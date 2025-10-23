@@ -129,9 +129,6 @@ namespace ModGameChanges
             {
                 return Tweakable.GetTweakable<GameDBTweakableInt>(Constants.Tweakables.Mod.AGC_TWEAKABLE_ALLOWED_CLINIC_DOCTORS_LEVEL).Value;
             }
-
-
-            
         }
 
         public static class Vanilla
