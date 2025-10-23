@@ -1,0 +1,35 @@
+<Database>
+
+<!-- ================================================== Department ================================================== -->
+
+	<GameDBAsset ID="AGC_DPT_ICON_0">
+		<Type>TEXTURE_CUSTOM_SPRITE</Type>
+		<File>MOD_ROOT/Assets/mod_dept_icon_0.png</File>
+	</GameDBAsset>
+	<GameDBAsset ID="AGC_DPT_ICON_1">
+		<Type>TEXTURE_CUSTOM_SPRITE</Type>
+		<File>MOD_ROOT/Assets/mod_dept_icon_1.png</File>
+	</GameDBAsset>
+	<GameDBAsset ID="AGC_DPT_ICON_2">
+		<Type>TEXTURE_CUSTOM_SPRITE</Type>
+		<File>MOD_ROOT/Assets/mod_dept_icon_2.png</File>
+	</GameDBAsset>
+	<GameDBAsset ID="AGC_DPT_ICON_3">
+		<Type>TEXTURE_CUSTOM_SPRITE</Type>
+		<File>MOD_ROOT/Assets/mod_dept_icon_3.png</File>
+	</GameDBAsset>
+	<GameDBAsset ID="AGC_DPT_ICON_4">
+		<Type>TEXTURE_CUSTOM_SPRITE</Type>
+		<File>MOD_ROOT/Assets/mod_dept_icon_4.png</File>
+	</GameDBAsset>
+	<GameDBAsset ID="AGC_DPT_ICON_5">
+		<Type>TEXTURE_CUSTOM_SPRITE</Type>
+		<File>MOD_ROOT/Assets/mod_dept_icon_5.png</File>
+	</GameDBAsset>
+	<GameDBAsset ID="AGC_DPT_ICON_6">
+		<Type>TEXTURE_CUSTOM_SPRITE</Type>
+		<File>MOD_ROOT/Assets/mod_dept_icon_6.png</File>
+	</GameDBAsset>
+	
+
+</Database>

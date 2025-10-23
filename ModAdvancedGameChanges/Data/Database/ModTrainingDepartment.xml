@@ -1,0 +1,117 @@
+<Database>
+	<GameDBDepartment ID="AGC_DPT_TRAINING">
+		<LockedByDefault>false</LockedByDefault>
+        <HospitalizationLockedByDefault>true</HospitalizationLockedByDefault>
+		
+		<MinDoctorLevel>1</MinDoctorLevel>
+		<LabQualification>SKILL_LAB_SPECIALIST_SPEC_BIOCHEMISTRY</LabQualification>
+		
+		<FirstDoctorSpecialization>SKILL_DOC_SPEC_ACUTE_MEDICINE</FirstDoctorSpecialization>
+
+        <SecondDoctorSpecializations></SecondDoctorSpecializations>
+		
+		<RequiredRoomsClinic>
+            <!-- Optional rooms -->
+
+            <GameDBDepartmentRoomRequirement>
+                <RoomDatabaseEntryRef>ROOM_TYPE_CLEANING_CLOSET</RoomDatabaseEntryRef>
+                <MinCount>0</MinCount>
+                <MaxCount>1</MaxCount>
+            </GameDBDepartmentRoomRequirement>
+
+            <GameDBDepartmentRoomRequirement>
+                <RoomDatabaseEntryRef>DLC_ROOM_TYPE_CLASSROOM</RoomDatabaseEntryRef>
+                <MinCount>0</MinCount>
+                <MaxCount>1</MaxCount>
+            </GameDBDepartmentRoomRequirement>
+			
+			<GameDBDepartmentRoomRequirement>
+                <RoomDatabaseEntryRef>AGC_ROOM_TYPE_EMPLOYEE_DOCTOR</RoomDatabaseEntryRef>
+                <MinCount>0</MinCount>
+                <MaxCount>1</MaxCount>
+            </GameDBDepartmentRoomRequirement>
+			
+			<GameDBDepartmentRoomRequirement>
+                <RoomDatabaseEntryRef>AGC_ROOM_TYPE_EMPLOYEE_NURSE</RoomDatabaseEntryRef>
+                <MinCount>0</MinCount>
+                <MaxCount>1</MaxCount>
+            </GameDBDepartmentRoomRequirement>
+			
+			<GameDBDepartmentRoomRequirement>
+                <RoomDatabaseEntryRef>AGC_ROOM_TYPE_EMPLOYEE_LAB_SPECIALIST</RoomDatabaseEntryRef>
+                <MinCount>0</MinCount>
+                <MaxCount>1</MaxCount>
+            </GameDBDepartmentRoomRequirement>
+			
+			<GameDBDepartmentRoomRequirement>
+                <RoomDatabaseEntryRef>AGC_ROOM_TYPE_EMPLOYEE_JANITOR</RoomDatabaseEntryRef>
+                <MinCount>0</MinCount>
+                <MaxCount>1</MaxCount>
+            </GameDBDepartmentRoomRequirement>
+			
+        </RequiredRoomsClinic>
+    
+        <SharedRoomsClinic>
+            <GameDBDepartmentRoomRequirement>
+                <RoomDatabaseEntryRef>ROOM_TYPE_WC</RoomDatabaseEntryRef>
+                <MinCount>0</MinCount>
+                <MaxCount>1</MaxCount>
+            </GameDBDepartmentRoomRequirement>
+    
+            <GameDBDepartmentRoomRequirement>
+                <RoomDatabaseEntryRef>ROOM_TYPE_COMMON_ROOM</RoomDatabaseEntryRef>
+                <MinCount>0</MinCount>
+                <MaxCount>1</MaxCount>
+            </GameDBDepartmentRoomRequirement>
+            <GameDBDepartmentRoomRequirement>
+                <RoomDatabaseEntryRef>ROOM_TYPE_CORRIDOR</RoomDatabaseEntryRef>
+                <MinCount>0</MinCount>
+                <MaxCount>1</MaxCount>
+            </GameDBDepartmentRoomRequirement>
+            <GameDBDepartmentRoomRequirement>
+                <RoomDatabaseEntryRef>ROOM_TYPE_ELEVATOR_MARKER</RoomDatabaseEntryRef>
+                <MinCount>0</MinCount>
+                <MaxCount>2</MaxCount>
+            </GameDBDepartmentRoomRequirement>
+        </SharedRoomsClinic>
+		
+		<NoClinic>true</NoClinic>
+        <NoDiagnoses>true</NoDiagnoses>
+        <NoHospitalization>true</NoHospitalization>
+        <NoSpecificStaffRequired>true</NoSpecificStaffRequired>
+		<PatientGenerationWeight>0</PatientGenerationWeight>
+		
+		<MinClinicnDoctorsDay>0</MinClinicnDoctorsDay>
+		<MinClinicnTechnologistDay>0</MinClinicnTechnologistDay>
+		
+		<RequiredRoomsHospitalization></RequiredRoomsHospitalization>
+        <SharedRoomsHospitalization></SharedRoomsHospitalization>
+        
+        <PatientRounds></PatientRounds>
+    
+        <IconID>451</IconID>
+
+        <PrefabTag>ui_prefab_training</PrefabTag>
+        <PrefabButtonIndex>2</PrefabButtonIndex>
+		
+		<PrestigeModifierStaff>0.0</PrestigeModifierStaff>
+        <PrestigeModifierPatients>0.0</PrestigeModifierPatients>
+        <PrestigeModifierTreated>0.0</PrestigeModifierTreated>
+        <PrestigeModifierDead>0.0</PrestigeModifierDead>
+		
+		<DisplayIndex>220</DisplayIndex>
+		
+		<CustomIcon_0_BigAssetRef>AGC_DPT_ICON_0</CustomIcon_0_BigAssetRef>
+		<CustomIcon_1_DarkBackgroundAssetRef>AGC_DPT_ICON_1</CustomIcon_1_DarkBackgroundAssetRef>
+		<CustomIcon_2_LightBackgroundAssetRef>AGC_DPT_ICON_2</CustomIcon_2_LightBackgroundAssetRef>
+		<CustomIcon_3_GrayedOutAssetRef>AGC_DPT_ICON_3</CustomIcon_3_GrayedOutAssetRef>
+		<CustomIcon_4_SmallDarkBackgroundAssetRef>AGC_DPT_ICON_4</CustomIcon_4_SmallDarkBackgroundAssetRef>
+		<CustomIcon_5_SmallGrayedOutAssetRef>AGC_DPT_ICON_5</CustomIcon_5_SmallGrayedOutAssetRef>
+		<CustomIcon_6_SmallLightBackgroundAssetRef>AGC_DPT_ICON_6</CustomIcon_6_SmallLightBackgroundAssetRef>
+
+        <ShowInPrefabs>true</ShowInPrefabs>
+        <PrefabsTooltipId>TOOLTIP_BUILDING_PREFAB_TRAINING</PrefabsTooltipId>
+        <PrefabsTag>ui_prefab_training</PrefabsTag>
+	</GameDBDepartment>
+	
+</Database>
