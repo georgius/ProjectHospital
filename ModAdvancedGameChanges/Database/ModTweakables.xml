@@ -1,0 +1,85 @@
+﻿<Database>
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_DOCTOR_LEVEL_POINTS_1">
+		<Value>100</Value>
+	</GameDBTweakableInt>
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_DOCTOR_LEVEL_POINTS_2">
+		<Value>200</Value>
+	</GameDBTweakableInt>
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_DOCTOR_LEVEL_POINTS_3">
+		<Value>400</Value>
+	</GameDBTweakableInt>
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_DOCTOR_LEVEL_POINTS_4">
+		<Value>800</Value>
+	</GameDBTweakableInt>
+	
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_NURSE_LEVEL_POINTS_1">
+		<Value>200</Value>
+	</GameDBTweakableInt>
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_NURSE_LEVEL_POINTS_2">
+		<Value>800</Value>
+	</GameDBTweakableInt>
+	
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_LAB_SPECIALIST_LEVEL_POINTS_1">
+		<Value>200</Value>
+	</GameDBTweakableInt>
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_LAB_SPECIALIST_LEVEL_POINTS_2">
+		<Value>800</Value>
+	</GameDBTweakableInt>
+	
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_JANITOR_LEVEL_POINTS_1">
+		<Value>200</Value>
+	</GameDBTweakableInt>
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_JANITOR_LEVEL_POINTS_2">
+		<Value>800</Value>
+	</GameDBTweakableInt>
+	
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_SKILL_LEVELS">
+		<!--
+		The skill or specialization will be splitted to equal levels.
+		E.g. for value 5, it will be 5 levels, each represents 20%.
+		
+		Each level needs its own AGC_TWEAKABLE_SKILL_POINTS_XX configuration value,
+		levels are counted from zero.
+		
+		Each AGC_TWEAKABLE_SKILL_POINTS_XX configuration value represents skill points
+		needed to fill interval.
+		-->
+		<Value>5</Value>
+	</GameDBTweakableInt>
+
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_SKILL_POINTS_0">
+		<Value>100</Value>
+	</GameDBTweakableInt>
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_SKILL_POINTS_1">
+		<Value>200</Value>
+	</GameDBTweakableInt>
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_SKILL_POINTS_2">
+		<Value>300</Value>
+	</GameDBTweakableInt>
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_SKILL_POINTS_3">
+		<Value>600</Value>
+	</GameDBTweakableInt>
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_SKILL_POINTS_4">
+		<Value>1200</Value>
+	</GameDBTweakableInt>
+	
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_ENABLE_EXTRA_LEVELING_PERCENT">
+		<!--
+		Enables or disables applying extra leveling percent.
+		By default, this option is disabled. To enable this option, set value to 1.
+		-->
+		<Value>0</Value>
+	</GameDBTweakableInt>
+	
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_ALLOWED_CLINIC_DOCTORS_LEVEL">
+		<!-- 
+		1 = Intern		(no specialization)
+		2 = Resident	(first specialization)
+		3 = Attending	(first specialization)
+		4 = Fellow		(second specialization)
+		5 = Specialist	(second specialization)			
+		-->
+		<Value>3</Value>
+	</GameDBTweakableInt>
+	
+</Database>

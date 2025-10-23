@@ -1,0 +1,100 @@
+﻿<Database>
+	<GameDBStringTable ID="LOC_EN_ADDON_ADVANCED_GAME_CHANGES">
+		<LanguageCode>en</LanguageCode>
+		<LanguageNameLocalized>English</LanguageNameLocalized>
+		<Contributors>
+			<Name>Georgius</Name>
+		</Contributors>
+
+		<LocalizedStrings>
+			<GameDBLocalizedString>
+				<LocID>ADDON_ADVANCED_GAME_CHANGES</LocID>
+				<Text>Advanced game changes</Text>
+			</GameDBLocalizedString>
+			
+			<GameDBLocalizedString>
+				<LocID>AGC_DEBUG</LocID>
+				<Text>[AGC] Debug output</Text>
+			</GameDBLocalizedString>
+			
+			<GameDBLocalizedString>
+				<LocID>AGC_ENABLE_NON_LINEAR_SKILL_LEVELING</LocID>
+				<Text>[AGC] Enable non-linear skill leveling</Text>
+			</GameDBLocalizedString>
+			
+			<GameDBLocalizedString>
+				<LocID>AGC_LIMIT_CLINIC_DOCTORS_LEVEL</LocID>
+				<Text>[AGC] Limit clinic doctors level</Text>
+			</GameDBLocalizedString>
+			
+			<GameDBLocalizedString>
+				<LocID>AGC_FORCE_EMPLOYEE_LOWEST_HIRE_LEVEL</LocID>
+				<Text>[AGC] Force employee lowest hire level</Text>
+			</GameDBLocalizedString>
+			
+			<GameDBLocalizedString>
+				<LocID>AGC_DPT_TRAINING</LocID>
+				<Text>Training department</Text>
+			</GameDBLocalizedString>
+			
+			<GameDBLocalizedString>
+				<LocID>AGC_ROOM_TYPE_EMPLOYEE_DOCTOR</LocID>
+				<Text>Doctors</Text>
+			</GameDBLocalizedString>
+			<GameDBLocalizedString>
+				<LocID>AGC_ROOM_TYPE_EMPLOYEE_DOCTOR_DESCRIPTION</LocID>
+				<Text>Employed doctors will go only to training.</Text>
+			</GameDBLocalizedString>
+			
+			<GameDBLocalizedString>
+				<LocID>AGC_ROOM_TYPE_EMPLOYEE_NURSE</LocID>
+				<Text>Nurses</Text>
+			</GameDBLocalizedString>
+			<GameDBLocalizedString>
+				<LocID>AGC_ROOM_TYPE_EMPLOYEE_NURSE_DESCRIPTION</LocID>
+				<Text>Employed nurses will go only to training.</Text>
+			</GameDBLocalizedString>
+			
+			<GameDBLocalizedString>
+				<LocID>AGC_ROOM_TYPE_EMPLOYEE_LAB_SPECIALIST</LocID>
+				<Text>Technologists</Text>
+			</GameDBLocalizedString>
+			<GameDBLocalizedString>
+				<LocID>AGC_ROOM_TYPE_EMPLOYEE_LAB_SPECIALIST_DESCRIPTION</LocID>
+				<Text>Employed technologists will go only to training.</Text>
+			</GameDBLocalizedString>
+			
+			<GameDBLocalizedString>
+				<LocID>AGC_ROOM_TYPE_EMPLOYEE_JANITOR</LocID>
+				<Text>Janitors</Text>
+			</GameDBLocalizedString>
+			<GameDBLocalizedString>
+				<LocID>AGC_ROOM_TYPE_EMPLOYEE_JANITOR_DESCRIPTION</LocID>
+				<Text>Employed janitors will go only to training.</Text>
+			</GameDBLocalizedString>
+			
+			<GameDBLocalizedString>
+				<LocID>AGC_DOCTOR_DESCRIPTION</LocID>
+				<Text>Doctors in training.</Text>
+			</GameDBLocalizedString>
+			<GameDBLocalizedString>
+				<LocID>AGC_NURSE_DESCRIPTION</LocID>
+				<Text>Nurses in training.</Text>
+			</GameDBLocalizedString>
+			<GameDBLocalizedString>
+				<LocID>AGC_LAB_SPECIALIST_DESCRIPTION</LocID>
+				<Text>Technologists in training.</Text>
+			</GameDBLocalizedString>
+			<GameDBLocalizedString>
+				<LocID>AGC_JANITOR_DESCRIPTION</LocID>
+				<Text>Janitors in training and ensuring the department stays clean.</Text>
+			</GameDBLocalizedString>
+			
+			<GameDBLocalizedString>
+				<LocID>TOOLTIP_BUILDING_PREFAB_TRAINING</LocID>
+				<Text>Templates of Training department rooms</Text>  
+			</GameDBLocalizedString>
+		</LocalizedStrings>
+	</GameDBStringTable>
+</Database>
+    
