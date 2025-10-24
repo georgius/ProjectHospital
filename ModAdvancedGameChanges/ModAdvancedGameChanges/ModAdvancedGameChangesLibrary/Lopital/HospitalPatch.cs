@@ -20,7 +20,7 @@ namespace ModAdvancedGameChanges.Lopital
                 return true;
             }
 
-            bool dlcHospitalServices = Database.Instance.GetEntry<GameDBTweakableInt>(Constants.Tweakables.Mod.HospitalServicesEnabled) != null;
+            bool dlcHospitalServices = Tweakable.Vanilla.DlcHospitalServicesEnabled();
 
             Debug.Log(System.Reflection.MethodBase.GetCurrentMethod(), $"Patching hospital");
             Debug.Log(System.Reflection.MethodBase.GetCurrentMethod(), $"DLC Hospital services present - {dlcHospitalServices}");

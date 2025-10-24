@@ -137,6 +137,13 @@ namespace ModGameChanges
             {
                 return Tweakable.GetTweakable<GameDBTweakableFloat>(Constants.Tweakables.Vanilla.LevelingRatePercent).Value;
             }
+
+            public static bool DlcHospitalServicesEnabled()
+            {
+                GameDBTweakableInt dlcHospitalServices = Database.Instance.GetEntry<GameDBTweakableInt>(Constants.Tweakables.Vanilla.DLC_ADMIN_PATHOLOGY_ENABLED);
+
+                return ((dlcHospitalServices != null) && (dlcHospitalServices.Value == 1));
+            }
         }
     }
 }

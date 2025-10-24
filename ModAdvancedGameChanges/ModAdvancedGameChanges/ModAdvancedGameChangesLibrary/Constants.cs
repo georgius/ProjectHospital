@@ -8,6 +8,11 @@
             {
                 public const string TrainingDepartment = "AGC_DPT_TRAINING";
             }
+
+            public static class Vanilla
+            {
+                public const string AdministrativeDepartment = "DLC_DPT_ADMINISTRATIVE";
+            }
         }
 
         public static class Perks
@@ -16,6 +21,14 @@
             {
                 public const string FastLearner = "PERK_FAST_LEARNER";
                 public const string SlowLearner = "PERK_SLOW_LEARNER";
+            }
+        }
+
+        public static class Procedures
+        {
+            public static class Vanilla
+            {
+                public const string StaffTraining = "DLC_ADMIN_STAFF_TRAINING";
             }
         }
 
@@ -28,10 +41,22 @@
 
                 public const string SKILL_NURSE_QUALIF_PATIENT_CARE = "SKILL_NURSE_QUALIF_PATIENT_CARE";
 
+                public const string SKILL_NURSE_SPEC_RECEPTIONIST = "SKILL_NURSE_SPEC_RECEPTIONIST";
+                public const string SKILL_NURSE_SPEC_MEDICAL_SURGERY = "SKILL_NURSE_SPEC_MEDICAL_SURGERY";
+                public const string SKILL_NURSE_SPEC_CLINICAL_SPECIALIST = "SKILL_NURSE_SPEC_CLINICAL_SPECIALIST";
+
                 public const string SKILL_LAB_SPECIALIST_QUALIF_SCIENCE_EDUCATION = "SKILL_LAB_SPECIALIST_QUALIF_SCIENCE_EDUCATION";
+
+                public const string SKILL_LAB_SPECIALIST_SPEC_BIOCHEMISTRY = "SKILL_LAB_SPECIALIST_SPEC_BIOCHEMISTRY";
+                public const string SKILL_LAB_SPECIALIST_SPEC_USG = "SKILL_LAB_SPECIALIST_SPEC_USG";
+                public const string SKILL_LAB_SPECIALIST_SPEC_CARDIOLOGY = "SKILL_LAB_SPECIALIST_SPEC_CARDIOLOGY";
+                public const string SKILL_LAB_SPECIALIST_SPEC_NEUROLOGY = "SKILL_LAB_SPECIALIST_SPEC_NEUROLOGY";
 
                 public const string SKILL_JANITOR_QUALIF_EFFICIENCY = "SKILL_JANITOR_QUALIF_EFFICIENCY";
                 public const string SKILL_JANITOR_QUALIF_DEXTERITY = "SKILL_JANITOR_QUALIF_DEXTERITY";
+
+                public const string DLC_SKILL_JANITOR_SPEC_VENDOR = "DLC_SKILL_JANITOR_SPEC_VENDOR";
+                public const string DLC_SKILL_JANITOR_SPEC_MANAGER = "DLC_SKILL_JANITOR_SPEC_MANAGER";
             }
         }
 
@@ -63,6 +88,8 @@
             public static class Vanilla
             {
                 public const string LevelingRatePercent = "LEVELING_RATE_PERCENT";
+
+                public const string DLC_ADMIN_PATHOLOGY_ENABLED = "DLC_ADMIN_PATHOLOGY_ENABLED";
             }
         }
 

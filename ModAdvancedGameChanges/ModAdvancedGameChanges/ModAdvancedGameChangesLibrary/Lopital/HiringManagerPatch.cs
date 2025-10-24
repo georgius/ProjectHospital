@@ -12,7 +12,7 @@ namespace ModGameChanges.Lopital
         [HarmonyPatch(typeof(HiringManager), nameof(HiringManager.GenerateAvailableCharacters))]
         public static bool GenerateAvailableCharactersPrefix(AvailableCharacters availableCharacters, GameDBDepartment gameDBDepartment, LopitalTypes characterType, bool forceAllcharacters, HiringManager __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_ForceEmployeeLowestHireLevel[SettingsManager.Instance.m_viewSettings].m_value))
+            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_forceEmployeeLowestHireLevel[SettingsManager.Instance.m_viewSettings].m_value))
             {
                 // Allow original method to run
                 return true;

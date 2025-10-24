@@ -29,7 +29,7 @@ namespace ModAdvancedGameChanges.Lopital
         [HarmonyPatch(typeof(SkillSet), nameof(SkillSet.DEBUG_CreateNurseSkillSet))]
         public static bool DEBUG_CreateNurseSkillSetPrefix(int level, GameDBSkill requiredSkill, ref SkillSet __result)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_ForceEmployeeLowestHireLevel[SettingsManager.Instance.m_viewSettings].m_value))
+            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_forceEmployeeLowestHireLevel[SettingsManager.Instance.m_viewSettings].m_value))
             {
                 // Allow original method to run
                 return true;
@@ -48,7 +48,7 @@ namespace ModAdvancedGameChanges.Lopital
         [HarmonyPatch(typeof(SkillSet), nameof(SkillSet.DEBUG_CreateLabSpecialistSkillSet))]
         public static bool DEBUG_CreateLabSpecialistSkillSetPrefix(GameDBDepartment department, int level, GameDBSkill requiredSkill, ref SkillSet __result)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_ForceEmployeeLowestHireLevel[SettingsManager.Instance.m_viewSettings].m_value))
+            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_forceEmployeeLowestHireLevel[SettingsManager.Instance.m_viewSettings].m_value))
             {
                 // Allow original method to run
                 return true;
@@ -67,7 +67,7 @@ namespace ModAdvancedGameChanges.Lopital
         [HarmonyPatch(typeof(SkillSet), nameof(SkillSet.DEBUG_CreateJanitorSkillSet))]
         public static bool DEBUG_CreateJanitorSkillSetPrefix(int level, GameDBSkill requiredSkill, ref SkillSet __result)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_ForceEmployeeLowestHireLevel[SettingsManager.Instance.m_viewSettings].m_value))
+            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_forceEmployeeLowestHireLevel[SettingsManager.Instance.m_viewSettings].m_value))
             {
                 // Allow original method to run
                 return true;
