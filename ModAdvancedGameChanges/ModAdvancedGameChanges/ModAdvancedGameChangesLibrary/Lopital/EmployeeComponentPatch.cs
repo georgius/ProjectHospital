@@ -58,9 +58,11 @@ namespace ModGameChanges.Lopital
                             __instance.m_state.m_points = 0;
                         }
 
-                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"04 Employee: {__instance.m_entity.Name} Level: {__instance.m_state.m_level.ToString(CultureInfo.InvariantCulture)} Allowed level: {doctorMaxLevel.ToString(CultureInfo.InvariantCulture)} Points: {__instance.m_state.m_points.ToString(CultureInfo.InvariantCulture)}");
+                        int nextLevelPoints = __instance.GetPointsNeededForNextLevel();
 
-                        if (__instance.m_state.m_points >= __instance.GetPointsNeededForNextLevel())
+                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"04 Employee: {__instance.m_entity.Name} Level: {__instance.m_state.m_level.ToString(CultureInfo.InvariantCulture)} Allowed level: {doctorMaxLevel.ToString(CultureInfo.InvariantCulture)} Points: {__instance.m_state.m_points.ToString(CultureInfo.InvariantCulture)} Required points: {nextLevelPoints.ToString(CultureInfo.InvariantCulture)}");
+
+                        if (__instance.m_state.m_points >= nextLevelPoints)
                         {
                             __instance.m_state.m_points = 0;
                             if (__instance.m_state.m_level < doctorMaxLevel)
@@ -149,10 +151,15 @@ namespace ModGameChanges.Lopital
                 {
                     __instance.m_state.m_points += (int)num;
                 }
-                int num2 = (__instance.m_entity.GetComponent<BehaviorDoctor>() == null) ? 3 : 5;
-                if (__instance.m_state.m_points >= __instance.GetPointsNeededForNextLevel() && __instance.m_state.m_level < num2)
+
+                int maxLevel = (__instance.m_entity.GetComponent<BehaviorDoctor>() == null) ? 3 : 5;
+                int nextLevelPoints = __instance.GetPointsNeededForNextLevel();
+
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} Required points: {nextLevelPoints.ToString(CultureInfo.InvariantCulture)}");
+
+                if (__instance.m_state.m_points >= nextLevelPoints && __instance.m_state.m_level < maxLevel)
                 {
-                    __instance.m_state.m_points -= __instance.GetPointsNeededForNextLevel();
+                    __instance.m_state.m_points -= nextLevelPoints;
                     __instance.m_state.m_level++;
                     __instance.m_state.m_leveledUpAfterHire = true;
                     if (__instance.m_entity.GetComponent<PerkComponent>().m_perkSet.HasHiddenPerk(Constants.Perks.Vanilla.FastLearner))
@@ -190,9 +197,9 @@ namespace ModGameChanges.Lopital
                         {
                             GameDBSkill[] array = new GameDBSkill[]
                             {
-                                Database.Instance.GetEntry<GameDBSkill>("SKILL_NURSE_SPEC_RECEPTIONIST"),
-                                Database.Instance.GetEntry<GameDBSkill>("SKILL_NURSE_SPEC_MEDICAL_SURGERY"),
-                                Database.Instance.GetEntry<GameDBSkill>("SKILL_NURSE_SPEC_CLINICAL_SPECIALIST")
+                                Database.Instance.GetEntry<GameDBSkill>(Constants.Skills.Vanilla.SKILL_NURSE_SPEC_RECEPTIONIST),
+                                Database.Instance.GetEntry<GameDBSkill>(Constants.Skills.Vanilla.SKILL_NURSE_SPEC_MEDICAL_SURGERY),
+                                Database.Instance.GetEntry<GameDBSkill>(Constants.Skills.Vanilla.SKILL_NURSE_SPEC_CLINICAL_SPECIALIST)
                             };
                             __instance.m_state.m_skillSet.m_specialization1 = new Skill(array[UnityEngine.Random.Range(0, array.Length)], 1f);
                         }
@@ -204,10 +211,10 @@ namespace ModGameChanges.Lopital
                         {
                             GameDBSkill[] array2 = new GameDBSkill[]
                             {
-                                Database.Instance.GetEntry<GameDBSkill>("SKILL_LAB_SPECIALIST_SPEC_BIOCHEMISTRY"),
-                                Database.Instance.GetEntry<GameDBSkill>("SKILL_LAB_SPECIALIST_SPEC_USG"),
-                                Database.Instance.GetEntry<GameDBSkill>("SKILL_LAB_SPECIALIST_SPEC_CARDIOLOGY"),
-                                Database.Instance.GetEntry<GameDBSkill>("SKILL_LAB_SPECIALIST_SPEC_NEUROLOGY")
+                                Database.Instance.GetEntry<GameDBSkill>(Constants.Skills.Vanilla.SKILL_LAB_SPECIALIST_SPEC_BIOCHEMISTRY),
+                                Database.Instance.GetEntry<GameDBSkill>(Constants.Skills.Vanilla.SKILL_LAB_SPECIALIST_SPEC_USG),
+                                Database.Instance.GetEntry<GameDBSkill>(Constants.Skills.Vanilla.SKILL_LAB_SPECIALIST_SPEC_CARDIOLOGY),
+                                Database.Instance.GetEntry<GameDBSkill>(Constants.Skills.Vanilla.SKILL_LAB_SPECIALIST_SPEC_NEUROLOGY)
                             };
                             __instance.m_state.m_skillSet.m_specialization1 = new Skill(array2[UnityEngine.Random.Range(0, array2.Length)], 1f);
                         }
@@ -215,16 +222,14 @@ namespace ModGameChanges.Lopital
                     }
                     else if (__instance.m_entity.GetComponent<BehaviorJanitor>() != null)
                     {
-                        bool dlcHospitalServices = Database.Instance.GetEntry<GameDBTweakableInt>("DLC_ADMIN_PATHOLOGY_ENABLED") != null;
-
-                        if (dlcHospitalServices && __instance.m_state.m_level > 1 && __instance.m_state.m_skillSet.m_specialization1 == null)
+                        if (Tweakable.Vanilla.DlcHospitalServicesEnabled() && __instance.m_state.m_level > 1 && __instance.m_state.m_skillSet.m_specialization1 == null)
                         {
                             titleLocID = "NOTIF_CHARACTER_LEVELED_UP_FIRST_SPECIALIZATION";
 
                             GameDBSkill[] array = new GameDBSkill[]
                             {
-                                Database.Instance.GetEntry<GameDBSkill>("DLC_SKILL_JANITOR_SPEC_VENDOR"),
-                                Database.Instance.GetEntry<GameDBSkill>("DLC_SKILL_JANITOR_SPEC_MANAGER")
+                                Database.Instance.GetEntry<GameDBSkill>(Constants.Skills.Vanilla.DLC_SKILL_JANITOR_SPEC_VENDOR),
+                                Database.Instance.GetEntry<GameDBSkill>(Constants.Skills.Vanilla.DLC_SKILL_JANITOR_SPEC_MANAGER)
                             };
 
                             __instance.m_state.m_skillSet.m_specialization1 = new Skill(array[UnityEngine.Random.Range(0, array.Length)], 1f);
@@ -270,8 +275,6 @@ namespace ModGameChanges.Lopital
             {
                 __result = Tweakable.Mod.JanitorLevelPoints(Math.Max(1, Math.Min(2, __instance.m_state.m_level)));
             }
-
-            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} Result: {__result.ToString(CultureInfo.InvariantCulture)}");
 
             return false;
         }
