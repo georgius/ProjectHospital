@@ -278,6 +278,116 @@ namespace ModGameChanges.Lopital
 
             return false;
         }
+
+        //[HarmonyPrefix]
+        //[HarmonyPatch(typeof(EmployeeComponent), nameof(EmployeeComponent.GoToTraining))]
+        //public static bool GoToTrainingPrefix(ProcedureComponent procedureComponent, EmployeeComponent __instance, ref bool __result)
+        //{
+        //    if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+        //    {
+        //        // Allow original method to run
+        //        return true;
+        //    }
+
+        //    Department trainingDepartment = MapScriptInterface.Instance.GetDepartmentOfType(Database.Instance.GetEntry<GameDBDepartment>(Constants.Departments.Mod.TrainingDepartment));
+
+        //    if (__instance.m_state.m_department.GetEntity() == trainingDepartment)
+        //    {
+        //        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} in training department");
+
+        //        Department administrativeDepartment = MapScriptInterface.Instance.GetDepartmentOfType(Database.Instance.GetEntry<GameDBDepartment>(Constants.Departments.Vanilla.AdministrativeDepartment));
+        //        GameDBProcedure staffTraining = Database.Instance.GetEntry<GameDBProcedure>(Constants.Procedures.Vanilla.StaffTraining);
+
+        //        if (procedureComponent.GetProcedureAvailabilty(staffTraining, __instance.m_entity, trainingDepartment, AccessRights.STAFF, EquipmentListRules.ONLY_FREE) == ProcedureSceneAvailability.AVAILABLE)
+        //        {
+        //            procedureComponent.StartProcedure(staffTraining, __instance.m_entity, trainingDepartment, AccessRights.STAFF, EquipmentListRules.ONLY_FREE);
+
+        //            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} starting training in training department");
+
+        //            __result = true;
+        //        }
+        //        else if (procedureComponent.GetProcedureAvailabilty(staffTraining, __instance.m_entity, administrativeDepartment, AccessRights.STAFF, EquipmentListRules.ONLY_FREE) == ProcedureSceneAvailability.AVAILABLE)
+        //        {
+        //            procedureComponent.StartProcedure(staffTraining, __instance.m_entity, administrativeDepartment, AccessRights.STAFF, EquipmentListRules.ONLY_FREE);
+
+        //            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} starting training in administrative department");
+
+        //            __result = true;
+        //        }
+        //        else
+        //        {
+        //            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} not found free space for training");
+
+        //            __result = false;
+        //        }
+
+        //        return false;
+        //    }
+
+        //    return true;
+        //}
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(EmployeeComponent), nameof(EmployeeComponent.OnDayStart))]
+        public static bool OnDayStartPrefix(EmployeeComponent __instance)
+        {
+            __instance.m_state.m_efficiency = 1f;
+
+            PerkComponent perkComponent = __instance.m_entity.GetComponent<PerkComponent>();
+
+            // start commuting between one hour and half hour before shift
+            __instance.m_state.m_commuteTime = UnityEngine.Random.Range(-1f, -0.5f);
+
+            // if long commute, add between 0.25 and 2 hours
+            __instance.m_state.m_commuteTime += perkComponent.m_perkSet.HasPerk(Constants.Perks.Vanilla.LongCommute) ? UnityEngine.Random.Range(0.25f, 2f) : 0;
+
+            if (perkComponent.m_perkSet.HasPerk(Constants.Perks.Vanilla.Alcoholism) && (__instance.m_state.m_shift == Shift.DAY)
+                && (UnityEngine.Random.Range(0, 100) < 4))
+            {
+                __instance.m_state.m_commuteTime = 2f + UnityEngine.Random.Range(0f, 1.5f);
+                __instance.m_state.m_efficiency = 0.5f;
+
+                if (perkComponent.m_perkSet.HasHiddenPerk(Constants.Perks.Vanilla.Alcoholism))
+                {
+                    NotificationManager.GetInstance().AddMessage(__instance.m_entity, "NOTIF_EMPLOYEE_GOT_DRUNK", string.Empty, string.Empty, string.Empty, 0, 0, 0, 0, null, null);
+                    perkComponent.m_perkSet.RevealPerk(Constants.Perks.Vanilla.Alcoholism);
+                }
+
+                __instance.m_entity.GetComponent<MoodComponent>().AddSatisfactionModifier(Constants.Mood.Vanilla.Hangover);
+            }
+
+            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} Commute time: {__instance.m_state.m_commuteTime.ToString(CultureInfo.InvariantCulture)}");
+
+            __instance.ResetNoWorkSpaceFlags();
+
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(EmployeeComponent), nameof(EmployeeComponent.ShouldStartCommuting))]
+        public static bool ShouldStartCommutingPrefix(EmployeeComponent __instance, ref bool __result)
+        {
+            GameDBSchedule shift = (__instance.m_state.m_shift == Shift.DAY) ?
+                Database.Instance.GetEntry<GameDBSchedule>(Constants.Schedule.Vanilla.SCHEDULE_OPENING_HOURS_STAFF) :
+                Database.Instance.GetEntry<GameDBSchedule>(Constants.Schedule.Vanilla.SCHEDULE_OPENING_HOURS_STAFF_NIGHT);
+
+            float startCommuteTime = shift.StartTime - 1f;
+            float endCommuteTime = shift.StartTime + 3.5f;
+            float dayTimeHours = DayTime.Instance.GetDayTimeHours();
+
+            if ((dayTimeHours >= startCommuteTime) && (dayTimeHours <= endCommuteTime) && (dayTimeHours > (shift.StartTime + __instance.m_state.m_commuteTime)))
+            {
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} Commute time: {__instance.m_state.m_commuteTime.ToString(CultureInfo.InvariantCulture)} Shift start time: {shift.StartTime.ToString(CultureInfo.InvariantCulture)} Day time: {dayTimeHours.ToString(CultureInfo.InvariantCulture)}");
+
+                __result = true;
+            }
+            else
+            {
+                __result = false;
+            }
+
+            return false;
+        }
     }
 }
 
