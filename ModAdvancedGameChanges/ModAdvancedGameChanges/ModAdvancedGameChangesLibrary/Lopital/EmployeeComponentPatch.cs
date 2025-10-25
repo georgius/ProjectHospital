@@ -280,53 +280,53 @@ namespace ModGameChanges.Lopital
             return false;
         }
 
-        //[HarmonyPrefix]
-        //[HarmonyPatch(typeof(EmployeeComponent), nameof(EmployeeComponent.GoToTraining))]
-        //public static bool GoToTrainingPrefix(ProcedureComponent procedureComponent, EmployeeComponent __instance, ref bool __result)
-        //{
-        //    if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
-        //    {
-        //        // Allow original method to run
-        //        return true;
-        //    }
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(EmployeeComponent), nameof(EmployeeComponent.GoToTraining))]
+        public static bool GoToTrainingPrefix(ProcedureComponent procedureComponent, EmployeeComponent __instance, ref bool __result)
+        {
+            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            {
+                // Allow original method to run
+                return true;
+            }
 
-        //    Department trainingDepartment = MapScriptInterface.Instance.GetDepartmentOfType(Database.Instance.GetEntry<GameDBDepartment>(Constants.Departments.Mod.TrainingDepartment));
+            Department trainingDepartment = MapScriptInterface.Instance.GetDepartmentOfType(Database.Instance.GetEntry<GameDBDepartment>(Departments.Mod.TrainingDepartment));
 
-        //    if (__instance.m_state.m_department.GetEntity() == trainingDepartment)
-        //    {
-        //        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} in training department");
+            if (__instance.m_state.m_department.GetEntity() == trainingDepartment)
+            {
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} in training department");
 
-        //        Department administrativeDepartment = MapScriptInterface.Instance.GetDepartmentOfType(Database.Instance.GetEntry<GameDBDepartment>(Constants.Departments.Vanilla.AdministrativeDepartment));
-        //        GameDBProcedure staffTraining = Database.Instance.GetEntry<GameDBProcedure>(Constants.Procedures.Vanilla.StaffTraining);
+                Department administrativeDepartment = MapScriptInterface.Instance.GetDepartmentOfType(Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.AdministrativeDepartment));
+                GameDBProcedure staffTraining = Database.Instance.GetEntry<GameDBProcedure>(Procedures.Vanilla.StaffTraining);
 
-        //        if (procedureComponent.GetProcedureAvailabilty(staffTraining, __instance.m_entity, trainingDepartment, AccessRights.STAFF, EquipmentListRules.ONLY_FREE) == ProcedureSceneAvailability.AVAILABLE)
-        //        {
-        //            procedureComponent.StartProcedure(staffTraining, __instance.m_entity, trainingDepartment, AccessRights.STAFF, EquipmentListRules.ONLY_FREE);
+                if (procedureComponent.GetProcedureAvailabilty(staffTraining, __instance.m_entity, trainingDepartment, AccessRights.STAFF, EquipmentListRules.ONLY_FREE) == ProcedureSceneAvailability.AVAILABLE)
+                {
+                    procedureComponent.StartProcedure(staffTraining, __instance.m_entity, trainingDepartment, AccessRights.STAFF, EquipmentListRules.ONLY_FREE);
 
-        //            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} starting training in training department");
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} starting training in training department");
 
-        //            __result = true;
-        //        }
-        //        else if (procedureComponent.GetProcedureAvailabilty(staffTraining, __instance.m_entity, administrativeDepartment, AccessRights.STAFF, EquipmentListRules.ONLY_FREE) == ProcedureSceneAvailability.AVAILABLE)
-        //        {
-        //            procedureComponent.StartProcedure(staffTraining, __instance.m_entity, administrativeDepartment, AccessRights.STAFF, EquipmentListRules.ONLY_FREE);
+                    __result = true;
+                }
+                else if (procedureComponent.GetProcedureAvailabilty(staffTraining, __instance.m_entity, administrativeDepartment, AccessRights.STAFF, EquipmentListRules.ONLY_FREE) == ProcedureSceneAvailability.AVAILABLE)
+                {
+                    procedureComponent.StartProcedure(staffTraining, __instance.m_entity, administrativeDepartment, AccessRights.STAFF, EquipmentListRules.ONLY_FREE);
 
-        //            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} starting training in administrative department");
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} starting training in administrative department");
 
-        //            __result = true;
-        //        }
-        //        else
-        //        {
-        //            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} not found free space for training");
+                    __result = true;
+                }
+                else
+                {
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} not found free space for training");
 
-        //            __result = false;
-        //        }
+                    __result = false;
+                }
 
-        //        return false;
-        //    }
+                return false;
+            }
 
-        //    return true;
-        //}
+            return true;
+        }
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(EmployeeComponent), nameof(EmployeeComponent.OnDayStart))]
