@@ -331,6 +331,12 @@ namespace ModGameChanges.Lopital
         [HarmonyPatch(typeof(EmployeeComponent), nameof(EmployeeComponent.OnDayStart))]
         public static bool OnDayStartPrefix(EmployeeComponent __instance)
         {
+            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_staffShiftsEqual[SettingsManager.Instance.m_viewSettings].m_value))
+            {
+                // Allow original method to run
+                return true;
+            }
+
             __instance.m_state.m_efficiency = 1f;
 
             PerkComponent perkComponent = __instance.m_entity.GetComponent<PerkComponent>();
@@ -367,17 +373,45 @@ namespace ModGameChanges.Lopital
         [HarmonyPatch(typeof(EmployeeComponent), nameof(EmployeeComponent.ShouldStartCommuting))]
         public static bool ShouldStartCommutingPrefix(EmployeeComponent __instance, ref bool __result)
         {
+            // it will be very difficult if employee should start commuting when staff shifts are not "reasonable"
+            // in such case, the original algorithm is used
+
+            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_staffShiftsEqual[SettingsManager.Instance.m_viewSettings].m_value))
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            // the staff day shift starts at least at 3h and at most 20h
+            // each shift will be 12h
+
             GameDBSchedule shift = (__instance.m_state.m_shift == Shift.DAY) ?
                 Database.Instance.GetEntry<GameDBSchedule>(Constants.Schedule.Vanilla.SCHEDULE_OPENING_HOURS_STAFF) :
                 Database.Instance.GetEntry<GameDBSchedule>(Constants.Schedule.Vanilla.SCHEDULE_OPENING_HOURS_STAFF_NIGHT);
 
-            float startCommuteTime = shift.StartTime - 1f;
-            float endCommuteTime = shift.StartTime + 3.5f;
-            float dayTimeHours = DayTime.Instance.GetDayTimeHours();
+            // because ViewSettingsPatch.FixScheduleTimes is fixing all schedules in game,
+            // then values in game are surely between 0 and 24
 
-            if ((dayTimeHours >= startCommuteTime) && (dayTimeHours <= endCommuteTime) && (dayTimeHours > (shift.StartTime + __instance.m_state.m_commuteTime)))
+            // commute window is hour before shift starts and ends
+            float startCommuteTime = shift.StartTime - 1f;      // 2 .. 19
+            float endCommuteTime = shift.EndTime - 1f;          // 2 .. 19
+
+            // if end commute time is before start commute time (like interval from 20 till 8),
+            // it means that end commute time is over midnight
+            bool overMidnight = (endCommuteTime < startCommuteTime);
+            float dayTimeHours = DayTime.Instance.GetDayTimeHours();    // 0 .. <24 (always below 24)
+
+            if ((!overMidnight) && (dayTimeHours >= startCommuteTime) && (dayTimeHours <= endCommuteTime)
+                && (dayTimeHours > (shift.StartTime + __instance.m_state.m_commuteTime)))
             {
                 Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} Commute time: {__instance.m_state.m_commuteTime.ToString(CultureInfo.InvariantCulture)} Shift start time: {shift.StartTime.ToString(CultureInfo.InvariantCulture)} Day time: {dayTimeHours.ToString(CultureInfo.InvariantCulture)}");
+
+                __result = true;
+            }
+            else if (overMidnight && ((dayTimeHours >= startCommuteTime) || (dayTimeHours <= endCommuteTime))
+                && (dayTimeHours > (shift.StartTime + __instance.m_state.m_commuteTime)))
+            {
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} Commute time: {__instance.m_state.m_commuteTime.ToString(CultureInfo.InvariantCulture)} Shift start time: {shift.StartTime.ToString(CultureInfo.InvariantCulture)} Day time: {dayTimeHours.ToString(CultureInfo.InvariantCulture)}, over midnight");
 
                 __result = true;
             }

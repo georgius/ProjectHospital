@@ -34,17 +34,21 @@ namespace ModAdvancedGameChanges.Lopital
                 GameDBSchedule staffMorningChange = Database.Instance.GetEntry<GameDBSchedule>(Constants.Schedule.Vanilla.SCHEDULE_SHIFT_CHANGE_MORNING);
                 GameDBSchedule staffEveningChange = Database.Instance.GetEntry<GameDBSchedule>(Constants.Schedule.Vanilla.SCHEDULE_SHIFT_CHANGE_EVENING);
 
-                // take day shift, add 12 hours
-                HospitalPatch.SetScheduleTimes(staffDayShift, staffDayShift.StartTime, staffDayShift.StartTime + 12f);
-                HospitalPatch.SetScheduleTimes(staffNightShift, staffDayShift.StartTime + 12f, staffDayShift.StartTime);
+                // we need that staff day shift starts at least at 3h and at most 20h
+                // each shift will be 12h
+                float staffDayShiftStart = UnityEngine.Mathf.Min(20f, UnityEngine.Mathf.Max(3f, staffDayShift.StartTime));
+                float staffDayShiftEnd = staffDayShiftStart + 12f;
+                if (staffDayShiftEnd > 24f)
+                {
+                    staffDayShiftEnd -= 24f;
+                }
+
+                HospitalPatch.SetScheduleTimes(staffDayShift, staffDayShiftStart, staffDayShiftEnd);
+                HospitalPatch.SetScheduleTimes(staffNightShift, staffDayShiftEnd, staffDayShiftStart);
 
                 // morning and evening shift change should be 0.5 hour around shuft start time
                 HospitalPatch.SetScheduleTimes(staffMorningChange, staffDayShift.StartTime - 0.5f, staffDayShift.StartTime + 0.5f);
                 HospitalPatch.SetScheduleTimes(staffEveningChange, staffNightShift.StartTime - 0.5f, staffNightShift.StartTime + 0.5f);
-
-                // fix change shift schedule (if needed)
-                ViewSettingsPatch.FixScheduleTimes(staffMorningChange);
-                ViewSettingsPatch.FixScheduleTimes(staffEveningChange);
             }
 
             Debug.Log(System.Reflection.MethodBase.GetCurrentMethod(), $"DLC Hospital services present - {dlcHospitalServices}");
