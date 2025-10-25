@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Lopital;
+using System;
+using System.Globalization;
 
 namespace ModGameChanges
 {
@@ -18,7 +20,7 @@ namespace ModGameChanges
         {
             if (ViewSettingsPatch.m_enabled && ViewSettingsPatch.m_debug[SettingsManager.Instance.m_viewSettings].m_value)
             {
-                Debug.Log(method, message);
+                Debug.Log(method, $"Day: {DayTime.Instance.GetDay().ToString(CultureInfo.InvariantCulture)} Time: {DayTime.Instance.GetDayTimeHours().ToString(CultureInfo.InvariantCulture)} {message}");
             }
         }
     }
