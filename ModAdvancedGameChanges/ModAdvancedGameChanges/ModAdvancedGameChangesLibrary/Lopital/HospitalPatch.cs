@@ -3,6 +3,7 @@ using Lopital;
 using ModGameChanges;
 using System;
 using System.Collections;
+using System.Globalization;
 using System.Reflection;
 
 namespace ModAdvancedGameChanges.Lopital
@@ -23,6 +24,29 @@ namespace ModAdvancedGameChanges.Lopital
             bool dlcHospitalServices = Tweakable.Vanilla.DlcHospitalServicesEnabled();
 
             Debug.Log(System.Reflection.MethodBase.GetCurrentMethod(), $"Patching hospital");
+
+            if (ViewSettingsPatch.m_staffShiftsEqual[SettingsManager.Instance.m_viewSettings].m_value)
+            {
+                Debug.Log(System.Reflection.MethodBase.GetCurrentMethod(), $"Making staff shifts equal");
+
+                GameDBSchedule staffDayShift = Database.Instance.GetEntry<GameDBSchedule>(Constants.Schedule.Vanilla.SCHEDULE_OPENING_HOURS_STAFF);
+                GameDBSchedule staffNightShift = Database.Instance.GetEntry<GameDBSchedule>(Constants.Schedule.Vanilla.SCHEDULE_OPENING_HOURS_STAFF_NIGHT);
+                GameDBSchedule staffMorningChange = Database.Instance.GetEntry<GameDBSchedule>(Constants.Schedule.Vanilla.SCHEDULE_SHIFT_CHANGE_MORNING);
+                GameDBSchedule staffEveningChange = Database.Instance.GetEntry<GameDBSchedule>(Constants.Schedule.Vanilla.SCHEDULE_SHIFT_CHANGE_EVENING);
+
+                // take day shift, add 12 hours
+                HospitalPatch.SetScheduleTimes(staffDayShift, staffDayShift.StartTime, staffDayShift.StartTime + 12f);
+                HospitalPatch.SetScheduleTimes(staffNightShift, staffDayShift.StartTime + 12f, staffDayShift.StartTime);
+
+                // morning and evening shift change should be 0.5 hour around shuft start time
+                HospitalPatch.SetScheduleTimes(staffMorningChange, staffDayShift.StartTime - 0.5f, staffDayShift.StartTime + 0.5f);
+                HospitalPatch.SetScheduleTimes(staffEveningChange, staffNightShift.StartTime - 0.5f, staffNightShift.StartTime + 0.5f);
+
+                // fix change shift schedule (if needed)
+                ViewSettingsPatch.FixScheduleTimes(staffMorningChange);
+                ViewSettingsPatch.FixScheduleTimes(staffEveningChange);
+            }
+
             Debug.Log(System.Reflection.MethodBase.GetCurrentMethod(), $"DLC Hospital services present - {dlcHospitalServices}");
 
             if (!dlcHospitalServices)
@@ -65,6 +89,22 @@ namespace ModAdvancedGameChanges.Lopital
             }
 
             return true;
+        }
+
+        private static void SetScheduleTimes(GameDBSchedule schedule, float startTime, float endTime)
+        {
+            Debug.Log(System.Reflection.MethodBase.GetCurrentMethod(), $"Setting schedule {schedule.DatabaseID}, start time {startTime.ToString(CultureInfo.InvariantCulture)}, end time {endTime.ToString(CultureInfo.InvariantCulture)}");
+
+            var scheduleType = typeof(GameDBSchedule);
+
+            var startTimeProperty = scheduleType.GetProperty(nameof(GameDBSchedule.StartTime), BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            var startTimeSetMethod = startTimeProperty.GetSetMethod(true);
+
+            var endTimeProperty = scheduleType.GetProperty(nameof(GameDBSchedule.EndTime), BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            var endTimeSetMethod = endTimeProperty.GetSetMethod(true);
+
+            startTimeSetMethod.Invoke(schedule, new object[] { startTime });
+            endTimeSetMethod.Invoke(schedule, new object[] { endTime });
         }
     }
 }

@@ -47,8 +47,10 @@
             public static class Vanilla
             {
                 public const string SCHEDULE_OPENING_HOURS_STAFF = "SCHEDULE_OPENING_HOURS_STAFF";
-
                 public const string SCHEDULE_OPENING_HOURS_STAFF_NIGHT = "SCHEDULE_OPENING_HOURS_STAFF_NIGHT";
+
+                public const string SCHEDULE_SHIFT_CHANGE_MORNING = "SCHEDULE_SHIFT_CHANGE_MORNING";
+                public const string SCHEDULE_SHIFT_CHANGE_EVENING = "SCHEDULE_SHIFT_CHANGE_EVENING";
             }
         }
 
@@ -118,6 +120,12 @@
             public static class Mod
             {
                 public const string JanitorTrainingWorkspace = "janitor_training_workspace";
+            }
+
+            public static class Vanilla
+            {
+                public const string JanitorAdminWorkplace = "janitor_admin_workplace";
+                public const string JanitorWorkspace = "janitor_workspace";
             }
         }
 
