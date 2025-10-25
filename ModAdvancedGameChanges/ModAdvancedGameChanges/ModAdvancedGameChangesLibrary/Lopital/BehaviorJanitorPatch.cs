@@ -1,7 +1,9 @@
-﻿using HarmonyLib;
+﻿using GLib;
+using HarmonyLib;
 using Lopital;
 using ModAdvancedGameChanges.Constants;
 using System;
+using System.Globalization;
 using System.Reflection;
 
 namespace ModGameChanges.Lopital
@@ -66,17 +68,17 @@ namespace ModGameChanges.Lopital
                 __instance.m_state.m_hadLunch = true;
             }
 
+            // janitors don't have commuting state as doctors, nurses and lab specialists
+            // we just keep them at home longer time
+
             if (ViewSettingsPatch.m_enabledTrainingDepartment)
             {
                 if ((homeRoomType != null) && homeRoomType.HasTag(Tags.Mod.JanitorTrainingWorkspace)
                     && employeeComponent.ShouldStartCommuting() && (!__instance.GetDepartment().IsClosed()))
                 {
-                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} - going to training workplace");
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} - going to workplace");
 
-                    employeeComponent.SetSimpleCommuteDuration();
-                    __instance.SwitchState((BehaviorJanitorState)20);
-
-                    //__instance.GoToWorkPlace();
+                    __instance.GoToWorkPlace();
                     return false;
 
                 }
@@ -84,20 +86,18 @@ namespace ModGameChanges.Lopital
                 if ((homeRoomType != null) && homeRoomType.HasTag(Tags.Vanilla.JanitorAdminWorkplace)
                     && employeeComponent.ShouldStartCommuting() && (!__instance.GetDepartment().IsClosed()))
                 {
-                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} - going to admin workplace");
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} - going to workplace");
 
-                    employeeComponent.SetSimpleCommuteDuration();
-                    //__instance.GoToWorkPlace();
+                    __instance.GoToWorkPlace();
                     return false;
                 }
 
                 if ((homeRoomType != null)
                     && employeeComponent.ShouldStartCommuting() && (!__instance.GetDepartment().IsClosed()))
                 {
-                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} - going to janitor workplace");
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} - going to workplace");
 
-                    employeeComponent.SetSimpleCommuteDuration();
-                    //__instance.GoToWorkPlace();
+                    __instance.GoToWorkPlace();
                     return false;
                 }
             }
@@ -108,7 +108,7 @@ namespace ModGameChanges.Lopital
                 if ((homeRoomType != null) && homeRoomType.HasTag(Tags.Vanilla.JanitorAdminWorkplace)
                     && employeeComponent.ShouldStartCommuting() && (!__instance.GetDepartment().IsClosed()))
                 {
-                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} - going to admin workplace");
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} - going to workplace");
 
                     __instance.GoToWorkPlace();
                     return false;
@@ -117,7 +117,7 @@ namespace ModGameChanges.Lopital
                 if ((homeRoomType != null)
                     && employeeComponent.ShouldStartCommuting() && (!__instance.GetDepartment().IsClosed()))
                 {
-                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} - going to janitor workplace");
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} - going to workplace");
 
                     __instance.GoToWorkPlace();
                     return false;

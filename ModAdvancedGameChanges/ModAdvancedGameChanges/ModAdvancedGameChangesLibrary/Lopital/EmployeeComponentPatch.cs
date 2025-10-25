@@ -363,6 +363,19 @@ namespace ModGameChanges.Lopital
                 __instance.m_entity.GetComponent<MoodComponent>().AddSatisfactionModifier(Moods.Vanilla.Hangover);
             }
 
+            BehaviorJanitor behaviorJanitor = __instance.m_entity.GetComponent<BehaviorJanitor>();
+            if (behaviorJanitor != null)
+            {
+                // janitors don't have commuting state as doctors, nurses and lab specialists
+                // we just keep them at home longer time
+
+                float commuteTime = __instance.m_state.m_commuteTime;
+
+                __instance.SetSimpleCommuteDuration();
+
+                __instance.m_state.m_commuteTime += commuteTime;
+            }
+
             Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} Commute time: {__instance.m_state.m_commuteTime.ToString(CultureInfo.InvariantCulture)}");
 
             __instance.ResetNoWorkSpaceFlags();
