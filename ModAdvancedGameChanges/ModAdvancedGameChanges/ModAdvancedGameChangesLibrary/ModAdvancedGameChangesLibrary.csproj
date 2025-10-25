@@ -33,8 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Constants.cs" />
     <Compile Include="Debug.cs" />
+    <Compile Include="Constants\Departments.cs" />
+    <Compile Include="Constants\Localizations.cs" />
     <Compile Include="Lopital\BehaviorJanitorPatch.cs" />
     <Compile Include="DepartmentManagementLogisticsHybridControllerPatch.cs" />
     <Compile Include="Lopital\EmployeeComponentPatch.cs" />
@@ -43,8 +44,16 @@
     <Compile Include="Lopital\SkillPatch.cs" />
     <Compile Include="Lopital\SkillSetPatch.cs" />
     <Compile Include="ModAdvancedGameChanges.cs" />
+    <Compile Include="Constants\Moods.cs" />
+    <Compile Include="Constants\Perks.cs" />
+    <Compile Include="Constants\Procedures.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Constants\Schedules.cs" />
+    <Compile Include="Constants\Skills.cs" />
+    <Compile Include="Constants\States.cs" />
+    <Compile Include="Constants\Tags.cs" />
     <Compile Include="Tweakable.cs" />
+    <Compile Include="Constants\Tweakables.cs" />
     <Compile Include="ViewSettingsPatch.cs" />
   </ItemGroup>
   <ItemGroup>

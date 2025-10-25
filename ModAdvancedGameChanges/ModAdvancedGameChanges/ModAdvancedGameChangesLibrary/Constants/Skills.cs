@@ -1,0 +1,30 @@
+﻿namespace ModAdvancedGameChanges.Constants
+{
+    public static class Skills
+    {
+        public static class Vanilla
+        {
+            public const string SKILL_DOC_QUALIF_GENERAL_MEDICINE = "SKILL_DOC_QUALIF_GENERAL_MEDICINE";
+            public const string SKILL_DOC_QUALIF_DIAGNOSIS = "SKILL_DOC_QUALIF_DIAGNOSIS";
+
+            public const string SKILL_NURSE_QUALIF_PATIENT_CARE = "SKILL_NURSE_QUALIF_PATIENT_CARE";
+
+            public const string SKILL_NURSE_SPEC_RECEPTIONIST = "SKILL_NURSE_SPEC_RECEPTIONIST";
+            public const string SKILL_NURSE_SPEC_MEDICAL_SURGERY = "SKILL_NURSE_SPEC_MEDICAL_SURGERY";
+            public const string SKILL_NURSE_SPEC_CLINICAL_SPECIALIST = "SKILL_NURSE_SPEC_CLINICAL_SPECIALIST";
+
+            public const string SKILL_LAB_SPECIALIST_QUALIF_SCIENCE_EDUCATION = "SKILL_LAB_SPECIALIST_QUALIF_SCIENCE_EDUCATION";
+
+            public const string SKILL_LAB_SPECIALIST_SPEC_BIOCHEMISTRY = "SKILL_LAB_SPECIALIST_SPEC_BIOCHEMISTRY";
+            public const string SKILL_LAB_SPECIALIST_SPEC_USG = "SKILL_LAB_SPECIALIST_SPEC_USG";
+            public const string SKILL_LAB_SPECIALIST_SPEC_CARDIOLOGY = "SKILL_LAB_SPECIALIST_SPEC_CARDIOLOGY";
+            public const string SKILL_LAB_SPECIALIST_SPEC_NEUROLOGY = "SKILL_LAB_SPECIALIST_SPEC_NEUROLOGY";
+
+            public const string SKILL_JANITOR_QUALIF_EFFICIENCY = "SKILL_JANITOR_QUALIF_EFFICIENCY";
+            public const string SKILL_JANITOR_QUALIF_DEXTERITY = "SKILL_JANITOR_QUALIF_DEXTERITY";
+
+            public const string DLC_SKILL_JANITOR_SPEC_VENDOR = "DLC_SKILL_JANITOR_SPEC_VENDOR";
+            public const string DLC_SKILL_JANITOR_SPEC_MANAGER = "DLC_SKILL_JANITOR_SPEC_MANAGER";
+        }
+    }
+}

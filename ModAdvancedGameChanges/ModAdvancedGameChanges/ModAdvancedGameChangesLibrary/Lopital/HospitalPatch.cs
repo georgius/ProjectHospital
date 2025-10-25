@@ -29,10 +29,10 @@ namespace ModAdvancedGameChanges.Lopital
             {
                 Debug.Log(System.Reflection.MethodBase.GetCurrentMethod(), $"Making staff shifts equal");
 
-                GameDBSchedule staffDayShift = Database.Instance.GetEntry<GameDBSchedule>(Constants.Schedule.Vanilla.SCHEDULE_OPENING_HOURS_STAFF);
-                GameDBSchedule staffNightShift = Database.Instance.GetEntry<GameDBSchedule>(Constants.Schedule.Vanilla.SCHEDULE_OPENING_HOURS_STAFF_NIGHT);
-                GameDBSchedule staffMorningChange = Database.Instance.GetEntry<GameDBSchedule>(Constants.Schedule.Vanilla.SCHEDULE_SHIFT_CHANGE_MORNING);
-                GameDBSchedule staffEveningChange = Database.Instance.GetEntry<GameDBSchedule>(Constants.Schedule.Vanilla.SCHEDULE_SHIFT_CHANGE_EVENING);
+                GameDBSchedule staffDayShift = Database.Instance.GetEntry<GameDBSchedule>(Constants.Schedules.Vanilla.SCHEDULE_OPENING_HOURS_STAFF);
+                GameDBSchedule staffNightShift = Database.Instance.GetEntry<GameDBSchedule>(Constants.Schedules.Vanilla.SCHEDULE_OPENING_HOURS_STAFF_NIGHT);
+                GameDBSchedule staffMorningChange = Database.Instance.GetEntry<GameDBSchedule>(Constants.Schedules.Vanilla.SCHEDULE_SHIFT_CHANGE_MORNING);
+                GameDBSchedule staffEveningChange = Database.Instance.GetEntry<GameDBSchedule>(Constants.Schedules.Vanilla.SCHEDULE_SHIFT_CHANGE_EVENING);
 
                 // we need that staff day shift starts at least at 3h and at most 20h
                 // each shift will be 12h

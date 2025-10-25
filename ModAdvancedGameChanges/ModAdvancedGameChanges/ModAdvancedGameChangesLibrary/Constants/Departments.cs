@@ -1,0 +1,15 @@
+﻿namespace ModAdvancedGameChanges.Constants
+{
+    public static class Departments
+    {
+        public static class Mod
+        {
+            public const string TrainingDepartment = "AGC_DPT_TRAINING";
+        }
+
+        public static class Vanilla
+        {
+            public const string AdministrativeDepartment = "DLC_DPT_ADMINISTRATIVE";
+        }
+    }
+}

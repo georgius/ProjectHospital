@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using Lopital;
 using ModAdvancedGameChanges;
+using ModAdvancedGameChanges.Constants;
 using System;
 using System.Globalization;
 
@@ -28,11 +29,11 @@ namespace ModGameChanges.Lopital
                         bool levelUp = false;
 
                         float num = (float)points * (Tweakable.Vanilla.LevelingRatePercent() / 100f);
-                        if (__instance.m_entity.GetComponent<PerkComponent>().m_perkSet.HasPerk(Constants.Perks.Vanilla.FastLearner))
+                        if (__instance.m_entity.GetComponent<PerkComponent>().m_perkSet.HasPerk(Perks.Vanilla.FastLearner))
                         {
                             num *= 1.1f;
                         }
-                        else if (__instance.m_entity.GetComponent<PerkComponent>().m_perkSet.HasPerk(Constants.Perks.Vanilla.SlowLearner))
+                        else if (__instance.m_entity.GetComponent<PerkComponent>().m_perkSet.HasPerk(Perks.Vanilla.SlowLearner))
                         {
                             num *= 0.9f;
                         }
@@ -93,13 +94,13 @@ namespace ModGameChanges.Lopital
                         if (levelUp)
                         {
                             __instance.m_state.m_leveledUpAfterHire = true;
-                            if (__instance.m_entity.GetComponent<PerkComponent>().m_perkSet.HasHiddenPerk(Constants.Perks.Vanilla.FastLearner))
+                            if (__instance.m_entity.GetComponent<PerkComponent>().m_perkSet.HasHiddenPerk(Perks.Vanilla.FastLearner))
                             {
-                                __instance.m_entity.GetComponent<PerkComponent>().m_perkSet.RevealPerk(Constants.Perks.Vanilla.FastLearner);
+                                __instance.m_entity.GetComponent<PerkComponent>().m_perkSet.RevealPerk(Perks.Vanilla.FastLearner);
                             }
-                            if (__instance.m_entity.GetComponent<PerkComponent>().m_perkSet.HasHiddenPerk(Constants.Perks.Vanilla.SlowLearner))
+                            if (__instance.m_entity.GetComponent<PerkComponent>().m_perkSet.HasHiddenPerk(Perks.Vanilla.SlowLearner))
                             {
-                                __instance.m_entity.GetComponent<PerkComponent>().m_perkSet.RevealPerk(Constants.Perks.Vanilla.SlowLearner);
+                                __instance.m_entity.GetComponent<PerkComponent>().m_perkSet.RevealPerk(Perks.Vanilla.SlowLearner);
                             }
                         }
 
@@ -138,12 +139,12 @@ namespace ModGameChanges.Lopital
             {
                 Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"08 Employee: {__instance.m_entity.Name}");
 
-                float num = (float)points * (Database.Instance.GetEntry<GameDBTweakableFloat>(Constants.Tweakables.Vanilla.LevelingRatePercent).Value / 100f);
-                if (__instance.m_entity.GetComponent<PerkComponent>().m_perkSet.HasPerk(Constants.Perks.Vanilla.FastLearner))
+                float num = (float)points * (Database.Instance.GetEntry<GameDBTweakableFloat>(Tweakables.Vanilla.LevelingRatePercent).Value / 100f);
+                if (__instance.m_entity.GetComponent<PerkComponent>().m_perkSet.HasPerk(Perks.Vanilla.FastLearner))
                 {
                     __instance.m_state.m_points += (int)num * 110 / 100;
                 }
-                else if (__instance.m_entity.GetComponent<PerkComponent>().m_perkSet.HasPerk(Constants.Perks.Vanilla.SlowLearner))
+                else if (__instance.m_entity.GetComponent<PerkComponent>().m_perkSet.HasPerk(Perks.Vanilla.SlowLearner))
                 {
                     __instance.m_state.m_points += (int)num * 90 / 100;
                 }
@@ -162,13 +163,13 @@ namespace ModGameChanges.Lopital
                     __instance.m_state.m_points -= nextLevelPoints;
                     __instance.m_state.m_level++;
                     __instance.m_state.m_leveledUpAfterHire = true;
-                    if (__instance.m_entity.GetComponent<PerkComponent>().m_perkSet.HasHiddenPerk(Constants.Perks.Vanilla.FastLearner))
+                    if (__instance.m_entity.GetComponent<PerkComponent>().m_perkSet.HasHiddenPerk(Perks.Vanilla.FastLearner))
                     {
-                        __instance.m_entity.GetComponent<PerkComponent>().m_perkSet.RevealPerk(Constants.Perks.Vanilla.FastLearner);
+                        __instance.m_entity.GetComponent<PerkComponent>().m_perkSet.RevealPerk(Perks.Vanilla.FastLearner);
                     }
-                    if (__instance.m_entity.GetComponent<PerkComponent>().m_perkSet.HasHiddenPerk(Constants.Perks.Vanilla.SlowLearner))
+                    if (__instance.m_entity.GetComponent<PerkComponent>().m_perkSet.HasHiddenPerk(Perks.Vanilla.SlowLearner))
                     {
-                        __instance.m_entity.GetComponent<PerkComponent>().m_perkSet.RevealPerk(Constants.Perks.Vanilla.SlowLearner);
+                        __instance.m_entity.GetComponent<PerkComponent>().m_perkSet.RevealPerk(Perks.Vanilla.SlowLearner);
                     }
                     string titleLocID = "NOTIF_CHARACTER_LEVELED_UP";
                     if (__instance.m_state.m_level == 2)
@@ -197,9 +198,9 @@ namespace ModGameChanges.Lopital
                         {
                             GameDBSkill[] array = new GameDBSkill[]
                             {
-                                Database.Instance.GetEntry<GameDBSkill>(Constants.Skills.Vanilla.SKILL_NURSE_SPEC_RECEPTIONIST),
-                                Database.Instance.GetEntry<GameDBSkill>(Constants.Skills.Vanilla.SKILL_NURSE_SPEC_MEDICAL_SURGERY),
-                                Database.Instance.GetEntry<GameDBSkill>(Constants.Skills.Vanilla.SKILL_NURSE_SPEC_CLINICAL_SPECIALIST)
+                                Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.SKILL_NURSE_SPEC_RECEPTIONIST),
+                                Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.SKILL_NURSE_SPEC_MEDICAL_SURGERY),
+                                Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.SKILL_NURSE_SPEC_CLINICAL_SPECIALIST)
                             };
                             __instance.m_state.m_skillSet.m_specialization1 = new Skill(array[UnityEngine.Random.Range(0, array.Length)], 1f);
                         }
@@ -211,10 +212,10 @@ namespace ModGameChanges.Lopital
                         {
                             GameDBSkill[] array2 = new GameDBSkill[]
                             {
-                                Database.Instance.GetEntry<GameDBSkill>(Constants.Skills.Vanilla.SKILL_LAB_SPECIALIST_SPEC_BIOCHEMISTRY),
-                                Database.Instance.GetEntry<GameDBSkill>(Constants.Skills.Vanilla.SKILL_LAB_SPECIALIST_SPEC_USG),
-                                Database.Instance.GetEntry<GameDBSkill>(Constants.Skills.Vanilla.SKILL_LAB_SPECIALIST_SPEC_CARDIOLOGY),
-                                Database.Instance.GetEntry<GameDBSkill>(Constants.Skills.Vanilla.SKILL_LAB_SPECIALIST_SPEC_NEUROLOGY)
+                                Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.SKILL_LAB_SPECIALIST_SPEC_BIOCHEMISTRY),
+                                Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.SKILL_LAB_SPECIALIST_SPEC_USG),
+                                Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.SKILL_LAB_SPECIALIST_SPEC_CARDIOLOGY),
+                                Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.SKILL_LAB_SPECIALIST_SPEC_NEUROLOGY)
                             };
                             __instance.m_state.m_skillSet.m_specialization1 = new Skill(array2[UnityEngine.Random.Range(0, array2.Length)], 1f);
                         }
@@ -228,8 +229,8 @@ namespace ModGameChanges.Lopital
 
                             GameDBSkill[] array = new GameDBSkill[]
                             {
-                                Database.Instance.GetEntry<GameDBSkill>(Constants.Skills.Vanilla.DLC_SKILL_JANITOR_SPEC_VENDOR),
-                                Database.Instance.GetEntry<GameDBSkill>(Constants.Skills.Vanilla.DLC_SKILL_JANITOR_SPEC_MANAGER)
+                                Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.DLC_SKILL_JANITOR_SPEC_VENDOR),
+                                Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.DLC_SKILL_JANITOR_SPEC_MANAGER)
                             };
 
                             __instance.m_state.m_skillSet.m_specialization1 = new Skill(array[UnityEngine.Random.Range(0, array.Length)], 1f);
@@ -341,25 +342,27 @@ namespace ModGameChanges.Lopital
 
             PerkComponent perkComponent = __instance.m_entity.GetComponent<PerkComponent>();
 
+            // the __instance.m_state.m_commuteTime will represent time
+
             // start commuting between one hour and half hour before shift
             __instance.m_state.m_commuteTime = UnityEngine.Random.Range(-1f, -0.5f);
 
             // if long commute, add between 0.25 and 2 hours
-            __instance.m_state.m_commuteTime += perkComponent.m_perkSet.HasPerk(Constants.Perks.Vanilla.LongCommute) ? UnityEngine.Random.Range(0.25f, 2f) : 0;
+            __instance.m_state.m_commuteTime += perkComponent.m_perkSet.HasPerk(Perks.Vanilla.LongCommute) ? UnityEngine.Random.Range(0.25f, 2f) : 0;
 
-            if (perkComponent.m_perkSet.HasPerk(Constants.Perks.Vanilla.Alcoholism) && (__instance.m_state.m_shift == Shift.DAY)
+            if (perkComponent.m_perkSet.HasPerk(Perks.Vanilla.Alcoholism) && (__instance.m_state.m_shift == Shift.DAY)
                 && (UnityEngine.Random.Range(0, 100) < 4))
             {
                 __instance.m_state.m_commuteTime = 2f + UnityEngine.Random.Range(0f, 1.5f);
                 __instance.m_state.m_efficiency = 0.5f;
 
-                if (perkComponent.m_perkSet.HasHiddenPerk(Constants.Perks.Vanilla.Alcoholism))
+                if (perkComponent.m_perkSet.HasHiddenPerk(Perks.Vanilla.Alcoholism))
                 {
                     NotificationManager.GetInstance().AddMessage(__instance.m_entity, "NOTIF_EMPLOYEE_GOT_DRUNK", string.Empty, string.Empty, string.Empty, 0, 0, 0, 0, null, null);
-                    perkComponent.m_perkSet.RevealPerk(Constants.Perks.Vanilla.Alcoholism);
+                    perkComponent.m_perkSet.RevealPerk(Perks.Vanilla.Alcoholism);
                 }
 
-                __instance.m_entity.GetComponent<MoodComponent>().AddSatisfactionModifier(Constants.Mood.Vanilla.Hangover);
+                __instance.m_entity.GetComponent<MoodComponent>().AddSatisfactionModifier(Moods.Vanilla.Hangover);
             }
 
             Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} Commute time: {__instance.m_state.m_commuteTime.ToString(CultureInfo.InvariantCulture)}");
@@ -386,8 +389,8 @@ namespace ModGameChanges.Lopital
             // each shift will be 12h
 
             GameDBSchedule shift = (__instance.m_state.m_shift == Shift.DAY) ?
-                Database.Instance.GetEntry<GameDBSchedule>(Constants.Schedule.Vanilla.SCHEDULE_OPENING_HOURS_STAFF) :
-                Database.Instance.GetEntry<GameDBSchedule>(Constants.Schedule.Vanilla.SCHEDULE_OPENING_HOURS_STAFF_NIGHT);
+                Database.Instance.GetEntry<GameDBSchedule>(Schedules.Vanilla.SCHEDULE_OPENING_HOURS_STAFF) :
+                Database.Instance.GetEntry<GameDBSchedule>(Schedules.Vanilla.SCHEDULE_OPENING_HOURS_STAFF_NIGHT);
 
             // because ViewSettingsPatch.FixScheduleTimes is fixing all schedules in game,
             // then values in game are surely between 0 and 24

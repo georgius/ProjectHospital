@@ -2,6 +2,7 @@
 using HarmonyLib;
 using Lopital;
 using ModAdvancedGameChanges;
+using ModAdvancedGameChanges.Constants;
 using System.Globalization;
 using UnityEngine;
 
@@ -29,11 +30,11 @@ namespace ModGameChanges.Lopital
                 num *= 0.01f * (100f + (float)__instance.m_gameDBSkill.Entry.ExtraLevelingPercent);
             }
 
-            if (character.GetComponent<PerkComponent>().m_perkSet.HasPerk(Constants.Perks.Vanilla.FastLearner))
+            if (character.GetComponent<PerkComponent>().m_perkSet.HasPerk(Perks.Vanilla.FastLearner))
             {
                 num *= 1.3f;
             }
-            else if (character.GetComponent<PerkComponent>().m_perkSet.HasPerk(Constants.Perks.Vanilla.SlowLearner))
+            else if (character.GetComponent<PerkComponent>().m_perkSet.HasPerk(Perks.Vanilla.SlowLearner))
             {
                 num *= 0.7f;
             }

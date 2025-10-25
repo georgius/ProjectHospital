@@ -1,9 +1,6 @@
-﻿using ModAdvancedGameChanges;
+﻿using ModAdvancedGameChanges.Constants;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 
 namespace ModGameChanges
 {
@@ -19,23 +16,23 @@ namespace ModGameChanges
             Tweakable.CheckNonLinearSkillLevelingConfiguration();
             Tweakable.CheckEnableExtraLevelingPercent();
             Tweakable.CheckClinicDoctorsMaxLevel();
-            Tweakable.CheckEmployeeLevelPoints(5, Constants.Tweakables.Mod.AGC_TWEAKABLE_DOCTOR_LEVEL_POINTS_FORMAT);              // doctors
-            Tweakable.CheckEmployeeLevelPoints(3, Constants.Tweakables.Mod.AGC_TWEAKABLE_NURSE_LEVEL_POINTS_FORMAT);               // nurses
-            Tweakable.CheckEmployeeLevelPoints(3, Constants.Tweakables.Mod.AGC_TWEAKABLE_LAB_SPECIALIST_LEVEL_POINTS_FORMAT);      // lab specialists
-            Tweakable.CheckEmployeeLevelPoints(3, Constants.Tweakables.Mod.AGC_TWEAKABLE_JANITOR_LEVEL_POINTS_FORMAT);             // janitors
+            Tweakable.CheckEmployeeLevelPoints(5, Tweakables.Mod.AGC_TWEAKABLE_DOCTOR_LEVEL_POINTS_FORMAT);              // doctors
+            Tweakable.CheckEmployeeLevelPoints(3, Tweakables.Mod.AGC_TWEAKABLE_NURSE_LEVEL_POINTS_FORMAT);               // nurses
+            Tweakable.CheckEmployeeLevelPoints(3, Tweakables.Mod.AGC_TWEAKABLE_LAB_SPECIALIST_LEVEL_POINTS_FORMAT);      // lab specialists
+            Tweakable.CheckEmployeeLevelPoints(3, Tweakables.Mod.AGC_TWEAKABLE_JANITOR_LEVEL_POINTS_FORMAT);             // janitors
         }
 
         public static void CheckNonLinearSkillLevelingConfiguration()
         {
-            var skillLevels = Tweakable.EnsureExists<GameDBTweakableInt>(Constants.Tweakables.Mod.AGC_TWEAKABLE_SKILL_LEVELS);
+            var skillLevels = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_SKILL_LEVELS);
             if (skillLevels.Value < 1)
             {
-                throw new Exception($"The tweakable '{Constants.Tweakables.Mod.AGC_TWEAKABLE_SKILL_LEVELS}' must be greater than zero.");
+                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_SKILL_LEVELS}' must be greater than zero.");
             }
 
             for (int i = 0; i < skillLevels.Value; i++)
             {
-                var name = String.Format(CultureInfo.InvariantCulture, Constants.Tweakables.Mod.AGC_TWEAKABLE_SKILL_POINTS_FORMAT, i);
+                var name = String.Format(CultureInfo.InvariantCulture, Tweakables.Mod.AGC_TWEAKABLE_SKILL_POINTS_FORMAT, i);
                 var skillPoints = Tweakable.EnsureExists<GameDBTweakableInt>(name);
 
                 if (skillPoints.Value < 1)
@@ -48,19 +45,19 @@ namespace ModGameChanges
         public static void CheckEnableExtraLevelingPercent()
         {
             // the AGC_TWEAKABLE_ENABLE_EXTRA_LEVELING_PERCENT value is not relevant, we test it against 1
-            Tweakable.EnsureExists<GameDBTweakableInt>(Constants.Tweakables.Mod.AGC_TWEAKABLE_ENABLE_EXTRA_LEVELING_PERCENT);
+            Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_ENABLE_EXTRA_LEVELING_PERCENT);
         }
 
         public static void CheckClinicDoctorsMaxLevel()
         {
-            var allowedLevel = Tweakable.EnsureExists<GameDBTweakableInt>(Constants.Tweakables.Mod.AGC_TWEAKABLE_ALLOWED_CLINIC_DOCTORS_LEVEL);
+            var allowedLevel = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_ALLOWED_CLINIC_DOCTORS_LEVEL);
             if (allowedLevel.Value < 1)
             {
-                throw new Exception($"The tweakable '{Constants.Tweakables.Mod.AGC_TWEAKABLE_ALLOWED_CLINIC_DOCTORS_LEVEL}' must be greater than zero.");
+                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_ALLOWED_CLINIC_DOCTORS_LEVEL}' must be greater than zero.");
             }
             if (allowedLevel.Value > 5)
             {
-                throw new Exception($"The tweakable '{Constants.Tweakables.Mod.AGC_TWEAKABLE_ALLOWED_CLINIC_DOCTORS_LEVEL}' must be lower than six.");
+                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_ALLOWED_CLINIC_DOCTORS_LEVEL}' must be lower than six.");
             }
         }
 
@@ -92,42 +89,42 @@ namespace ModGameChanges
         {
             public static int DoctorLevelPoints(int index)
             {
-                return Tweakable.GetTweakable<GameDBTweakableInt>(String.Format(CultureInfo.InvariantCulture, Constants.Tweakables.Mod.AGC_TWEAKABLE_DOCTOR_LEVEL_POINTS_FORMAT, index)).Value;
+                return Tweakable.GetTweakable<GameDBTweakableInt>(String.Format(CultureInfo.InvariantCulture, Tweakables.Mod.AGC_TWEAKABLE_DOCTOR_LEVEL_POINTS_FORMAT, index)).Value;
             }
 
             public static int NurseLevelPoints(int index)
             {
-                return Tweakable.GetTweakable<GameDBTweakableInt>(String.Format(CultureInfo.InvariantCulture, Constants.Tweakables.Mod.AGC_TWEAKABLE_NURSE_LEVEL_POINTS_FORMAT, index)).Value;
+                return Tweakable.GetTweakable<GameDBTweakableInt>(String.Format(CultureInfo.InvariantCulture, Tweakables.Mod.AGC_TWEAKABLE_NURSE_LEVEL_POINTS_FORMAT, index)).Value;
             }
 
             public static int LabSpecialistLevelPoints(int index)
             {
-                return Tweakable.GetTweakable<GameDBTweakableInt>(String.Format(CultureInfo.InvariantCulture, Constants.Tweakables.Mod.AGC_TWEAKABLE_LAB_SPECIALIST_LEVEL_POINTS_FORMAT, index)).Value;
+                return Tweakable.GetTweakable<GameDBTweakableInt>(String.Format(CultureInfo.InvariantCulture, Tweakables.Mod.AGC_TWEAKABLE_LAB_SPECIALIST_LEVEL_POINTS_FORMAT, index)).Value;
             }
 
             public static int JanitorLevelPoints(int index)
             {
-                return Tweakable.GetTweakable<GameDBTweakableInt>(String.Format(CultureInfo.InvariantCulture, Constants.Tweakables.Mod.AGC_TWEAKABLE_JANITOR_LEVEL_POINTS_FORMAT, index)).Value;
+                return Tweakable.GetTweakable<GameDBTweakableInt>(String.Format(CultureInfo.InvariantCulture, Tweakables.Mod.AGC_TWEAKABLE_JANITOR_LEVEL_POINTS_FORMAT, index)).Value;
             }
 
             public static int SkillLevels()
             {
-                return Tweakable.GetTweakable<GameDBTweakableInt>(Constants.Tweakables.Mod.AGC_TWEAKABLE_SKILL_LEVELS).Value;
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_SKILL_LEVELS).Value;
             }
 
             public static int SkillPoints(int index)
             {
-                return Tweakable.GetTweakable<GameDBTweakableInt>(String.Format(CultureInfo.InvariantCulture, Constants.Tweakables.Mod.AGC_TWEAKABLE_SKILL_POINTS_FORMAT, index)).Value;
+                return Tweakable.GetTweakable<GameDBTweakableInt>(String.Format(CultureInfo.InvariantCulture, Tweakables.Mod.AGC_TWEAKABLE_SKILL_POINTS_FORMAT, index)).Value;
             }
 
             public static bool EnableExtraLevelingPercent()
             {
-                return (Tweakable.GetTweakable<GameDBTweakableInt>(Constants.Tweakables.Mod.AGC_TWEAKABLE_ENABLE_EXTRA_LEVELING_PERCENT).Value == 1);
+                return (Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_ENABLE_EXTRA_LEVELING_PERCENT).Value == 1);
             }
 
             public static int AllowedClinicDoctorsLevel()
             {
-                return Tweakable.GetTweakable<GameDBTweakableInt>(Constants.Tweakables.Mod.AGC_TWEAKABLE_ALLOWED_CLINIC_DOCTORS_LEVEL).Value;
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_ALLOWED_CLINIC_DOCTORS_LEVEL).Value;
             }
         }
 
@@ -135,12 +132,12 @@ namespace ModGameChanges
         {
             public static float LevelingRatePercent()
             {
-                return Tweakable.GetTweakable<GameDBTweakableFloat>(Constants.Tweakables.Vanilla.LevelingRatePercent).Value;
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Vanilla.LevelingRatePercent).Value;
             }
 
             public static bool DlcHospitalServicesEnabled()
             {
-                GameDBTweakableInt dlcHospitalServices = Database.Instance.GetEntry<GameDBTweakableInt>(Constants.Tweakables.Vanilla.DLC_ADMIN_PATHOLOGY_ENABLED);
+                GameDBTweakableInt dlcHospitalServices = Database.Instance.GetEntry<GameDBTweakableInt>(Tweakables.Vanilla.DLC_ADMIN_PATHOLOGY_ENABLED);
 
                 return ((dlcHospitalServices != null) && (dlcHospitalServices.Value == 1));
             }
