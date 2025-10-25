@@ -9,6 +9,9 @@
 
         public static class Vanilla
         {
+            public const string Emergency = "DPT_EMERGENCY";
+            public const string Radiology = "DPT_RADIOLOGY";
+            public const string MedicalLaboratories = "DPT_LAB";
             public const string AdministrativeDepartment = "DLC_DPT_ADMINISTRATIVE";
         }
     }
