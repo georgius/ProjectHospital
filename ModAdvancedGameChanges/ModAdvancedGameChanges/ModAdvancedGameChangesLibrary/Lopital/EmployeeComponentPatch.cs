@@ -342,8 +342,6 @@ namespace ModGameChanges.Lopital
 
             PerkComponent perkComponent = __instance.m_entity.GetComponent<PerkComponent>();
 
-            // the __instance.m_state.m_commuteTime will represent time
-
             // start commuting between one hour and half hour before shift
             __instance.m_state.m_commuteTime = UnityEngine.Random.Range(-1f, -0.5f);
 
