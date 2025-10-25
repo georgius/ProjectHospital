@@ -6,7 +6,7 @@ namespace ModAdvancedGameChanges.Constants
     {
         public static class Janitor
         {
-            public static BehaviorJanitorState Commuting = (BehaviorJanitorState)30;
+            public const BehaviorJanitorState Commuting = (BehaviorJanitorState)30;
         }
     }
 }
