@@ -1,5 +1,7 @@
-﻿using HarmonyLib;
+﻿using GLib;
+using HarmonyLib;
 using Lopital;
+using ModAdvancedGameChanges.Constants;
 using ModGameChanges;
 using System;
 using System.Collections;
@@ -93,6 +95,31 @@ namespace ModAdvancedGameChanges.Lopital
             }
 
             return true;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(Hospital), nameof(Hospital.CheckDepartmentJanitorBoss))]
+        public static bool CheckDepartmentJanitorBossPrefix(Entity janitor, Hospital __instance)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            Department department = janitor.GetComponent<EmployeeComponent>().m_state.m_department.GetEntity();
+            Department departmentOfType = MapScriptInterface.Instance.GetDepartmentOfType(Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.Emergency));
+
+            if (department.m_departmentPersistentData.m_chiefDoctor != null)
+            {
+                janitor.GetComponent<EmployeeComponent>().m_state.m_supervisor = department.m_departmentPersistentData.m_chiefDoctor;
+            }
+            else if (departmentOfType.m_departmentPersistentData.m_chiefDoctor != null)
+            {
+                janitor.GetComponent<EmployeeComponent>().m_state.m_supervisor = departmentOfType.m_departmentPersistentData.m_chiefDoctor;
+            }
+
+            return false;
         }
 
         private static void SetScheduleTimes(GameDBSchedule schedule, float startTime, float endTime)
