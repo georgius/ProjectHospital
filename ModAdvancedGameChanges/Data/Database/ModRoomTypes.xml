@@ -30,6 +30,7 @@
 		<Tags>
 			<Tag>intern_workspace</Tag>
 			<Tag>doctor_workspace</Tag>
+			<Tag>doctor_training_workspace</Tag>
 		</Tags>
 
 		<MinWidth>2</MinWidth>
@@ -65,6 +66,7 @@
 
 		<Tags>
 			<Tag>nurse_workspace</Tag>
+			<Tag>nurse_training_workspace</Tag>
 		</Tags>
 
 		<MinWidth>2</MinWidth>
@@ -100,6 +102,7 @@
 
 		<Tags>
 			<Tag>lab_specialist_workspace</Tag>
+			<Tag>lab_specialist_training_workspace</Tag>
 		</Tags>
 
 		<MinWidth>2</MinWidth>

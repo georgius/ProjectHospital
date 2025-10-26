@@ -1,15 +1,15 @@
 ﻿<Database>
 	<GameDBTweakableInt ID="AGC_TWEAKABLE_DOCTOR_LEVEL_POINTS_1">
-		<Value>100</Value>
-	</GameDBTweakableInt>
-	<GameDBTweakableInt ID="AGC_TWEAKABLE_DOCTOR_LEVEL_POINTS_2">
 		<Value>200</Value>
 	</GameDBTweakableInt>
-	<GameDBTweakableInt ID="AGC_TWEAKABLE_DOCTOR_LEVEL_POINTS_3">
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_DOCTOR_LEVEL_POINTS_2">
 		<Value>400</Value>
 	</GameDBTweakableInt>
-	<GameDBTweakableInt ID="AGC_TWEAKABLE_DOCTOR_LEVEL_POINTS_4">
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_DOCTOR_LEVEL_POINTS_3">
 		<Value>800</Value>
+	</GameDBTweakableInt>
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_DOCTOR_LEVEL_POINTS_4">
+		<Value>1600</Value>
 	</GameDBTweakableInt>
 	
 	<GameDBTweakableInt ID="AGC_TWEAKABLE_NURSE_LEVEL_POINTS_1">
@@ -48,19 +48,19 @@
 	</GameDBTweakableInt>
 
 	<GameDBTweakableInt ID="AGC_TWEAKABLE_SKILL_POINTS_0">
-		<Value>100</Value>
-	</GameDBTweakableInt>
-	<GameDBTweakableInt ID="AGC_TWEAKABLE_SKILL_POINTS_1">
 		<Value>200</Value>
 	</GameDBTweakableInt>
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_SKILL_POINTS_1">
+		<Value>400</Value>
+	</GameDBTweakableInt>
 	<GameDBTweakableInt ID="AGC_TWEAKABLE_SKILL_POINTS_2">
-		<Value>300</Value>
+		<Value>800</Value>
 	</GameDBTweakableInt>
 	<GameDBTweakableInt ID="AGC_TWEAKABLE_SKILL_POINTS_3">
-		<Value>600</Value>
+		<Value>1600</Value>
 	</GameDBTweakableInt>
 	<GameDBTweakableInt ID="AGC_TWEAKABLE_SKILL_POINTS_4">
-		<Value>1200</Value>
+		<Value>3200</Value>
 	</GameDBTweakableInt>
 	
 	<GameDBTweakableInt ID="AGC_TWEAKABLE_ENABLE_EXTRA_LEVELING_PERCENT">
