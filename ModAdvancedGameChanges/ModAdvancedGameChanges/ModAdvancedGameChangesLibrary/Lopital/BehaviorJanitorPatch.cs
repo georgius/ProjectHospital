@@ -3,8 +3,6 @@ using HarmonyLib;
 using Lopital;
 using ModAdvancedGameChanges.Constants;
 using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Reflection;
 using UnityEngine;
 
@@ -66,6 +64,28 @@ namespace ModGameChanges.Lopital
             }
 
             return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorJanitor), nameof(BehaviorJanitor.ReceiveMessage))]
+        public static bool ReceiveMessagePrefix(Message message, BehaviorJanitor __instance)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} Message received: {message.m_messageID}");
+
+            if (message.m_messageID == Messages.REST_REDUCED)
+            {
+                __instance.GetComponent<MoodComponent>().GetNeed(Needs.Vanilla.Rest).ReduceRandomized(message.m_mainParameter, __instance.GetComponent<MoodComponent>());
+
+                return false;
+            }
+
+            return true;
         }
 
         //[HarmonyPrefix]
@@ -248,91 +268,6 @@ namespace ModGameChanges.Lopital
             }
 
             return false;
-
-
-            //if (ViewSettingsPatch.m_enabledTrainingDepartment)
-            //{
-            //    //if ((homeRoomType != null) && homeRoomType.HasTag(Tags.Mod.JanitorTrainingWorkspace)
-            //    //    && employeeComponent.ShouldStartCommuting() && (!__instance.GetDepartment().IsClosed()))
-            //    //{
-            //    //    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} - going to workplace");
-
-            //    //    var commonRoom = BehaviorJanitorPatch.GetCommonRoom(__instance);
-
-            //    //    __instance.GetComponent<WalkComponent>().SetDestination(commonRoom.GetDefaultUsePosition(), commonRoom.GetFloorIndex(), MovementType.WALKING);
-            //    //    __instance.SwitchState(BehaviorJanitorState.GoingToWorkplace);
-
-            //    //    //__instance.GoToWorkPlace();
-            //    //    return false;
-
-            //    //}
-
-            //    //if ((homeRoomType != null) && homeRoomType.HasTag(Tags.Vanilla.JanitorAdminWorkplace)
-            //    //    && employeeComponent.ShouldStartCommuting() && (!__instance.GetDepartment().IsClosed()))
-            //    //{
-            //    //    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} - going to workplace");
-
-            //    //    //__instance.GoToWorkPlace();
-
-            //    //    var commonRoom = BehaviorJanitorPatch.GetCommonRoom(__instance);
-
-            //    //    __instance.GetComponent<WalkComponent>().SetDestination(commonRoom.GetDefaultUsePosition(), commonRoom.GetFloorIndex(), MovementType.WALKING);
-            //    //    __instance.SwitchState(BehaviorJanitorState.GoingToWorkplace);
-
-            //    //    return false;
-            //    //}
-
-            //    //if ((homeRoomType != null)
-            //    //    && employeeComponent.ShouldStartCommuting() && (!__instance.GetDepartment().IsClosed()))
-            //    //{
-            //    //    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} - going to workplace");
-
-            //    //    //__instance.GoToWorkPlace();
-
-            //    //    var commonRoom = BehaviorJanitorPatch.GetCommonRoom(__instance);
-
-            //    //    __instance.GetComponent<WalkComponent>().SetDestination(commonRoom.GetDefaultUsePosition(), commonRoom.GetFloorIndex(), MovementType.WALKING);
-            //    //    __instance.SwitchState(BehaviorJanitorState.GoingToWorkplace);
-
-            //    //    return false;
-            //    //}
-            //}
-            //else
-            //{
-            //    // replace in-game method
-
-            //    if ((homeRoomType != null) && homeRoomType.HasTag(Tags.Vanilla.JanitorAdminWorkplace)
-            //        && employeeComponent.ShouldStartCommuting() && (!__instance.GetDepartment().IsClosed()))
-            //    {
-            //        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} - going to workplace");
-
-            //        //__instance.GoToWorkPlace();
-
-            //        var commonRoom = BehaviorJanitorPatch.GetCommonRoom(__instance);
-
-            //        __instance.GetComponent<WalkComponent>().SetDestination(commonRoom.GetDefaultUsePosition(), commonRoom.GetFloorIndex(), MovementType.WALKING);
-            //        __instance.SwitchState(BehaviorJanitorState.GoingToWorkplace);
-
-            //        return false;
-            //    }
-
-            //    if ((homeRoomType != null)
-            //        && employeeComponent.ShouldStartCommuting() && (!__instance.GetDepartment().IsClosed()))
-            //    {
-            //        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} - going to workplace");
-
-            //        //__instance.GoToWorkPlace();
-
-            //        var commonRoom = BehaviorJanitorPatch.GetCommonRoom(__instance);
-
-            //        __instance.GetComponent<WalkComponent>().SetDestination(commonRoom.GetDefaultUsePosition(), commonRoom.GetFloorIndex(), MovementType.WALKING);
-            //        __instance.SwitchState(BehaviorJanitorState.GoingToWorkplace);
-
-            //        return false;
-            //    }
-            //}
-
-            //return false;
         }
 
         [HarmonyPrefix]
