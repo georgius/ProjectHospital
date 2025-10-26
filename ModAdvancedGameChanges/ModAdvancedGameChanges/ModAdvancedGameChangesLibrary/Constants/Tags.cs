@@ -10,6 +10,7 @@
         public static class Vanilla
         {
             public const string CommonRoom = "common_room";
+            public const string Rest = "rest";
 
             public const string JanitorAdminWorkplace = "janitor_admin_workplace";
             public const string JanitorWorkspace = "janitor_workspace";
