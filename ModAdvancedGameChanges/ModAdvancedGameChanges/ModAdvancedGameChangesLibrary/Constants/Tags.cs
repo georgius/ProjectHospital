@@ -4,6 +4,9 @@
     {
         public static class Mod
         {
+            public const string DoctorTrainingWorkspace = "doctor_training_workspace";
+            public const string NurseTrainingWorkspace = "nurse_training_workspace";
+            public const string LabSpecialistTrainingWorkspace = "lab_specialist_training_workspace";
             public const string JanitorTrainingWorkspace = "janitor_training_workspace";
         }
 
