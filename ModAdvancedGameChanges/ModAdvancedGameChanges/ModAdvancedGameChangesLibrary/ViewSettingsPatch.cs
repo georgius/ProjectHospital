@@ -37,11 +37,11 @@ namespace ModGameChanges
                 {
                     Debug.Log(System.Reflection.MethodBase.GetCurrentMethod(), "Adding settings");
 
-                    ViewSettingsPatch.m_debug.Add(__instance, new GenericFlag<bool>("AGC_DEBUG", false));
-                    ViewSettingsPatch.m_enableNonLinearSkillLeveling.Add(__instance, new GenericFlag<bool>("AGC_ENABLE_NON_LINEAR_SKILL_LEVELING", true));
-                    ViewSettingsPatch.m_limitClinicDoctorsLevel.Add(__instance, new GenericFlag<bool>("AGC_LIMIT_CLINIC_DOCTORS_LEVEL", true));
-                    ViewSettingsPatch.m_forceEmployeeLowestHireLevel.Add(__instance, new GenericFlag<bool>("AGC_FORCE_EMPLOYEE_LOWEST_HIRE_LEVEL", true));
-                    ViewSettingsPatch.m_staffShiftsEqual.Add(__instance, new GenericFlag<bool>("AGC_STAFF_SHIFTS_EQUAL", true));
+                    ViewSettingsPatch.m_debug.Add(__instance, new GenericFlag<bool>("AGC_OPTION_DEBUG", false));
+                    ViewSettingsPatch.m_enableNonLinearSkillLeveling.Add(__instance, new GenericFlag<bool>("AGC_OPTION_ENABLE_NON_LINEAR_SKILL_LEVELING", true));
+                    ViewSettingsPatch.m_limitClinicDoctorsLevel.Add(__instance, new GenericFlag<bool>("AGC_OPTION_LIMIT_CLINIC_DOCTORS_LEVEL", true));
+                    ViewSettingsPatch.m_forceEmployeeLowestHireLevel.Add(__instance, new GenericFlag<bool>("AGC_OPTION_FORCE_EMPLOYEE_LOWEST_HIRE_LEVEL", true));
+                    ViewSettingsPatch.m_staffShiftsEqual.Add(__instance, new GenericFlag<bool>("AGC_OPTION_STAFF_SHIFTS_EQUAL", true));
 
                     var boolFlags = new List<GenericFlag<bool>>(__instance.m_allBoolFlags);
 

@@ -13,23 +13,28 @@
 			</GameDBLocalizedString>
 			
 			<GameDBLocalizedString>
-				<LocID>AGC_DEBUG</LocID>
+				<LocID>AGC_OPTION_DEBUG</LocID>
 				<Text>[AGC] Debug output</Text>
 			</GameDBLocalizedString>
 			
 			<GameDBLocalizedString>
-				<LocID>AGC_ENABLE_NON_LINEAR_SKILL_LEVELING</LocID>
+				<LocID>AGC_OPTION_ENABLE_NON_LINEAR_SKILL_LEVELING</LocID>
 				<Text>[AGC] Enable non-linear skill leveling</Text>
 			</GameDBLocalizedString>
 			
 			<GameDBLocalizedString>
-				<LocID>AGC_LIMIT_CLINIC_DOCTORS_LEVEL</LocID>
+				<LocID>AGC_OPTION_LIMIT_CLINIC_DOCTORS_LEVEL</LocID>
 				<Text>[AGC] Limit clinic doctors level</Text>
 			</GameDBLocalizedString>
 			
 			<GameDBLocalizedString>
-				<LocID>AGC_FORCE_EMPLOYEE_LOWEST_HIRE_LEVEL</LocID>
+				<LocID>AGC_OPTION_FORCE_EMPLOYEE_LOWEST_HIRE_LEVEL</LocID>
 				<Text>[AGC] Force employee lowest hire level</Text>
+			</GameDBLocalizedString>
+			
+			<GameDBLocalizedString>
+				<LocID>AGC_OPTION_STAFF_SHIFTS_EQUAL</LocID>
+				<Text>[AGC] Same length for staff shifts (requires restart)</Text>
 			</GameDBLocalizedString>
 			
 			<GameDBLocalizedString>
@@ -94,6 +99,7 @@
 				<LocID>TOOLTIP_BUILDING_PREFAB_TRAINING</LocID>
 				<Text>Templates of Training department rooms</Text>  
 			</GameDBLocalizedString>
+           
 		</LocalizedStrings>
 	</GameDBStringTable>
 </Database>
