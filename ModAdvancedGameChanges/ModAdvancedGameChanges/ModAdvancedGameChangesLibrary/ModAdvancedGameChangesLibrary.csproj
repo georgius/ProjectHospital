@@ -33,6 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Constants\Needs.cs" />
     <Compile Include="Debug.cs" />
     <Compile Include="Constants\Departments.cs" />
     <Compile Include="Constants\Localizations.cs" />
