@@ -1,11 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Reflection;
-using System.Xml;
 using HarmonyLib;
-using ModAdvancedGameChanges;
+using ModAdvancedGameChanges.Constants;
 
 namespace ModGameChanges
 {
@@ -20,6 +19,7 @@ namespace ModGameChanges
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_limitClinicDoctorsLevel = new Dictionary<ViewSettings, GenericFlag<bool>>();
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_forceEmployeeLowestHireLevel = new Dictionary<ViewSettings, GenericFlag<bool>>();
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_staffShiftsEqual = new Dictionary<ViewSettings, GenericFlag<bool>>();
+        public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_trainingDepartment = new Dictionary<ViewSettings, GenericFlag<bool>>();
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(ViewSettings), nameof(ViewSettings.Load))]
@@ -43,6 +43,11 @@ namespace ModGameChanges
                     ViewSettingsPatch.m_forceEmployeeLowestHireLevel.Add(__instance, new GenericFlag<bool>("AGC_OPTION_FORCE_EMPLOYEE_LOWEST_HIRE_LEVEL", true));
                     ViewSettingsPatch.m_staffShiftsEqual.Add(__instance, new GenericFlag<bool>("AGC_OPTION_STAFF_SHIFTS_EQUAL", true));
 
+                    if (Tweakable.Vanilla.DlcHospitalServicesEnabled())
+                    {
+                        ViewSettingsPatch.m_trainingDepartment.Add(__instance, new GenericFlag<bool>("AGC_OPTION_TRAINING_DEPARTMENT", true));
+                    }
+
                     var boolFlags = new List<GenericFlag<bool>>(__instance.m_allBoolFlags);
 
                     boolFlags.Add(ViewSettingsPatch.m_debug[__instance]);
@@ -50,6 +55,11 @@ namespace ModGameChanges
                     boolFlags.Add(ViewSettingsPatch.m_limitClinicDoctorsLevel[__instance]);
                     boolFlags.Add(ViewSettingsPatch.m_forceEmployeeLowestHireLevel[__instance]);
                     boolFlags.Add(ViewSettingsPatch.m_staffShiftsEqual[__instance]);
+
+                    if (Tweakable.Vanilla.DlcHospitalServicesEnabled())
+                    {
+                        boolFlags.Add(ViewSettingsPatch.m_trainingDepartment[__instance]);
+                    }
 
                     __instance.m_allBoolFlags = boolFlags.ToArray();
                 }
@@ -70,6 +80,56 @@ namespace ModGameChanges
 
             // Allow original method to run
             return true;
+        }
+
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(ViewSettings), nameof(ViewSettings.Load))]
+        public static void LoadPostfix(ViewSettings __instance)
+        {
+            Debug.Log(System.Reflection.MethodBase.GetCurrentMethod(), $"DLC Hospital services present: {Tweakable.Vanilla.DlcHospitalServicesEnabled()}");
+
+            bool enableTrainingDepartment = Tweakable.Vanilla.DlcHospitalServicesEnabled();
+            enableTrainingDepartment &= ViewSettingsPatch.m_trainingDepartment.ContainsKey(__instance);
+            enableTrainingDepartment &= (enableTrainingDepartment && ViewSettingsPatch.m_trainingDepartment[__instance].m_value);
+
+            if (!enableTrainingDepartment)
+            {
+                ViewSettingsPatch.m_enabledTrainingDepartment = false;
+
+                Debug.Log(System.Reflection.MethodBase.GetCurrentMethod(), $"Disabling training department");
+
+                // Get the Type of the class
+                Type type = typeof(Database);
+
+                // Get the private field using BindingFlags
+                FieldInfo fieldInfo = type.GetField("tables", BindingFlags.NonPublic | BindingFlags.Instance);
+
+                // cast to IDictionary since we can’t use the internal generic type
+                var tables = (IDictionary)fieldInfo.GetValue(Database.Instance);
+
+                foreach (DictionaryEntry tableEntry in tables)
+                {
+                    if (tableEntry.Key == typeof(GameDBDepartment))
+                    {
+                        Debug.Log(System.Reflection.MethodBase.GetCurrentMethod(), $"Found game departments");
+
+                        // tableEntry.Value is a DatabaseTable (internal) — treat it as IDictionary
+                        var dbTable = (IDictionary)tableEntry.Value;
+
+                        foreach (DictionaryEntry entry in dbTable)
+                        {
+                            if (entry.Key.ToString() == Departments.Mod.TrainingDepartment)
+                            {
+                                Debug.Log(System.Reflection.MethodBase.GetCurrentMethod(), $"Found training department ({Departments.Mod.TrainingDepartment}), removing");
+
+                                dbTable.Remove(entry.Key);
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
         }
 
         internal static void FixScheduleTimes(GameDBSchedule schedule)
