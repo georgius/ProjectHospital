@@ -82,4 +82,7 @@
 		<Value>3</Value>
 	</GameDBTweakableInt>
 	
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_TRAINING_HOUR_POINTS">
+		<Value>10</Value>
+	</GameDBTweakableInt>
 </Database>

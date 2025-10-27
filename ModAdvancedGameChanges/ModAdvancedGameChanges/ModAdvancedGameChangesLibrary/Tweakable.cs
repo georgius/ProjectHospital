@@ -20,6 +20,7 @@ namespace ModGameChanges
             Tweakable.CheckEmployeeLevelPoints(3, Tweakables.Mod.AGC_TWEAKABLE_NURSE_LEVEL_POINTS_FORMAT);               // nurses
             Tweakable.CheckEmployeeLevelPoints(3, Tweakables.Mod.AGC_TWEAKABLE_LAB_SPECIALIST_LEVEL_POINTS_FORMAT);      // lab specialists
             Tweakable.CheckEmployeeLevelPoints(3, Tweakables.Mod.AGC_TWEAKABLE_JANITOR_LEVEL_POINTS_FORMAT);             // janitors
+            Tweakable.CheckTrainingHourPoints();
         }
 
         public static void CheckNonLinearSkillLevelingConfiguration()
@@ -74,6 +75,15 @@ namespace ModGameChanges
             }
         }
 
+        public static void CheckTrainingHourPoints()
+        {
+            var points = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_TRAINING_HOUR_POINTS);
+            if (points.Value < 1)
+            {
+                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_TRAINING_HOUR_POINTS}' must be greater than zero.");
+            }
+        }
+
         public static T EnsureExists<T>(string tweakable) where T : DatabaseEntry
         {
             var entry = Tweakable.GetTweakable<T>(tweakable);
@@ -125,6 +135,11 @@ namespace ModGameChanges
             public static int AllowedClinicDoctorsLevel()
             {
                 return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_ALLOWED_CLINIC_DOCTORS_LEVEL).Value;
+            }
+
+            public static int TrainingHourPoints()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_TRAINING_HOUR_POINTS).Value;
             }
         }
 
