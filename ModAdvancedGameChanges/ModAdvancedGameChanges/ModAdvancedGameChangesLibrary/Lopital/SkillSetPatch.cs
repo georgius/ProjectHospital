@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using Lopital;
+using ModAdvancedGameChanges.Constants;
 using ModGameChanges;
 using System;
 
@@ -16,11 +17,11 @@ namespace ModAdvancedGameChanges.Lopital
             __result.m_qualifications.Add(
                 new Skill(
                     Database.Instance.GetEntry<GameDBSkill>(Constants.Skills.Vanilla.SKILL_DOC_QUALIF_GENERAL_MEDICINE),
-                    UnityEngine.Random.Range(Math.Max(1f, (float)level - 1f), (float)level)));
+                    UnityEngine.Random.Range(Math.Max(Skills.SkillLevelMinimum, (float)level - Skills.SkillLevelMinimum), (float)level)));
             __result.m_qualifications.Add(
                 new Skill(
                     Database.Instance.GetEntry<GameDBSkill>(Constants.Skills.Vanilla.SKILL_DOC_QUALIF_DIAGNOSIS),
-                    UnityEngine.Random.Range(Math.Max(1f, (float)level - 1f), (float)level)));
+                    UnityEngine.Random.Range(Math.Max(Skills.SkillLevelMinimum, (float)level - Skills.SkillLevelMinimum), (float)level)));
 
             return false;
         }
@@ -39,7 +40,7 @@ namespace ModAdvancedGameChanges.Lopital
 			__result.m_qualifications.Add(
 				new Skill(
 					Database.Instance.GetEntry<GameDBSkill>(Constants.Skills.Vanilla.SKILL_NURSE_QUALIF_PATIENT_CARE),
-					UnityEngine.Random.Range(Math.Max(1f, (float)level - 1f), (float)level)));
+					UnityEngine.Random.Range(Math.Max(Skills.SkillLevelMinimum, (float)level - Skills.SkillLevelMinimum), (float)level)));
 
 			return false;
         }
@@ -58,7 +59,7 @@ namespace ModAdvancedGameChanges.Lopital
             __result.m_qualifications.Add(
                 new Skill(
                     Database.Instance.GetEntry<GameDBSkill>(Constants.Skills.Vanilla.SKILL_LAB_SPECIALIST_QUALIF_SCIENCE_EDUCATION),
-                    UnityEngine.Random.Range(Math.Max(1f, (float)level - 1f), (float)level)));
+                    UnityEngine.Random.Range(Math.Max(Skills.SkillLevelMinimum, (float)level - Skills.SkillLevelMinimum), (float)level)));
 
             return false;
         }
@@ -77,11 +78,11 @@ namespace ModAdvancedGameChanges.Lopital
             __result.m_qualifications.Add(
                 new Skill(
                     Database.Instance.GetEntry<GameDBSkill>(Constants.Skills.Vanilla.SKILL_JANITOR_QUALIF_EFFICIENCY),
-                    UnityEngine.Random.Range(Math.Max(1f, (float)level - 1f), (float)level)));
+                    UnityEngine.Random.Range(Math.Max(Skills.SkillLevelMinimum, (float)level - Skills.SkillLevelMinimum), (float)level)));
             __result.m_qualifications.Add(
                 new Skill(
                     Database.Instance.GetEntry<GameDBSkill>(Constants.Skills.Vanilla.SKILL_JANITOR_QUALIF_DEXTERITY),
-                    UnityEngine.Random.Range(Math.Max(1f, (float)level - 1f), (float)level)));
+                    UnityEngine.Random.Range(Math.Max(Skills.SkillLevelMinimum, (float)level - Skills.SkillLevelMinimum), (float)level)));
 
             return false;
         }

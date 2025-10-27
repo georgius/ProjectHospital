@@ -26,5 +26,8 @@
             public const string DLC_SKILL_JANITOR_SPEC_VENDOR = "DLC_SKILL_JANITOR_SPEC_VENDOR";
             public const string DLC_SKILL_JANITOR_SPEC_MANAGER = "DLC_SKILL_JANITOR_SPEC_MANAGER";
         }
+
+        public const float SkillLevelMinimum = 1f;
+        public const float SkillLevelMaximum = f;
     }
 }

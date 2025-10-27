@@ -1,7 +1,6 @@
 ﻿using GLib;
 using HarmonyLib;
 using Lopital;
-using ModAdvancedGameChanges;
 using ModAdvancedGameChanges.Constants;
 using System.Globalization;
 using UnityEngine;
@@ -56,7 +55,7 @@ namespace ModGameChanges.Lopital
                     character.LogWarning("Zero added skill xp");
                 }
             }
-            __instance.m_level = Mathf.Min(5f, __instance.m_level);
+            __instance.m_level = Mathf.Min(Skills.SkillLevelMaximum, __instance.m_level);
 
             __result = AddExperienceResult.NONE;
 
@@ -75,9 +74,9 @@ namespace ModGameChanges.Lopital
 
             // the minimum __instance.m_level is 1, the maximum is 5
             // we convert the value to 0 - 4
-            float level = Mathf.Max(1, Mathf.Min(5, __instance.m_level)) - 1;
-            var interval = (float)4 / (float)Tweakable.Mod.SkillLevels();
-            var index = (int)Mathf.Max(0, Mathf.Min(4, level / interval));
+            float level = Mathf.Max(Skills.SkillLevelMinimum, Mathf.Min(Skills.SkillLevelMaximum, __instance.m_level)) - Skills.SkillLevelMinimum;
+            var interval = (Skills.SkillLevelMaximum - Skills.SkillLevelMinimum) / (float)Tweakable.Mod.SkillLevels();
+            var index = (int)Mathf.Max(0, Mathf.Min(Skills.SkillLevelMaximum - Skills.SkillLevelMinimum, level / interval));
 
             __result = Tweakable.Mod.SkillPoints(index);
 

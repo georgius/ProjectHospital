@@ -202,7 +202,7 @@ namespace ModGameChanges.Lopital
                                 Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.SKILL_NURSE_SPEC_MEDICAL_SURGERY),
                                 Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.SKILL_NURSE_SPEC_CLINICAL_SPECIALIST)
                             };
-                            __instance.m_state.m_skillSet.m_specialization1 = new Skill(array[UnityEngine.Random.Range(0, array.Length)], 1f);
+                            __instance.m_state.m_skillSet.m_specialization1 = new Skill(array[UnityEngine.Random.Range(0, array.Length)], Skills.SkillLevelMinimum);
                         }
                         NotificationManager.GetInstance().AddMessage(__instance.m_entity, titleLocID, StringTable.GetInstance().GetLocalizedText(EmployeeComponent.sm_levelLocalizationIDsNurse[__instance.m_state.m_level], new string[0]), string.Empty, string.Empty, 0, 0, 0, 0, null, null);
                     }
@@ -217,7 +217,7 @@ namespace ModGameChanges.Lopital
                                 Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.SKILL_LAB_SPECIALIST_SPEC_CARDIOLOGY),
                                 Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.SKILL_LAB_SPECIALIST_SPEC_NEUROLOGY)
                             };
-                            __instance.m_state.m_skillSet.m_specialization1 = new Skill(array2[UnityEngine.Random.Range(0, array2.Length)], 1f);
+                            __instance.m_state.m_skillSet.m_specialization1 = new Skill(array2[UnityEngine.Random.Range(0, array2.Length)], Skills.SkillLevelMinimum);
                         }
                         NotificationManager.GetInstance().AddMessage(__instance.m_entity, titleLocID, StringTable.GetInstance().GetLocalizedText(EmployeeComponent.sm_levelLocalizationIDsLabSpecialist[__instance.m_state.m_level], new string[0]), string.Empty, string.Empty, 0, 0, 0, 0, null, null);
                     }
@@ -233,7 +233,7 @@ namespace ModGameChanges.Lopital
                                 Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.DLC_SKILL_JANITOR_SPEC_MANAGER)
                             };
 
-                            __instance.m_state.m_skillSet.m_specialization1 = new Skill(array[UnityEngine.Random.Range(0, array.Length)], 1f);
+                            __instance.m_state.m_skillSet.m_specialization1 = new Skill(array[UnityEngine.Random.Range(0, array.Length)], Skills.SkillLevelMinimum);
                         }
                         else
                         {
@@ -384,6 +384,47 @@ namespace ModGameChanges.Lopital
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(EmployeeComponent), nameof(EmployeeComponent.ToggleTraining))]
+        public static bool ToggleTrainingPrefix(Skill skill, EmployeeComponent __instance)
+        {
+            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            GameDBRoomType homeRoomType = __instance.GetHomeRoomType();
+
+            if ((homeRoomType != null)
+                && (
+                    homeRoomType.HasTag(Tags.Mod.DoctorTrainingWorkspace)
+                    || homeRoomType.HasTag(Tags.Mod.NurseTrainingWorkspace)
+                    || homeRoomType.HasTag(Tags.Mod.LabSpecialistTrainingWorkspace)
+                    || homeRoomType.HasTag(Tags.Mod.JanitorTrainingWorkspace)
+                    ))
+            {
+                // employee is in training department, employee is in training workspace
+
+                if (!__instance.m_state.m_trainingData.m_trainingSkillsToTrain.Contains(skill.m_gameDBSkill.Entry))
+                {
+                    if (__instance.m_state.m_trainingData.m_trainingSkillsToTrain.Count == 0)
+                    {
+                        __instance.m_state.m_trainingData.m_trainingRemainingHours = 1;
+                    }
+
+                    __instance.m_state.m_trainingData.m_trainingSkillsToTrain.Add(skill.m_gameDBSkill.Entry);
+                    __instance.m_state.m_trainingData.m_trainingInitialSkillLevels.Put(skill.m_gameDBSkill.Entry, skill.m_level);
+                }
+
+                __instance.m_state.m_department.GetEntity().Validate();
+
+                return false;
+            }
+
+            return true;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(EmployeeComponent), nameof(EmployeeComponent.ShouldStartCommuting))]
         public static bool ShouldStartCommutingPrefix(EmployeeComponent __instance, ref bool __result)
         {
@@ -435,6 +476,74 @@ namespace ModGameChanges.Lopital
             }
 
             return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(EmployeeComponent), nameof(EmployeeComponent.UpdateTraining))]
+        public static bool UpdateTrainingPrefix(ProcedureComponent procedureComponent, EmployeeComponent __instance, ref bool __result)
+        {
+            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            if (procedureComponent.IsBusy())
+            {
+                __result = false;
+                return false;
+            }
+
+            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} training finished");
+
+            GameDBRoomType homeRoomType = __instance.GetHomeRoomType();
+
+            if ((homeRoomType != null)
+                && (
+                    homeRoomType.HasTag(Tags.Mod.DoctorTrainingWorkspace)
+                    || homeRoomType.HasTag(Tags.Mod.NurseTrainingWorkspace)
+                    || homeRoomType.HasTag(Tags.Mod.LabSpecialistTrainingWorkspace)
+                    || homeRoomType.HasTag(Tags.Mod.JanitorTrainingWorkspace)
+                    ))
+            {
+                // employee in training department, employee is in training workspace
+                __instance.m_state.m_trainingData.m_trainingRemainingHours = 0;
+
+                if (__instance.m_state.m_trainingData.m_trainingSkillsToTrain.Count == 0)
+                {
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} training finished, but there are no trained skills");
+
+                    __result = true;
+                    return false;
+                }
+
+                // randomly choose skill which is trained
+                Skill skill = __instance.m_state.m_skillSet.GetSkill(__instance.m_state.m_trainingData.m_trainingSkillsToTrain[0].Entry);
+                if (skill == null)
+                {
+                    __result = true;
+                    return false;
+                }
+
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} training finished, skill {skill.m_gameDBSkill.Entry.DatabaseID}");
+
+                // __instance.m_state.m_level
+
+                float points = skill.m_level * 10f;
+                skill.AddPoints((int)points, __instance.m_entity);
+                __instance.AddExperiencePoints((int)(points * UnityEngine.Random.Range(0f, 1f)));
+
+                // remove all skills to train
+                __instance.m_state.m_trainingData.m_trainingSkillsToTrain.Clear();
+
+                __result = true;
+                return false;
+            }
+
+            // employee not in training department
+            // training was requested by player
+            // return to original code
+            return true;
         }
     }
 }
