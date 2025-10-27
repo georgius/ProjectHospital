@@ -524,6 +524,37 @@ namespace ModGameChanges.Lopital
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(EmployeeComponent), nameof(EmployeeComponent.SwitchDepartment))]
+        public static bool SwitchDepartmentPrefix(Department department, EmployeeComponent __instance)
+        {
+            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            GameDBRoomType homeRoomType = __instance.GetHomeRoomType();
+
+            if ((homeRoomType != null)
+                && (
+                    homeRoomType.HasTag(Tags.Mod.DoctorTrainingWorkspace)
+                    || homeRoomType.HasTag(Tags.Mod.NurseTrainingWorkspace)
+                    || homeRoomType.HasTag(Tags.Mod.LabSpecialistTrainingWorkspace)
+                    || homeRoomType.HasTag(Tags.Mod.JanitorTrainingWorkspace)
+                    ))
+            {
+                // employee in training department, employee is in training workspace
+
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, switch department, reset training");
+
+                __instance.m_state.m_trainingData.m_trainingRemainingHours = 0;
+                __instance.m_state.m_trainingData.m_trainingSkillsToTrain.Clear();
+            }
+
+            return true;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(EmployeeComponent), nameof(EmployeeComponent.UpdateTraining))]
         public static bool UpdateTrainingPrefix(ProcedureComponent procedureComponent, EmployeeComponent __instance, ref bool __result)
         {
