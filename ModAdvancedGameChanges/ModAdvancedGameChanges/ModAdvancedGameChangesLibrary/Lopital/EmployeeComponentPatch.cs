@@ -564,9 +564,51 @@ namespace ModGameChanges.Lopital
                 float points = Tweakable.Mod.TrainingHourPoints();
                 points *= UnityEngine.Random.Range(0f, 3f);
 
-                // if 
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"01 Employee: {__instance.m_entity.Name}, points {points.ToString(CultureInfo.InvariantCulture)}");
 
-                //float points = __instance.m_state.m_level * 10f;
+                if (__instance.m_state.m_supervisor != null)
+                {
+                    // employee has chief
+
+                    GLib.Entity chief = __instance.m_state.m_supervisor.GetEntity();
+                    EmployeeComponent chiefEmployeeComponent = chief.GetComponent<EmployeeComponent>();
+                    BehaviorDoctor doctor = chief.GetComponent<BehaviorDoctor>();
+                    BehaviorJanitor janitor = chief.GetComponent<BehaviorJanitor>();
+
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"02 Employee: {__instance.m_entity.Name}, chief {chief.Name}, doctor {doctor != null}, janitor {janitor != null}");
+
+                    if (janitor != null)
+                    {
+                        // chief is janitor => janitor manager
+
+                        Skill managementSkill = chiefEmployeeComponent.m_state.m_skillSet.GetSkill(Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.DLC_SKILL_JANITOR_SPEC_MANAGER));
+
+                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"03 Employee: {__instance.m_entity.Name}, management skill level {(managementSkill?.m_level ?? 0f).ToString(CultureInfo.InvariantCulture)}");
+
+                        if (managementSkill != null)
+                        {
+                            points *= UnityEngine.Random.Range(0f, managementSkill.m_level);
+                        }
+
+                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"04 Employee: {__instance.m_entity.Name}, points {points.ToString(CultureInfo.InvariantCulture)}");
+                    }
+                    if (doctor != null)
+                    {
+                        // chief is doctor
+
+                        Skill medicineSkill = chiefEmployeeComponent.m_state.m_skillSet.GetSkill(Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.SKILL_DOC_QUALIF_GENERAL_MEDICINE));
+
+                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"05 Employee: {__instance.m_entity.Name}, general medicine skill level {(medicineSkill?.m_level ?? 0f).ToString(CultureInfo.InvariantCulture)}");
+
+                        if (medicineSkill != null)
+                        {
+                            points *= UnityEngine.Random.Range(0f, medicineSkill.m_level);
+                        }
+
+                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"06 Employee: {__instance.m_entity.Name}, points {points.ToString(CultureInfo.InvariantCulture)}");
+                    }
+                }
+
                 skill.AddPoints((int)points, __instance.m_entity);
                 __instance.AddExperiencePoints((int)points);
 
