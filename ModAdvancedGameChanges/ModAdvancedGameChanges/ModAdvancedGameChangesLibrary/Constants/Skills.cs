@@ -28,6 +28,6 @@
         }
 
         public const float SkillLevelMinimum = 1f;
-        public const float SkillLevelMaximum = f;
+        public const float SkillLevelMaximum = 5f;
     }
 }
