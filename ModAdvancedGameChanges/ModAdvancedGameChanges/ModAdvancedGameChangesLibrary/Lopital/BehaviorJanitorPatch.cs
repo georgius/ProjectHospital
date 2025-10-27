@@ -556,22 +556,34 @@ namespace ModGameChanges.Lopital
             {
                 foreach (var skill in employeeComponent.m_state.m_skillSet.m_qualifications)
                 {
-                    skills.Add(skill);
+                    if (skill.m_level < Skills.SkillLevelMaximum)
+                    {
+                        skills.Add(skill);
+                    }
                 }
             }
             if (employeeComponent.m_state.m_skillSet.m_specialization1 != null)
             {
-                skills.Add(employeeComponent.m_state.m_skillSet.m_specialization1);
+                if (employeeComponent.m_state.m_skillSet.m_specialization1.m_level < Skills.SkillLevelMaximum)
+                {
+                    skills.Add(employeeComponent.m_state.m_skillSet.m_specialization1);
+                }
             }
             if (employeeComponent.m_state.m_skillSet.m_specialization2 != null)
             {
-                skills.Add(employeeComponent.m_state.m_skillSet.m_specialization2);
+                if (employeeComponent.m_state.m_skillSet.m_specialization2.m_level < Skills.SkillLevelMaximum)
+                {
+                    skills.Add(employeeComponent.m_state.m_skillSet.m_specialization2);
+                }
             }
 
-            Skill skillToTrain = skills[UnityEngine.Random.Range(0, skills.Count)];
+            if (skills.Count != 0)
+            {
+                Skill skillToTrain = skills[UnityEngine.Random.Range(0, skills.Count)];
 
-            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {instance.m_entity.Name}, training skill {skillToTrain.m_gameDBSkill.Entry.DatabaseID}");
-            employeeComponent.ToggleTraining(skillToTrain);
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {instance.m_entity.Name}, training skill {skillToTrain.m_gameDBSkill.Entry.DatabaseID}");
+                employeeComponent.ToggleTraining(skillToTrain);
+            }
         }
 
         private static bool CheckNeedsMod(BehaviorJanitor instance)
