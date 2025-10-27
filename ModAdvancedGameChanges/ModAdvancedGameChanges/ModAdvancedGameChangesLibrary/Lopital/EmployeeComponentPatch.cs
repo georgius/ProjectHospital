@@ -439,7 +439,18 @@ namespace ModGameChanges.Lopital
             {
                 // employee is in training department, employee is in training workspace
 
-                if (!__instance.m_state.m_trainingData.m_trainingSkillsToTrain.Contains(skill.m_gameDBSkill.Entry))
+                if (__instance.m_state.m_trainingData.m_trainingSkillsToTrain.Contains(skill.m_gameDBSkill.Entry))
+                {
+                    if (__instance.m_state.m_trainingData.m_trainingSkillsToTrain.IndexOf(skill.m_gameDBSkill.Entry) == 0)
+                    {
+                        if (__instance.m_state.m_trainingData.m_trainingSkillsToTrain.Count != 1)
+                        {
+                            __instance.m_state.m_trainingData.m_trainingRemainingHours = 1;
+                        }
+                    }
+                    __instance.m_state.m_trainingData.m_trainingSkillsToTrain.Remove(skill.m_gameDBSkill.Entry);
+                }
+                else
                 {
                     if (__instance.m_state.m_trainingData.m_trainingSkillsToTrain.Count == 0)
                     {
@@ -552,7 +563,7 @@ namespace ModGameChanges.Lopital
                 }
 
                 // randomly choose skill which is trained
-                Skill skill = __instance.m_state.m_skillSet.GetSkill(__instance.m_state.m_trainingData.m_trainingSkillsToTrain[0].Entry);
+                Skill skill = __instance.m_state.m_skillSet.GetSkill(__instance.m_state.m_trainingData.m_trainingSkillsToTrain[UnityEngine.Random.Range(0, __instance.m_state.m_trainingData.m_trainingSkillsToTrain.Count)].Entry);
                 if (skill == null)
                 {
                     __result = true;
@@ -611,9 +622,6 @@ namespace ModGameChanges.Lopital
 
                 skill.AddPoints((int)points, __instance.m_entity);
                 __instance.AddExperiencePoints((int)points);
-
-                // remove all skills to train
-                __instance.m_state.m_trainingData.m_trainingSkillsToTrain.Clear();
 
                 __result = true;
                 return false;

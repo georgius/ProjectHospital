@@ -342,7 +342,7 @@ namespace ModGameChanges.Lopital
 
                     if (!employeeComponent.ShouldGoToTraining())
                     {
-                        BehaviorJanitorPatch.ChooseTrainedSkillAndToggleTraining(__instance);
+                        BehaviorJanitorPatch.ChooseSkillToTrainAndToggleTraining(__instance);
                     }
 
                     // if possible, go to training
@@ -416,7 +416,7 @@ namespace ModGameChanges.Lopital
 
                     if (!employeeComponent.ShouldGoToTraining())
                     {
-                        BehaviorJanitorPatch.ChooseTrainedSkillAndToggleTraining(__instance);
+                        BehaviorJanitorPatch.ChooseSkillToTrainAndToggleTraining(__instance);
                     }
 
                     // if possible, go to training
@@ -517,7 +517,7 @@ namespace ModGameChanges.Lopital
 
                     if (!employeeComponent.ShouldGoToTraining())
                     {
-                        BehaviorJanitorPatch.ChooseTrainedSkillAndToggleTraining(__instance);
+                        BehaviorJanitorPatch.ChooseSkillToTrainAndToggleTraining(__instance);
                     }
 
                     // if possible, go to training
@@ -546,7 +546,7 @@ namespace ModGameChanges.Lopital
             return true;
         }
 
-        public static void ChooseTrainedSkillAndToggleTraining(BehaviorJanitor instance)
+        public static void ChooseSkillToTrainAndToggleTraining(BehaviorJanitor instance)
         {
             EmployeeComponent employeeComponent = instance.GetComponent<EmployeeComponent>();
 
