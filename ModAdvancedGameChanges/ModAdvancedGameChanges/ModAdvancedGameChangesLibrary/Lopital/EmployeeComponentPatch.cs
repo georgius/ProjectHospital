@@ -251,6 +251,40 @@ namespace ModGameChanges.Lopital
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(EmployeeComponent), nameof(EmployeeComponent.CheckChiefNodiagnoseDepartment))]
+        public static bool CheckChiefNodiagnoseDepartmentPrefix(bool janitorCheck, EmployeeComponent __instance)
+        {
+            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            if (__instance.m_state.m_department.GetEntity().GetDepartmentType() == Database.Instance.GetEntry<GameDBDepartment>(Departments.Mod.TrainingDepartment))
+            {
+                // employee is in training department
+
+                if (janitorCheck && Tweakable.Vanilla.DlcHospitalServicesEnabled())
+                {
+                    Hospital.Instance.UpdateJanitorBosses();
+                    return false;
+                }
+
+                Department departmentOfType = MapScriptInterface.Instance.GetDepartmentOfType(Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.Emergency));
+
+                if (departmentOfType.m_departmentPersistentData.m_chiefDoctor != null)
+                {
+                    __instance.m_state.m_supervisor = departmentOfType.m_departmentPersistentData.m_chiefDoctor;
+                    __instance.CheckBossModifiers();
+                }
+
+                return false;
+            }
+
+            return true;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(EmployeeComponent), nameof(EmployeeComponent.GetPointsNeededForNextLevel))]
         public static bool GetPointsNeededForNextLevelPrefix(EmployeeComponent __instance, ref int __result)
         {
@@ -527,11 +561,14 @@ namespace ModGameChanges.Lopital
 
                 Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} training finished, skill {skill.m_gameDBSkill.Entry.DatabaseID}");
 
-                // __instance.m_state.m_level
+                float points = Tweakable.Mod.TrainingHourPoints();
+                points *= UnityEngine.Random.Range(0f, 3f);
 
-                float points = skill.m_level * 10f;
+                // if 
+
+                //float points = __instance.m_state.m_level * 10f;
                 skill.AddPoints((int)points, __instance.m_entity);
-                __instance.AddExperiencePoints((int)(points * UnityEngine.Random.Range(0f, 1f)));
+                __instance.AddExperiencePoints((int)points);
 
                 // remove all skills to train
                 __instance.m_state.m_trainingData.m_trainingSkillsToTrain.Clear();
