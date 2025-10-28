@@ -34,6 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Constants\Needs.cs" />
+    <Compile Include="Constants\RoomTypes.cs" />
     <Compile Include="Debug.cs" />
     <Compile Include="Constants\Departments.cs" />
     <Compile Include="Constants\Localizations.cs" />
