@@ -654,6 +654,27 @@ namespace ModGameChanges.Lopital
                 skill.AddPoints((int)points, __instance.m_entity);
                 __instance.AddExperiencePoints((int)points);
 
+                if (skill.m_level >= Skills.SkillLevelMaximum)
+                {
+                    // skill was trained to maximum level
+                    // remove skill from training
+
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} training finished, skill {skill.m_gameDBSkill.Entry.DatabaseID} on maximum level, removing from training");
+
+                    NotificationManager.GetInstance().AddMessage(
+                        __instance.m_entity, 
+                        "NOTIF_TRAINING_FINISHED", 
+                        StringTable.GetInstance().GetLocalizedText(skill.m_gameDBSkill.m_id.ToString(), new string[0]), 
+                        string.Empty, 
+                        string.Empty, 
+                        0, 0, 0, 0, null, null);
+
+                    if (__instance.m_state.m_trainingData.m_trainingSkillsToTrain.Contains(skill.m_gameDBSkill.Entry))
+                    {
+                        __instance.m_state.m_trainingData.m_trainingSkillsToTrain.Remove(skill.m_gameDBSkill.Entry);
+                    }
+                }
+
                 __result = true;
                 return false;
             }
