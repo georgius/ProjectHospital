@@ -20,6 +20,7 @@ namespace ModGameChanges
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_forceEmployeeLowestHireLevel = new Dictionary<ViewSettings, GenericFlag<bool>>();
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_staffShiftsEqual = new Dictionary<ViewSettings, GenericFlag<bool>>();
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_trainingDepartment = new Dictionary<ViewSettings, GenericFlag<bool>>();
+        public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_staffLunchNight = new Dictionary<ViewSettings, GenericFlag<bool>>();
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(ViewSettings), nameof(ViewSettings.Load))]
@@ -42,6 +43,7 @@ namespace ModGameChanges
                     ViewSettingsPatch.m_limitClinicDoctorsLevel.Add(__instance, new GenericFlag<bool>("AGC_OPTION_LIMIT_CLINIC_DOCTORS_LEVEL", true));
                     ViewSettingsPatch.m_forceEmployeeLowestHireLevel.Add(__instance, new GenericFlag<bool>("AGC_OPTION_FORCE_EMPLOYEE_LOWEST_HIRE_LEVEL", true));
                     ViewSettingsPatch.m_staffShiftsEqual.Add(__instance, new GenericFlag<bool>("AGC_OPTION_STAFF_SHIFTS_EQUAL", true));
+                    ViewSettingsPatch.m_staffLunchNight.Add(__instance, new GenericFlag<bool>("AGC_OPTION_STAFF_LUNCH_NIGHT", true));
 
                     if (Tweakable.Vanilla.DlcHospitalServicesEnabled())
                     {
@@ -55,6 +57,7 @@ namespace ModGameChanges
                     boolFlags.Add(ViewSettingsPatch.m_limitClinicDoctorsLevel[__instance]);
                     boolFlags.Add(ViewSettingsPatch.m_forceEmployeeLowestHireLevel[__instance]);
                     boolFlags.Add(ViewSettingsPatch.m_staffShiftsEqual[__instance]);
+                    boolFlags.Add(ViewSettingsPatch.m_staffLunchNight[__instance]);
 
                     if (Tweakable.Vanilla.DlcHospitalServicesEnabled())
                     {
