@@ -2,6 +2,11 @@
 {
     public static class Schedules
     {
+        public static class Mod
+        {
+            public const string SCHEDULE_STAFF_LUNCH_NIGHT = "SCHEDULE_STAFF_LUNCH_NIGHT";
+        }
+
         public static class Vanilla
         {
             public const string SCHEDULE_OPENING_HOURS_STAFF = "SCHEDULE_OPENING_HOURS_STAFF";
@@ -9,6 +14,8 @@
 
             public const string SCHEDULE_SHIFT_CHANGE_MORNING = "SCHEDULE_SHIFT_CHANGE_MORNING";
             public const string SCHEDULE_SHIFT_CHANGE_EVENING = "SCHEDULE_SHIFT_CHANGE_EVENING";
+
+            public const string SCHEDULE_STAFF_LUNCH = "SCHEDULE_STAFF_LUNCH";
         }
     }
 }
