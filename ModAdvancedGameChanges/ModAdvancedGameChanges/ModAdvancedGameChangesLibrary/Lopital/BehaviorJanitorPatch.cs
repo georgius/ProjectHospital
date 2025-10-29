@@ -23,25 +23,9 @@ namespace ModGameChanges.Lopital
                 return true;
             }
 
-            EmployeeComponent employeeComponent = __instance.GetComponent<EmployeeComponent>();
-            //GameDBRoomType homeRoomType = employeeComponent?.GetHomeRoomType();
-
-            //if ((homeRoomType != null) && homeRoomType.HasTag(Tags.Mod.JanitorTrainingWorkspace))
-            //{
-            //    // janitor in training, go to working place
-            //    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, going to training workplace");
-
-            //    employeeComponent.CheckChiefNodiagnoseDepartment(true);
-
-            //    __instance.GetComponent<WalkComponent>().GoSit(employeeComponent.GetWorkChair(), MovementType.WALKING);
-            //    __instance.SwitchState(BehaviorJanitorState.GoingToWorkplace);
-
-            //    __instance.GetComponent<WalkComponent>().Floor = Hospital.Instance.GetCurrentFloor();
-
-            //    return false;
-            //}
-
             Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, added to hospital, trying to find common room");
+
+            EmployeeComponent employeeComponent = __instance.GetComponent<EmployeeComponent>();
 
             employeeComponent.m_state.m_department = MapScriptInterface.Instance.GetActiveDepartment();
             employeeComponent.m_state.m_startDay = DayTime.Instance.GetDay();
