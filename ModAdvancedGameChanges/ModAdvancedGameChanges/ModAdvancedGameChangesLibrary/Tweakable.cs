@@ -21,6 +21,8 @@ namespace ModGameChanges
             Tweakable.CheckEmployeeLevelPoints(3, Tweakables.Mod.AGC_TWEAKABLE_LAB_SPECIALIST_LEVEL_POINTS_FORMAT);      // lab specialists
             Tweakable.CheckEmployeeLevelPoints(3, Tweakables.Mod.AGC_TWEAKABLE_JANITOR_LEVEL_POINTS_FORMAT);             // janitors
             Tweakable.CheckTrainingHourPoints();
+            Tweakable.CheckMainSkillPoints();
+            Tweakable.CheckJanitorDexteritySkillPoints();
         }
 
         public static void CheckNonLinearSkillLevelingConfiguration()
@@ -81,6 +83,24 @@ namespace ModGameChanges
             if (points.Value < 1)
             {
                 throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_TRAINING_HOUR_POINTS}' must be greater than zero.");
+            }
+        }
+
+        public static void CheckMainSkillPoints()
+        {
+            var points = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_MAIN_SKILL_POINTS);
+            if (points.Value < 1)
+            {
+                throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_MAIN_SKILL_POINTS}' must be greater than zero.");
+            }
+        }
+
+        public static void CheckJanitorDexteritySkillPoints()
+        {
+            var points = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_JANITOR_DEXTERITY_SKILL_POINTS);
+            if (points.Value < 1)
+            {
+                throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_JANITOR_DEXTERITY_SKILL_POINTS}' must be greater than zero.");
             }
         }
 
@@ -155,6 +175,16 @@ namespace ModGameChanges
                 GameDBTweakableInt dlcHospitalServices = Database.Instance.GetEntry<GameDBTweakableInt>(Tweakables.Vanilla.DLC_ADMIN_PATHOLOGY_ENABLED);
 
                 return ((dlcHospitalServices != null) && (dlcHospitalServices.Value == 1));
+            }
+
+            public static int MainSkillPoints()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_MAIN_SKILL_POINTS).Value;
+            }
+
+            public static int JanitorDexteritySkillPoints()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_JANITOR_DEXTERITY_SKILL_POINTS).Value;
             }
         }
     }

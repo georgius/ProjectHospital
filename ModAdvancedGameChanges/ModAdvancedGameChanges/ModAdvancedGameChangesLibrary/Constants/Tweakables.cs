@@ -32,6 +32,9 @@
             public const string LevelingRatePercent = "LEVELING_RATE_PERCENT";
 
             public const string DLC_ADMIN_PATHOLOGY_ENABLED = "DLC_ADMIN_PATHOLOGY_ENABLED";
+
+            public const string TWEAKABLE_MAIN_SKILL_POINTS = "TWEAKABLE_MAIN_SKILL_POINTS";
+            public const string TWEAKABLE_JANITOR_DEXTERITY_SKILL_POINTS = "TWEAKABLE_JANITOR_DEXTERITY_SKILL_POINTS";
         }
     }
 }
