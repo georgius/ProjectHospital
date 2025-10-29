@@ -184,6 +184,7 @@ namespace ModGameChanges.Lopital
             }
 
             EmployeeComponent employeeComponent = __instance.GetComponent<EmployeeComponent>();
+
             if (__instance.m_state.m_cart != null && __instance.m_state.m_cart.GetEntity() != null && __instance.m_state.m_cart.GetEntity().m_state.m_position != Vector2i.ZERO_VECTOR)
             {
                 __instance.GetComponent<WalkComponent>().SetDestination(__instance.m_state.m_cart.GetEntity().m_state.m_position, __instance.m_state.m_cart.GetEntity().GetFloorIndex(), MovementType.WALKING);
@@ -191,7 +192,22 @@ namespace ModGameChanges.Lopital
             }
             else
             {
-                __instance.SwitchState(BehaviorJanitorState.FillingFreeTime);
+                if (!BehaviorJanitorPatch.HandleGoHomeFulfillNeedsTraining(__instance))
+                {
+                    if (BehaviorJanitorPatch.HandleGoHomeFulfillNeedsGoToWorkplace(__instance))
+                    {
+                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, going to workplace");
+
+                        __instance.GoToWorkPlace();
+                        __instance.SwitchState(BehaviorJanitorState.GoingToWorkplace);
+                    }
+                    else
+                    {
+                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, nothing to do");
+
+                        __instance.SwitchState(BehaviorJanitorState.FillingFreeTime);
+                    }
+                }
             }
 
             return false;
@@ -219,141 +235,188 @@ namespace ModGameChanges.Lopital
             return true;
         }
 
-        //[HarmonyPrefix]
-        //[HarmonyPatch(typeof(BehaviorJanitor), "TryToSelectTileInARoom")]
-        //public static bool TryToSelectTileInARoomPrefix(BehaviorJanitor __instance, ref bool __result)
-        //{
-        //    return true;
-        //}
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorJanitor), "SelectNextAction")]
+        public static bool SelectNextActionPrefix(BehaviorJanitor __instance)
+        {
+            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            {
+                // Allow original method to run
+                return true;
+            }
 
-        //[HarmonyPrefix]
-        //[HarmonyPatch(typeof(BehaviorJanitor), "TryToSelectTileInCurrentRoom")]
-        //public static bool TryToSelectTileInCurrentRoomPrefix(BehaviorJanitor __instance, ref bool __result)
-        //{
-        //    return true;
-        //}
+            EmployeeComponent employeeComponent = __instance.GetComponent<EmployeeComponent>();
+            GameDBRoomType homeRoomType = employeeComponent?.GetHomeRoomType();
 
-        //[HarmonyPrefix]
-        //[HarmonyPatch(typeof(BehaviorJanitor), "TryToSelectIndoorTile")]
-        //public static bool TryToSelectIndoorTilePrefix(BehaviorJanitor __instance, ref bool __result)
-        //{
-        //    return true;
-        //}
+            if ((homeRoomType != null) && homeRoomType.HasAnyTag(new string[] { Tags.Vanilla.JanitorAdminWorkplace, Tags.Mod.JanitorTrainingWorkspace }))
+            {
+                BehaviorJanitorPatch.FreeObjectMod(__instance);
+                BehaviorJanitorPatch.FreeTileMod(__instance);
+                BehaviorJanitorPatch.FreeRoomMod(__instance);
+                BehaviorJanitorPatch.GoReturnCartMod(__instance);
+            }
+            else
+            {
+                if (__instance.m_state.m_cleaningTime <= -1f)
+                {
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, starting cleaning tile");
 
-        //[HarmonyPrefix]
-        //[HarmonyPatch(typeof(BehaviorJanitor), "SelectNextAction")]
-        //public static bool SelectNextActionPrefix(BehaviorJanitor __instance)
-        //{
-        //    if (!ViewSettingsPatch.m_enabled)
-        //    {
-        //        // Allow original method to run
-        //        return true;
-        //    }
+                    __instance.GetComponent<AnimModelComponent>().PlayAnimation("stand_mop", true);
 
-        //    EmployeeComponent employeeComponent = __instance.GetComponent<EmployeeComponent>();
-        //    GameDBRoomType homeRoomType = employeeComponent?.GetHomeRoomType();
+                    BehaviorJanitorPatch.UpdateCleaningTimeMod(__instance);
 
-        //    if (employeeComponent.m_state.m_homeRoom == null)
-        //    {
-        //        BehaviorJanitorPatch.GoReturnCartPrefix(__instance);
-        //        return false;
-        //    }
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, cleaning time {__instance.m_state.m_cleaningTime.ToString(CultureInfo.InvariantCulture)}");
 
-        //    if (employeeComponent.IsFired() || __instance.GetDepartment().IsClosed())
-        //    {
-        //        BehaviorJanitorPatch.GoReturnCartPrefix(__instance);
-        //        return false;
-        //    }
+                    PlayerStatistics.Instance.IncrementStatistic("STAT_TILES_CLEAN", 1);
+                    MapScriptInterface.Instance.CleanTile(__instance.GetComponent<WalkComponent>().GetCurrentTile(), __instance.GetComponent<WalkComponent>().GetFloorIndex());
+                }
+                else if (__instance.m_state.m_cleaningTime <= 0f)
+                {
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, cleaning tile over");
 
-        //    if (ViewSettingsPatch.m_enabledTrainingDepartment && (homeRoomType != null) && homeRoomType.HasTag(Tags.Mod.JanitorTrainingWorkspace))
-        //    {
-        //        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, going to workplace");
+                    __instance.GetComponent<AnimModelComponent>().PlayAnimation("stand_idle", true);
 
-        //        BehaviorJanitorPatch.GoReturnCartPrefix(__instance);
-        //        return false;
-        //    }
+                    employeeComponent.AddSkillPoints(Skills.Vanilla.SKILL_JANITOR_QUALIF_DEXTERITY, Tweakable.Vanilla.JanitorDexteritySkillPoints(), true);
 
-        //    if ((homeRoomType != null) && homeRoomType.HasTag(Tags.Vanilla.JanitorAdminWorkplace))
-        //    {
-        //        BehaviorJanitorPatch.GoReturnCartPrefix(__instance);
-        //        return false;
-        //    }
+                    __instance.m_state.m_cleaningTime = -1f;
 
-        //    if (__instance.m_state.m_object != null)
-        //    {
-        //        __instance.m_state.m_object.GetEntity().Repair();
-        //        BehaviorJanitorPatch.FreeObjectMod(__instance);
-        //    }
-        //    else
-        //    {
-        //        PlayerStatistics.Instance.IncrementStatistic("STAT_TILES_CLEAN", 1);
-        //        MapScriptInterface.Instance.CleanTile(__instance.GetComponent<WalkComponent>().GetCurrentTile(), __instance.GetComponent<WalkComponent>().GetFloorIndex());
-        //    }
+                    if (!BehaviorJanitorPatch.TryToSelectTileInCurrentRoomMod(__instance))
+                    {
+                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, dirty tile in current room not found");
 
-        //    if (DayTime.Instance.GetShift() != employeeComponent.m_state.m_shift)
-        //    {
-        //        BehaviorJanitorPatch.FreeObjectMod(__instance);
-        //        BehaviorJanitorPatch.FreeRoomMod(__instance);
-        //        BehaviorJanitorPatch.FreeTileMod(__instance);
-        //        BehaviorJanitorPatch.GoReturnCartPrefix(__instance);
+                        if (!BehaviorJanitorPatch.TryToSelectTileInARoomMod(__instance))
+                        {
+                            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, dirty tile in room not found");
 
-        //        __instance.m_state.m_hadLunch = false;
-        //        __instance.m_state.m_hadBreak = false;
-        //    }
-        //    else
-        //    {
-        //        BehaviorJanitorPatch.FreeTileMod(__instance);
+                            if (!BehaviorJanitorPatch.TryToSelectIndoorTileMod(__instance, BehaviorJanitorPatch.DirtinessThreshold))
+                            {
+                                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, dirty tile not found");
 
-        //        if (BehaviorJanitorPatch.CheckNeedsMod(__instance))
-        //        {
-        //            //__instance.m_entity.GetComponent<SpeechComponent>().HideBubble();
-        //            //__instance.SwitchState(BehaviorJanitorState.FulfillingNeeds);
+                                BehaviorJanitorPatch.FreeObjectMod(__instance);
+                                BehaviorJanitorPatch.FreeTileMod(__instance);
+                                BehaviorJanitorPatch.FreeRoomMod(__instance);
+                                BehaviorJanitorPatch.GoReturnCartMod(__instance);
+                            }
+                        }
+                    }
+                }
+            }
 
-        //            BehaviorJanitorPatch.FreeObjectMod(__instance);
-        //            BehaviorJanitorPatch.FreeRoomMod(__instance);
-        //            BehaviorJanitorPatch.FreeTileMod(__instance);
-        //            BehaviorJanitorPatch.GoReturnCartPrefix(__instance);
+            return false;
+        }
 
-        //            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, fulfilling needs");
-        //        }
-        //        else if (employeeComponent.ShouldGoToTraining() && employeeComponent.GoToTraining(__instance.GetComponent<ProcedureComponent>()))
-        //        {
-        //            //__instance.SwitchState(BehaviorJanitorState.Training);
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorJanitor), "TryToSelectTileInARoom")]
+        public static bool TryToSelectTileInARoomPrefix(BehaviorJanitor __instance, ref bool __result)
+        {
+            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            {
+                // Allow original method to run
+                return true;
+            }
 
-        //            BehaviorJanitorPatch.FreeObjectMod(__instance);
-        //            BehaviorJanitorPatch.FreeRoomMod(__instance);
-        //            BehaviorJanitorPatch.FreeTileMod(__instance);
-        //            BehaviorJanitorPatch.GoReturnCartPrefix(__instance);
+            __result = false;
+            return false;
+        }
 
-        //            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, training");
-        //        }
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorJanitor), "TryToSelectTileInCurrentRoom")]
+        public static bool TryToSelectTileInCurrentRoomPrefix(BehaviorJanitor __instance, ref bool __result)
+        {
+            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            {
+                // Allow original method to run
+                return true;
+            }
 
-        //        if (__instance.m_state.m_cart == null)
-        //        {
-        //            BehaviorJanitorPatch.FindCartMod(__instance);
-        //        }
+            EmployeeComponent employeeComponent = __instance.GetComponent<EmployeeComponent>();
+            WalkComponent walkComponent = __instance.GetComponent<WalkComponent>();
 
-        //        if (!BehaviorJanitorPatch.TryToSelectTileInCurrentRoomMod(__instance))
-        //        {
-        //            if (!BehaviorJanitorPatch.TryToSelectTileInARoomMod(__instance))
-        //            {
-        //                if (!BehaviorJanitorPatch.TryToSelectIndoorTileMod(__instance, 10))
-        //                {
-        //                    BehaviorJanitorPatch.FreeObjectMod(__instance);
-        //                    BehaviorJanitorPatch.FreeRoomMod(__instance);
-        //                    BehaviorJanitorPatch.FreeTileMod(__instance);
-        //                    BehaviorJanitorPatch.GoReturnCartPrefix(__instance);
-        //                }
-        //            }
-        //        }
-        //    }
+            if (__instance.m_state.m_room == null)
+            {
+                __result = false;
+                return false;
+            }
 
-        //    return false;
-        //}
+            if (__instance.m_state.m_room.GetEntity() == null)
+            {
+                __result = false;
+                return false;
+            }
+
+            BehaviorJanitor janitorManager = null;
+
+            if (employeeComponent.m_state.m_supervisor != null)
+            {
+                janitorManager = employeeComponent.m_state.m_supervisor.GetEntity()?.GetComponent<BehaviorJanitor>();
+            }
+            float skillLevel = employeeComponent.GetSkillLevel(Skills.Vanilla.SKILL_JANITOR_QUALIF_EFFICIENCY);
+
+            Vector2i dirtyTile = Vector2i.ZERO_VECTOR;
+            if (UnityEngine.Random.Range(Skills.SkillLevelMinimum, Skills.SkillLevelMaximum) < skillLevel)
+            {
+                dirtyTile = MapScriptInterface.Instance.FindClosestDirtyTileInARoom(__instance.m_state.m_room.GetEntity(), walkComponent.GetCurrentTile());
+
+                if (janitorManager != null)
+                {
+                    float points = UnityEngine.Random.Range(0f, 1f) * (float)Tweakable.Vanilla.MainSkillPoints();
+
+                    janitorManager.GetComponent<EmployeeComponent>().AddSkillPoints(Skills.Vanilla.DLC_SKILL_JANITOR_SPEC_MANAGER, (int)points, false);
+                }
+            }
+            else
+            {
+                dirtyTile = MapScriptInterface.Instance.FindDirtiestTileInARoom(__instance.m_state.m_room.GetEntity(), false, BehaviorJanitorPatch.DirtinessThreshold);
+
+                if (janitorManager != null)
+                {
+                    float points = UnityEngine.Random.Range(0f, 0.5f) * (float)Tweakable.Vanilla.MainSkillPoints();
+
+                    janitorManager.GetComponent<EmployeeComponent>().AddSkillPoints(Skills.Vanilla.DLC_SKILL_JANITOR_SPEC_MANAGER, (int)points, false);
+                }
+            }
+
+            employeeComponent.AddSkillPoints(Skills.Vanilla.SKILL_JANITOR_QUALIF_EFFICIENCY, Tweakable.Vanilla.MainSkillPoints(), true);
+
+            __instance.GetComponent<WalkComponent>().SetDestination(dirtyTile, __instance.m_state.m_room.GetEntity().GetFloorIndex(), MovementType.WALKING);
+
+            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, dirty tile [{dirtyTile.m_x.ToString(CultureInfo.InvariantCulture)}, {dirtyTile.m_y.ToString(CultureInfo.InvariantCulture)}], current tile [{walkComponent.GetCurrentTile().m_x.ToString(CultureInfo.InvariantCulture)}, {walkComponent.GetCurrentTile().m_y.ToString(CultureInfo.InvariantCulture)}]");
+
+            __result = false;
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorJanitor), "TryToSelectIndoorTile")]
+        public static bool TryToSelectIndoorTilePrefix(int threshold, BehaviorJanitor __instance, ref bool __result)
+        {
+            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            EmployeeComponent employeeComponent = __instance.GetComponent<EmployeeComponent>();
+            WalkComponent walkComponent = __instance.GetComponent<WalkComponent>();
+
+            Vector2i dirtyTile = MapScriptInterface.Instance.FindClosestDirtyIndoorsTile(walkComponent.GetCurrentTile(), walkComponent.GetFloorIndex(), threshold);
+            if (dirtyTile == Vector2i.ZERO_VECTOR)
+            {
+                __result = false;
+                return false;
+            }
+
+            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, dirty tile [{dirtyTile.m_x.ToString(CultureInfo.InvariantCulture)}, {dirtyTile.m_y.ToString(CultureInfo.InvariantCulture)}], current tile [{walkComponent.GetCurrentTile().m_x.ToString(CultureInfo.InvariantCulture)}, {walkComponent.GetCurrentTile().m_y.ToString(CultureInfo.InvariantCulture)}]");
+
+            walkComponent.SetDestination(dirtyTile, walkComponent.GetFloorIndex(), MovementType.WALKING);
+
+            __result = true;
+            return false;
+        }
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(BehaviorJanitor), "UpdateStateAdminIdle")]
-        public static bool UpdateStateAdminIdle(float deltaTime, BehaviorJanitor __instance)
+        public static bool UpdateStateAdminIdlePrefix(float deltaTime, BehaviorJanitor __instance)
         {
             if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
             {
@@ -382,7 +445,7 @@ namespace ModGameChanges.Lopital
 
                 if (__instance.m_state.m_timeInState > 2f)
                 {
-                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"01: Employee: {__instance.m_entity.Name}, managing janitors");
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, managing janitors");
 
                     if (!__instance.m_state.m_usingComputer && employeeComponent.m_state.m_workDesk.GetEntity() != null)
                     {
@@ -453,6 +516,42 @@ namespace ModGameChanges.Lopital
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorJanitor), "UpdateStateCleaning")]
+        public static bool UpdateStateCleaningPrefix(float deltaTime, BehaviorJanitor __instance)
+        {
+            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            if (!__instance.GetComponent<WalkComponent>().IsBusy())
+            {
+                EmployeeComponent employeeComponent = __instance.GetComponent<EmployeeComponent>();
+
+                if (BehaviorJanitorPatch.IsNeededHandleGoHome(__instance) || BehaviorJanitorPatch.IsNeededHandleFullfillNeeds(__instance) || BehaviorJanitorPatch.IsNeededHandleTraining(__instance))
+                {
+                    BehaviorJanitorPatch.FreeObjectMod(__instance);
+                    BehaviorJanitorPatch.FreeTileMod(__instance);
+                    BehaviorJanitorPatch.FreeRoomMod(__instance);
+                    BehaviorJanitorPatch.GoReturnCartMod(__instance);
+                }
+                else
+                {
+                    BehaviorJanitorPatch.SelectNextActionMod(__instance);
+                }
+
+                __instance.m_state.m_workingTime += deltaTime;
+                if (__instance.m_state.m_cleaningTime >= 0f)
+                {
+                    __instance.m_state.m_cleaningTime -= deltaTime;
+                }
+            }
+
+            return false;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(BehaviorJanitor), "UpdateStateGoingToWorkplace")]
         public static bool UpdateStateGoingToWorkplacePrefix(BehaviorJanitor __instance)
         {
@@ -468,6 +567,9 @@ namespace ModGameChanges.Lopital
                 GameDBRoomType homeRoomType = employeeComponent?.GetHomeRoomType();
 
                 Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, arrived to workplace");
+
+                employeeComponent.CheckRoomSatisfactionBonuses();
+                employeeComponent.CheckMoodModifiers(__instance.IsBookmarked());
 
                 if (!BehaviorJanitorPatch.HandleGoHomeFulfillNeedsTraining(__instance))
                 {
@@ -497,9 +599,25 @@ namespace ModGameChanges.Lopital
                     }
                     else
                     {
-                        // nothing to do
-                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, nothing to do, filling free time");
-                        __instance.SwitchState(BehaviorJanitorState.FillingFreeTime);
+                        if (__instance.m_state.m_cart == null)
+                        {
+                            BehaviorJanitorPatch.FindCartMod(__instance);
+                        }
+
+                        if (__instance.m_state.m_cart != null)
+                        {
+                            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, going to cart");
+
+                            __instance.GetComponent<WalkComponent>().SetDestination(__instance.m_state.m_cart.GetEntity().GetDefaultUsePosition(), __instance.m_state.m_cart.GetEntity().GetFloorIndex(), MovementType.WALKING);
+                            __instance.SwitchState(BehaviorJanitorState.WalkingToCart);
+                        }
+                        else
+                        {
+                            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, no cart, cleaning");
+
+                            __instance.m_state.m_cartAvailable = false;
+                            __instance.SwitchState(BehaviorJanitorState.Cleaning);
+                        }
                     }
                 }
             }
@@ -563,7 +681,6 @@ namespace ModGameChanges.Lopital
             if ((!__instance.GetComponent<ProcedureComponent>().IsBusy()) && (!__instance.GetComponent<WalkComponent>().IsBusy()))
             {
                 // currently janitor is not doing anything
-
                 if (!BehaviorJanitorPatch.HandleGoHomeFulfillNeedsGoToWorkplace(__instance))
                 {
                     // janitor still don't have anything to do
@@ -630,6 +747,9 @@ namespace ModGameChanges.Lopital
             EmployeeComponent employeeComponent = __instance.GetComponent<EmployeeComponent>();
             GameDBRoomType homeRoomType = employeeComponent?.GetHomeRoomType();
 
+            employeeComponent.CheckRoomSatisfactionBonuses();
+            employeeComponent.CheckMoodModifiers(__instance.IsBookmarked());
+
             if ((homeRoomType != null) && homeRoomType.HasTag(Tags.Mod.JanitorTrainingWorkspace))
             {
                 if (employeeComponent.UpdateTraining(__instance.GetComponent<ProcedureComponent>()))
@@ -664,6 +784,59 @@ namespace ModGameChanges.Lopital
             // missing reular janitor training
 
             return true;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorJanitor), "UpdateStateReturningCart")]
+        public static bool UpdateStateReturningCartPrefix(BehaviorJanitor __instance)
+        {
+            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            if (!__instance.GetComponent<WalkComponent>().IsBusy())
+            {
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, returned cart");
+
+                __instance.m_state.m_cart.GetEntity().User = null;
+                __instance.m_state.m_cart.GetEntity().SetAttachedToCharacter(false);
+                __instance.m_state.m_cart.GetEntity().StopSounds();
+                __instance.m_state.m_cartAvailable = false;
+
+                if (MapScriptInterface.Instance.MoveObject(__instance.m_state.m_cart.GetEntity(), __instance.m_state.m_cartHomeTile))
+                {
+                    __instance.m_state.m_cart.GetEntity().Orientation = __instance.m_state.m_cartHomeOrientation;
+                }
+                else
+                {
+                    Hospital.Instance.m_floors[__instance.m_state.m_cart.GetEntity().GetFloorIndex()].m_movingObjects.Remove(__instance.m_state.m_cart.GetEntity());
+                    __instance.m_state.m_cart.GetEntity().m_state.m_department.GetEntity().RemoveObject(__instance.m_state.m_cart.GetEntity());
+                    __instance.m_state.m_cart.GetEntity().Destroy();
+                }
+                __instance.m_state.m_cart.GetEntity().StopSounds();
+                __instance.m_state.m_cart = null;
+
+                if (!BehaviorJanitorPatch.HandleGoHomeFulfillNeedsTraining(__instance))
+                {
+                    if (BehaviorJanitorPatch.HandleGoHomeFulfillNeedsGoToWorkplace(__instance))
+                    {
+                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, going to workplace");
+
+                        __instance.GoToWorkPlace();
+                        __instance.SwitchState(BehaviorJanitorState.GoingToWorkplace);
+                    }
+                    else
+                    {
+                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, nothing to do");
+
+                        __instance.SwitchState(BehaviorJanitorState.FillingFreeTime);
+                    }
+                }
+            }
+
+            return false;
         }
 
         [HarmonyPrefix]
@@ -708,6 +881,39 @@ namespace ModGameChanges.Lopital
             return false;
         }
 
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorJanitor), "UpdateStateWalkingToCartToNextRoom")]
+        public static bool UpdateStateWalkingToCartToNextRoomPrefix(BehaviorJanitor __instance)
+        {
+            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            if (!__instance.GetComponent<WalkComponent>().IsBusy())
+            {
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, arrived to cart");
+
+                EmployeeComponent employeeComponent = __instance.GetComponent<EmployeeComponent>();
+
+                if (__instance.m_state.m_cart != null)
+                {
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, picking up cart");
+
+                    MapScriptInterface.Instance.PickUpObject(__instance.m_state.m_cart.GetEntity());
+                    __instance.m_state.m_cart.GetEntity().SetAttachedToCharacter(true);
+                    __instance.m_state.m_cartAvailable = true;
+                }
+
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, cleaning");
+
+                __instance.SwitchState(BehaviorJanitorState.Cleaning);
+            }
+
+            return false;
+        }
+
         public static void ChooseSkillToTrainAndToggleTraining(BehaviorJanitor instance)
         {
             EmployeeComponent employeeComponent = instance.GetComponent<EmployeeComponent>();
@@ -747,6 +953,52 @@ namespace ModGameChanges.Lopital
                 employeeComponent.ToggleTraining(skillToTrain);
             }
         }
+
+        private static bool IsNeededHandleGoHome(BehaviorJanitor instance)
+        {
+            EmployeeComponent employeeComponent = instance.GetComponent<EmployeeComponent>();
+
+            GameDBSchedule shift = (employeeComponent.m_state.m_shift == Shift.DAY) ?
+                Database.Instance.GetEntry<GameDBSchedule>(Schedules.Vanilla.SCHEDULE_OPENING_HOURS_STAFF) :
+                Database.Instance.GetEntry<GameDBSchedule>(Schedules.Vanilla.SCHEDULE_OPENING_HOURS_STAFF_NIGHT);
+
+            return (employeeComponent.IsFired() || instance.GetDepartment().IsClosed()
+                || ((DayTime.Instance.GetShift() != employeeComponent.m_state.m_shift) && (Mathf.Abs(DayTime.Instance.GetDayTimeHours() - shift.StartTime) > 1)));
+        }
+
+
+        private static bool IsNeededHandleFullfillNeeds(BehaviorJanitor instance)
+        {
+            EmployeeComponent employeeComponent = instance.GetComponent<EmployeeComponent>();
+            GameDBSchedule shift = (employeeComponent.m_state.m_shift == Shift.DAY) ?
+                Database.Instance.GetEntry<GameDBSchedule>(Schedules.Vanilla.SCHEDULE_OPENING_HOURS_STAFF) :
+                Database.Instance.GetEntry<GameDBSchedule>(Schedules.Vanilla.SCHEDULE_OPENING_HOURS_STAFF_NIGHT);
+
+            // check if janitor should go to lunch
+            if ((!instance.m_state.m_hadLunch) &&
+                ((DayTime.Instance.IsScheduledActionTime(Schedules.Vanilla.SCHEDULE_STAFF_LUNCH, true) && (DayTime.Instance.GetShift() == Shift.DAY) && (employeeComponent.m_state.m_shift == Shift.DAY) && (DayTime.Instance.GetDayTimeHours() < shift.EndTime)) ||
+                (DayTime.Instance.IsScheduledActionTime(Schedules.Mod.SCHEDULE_STAFF_LUNCH_NIGHT, true) && (DayTime.Instance.GetShift() == Shift.NIGHT) && (employeeComponent.m_state.m_shift == Shift.NIGHT) && (DayTime.Instance.GetDayTimeHours() < shift.EndTime) && ViewSettingsPatch.m_staffLunchNight[SettingsManager.Instance.m_viewSettings].m_value)))
+            {
+                return true;
+            }
+
+            List<Need> needsSortedFromMostCritical = instance.GetComponent<MoodComponent>().GetNeedsSortedFromMostCritical();
+            foreach (Need need in needsSortedFromMostCritical)
+            {
+                if ((need.m_currentValue > 50f) && instance.GetComponent<ProcedureComponent>().GetProcedureAvailabilty(need.m_gameDBNeed.Entry.Procedure, instance.m_entity, employeeComponent.m_state.m_department.GetEntity(), AccessRights.STAFF_ONLY, EquipmentListRules.ONLY_FREE_SAME_FLOOR) == ProcedureSceneAvailability.AVAILABLE)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool IsNeededHandleTraining(BehaviorJanitor instance)
+        {
+            return instance.GetComponent<EmployeeComponent>().ShouldGoToTraining();
+        }
+
 
         public static bool HandleGoHomeFulfillNeeds(BehaviorJanitor instance)
         {
@@ -807,10 +1059,14 @@ namespace ModGameChanges.Lopital
                         return true;
                     }
 
-                    // regular janitor TO DO
-                    //instance.SwitchState(BehaviorJanitorState.FillingFreeTime);
-                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {instance.m_entity.Name}, NOT IMPLEMENTED 2");
-                    return false;
+                    // regular janitor
+                    if (BehaviorJanitorPatch.FindAnyDirtyTile(instance) != Vector3i.ZERO_VECTOR)
+                    {
+                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {instance.m_entity.Name}, going to janitor workplace");
+
+                        instance.GoToWorkPlace();
+                        return true;
+                    }
                 }
                 else
                 {
@@ -872,36 +1128,44 @@ namespace ModGameChanges.Lopital
             return (bool)methodInfo.Invoke(instance, null);
         }
 
-        private static bool FindCartMod(BehaviorJanitor instance)
+        private static void FindCartMod(BehaviorJanitor instance)
         {
             Type type = typeof(BehaviorJanitor);
             MethodInfo methodInfo = type.GetMethod("FindCart", BindingFlags.NonPublic | BindingFlags.Instance);
 
-            return (bool)methodInfo.Invoke(instance, null);
+            methodInfo.Invoke(instance, null);
         }
 
-        private static bool FreeObjectMod(BehaviorJanitor instance)
+        private static void FreeObjectMod(BehaviorJanitor instance)
         {
             Type type = typeof(BehaviorJanitor);
             MethodInfo methodInfo = type.GetMethod("FreeObject", BindingFlags.NonPublic | BindingFlags.Instance);
 
-            return (bool)methodInfo.Invoke(instance, null);
+            methodInfo.Invoke(instance, null);
         }
 
-        private static bool FreeRoomMod(BehaviorJanitor instance)
+        private static void FreeRoomMod(BehaviorJanitor instance)
         {
             Type type = typeof(BehaviorJanitor);
             MethodInfo methodInfo = type.GetMethod("FreeRoom", BindingFlags.NonPublic | BindingFlags.Instance);
 
-            return (bool)methodInfo.Invoke(instance, null);
+            methodInfo.Invoke(instance, null);
         }
 
-        private static bool FreeTileMod(BehaviorJanitor instance)
+        private static void FreeTileMod(BehaviorJanitor instance)
         {
             Type type = typeof(BehaviorJanitor);
             MethodInfo methodInfo = type.GetMethod("FreeTile", BindingFlags.NonPublic | BindingFlags.Instance);
+            
+            methodInfo.Invoke(instance, null);
+        }
 
-            return (bool)methodInfo.Invoke(instance, null);
+        private static void GoReturnCartMod(BehaviorJanitor instance)
+        {
+            Type type = typeof(BehaviorJanitor);
+            MethodInfo methodInfo = type.GetMethod("GoReturnCart", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            methodInfo.Invoke(instance, null);
         }
 
         private static TileObject GetWorkDeskMod(BehaviorJanitor instance)
@@ -948,6 +1212,14 @@ namespace ModGameChanges.Lopital
             return false;
         }
 
+        private static bool TryToSelectIndoorTileMod(BehaviorJanitor instance, int threshold)
+        {
+            Type type = typeof(BehaviorJanitor);
+            MethodInfo methodInfo = type.GetMethod("TryToSelectIndoorTile", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            return (bool)methodInfo.Invoke(instance, new object[] { threshold });
+        }
+
         private static bool TryToSelectTileInARoomMod(BehaviorJanitor instance)
         {
             Type type = typeof(BehaviorJanitor);
@@ -964,12 +1236,20 @@ namespace ModGameChanges.Lopital
             return (bool)methodInfo.Invoke(instance, null);
         }
 
-        private static bool TryToSelectIndoorTileMod(BehaviorJanitor instance, int threshold)
+        private static void SelectNextActionMod(BehaviorJanitor instance)
         {
             Type type = typeof(BehaviorJanitor);
-            MethodInfo methodInfo = type.GetMethod("TryToSelectIndoorTile", BindingFlags.NonPublic | BindingFlags.Instance);
+            MethodInfo methodInfo = type.GetMethod("SelectNextAction", BindingFlags.NonPublic | BindingFlags.Instance);
 
-            return (bool)methodInfo.Invoke(instance, new object[] { threshold });
+            methodInfo.Invoke(instance, null);
+        }
+
+        private static void UpdateCleaningTimeMod(BehaviorJanitor instance)
+        {
+            Type type = typeof(BehaviorJanitor);
+            MethodInfo methodInfo = type.GetMethod("UpdateCleaningTime", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            methodInfo.Invoke(instance, null);
         }
 
         private static Vector3i GetCommonRoomFreePlace(BehaviorJanitor instance)
@@ -1026,5 +1306,17 @@ namespace ModGameChanges.Lopital
 
             return selectedVector;
         }
+
+        private static Vector3i FindAnyDirtyTile(BehaviorJanitor instance)
+        {
+            Vector2i position = instance.GetComponent<WalkComponent>().GetCurrentTile();
+            int floorIndex = instance.GetComponent<WalkComponent>().GetFloorIndex();
+
+            Vector2i tile = MapScriptInterface.Instance.FindClosestDirtyIndoorsTile(position, floorIndex, BehaviorJanitorPatch.DirtinessThreshold);
+
+            return new Vector3i(tile.m_x, tile.m_y, (tile == Vector2i.ZERO_VECTOR) ? 0 : floorIndex);
+        }
+
+        public const int DirtinessThreshold = 12;
     }
 }
