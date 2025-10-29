@@ -24,24 +24,43 @@ namespace ModGameChanges.Lopital
             }
 
             EmployeeComponent employeeComponent = __instance.GetComponent<EmployeeComponent>();
-            GameDBRoomType homeRoomType = employeeComponent?.GetHomeRoomType();
+            //GameDBRoomType homeRoomType = employeeComponent?.GetHomeRoomType();
 
-            if ((homeRoomType != null) && homeRoomType.HasTag(Tags.Mod.JanitorTrainingWorkspace))
+            //if ((homeRoomType != null) && homeRoomType.HasTag(Tags.Mod.JanitorTrainingWorkspace))
+            //{
+            //    // janitor in training, go to working place
+            //    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, going to training workplace");
+
+            //    employeeComponent.CheckChiefNodiagnoseDepartment(true);
+
+            //    __instance.GetComponent<WalkComponent>().GoSit(employeeComponent.GetWorkChair(), MovementType.WALKING);
+            //    __instance.SwitchState(BehaviorJanitorState.GoingToWorkplace);
+
+            //    __instance.GetComponent<WalkComponent>().Floor = Hospital.Instance.GetCurrentFloor();
+
+            //    return false;
+            //}
+
+            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, added to hospital, trying to find common room");
+
+            employeeComponent.m_state.m_department = MapScriptInterface.Instance.GetActiveDepartment();
+            employeeComponent.m_state.m_startDay = DayTime.Instance.GetDay();
+
+            Vector3i position = BehaviorJanitorPatch.GetCommonRoomFreePlace(__instance);
+
+            if (position == Vector3i.ZERO_VECTOR)
             {
-                // janitor in training, go to working place
-                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, going to training workplace");
-
-                employeeComponent.CheckChiefNodiagnoseDepartment(true);
-
-                __instance.GetComponent<WalkComponent>().GoSit(employeeComponent.GetWorkChair(), MovementType.WALKING);
-                __instance.SwitchState(BehaviorJanitorState.GoingToWorkplace);
-
-                __instance.GetComponent<WalkComponent>().Floor = Hospital.Instance.GetCurrentFloor();
-
+                // not found common room, stay at home
+                BehaviorJanitorPatch.GoHomeMod(__instance);
                 return false;
             }
 
-            return true;
+            __instance.GetComponent<WalkComponent>().SetDestination(new Vector2i(position.m_x, position.m_y), position.m_z, MovementType.WALKING);
+            __instance.SwitchState(BehaviorJanitorState.Walking);
+
+            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, going to common room");
+
+            return false;
         }
 
         [HarmonyPrefix]
@@ -502,73 +521,6 @@ namespace ModGameChanges.Lopital
             }
 
             return false;
-
-            //if (!__instance.GetComponent<WalkComponent>().IsBusy())
-            //{
-            //    EmployeeComponent employeeComponent = __instance.GetComponent<EmployeeComponent>();
-            //    GameDBRoomType homeRoomType = employeeComponent?.GetHomeRoomType();
-
-            //    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, arrived to workspace");
-
-            //    employeeComponent.CheckChiefNodiagnoseDepartment(true);
-            //    employeeComponent.CheckRoomSatisfactionBonuses();
-            //    employeeComponent.CheckMoodModifiers(__instance.IsBookmarked());
-            //    employeeComponent.CheckBossModifiers();
-            //    employeeComponent.UpdateHomeRoom();
-            //    __instance.GetComponent<AnimModelComponent>().RevertToDefaultClothes(false);
-
-            //    if (!BehaviorJanitorPatch.HandleGoHomeFulfillNeedsTraining(__instance))
-            //    {
-            //        // "workplace" can be dedicated training place, admin workplace or common room
-
-            //        //// the janitor don't have to be in common room !
-            //        //Room room = MapScriptInterface.Instance.GetRoomAt(__instance.m_entity.GetComponent<WalkComponent>());
-
-            //        //if ((room != null) && (room.m_roomPersistentData.m_roomType.Entry.HasTag(Tags.Vanilla.CommonRoom)))
-            //        //{
-            //        //    // janitor is in common room
-
-            //        //    __instance.GoToWorkPlace();
-            //        //    return false;
-            //        //}
-
-            //        bool canGoToWorkplace = false;
-            //        Entity oppositeShiftEmployee = employeeComponent.GetOppositeShiftEmployee();
-
-            //        canGoToWorkplace &= (oppositeShiftEmployee == null) ||
-            //            ((oppositeShiftEmployee != null) && ((oppositeShiftEmployee.GetComponent<BehaviorJanitor>().m_state.m_janitorState == BehaviorJanitorState.AtHome)
-            //                || (oppositeShiftEmployee.GetComponent<BehaviorJanitor>().m_state.m_janitorState == BehaviorJanitorState.GoingHome)));
-
-            //        if (canGoToWorkplace)
-            //        {
-            //            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, can go to workplace");
-
-            //            if ((homeRoomType != null) && homeRoomType.HasTag(Tags.Mod.JanitorTrainingWorkspace))
-            //            {
-            //                __instance.SwitchState(BehaviorJanitorState.FillingFreeTime);
-            //                return false;
-            //            }
-
-            //            if ((homeRoomType != null) && homeRoomType.HasTag(Tags.Vanilla.JanitorAdminWorkplace))
-            //            {
-            //                __instance.SwitchState(BehaviorJanitorState.FillingFreeTime);
-            //                return false;
-            //            }
-
-            //            // regular janitor TO DO
-            //            __instance.SwitchState(BehaviorJanitorState.FillingFreeTime);
-            //        }
-            //        else
-            //        {
-            //            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, cannot go to workplace, filling free time");
-
-            //            // can't go to workplace, fill free time
-            //            __instance.SwitchState(BehaviorJanitorState.FillingFreeTime);
-            //        }
-            //    }
-            //}
-
-            //return false;
         }
 
         [HarmonyPrefix]
