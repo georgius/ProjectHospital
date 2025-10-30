@@ -744,51 +744,6 @@ namespace ModAdvancedGameChanges .Lopital
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(BehaviorJanitor), "UpdateStateFulfillingNeeds")]
-        public static bool UpdateStateFulfillingNeedsPrefix(BehaviorJanitor __instance)
-        {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
-            {
-                // Allow original method to run
-                return true;
-            }
-
-            EmployeeComponent employeeComponent = __instance.GetComponent<EmployeeComponent>();
-            GameDBRoomType homeRoomType = employeeComponent?.GetHomeRoomType();
-
-            if (!__instance.GetComponent<ProcedureComponent>().IsBusy())
-            {
-                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, fulfilling need finished");
-
-                if (!BehaviorJanitorPatch.HandleGoHomeFulfillNeeds(__instance))
-                {
-                    if ((homeRoomType == null)
-                        || ((homeRoomType != null) && homeRoomType.HasTag(Tags.Mod.JanitorTrainingWorkspace) && (!BehaviorJanitorPatch.HandleGoHomeFulfillNeedsGoToWorkplace(__instance)))
-                        || ((homeRoomType != null) && (!homeRoomType.HasTag(Tags.Mod.JanitorTrainingWorkspace)) && (!BehaviorJanitorPatch.HandleGoHomeFulfillNeedsTraining(__instance))))
-                    {
-                        // by default, go to common room
-                        Vector3i position = BehaviorPatch.GetCommonRoomFreePlace(__instance);
-
-                        if (position != Vector3i.ZERO_VECTOR)
-                        {
-                            __instance.GetComponent<WalkComponent>().SetDestination(new Vector2i(position.m_x, position.m_y), position.m_z, MovementType.WALKING);
-
-                            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, going to common room");
-
-                            __instance.SwitchState(BehaviorJanitorState.FillingFreeTime);
-                        }
-                        else
-                        {
-                            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, common room room not found");
-                        }
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        [HarmonyPrefix]
         [HarmonyPatch(typeof(BehaviorJanitor), "UpdateStateFillingFreeTime")]
         public static bool UpdateStateFillingFreeTimePrefix(float deltaTime, BehaviorJanitor __instance)
         {
@@ -854,6 +809,51 @@ namespace ModAdvancedGameChanges .Lopital
 
                                 Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, going to common room");
                             }
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorJanitor), "UpdateStateFulfillingNeeds")]
+        public static bool UpdateStateFulfillingNeedsPrefix(BehaviorJanitor __instance)
+        {
+            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            EmployeeComponent employeeComponent = __instance.GetComponent<EmployeeComponent>();
+            GameDBRoomType homeRoomType = employeeComponent?.GetHomeRoomType();
+
+            if (!__instance.GetComponent<ProcedureComponent>().IsBusy())
+            {
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, fulfilling need finished");
+
+                if (!BehaviorJanitorPatch.HandleGoHomeFulfillNeeds(__instance))
+                {
+                    if ((homeRoomType == null)
+                        || ((homeRoomType != null) && homeRoomType.HasTag(Tags.Mod.JanitorTrainingWorkspace) && (!BehaviorJanitorPatch.HandleGoHomeFulfillNeedsGoToWorkplace(__instance)))
+                        || ((homeRoomType != null) && (!homeRoomType.HasTag(Tags.Mod.JanitorTrainingWorkspace)) && (!BehaviorJanitorPatch.HandleGoHomeFulfillNeedsTraining(__instance))))
+                    {
+                        // by default, go to common room
+                        Vector3i position = BehaviorPatch.GetCommonRoomFreePlace(__instance);
+
+                        if (position != Vector3i.ZERO_VECTOR)
+                        {
+                            __instance.GetComponent<WalkComponent>().SetDestination(new Vector2i(position.m_x, position.m_y), position.m_z, MovementType.WALKING);
+
+                            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, going to common room");
+
+                            __instance.SwitchState(BehaviorJanitorState.FillingFreeTime);
+                        }
+                        else
+                        {
+                            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, common room room not found");
                         }
                     }
                 }
