@@ -23,6 +23,9 @@ namespace ModGameChanges
             Tweakable.CheckTrainingHourPoints();
             Tweakable.CheckMainSkillPoints();
             Tweakable.CheckJanitorDexteritySkillPoints();
+            Tweakable.CheckCleaningTimeDirt();
+            Tweakable.CheckCleaningTimeBlood();
+            Tweakable.CheckJanitorManagerCleaningBonusPercent();
         }
 
         public static void CheckNonLinearSkillLevelingConfiguration()
@@ -104,6 +107,37 @@ namespace ModGameChanges
             }
         }
 
+        public static void CheckCleaningTimeDirt()
+        {
+            var points = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_CLEANING_TIME_DIRT);
+            if (points.Value < 1)
+            {
+                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_CLEANING_TIME_DIRT}' must be greater than zero.");
+            }
+        }
+
+        public static void CheckCleaningTimeBlood()
+        {
+            var points = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_CLEANING_TIME_BLOOD);
+            if (points.Value < 1)
+            {
+                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_CLEANING_TIME_BLOOD}' must be greater than zero.");
+            }
+        }
+
+        public static void CheckJanitorManagerCleaningBonusPercent()
+        {
+            var points = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_JANITOR_MANAGER_CLEANING_BONUS_PERCENT);
+            if (points.Value < 1)
+            {
+                throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_JANITOR_MANAGER_CLEANING_BONUS_PERCENT}' must be greater than zero.");
+            }
+            if (points.Value > 100)
+            {
+                throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_JANITOR_MANAGER_CLEANING_BONUS_PERCENT}' must be less than 100.");
+            }
+        }
+
         public static T EnsureExists<T>(string tweakable) where T : DatabaseEntry
         {
             var entry = Tweakable.GetTweakable<T>(tweakable);
@@ -161,6 +195,16 @@ namespace ModGameChanges
             {
                 return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_TRAINING_HOUR_POINTS).Value;
             }
+
+            public static int CleaningTimeDirt()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_CLEANING_TIME_DIRT).Value;
+            }
+
+            public static int CleaningTimeBlood()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_CLEANING_TIME_BLOOD).Value;
+            }
         }
 
         public static class Vanilla
@@ -185,6 +229,11 @@ namespace ModGameChanges
             public static int JanitorDexteritySkillPoints()
             {
                 return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_JANITOR_DEXTERITY_SKILL_POINTS).Value;
+            }
+
+            public static int JanitorManagerCleaningBonusPercent()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_JANITOR_MANAGER_CLEANING_BONUS_PERCENT).Value;
             }
         }
     }

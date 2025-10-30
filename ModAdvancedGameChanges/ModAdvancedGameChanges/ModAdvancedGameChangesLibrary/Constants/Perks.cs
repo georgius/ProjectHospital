@@ -8,6 +8,7 @@
             public const string SlowLearner = "PERK_SLOW_LEARNER";
             public const string LongCommute = "PERK_LONG_COMMUTE";
             public const string Alcoholism = "PERK_ALCOHOLISM";
+            public const string Chemist = "PERK_CHEMIST";
         }
     }
 }
