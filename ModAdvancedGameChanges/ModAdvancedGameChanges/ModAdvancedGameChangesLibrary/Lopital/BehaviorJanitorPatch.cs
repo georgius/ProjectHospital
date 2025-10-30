@@ -790,7 +790,7 @@ namespace ModAdvancedGameChanges .Lopital
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(BehaviorJanitor), "UpdateStateFillingFreeTime")]
-        public static bool UpdateStateFillingFreeTimePrefix(BehaviorJanitor __instance)
+        public static bool UpdateStateFillingFreeTimePrefix(float deltaTime, BehaviorJanitor __instance)
         {
             if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
             {
@@ -1064,46 +1064,6 @@ namespace ModAdvancedGameChanges .Lopital
             return false;
         }
 
-        public static void ChooseSkillToTrainAndToggleTraining(BehaviorJanitor instance)
-        {
-            EmployeeComponent employeeComponent = instance.GetComponent<EmployeeComponent>();
-
-            List<Skill> skills = new List<Skill>();
-
-            if (employeeComponent.m_state.m_skillSet.m_qualifications != null)
-            {
-                foreach (var skill in employeeComponent.m_state.m_skillSet.m_qualifications)
-                {
-                    if (skill.m_level < Skills.SkillLevelMaximum)
-                    {
-                        skills.Add(skill);
-                    }
-                }
-            }
-            if (employeeComponent.m_state.m_skillSet.m_specialization1 != null)
-            {
-                if (employeeComponent.m_state.m_skillSet.m_specialization1.m_level < Skills.SkillLevelMaximum)
-                {
-                    skills.Add(employeeComponent.m_state.m_skillSet.m_specialization1);
-                }
-            }
-            if (employeeComponent.m_state.m_skillSet.m_specialization2 != null)
-            {
-                if (employeeComponent.m_state.m_skillSet.m_specialization2.m_level < Skills.SkillLevelMaximum)
-                {
-                    skills.Add(employeeComponent.m_state.m_skillSet.m_specialization2);
-                }
-            }
-
-            if (skills.Count != 0)
-            {
-                Skill skillToTrain = skills[UnityEngine.Random.Range(0, skills.Count)];
-
-                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {instance.m_entity.Name}, training skill {skillToTrain.m_gameDBSkill.Entry.DatabaseID}");
-                employeeComponent.ToggleTraining(skillToTrain);
-            }
-        }
-
         private static bool IsNeededHandleGoHome(BehaviorJanitor instance)
         {
             EmployeeComponent employeeComponent = instance.GetComponent<EmployeeComponent>();
@@ -1151,7 +1111,6 @@ namespace ModAdvancedGameChanges .Lopital
         public static bool HandleGoHomeFulfillNeeds(BehaviorJanitor instance)
         {
             EmployeeComponent employeeComponent = instance.GetComponent<EmployeeComponent>();
-            GameDBRoomType homeRoomType = employeeComponent?.GetHomeRoomType();
 
             // check if janitor needs to go home
             if (BehaviorJanitorPatch.GoHomeMod(instance))
@@ -1241,7 +1200,7 @@ namespace ModAdvancedGameChanges .Lopital
 
                     if (!employeeComponent.ShouldGoToTraining())
                     {
-                        BehaviorJanitorPatch.ChooseSkillToTrainAndToggleTraining(instance);
+                        BehaviorPatch.ChooseSkillToTrainAndToggleTraining(instance);
                     }
 
                     // if possible, go to training
