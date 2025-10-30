@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using GLib;
+using HarmonyLib;
 using Lopital;
 using ModAdvancedGameChanges;
 using ModAdvancedGameChanges.Constants;
@@ -14,8 +15,6 @@ namespace ModGameChanges.Lopital
         [HarmonyPatch(typeof(EmployeeComponent), nameof(EmployeeComponent.AddExperiencePoints))]
         public static void AddExperiencePoints(int points, EmployeeComponent __instance)
         {
-            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"01 Employee: {__instance.m_entity.Name} Points: {points.ToString(CultureInfo.InvariantCulture)}");
-
             // it seems that original code is "optimized" or something similar
             // the GetPointsNeededForNextLevel() patched method is not called for unknown reason
             bool runOriginalCode = true;
@@ -40,8 +39,6 @@ namespace ModGameChanges.Lopital
 
                         __instance.m_state.m_points += (int)num;
 
-                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"02 Employee: {__instance.m_entity.Name} Points: {points.ToString(CultureInfo.InvariantCulture)}");
-
                         int doctorMaxLevel = 5;
                         if (__instance.IsClinicEmployee())
                         {
@@ -51,8 +48,6 @@ namespace ModGameChanges.Lopital
                             }
                         }
 
-                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"03 Employee: {__instance.m_entity.Name} Level: {__instance.m_state.m_level.ToString(CultureInfo.InvariantCulture)} Allowed level: {doctorMaxLevel.ToString(CultureInfo.InvariantCulture)}");
-
                         if (__instance.m_state.m_level >= doctorMaxLevel)
                         {
                             __instance.m_state.m_level = doctorMaxLevel;
@@ -61,7 +56,7 @@ namespace ModGameChanges.Lopital
 
                         int nextLevelPoints = __instance.GetPointsNeededForNextLevel();
 
-                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"04 Employee: {__instance.m_entity.Name} Level: {__instance.m_state.m_level.ToString(CultureInfo.InvariantCulture)} Allowed level: {doctorMaxLevel.ToString(CultureInfo.InvariantCulture)} Points: {__instance.m_state.m_points.ToString(CultureInfo.InvariantCulture)} Required points: {nextLevelPoints.ToString(CultureInfo.InvariantCulture)}");
+                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, level: {__instance.m_state.m_level.ToString(CultureInfo.InvariantCulture)}, allowed level: {doctorMaxLevel.ToString(CultureInfo.InvariantCulture)}, points: {__instance.m_state.m_points.ToString(CultureInfo.InvariantCulture)}, required points: {nextLevelPoints.ToString(CultureInfo.InvariantCulture)}");
 
                         if (__instance.m_state.m_points >= nextLevelPoints)
                         {
@@ -111,15 +106,13 @@ namespace ModGameChanges.Lopital
                 {
                     if (__instance.m_entity.GetComponent<BehaviorDoctor>() != null)
                     {
-                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"05 Employee: {__instance.m_entity.Name} Points: {points.ToString(CultureInfo.InvariantCulture)}");
-
                         int doctorMaxLevel = 5;
                         if (__instance.IsClinicEmployee())
                         {
                             doctorMaxLevel = Tweakable.Mod.AllowedClinicDoctorsLevel();
                         }
 
-                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"06 Employee: {__instance.m_entity.Name} Level: {__instance.m_state.m_level.ToString(CultureInfo.InvariantCulture)} Allowed level: {doctorMaxLevel.ToString(CultureInfo.InvariantCulture)}");
+                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, level: {__instance.m_state.m_level.ToString(CultureInfo.InvariantCulture)}, allowed level: {doctorMaxLevel.ToString(CultureInfo.InvariantCulture)}");
 
                         if (__instance.m_state.m_level >= doctorMaxLevel)
                         {
@@ -128,8 +121,6 @@ namespace ModGameChanges.Lopital
 
                         }
 
-                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"07 Employee: {__instance.m_entity.Name} Level: {__instance.m_state.m_level.ToString(CultureInfo.InvariantCulture)} Allowed level: {doctorMaxLevel.ToString(CultureInfo.InvariantCulture)} Points: {__instance.m_state.m_points.ToString(CultureInfo.InvariantCulture)}");
-
                         runOriginalCode = false;
                     }
                 }
@@ -137,8 +128,6 @@ namespace ModGameChanges.Lopital
 
             if (runOriginalCode)
             {
-                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"08 Employee: {__instance.m_entity.Name}");
-
                 float num = (float)points * (Database.Instance.GetEntry<GameDBTweakableFloat>(Tweakables.Vanilla.LevelingRatePercent).Value / 100f);
                 if (__instance.m_entity.GetComponent<PerkComponent>().m_perkSet.HasPerk(Perks.Vanilla.FastLearner))
                 {
@@ -156,7 +145,7 @@ namespace ModGameChanges.Lopital
                 int maxLevel = (__instance.m_entity.GetComponent<BehaviorDoctor>() == null) ? 3 : 5;
                 int nextLevelPoints = __instance.GetPointsNeededForNextLevel();
 
-                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} Required points: {nextLevelPoints.ToString(CultureInfo.InvariantCulture)}");
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, required points: {nextLevelPoints.ToString(CultureInfo.InvariantCulture)}");
 
                 if (__instance.m_state.m_points >= nextLevelPoints && __instance.m_state.m_level < maxLevel)
                 {
@@ -325,13 +314,19 @@ namespace ModGameChanges.Lopital
             }
 
             Department trainingDepartment = MapScriptInterface.Instance.GetDepartmentOfType(Database.Instance.GetEntry<GameDBDepartment>(Departments.Mod.TrainingDepartment));
+            Department administrativeDepartment = MapScriptInterface.Instance.GetDepartmentOfType(Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.AdministrativeDepartment));
+            GameDBProcedure staffTraining = Database.Instance.GetEntry<GameDBProcedure>(Procedures.Vanilla.StaffTraining);
+            GameDBRoomType homeRoomType = __instance.GetHomeRoomType();
 
-            if (__instance.m_state.m_department.GetEntity() == trainingDepartment)
+            if ((homeRoomType != null)
+                && (
+                    homeRoomType.HasTag(Tags.Mod.DoctorTrainingWorkspace)
+                    || homeRoomType.HasTag(Tags.Mod.NurseTrainingWorkspace)
+                    || homeRoomType.HasTag(Tags.Mod.LabSpecialistTrainingWorkspace)
+                    || homeRoomType.HasTag(Tags.Mod.JanitorTrainingWorkspace)
+                    ))
             {
-                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} in training department");
-
-                Department administrativeDepartment = MapScriptInterface.Instance.GetDepartmentOfType(Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.AdministrativeDepartment));
-                GameDBProcedure staffTraining = Database.Instance.GetEntry<GameDBProcedure>(Procedures.Vanilla.StaffTraining);
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} in training workplace");
 
                 if (procedureComponent.GetProcedureAvailabilty(staffTraining, __instance.m_entity, trainingDepartment, AccessRights.STAFF, EquipmentListRules.ONLY_FREE) == ProcedureSceneAvailability.AVAILABLE)
                 {
@@ -358,8 +353,123 @@ namespace ModGameChanges.Lopital
 
                 return false;
             }
+            else
+            {
+                // trainee in regular place
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} not in training workplace");
 
-            return true;
+                if (procedureComponent.GetProcedureAvailabilty(staffTraining, __instance.m_entity, administrativeDepartment, AccessRights.STAFF, EquipmentListRules.ONLY_FREE) == ProcedureSceneAvailability.AVAILABLE)
+                {
+                    BehaviorDoctor doctor = __instance.m_entity.GetComponent<BehaviorDoctor>();
+                    if (doctor != null)
+                    {
+                        doctor.CurrentPatient = null;
+                        foreach (Entity entity in Hospital.Instance.m_characters)
+                        {
+                            if (entity.GetComponent<BehaviorPatient>() != null && entity.GetComponent<BehaviorPatient>().m_state.m_doctor == __instance.m_entity)
+                            {
+                                entity.GetComponent<BehaviorPatient>().SetDoctor(null);
+                            }
+                        }
+                    }
+
+                    BehaviorNurse nurse = __instance.m_entity.GetComponent<BehaviorNurse>();
+                    if (nurse != null)
+                    {
+                        nurse.CurrentPatient = null;
+                        foreach (Entity entity in Hospital.Instance.m_characters)
+                        {
+                            if (entity.GetComponent<BehaviorPatient>() != null && entity.GetComponent<BehaviorPatient>().m_state.m_nurse == __instance.m_entity)
+                            {
+                                entity.GetComponent<BehaviorPatient>().m_state.m_nurse = null;
+                            }
+                        }
+                    }
+
+                    BehaviorLabSpecialist labSpecialist = __instance.m_entity.GetComponent<BehaviorLabSpecialist>();
+                    if (labSpecialist != null)
+                    {
+                        labSpecialist.CurrentPatient = null;
+                        foreach (Entity entity in Hospital.Instance.m_characters)
+                        {
+                            if (entity.GetComponent<BehaviorPatient>() != null && entity.GetComponent<BehaviorPatient>().m_state.m_labSpecialist == __instance.m_entity)
+                            {
+                                entity.GetComponent<BehaviorPatient>().m_state.m_labSpecialist = null;
+                            }
+                        }
+                    }
+
+                    procedureComponent.StartProcedure(staffTraining, __instance.m_entity, administrativeDepartment, AccessRights.STAFF, EquipmentListRules.ONLY_FREE);
+
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} starting training in administrative department");
+
+                    __result = true;
+                }
+                else if (procedureComponent.GetProcedureAvailabilty(staffTraining, __instance.m_entity, trainingDepartment, AccessRights.STAFF, EquipmentListRules.ONLY_FREE) == ProcedureSceneAvailability.AVAILABLE)
+                {
+                    BehaviorDoctor doctor = __instance.m_entity.GetComponent<BehaviorDoctor>();
+                    if (doctor != null)
+                    {
+                        doctor.CurrentPatient = null;
+                        foreach (Entity entity in Hospital.Instance.m_characters)
+                        {
+                            if (entity.GetComponent<BehaviorPatient>() != null && entity.GetComponent<BehaviorPatient>().m_state.m_doctor == __instance.m_entity)
+                            {
+                                entity.GetComponent<BehaviorPatient>().SetDoctor(null);
+                            }
+                        }
+                    }
+
+                    BehaviorNurse nurse = __instance.m_entity.GetComponent<BehaviorNurse>();
+                    if (nurse != null)
+                    {
+                        nurse.CurrentPatient = null;
+                        foreach (Entity entity in Hospital.Instance.m_characters)
+                        {
+                            if (entity.GetComponent<BehaviorPatient>() != null && entity.GetComponent<BehaviorPatient>().m_state.m_nurse == __instance.m_entity)
+                            {
+                                entity.GetComponent<BehaviorPatient>().m_state.m_nurse = null;
+                            }
+                        }
+                    }
+
+                    BehaviorLabSpecialist labSpecialist = __instance.m_entity.GetComponent<BehaviorLabSpecialist>();
+                    if (labSpecialist != null)
+                    {
+                        labSpecialist.CurrentPatient = null;
+                        foreach (Entity entity in Hospital.Instance.m_characters)
+                        {
+                            if (entity.GetComponent<BehaviorPatient>() != null && entity.GetComponent<BehaviorPatient>().m_state.m_labSpecialist == __instance.m_entity)
+                            {
+                                entity.GetComponent<BehaviorPatient>().m_state.m_labSpecialist = null;
+                            }
+                        }
+                    }
+
+                    procedureComponent.StartProcedure(staffTraining, __instance.m_entity, trainingDepartment, AccessRights.STAFF, EquipmentListRules.ONLY_FREE);
+
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} starting training in training department");
+
+                    __result = true;
+                }
+                else
+                {
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} not found free space for training");
+
+                    NotificationManager.GetInstance().AddMessage(
+                        __instance.m_entity, 
+                        "NOTIF_TRAINING_FULL", 
+                        StringTable.GetInstance().GetLocalizedText(__instance.m_state.m_trainingData.m_trainingSkillsToTrain[0].m_id.ToString(), new string[0]), 
+                        string.Empty, string.Empty, 0, 0, 0, 0, null, null);
+
+                    __instance.m_state.m_trainingData.m_trainingSkillsToTrain.Clear();
+                    __instance.m_state.m_trainingData.m_trainingRemainingHours = 0;
+
+                    __result = false;
+                }
+
+                return false;
+            }
         }
 
         [HarmonyPrefix]
