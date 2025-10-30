@@ -315,6 +315,34 @@ namespace ModGameChanges.Lopital
                 return true;
             }
 
+            //EmployeeComponent employeeComponent = __instance.GetComponent<EmployeeComponent>();
+            //WalkComponent walkComponent = __instance.GetComponent<WalkComponent>();
+
+            //Vector3i dirtyTileFloor = MapScriptInterface.Instance.FindDirtiestTileInRoomWithMatchingAssignmentAnyFloor(__instance, __instance.GetDepartment(), BehaviorJanitorPatch.DirtinessThreshold);
+            //if (dirtyTileFloor.m_x == 0 && dirtyTileFloor.m_y == 0)
+            //{
+            //    dirtyTileFloor = MapScriptInterface.Instance.FindDirtiestTileInAnyUnreservedRoomAnyFloor(__instance.GetDepartment(), BehaviorJanitorPatch.DirtinessThreshold);
+            //}
+            //if (dirtyTileFloor.m_x == 0 && dirtyTileFloor.m_y == 0)
+            //{
+            //    __result = false;
+            //    return false;
+            //}
+
+            //Vector2i dirtyTile = new Vector2i(dirtyTileFloor.m_x, dirtyTileFloor.m_y);
+            //BehaviorJanitor janitorManager = null;
+            //if (employeeComponent.m_state.m_supervisor != null)
+            //{
+            //    janitorManager = employeeComponent.m_state.m_supervisor.GetEntity()?.GetComponent<BehaviorJanitor>();
+            //}
+
+            //__instance.GetComponent<WalkComponent>().SetDestination(dirtyTile, dirtyTileFloor.m_z, MovementType.WALKING);
+
+            //Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, dirty tile [{dirtyTile.m_x.ToString(CultureInfo.InvariantCulture)}, {dirtyTile.m_y.ToString(CultureInfo.InvariantCulture)}], current tile [{walkComponent.GetCurrentTile().m_x.ToString(CultureInfo.InvariantCulture)}, {walkComponent.GetCurrentTile().m_y.ToString(CultureInfo.InvariantCulture)}]");
+
+            //__result = true;
+            //return false;
+
             __result = false;
             return false;
         }
@@ -382,7 +410,7 @@ namespace ModGameChanges.Lopital
 
             Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, dirty tile [{dirtyTile.m_x.ToString(CultureInfo.InvariantCulture)}, {dirtyTile.m_y.ToString(CultureInfo.InvariantCulture)}], current tile [{walkComponent.GetCurrentTile().m_x.ToString(CultureInfo.InvariantCulture)}, {walkComponent.GetCurrentTile().m_y.ToString(CultureInfo.InvariantCulture)}]");
 
-            __result = false;
+            __result = true;
             return false;
         }
 
@@ -460,13 +488,15 @@ namespace ModGameChanges.Lopital
                 if (janitorManager != null)
                 {
                     penalty = UnityEngine.Random.Range(Skills.SkillLevelMinimum, Skills.SkillLevelMaximum + Skills.SkillLevelMinimum - janitorManager.GetComponent<EmployeeComponent>().m_state.m_skillSet.GetSkillLevel(Skills.Vanilla.DLC_SKILL_JANITOR_SPEC_MANAGER));
-                    bonus = (float)Tweakable.Vanilla.JanitorManagerCleaningBonusPercent() / penalty;
+                    bonus = (float)Tweakable.Vanilla.JanitorManagerCleaningBonusPercent() / (100f * penalty);
                 }
             }
 
+            bonus += __instance.m_state.m_cartAvailable ? UnityEngine.Random.Range(0f, 0.2f) : 0f;
+
             cleaningTime *= Mathf.Max(0f, Mathf.Min(1f, (1 - bonus)));
 
-            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, chemist {perkComponent.m_perkSet.HasPerk(Perks.Vanilla.Chemist)}, penalty {penalty.ToString(CultureInfo.InvariantCulture)}, bonus {bonus.ToString(CultureInfo.InvariantCulture)}");
+            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, chemist {perkComponent.m_perkSet.HasPerk(Perks.Vanilla.Chemist)}, penalty {penalty.ToString(CultureInfo.InvariantCulture)}, bonus {bonus.ToString(CultureInfo.InvariantCulture)}, cart {__instance.m_state.m_cartAvailable}");
 
             __instance.m_state.m_cleaningTime = cleaningTime;
             return false;
