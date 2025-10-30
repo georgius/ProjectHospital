@@ -53,30 +53,33 @@ namespace ModAdvancedGameChanges.Lopital
         {
             GameDBRoomType commonRoomType = Database.Instance.GetEntry<GameDBRoomType>(RoomTypes.Vanilla.CommonRoom);
             EmployeeComponent employeeComponent = instance.GetComponent<EmployeeComponent>();
+            WalkComponent walkComponent = instance.GetComponent<WalkComponent>();
+
+            Vector3i instancePosition = new Vector3i(walkComponent.GetCurrentTile().m_x, walkComponent.GetCurrentTile().m_y, walkComponent.GetFloorIndex());
 
             List<Room> commonRooms = MapScriptInterface.Instance.FindValidRoomsWithType(commonRoomType, employeeComponent.m_state.m_department.GetEntity());
             int minDistance = int.MaxValue;
-            Vector3i selectedVector = Vector3i.ZERO_VECTOR;
+            Vector3i selectedPosition = Vector3i.ZERO_VECTOR;
 
             foreach (var commonRoom in commonRooms)
             {
                 Vector2i position = MapScriptInterface.Instance.GetRandomFreePosition(commonRoom, AccessRights.STAFF);
                 if (position != Vector2i.ZERO_VECTOR)
                 {
-                    Vector3i vector = new Vector3i(position.m_x, position.m_y, commonRoom.GetFloorIndex());
-                    int distance = (vector - selectedVector).LengthSquared();
+                    Vector3i roomPosition = new Vector3i(position.m_x, position.m_y, commonRoom.GetFloorIndex());
+                    int distance = (roomPosition - instancePosition).LengthSquared();
 
                     if (distance < minDistance)
                     {
                         minDistance = distance;
-                        selectedVector = vector;
+                        selectedPosition = roomPosition;
                     }
                 }
             }
 
-            if (selectedVector != Vector3i.ZERO_VECTOR)
+            if (selectedPosition != Vector3i.ZERO_VECTOR)
             {
-                return selectedVector;
+                return selectedPosition;
             }
 
             // no free space in any common room in department
@@ -89,19 +92,19 @@ namespace ModAdvancedGameChanges.Lopital
                     Vector2i position = MapScriptInterface.Instance.GetRandomFreePosition(commonRoom, AccessRights.STAFF);
                     if (position != Vector2i.ZERO_VECTOR)
                     {
-                        Vector3i vector = new Vector3i(position.m_x, position.m_y, commonRoom.GetFloorIndex());
-                        int distance = (vector - selectedVector).LengthSquared();
+                        Vector3i roomPosition = new Vector3i(position.m_x, position.m_y, commonRoom.GetFloorIndex());
+                        int distance = (roomPosition - instancePosition).LengthSquared();
 
                         if (distance < minDistance)
                         {
                             minDistance = distance;
-                            selectedVector = vector;
+                            selectedPosition = roomPosition;
                         }
                     }
                 }
             }
 
-            return selectedVector;
+            return selectedPosition;
         }
     }
 }
