@@ -43,6 +43,11 @@
 			</GameDBLocalizedString>
 			
 			<GameDBLocalizedString>
+				<LocID>AGC_OPTION_STAFF_LUNCH_NIGHT</LocID>
+				<Text>[AGC] Night shift staff lunch</Text>
+			</GameDBLocalizedString>
+			
+			<GameDBLocalizedString>
 				<LocID>AGC_DPT_TRAINING</LocID>
 				<Text>Training department</Text>
 			</GameDBLocalizedString>
@@ -103,6 +108,18 @@
 			<GameDBLocalizedString>
 				<LocID>TOOLTIP_BUILDING_PREFAB_TRAINING</LocID>
 				<Text>Templates of Training department rooms</Text>  
+			</GameDBLocalizedString>
+			
+			<!-- night shift lunch -->
+			<GameDBLocalizedString>
+				<LocID>SCHEDULE_STAFF_LUNCH_NIGHT</LocID>
+				<Text>Night staff lunch</Text>
+			</GameDBLocalizedString>
+			
+			<!-- fixed description of janitor walking state -->
+			<GameDBLocalizedString>
+				<LocID>JANITOR_STATE_Walking</LocID>                       
+				<Text>Walking</Text>  
 			</GameDBLocalizedString>
            
 		</LocalizedStrings>

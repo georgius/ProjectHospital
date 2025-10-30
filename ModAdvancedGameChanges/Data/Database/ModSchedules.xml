@@ -1,0 +1,9 @@
+﻿<Database>
+    
+	<!-- night shift lunch -->
+    <GameDBSchedule ID="SCHEDULE_STAFF_LUNCH_NIGHT">
+		<StartTime>1</StartTime>
+		<EndTime>2</EndTime>
+	</GameDBSchedule>
+
+</Database>
