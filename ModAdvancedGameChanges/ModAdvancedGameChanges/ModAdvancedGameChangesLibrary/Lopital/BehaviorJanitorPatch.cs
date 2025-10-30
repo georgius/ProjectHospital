@@ -1005,7 +1005,6 @@ namespace ModAdvancedGameChanges .Lopital
             if (!__instance.GetComponent<WalkComponent>().IsBusy())
             {
                 EmployeeComponent employeeComponent = __instance.GetComponent<EmployeeComponent>();
-                GameDBRoomType homeRoomType = employeeComponent?.GetHomeRoomType();
 
                 Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, arrived to hospital");
 
@@ -1116,7 +1115,6 @@ namespace ModAdvancedGameChanges .Lopital
             return (employeeComponent.IsFired() || instance.GetDepartment().IsClosed()
                 || ((DayTime.Instance.GetShift() != employeeComponent.m_state.m_shift) && (Mathf.Abs(DayTime.Instance.GetDayTimeHours() - shift.StartTime) > 1)));
         }
-
 
         private static bool IsNeededHandleFullfillNeeds(BehaviorJanitor instance)
         {
