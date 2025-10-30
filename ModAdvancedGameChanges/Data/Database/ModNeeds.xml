@@ -1,0 +1,22 @@
+﻿<Database>
+
+	<GameDBNeed ID="NEED_REST">
+		<Procedure>
+            <RequiredEquipmentList>
+                <RequiredEquipment>
+                    <Tag>rest</Tag>
+                </RequiredEquipment>
+            </RequiredEquipmentList>
+            
+            <RequiredRoomTags>
+                <Tag>common_room</Tag>
+            </RequiredRoomTags>
+            
+            <ProcedureScript>ProcedureScriptControlNurseFreeTime</ProcedureScript>
+        </Procedure>
+        <SatisfactionModifierSatisfied>SAT_MOD_RESTED</SatisfactionModifierSatisfied>
+        <SatisfactionModifierCritical>SAT_MOD_TIRED</SatisfactionModifierCritical>
+        <ChangePerSecondPercent>0.1</ChangePerSecondPercent>
+    </GameDBNeed>
+	
+</Database>
