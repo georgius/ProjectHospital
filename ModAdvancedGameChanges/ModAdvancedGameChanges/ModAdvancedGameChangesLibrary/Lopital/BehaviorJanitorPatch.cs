@@ -315,33 +315,48 @@ namespace ModGameChanges.Lopital
                 return true;
             }
 
-            //EmployeeComponent employeeComponent = __instance.GetComponent<EmployeeComponent>();
-            //WalkComponent walkComponent = __instance.GetComponent<WalkComponent>();
+            EmployeeComponent employeeComponent = __instance.GetComponent<EmployeeComponent>();
+            WalkComponent walkComponent = __instance.GetComponent<WalkComponent>();
 
-            //Vector3i dirtyTileFloor = MapScriptInterface.Instance.FindDirtiestTileInRoomWithMatchingAssignmentAnyFloor(__instance, __instance.GetDepartment(), BehaviorJanitorPatch.DirtinessThreshold);
-            //if (dirtyTileFloor.m_x == 0 && dirtyTileFloor.m_y == 0)
-            //{
-            //    dirtyTileFloor = MapScriptInterface.Instance.FindDirtiestTileInAnyUnreservedRoomAnyFloor(__instance.GetDepartment(), BehaviorJanitorPatch.DirtinessThreshold);
-            //}
-            //if (dirtyTileFloor.m_x == 0 && dirtyTileFloor.m_y == 0)
-            //{
-            //    __result = false;
-            //    return false;
-            //}
+            Vector3i dirtyTileFloor = MapScriptInterface.Instance.FindDirtiestTileInRoomWithMatchingAssignmentAnyFloor(__instance, __instance.GetDepartment(), BehaviorJanitorPatch.DirtinessThreshold);
+            if (dirtyTileFloor.m_x == 0 && dirtyTileFloor.m_y == 0)
+            {
+                dirtyTileFloor = MapScriptInterface.Instance.FindDirtiestTileInAnyUnreservedRoomAnyFloor(__instance.GetDepartment(), BehaviorJanitorPatch.DirtinessThreshold);
+            }
+            if (dirtyTileFloor.m_x == 0 && dirtyTileFloor.m_y == 0)
+            {
+                __result = false;
+                return false;
+            }
 
-            //Vector2i dirtyTile = new Vector2i(dirtyTileFloor.m_x, dirtyTileFloor.m_y);
-            //BehaviorJanitor janitorManager = null;
-            //if (employeeComponent.m_state.m_supervisor != null)
-            //{
-            //    janitorManager = employeeComponent.m_state.m_supervisor.GetEntity()?.GetComponent<BehaviorJanitor>();
-            //}
+            Vector2i dirtyTile = new Vector2i(dirtyTileFloor.m_x, dirtyTileFloor.m_y);
 
-            //__instance.GetComponent<WalkComponent>().SetDestination(dirtyTile, dirtyTileFloor.m_z, MovementType.WALKING);
+            if (dirtyTile != Vector2i.ZERO_VECTOR)
+            {
+                BehaviorJanitor janitorManager = null;
+                if (employeeComponent.m_state.m_supervisor != null)
+                {
+                    janitorManager = employeeComponent.m_state.m_supervisor.GetEntity()?.GetComponent<BehaviorJanitor>();
+                }
 
-            //Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, dirty tile [{dirtyTile.m_x.ToString(CultureInfo.InvariantCulture)}, {dirtyTile.m_y.ToString(CultureInfo.InvariantCulture)}], current tile [{walkComponent.GetCurrentTile().m_x.ToString(CultureInfo.InvariantCulture)}, {walkComponent.GetCurrentTile().m_y.ToString(CultureInfo.InvariantCulture)}]");
+                float skillPoints = (float)Tweakable.Vanilla.MainSkillPoints() * UnityEngine.Random.Range(0.25f, 0.75f);
 
-            //__result = true;
-            //return false;
+                if ((dirtyTile != Vector2i.ZERO_VECTOR) && (janitorManager != null))
+                {
+                    float points = UnityEngine.Random.Range(0f, 1f) * skillPoints;
+
+                    janitorManager.GetComponent<EmployeeComponent>().AddSkillPoints(Skills.Vanilla.DLC_SKILL_JANITOR_SPEC_MANAGER, (int)points, false);
+                }
+
+                employeeComponent.AddSkillPoints(Skills.Vanilla.SKILL_JANITOR_QUALIF_EFFICIENCY, (int)skillPoints, true);
+
+                __instance.GetComponent<WalkComponent>().SetDestination(dirtyTile, dirtyTileFloor.m_z, MovementType.WALKING);
+
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, dirty tile [{dirtyTile.m_x.ToString(CultureInfo.InvariantCulture)}, {dirtyTile.m_y.ToString(CultureInfo.InvariantCulture)}], current tile [{walkComponent.GetCurrentTile().m_x.ToString(CultureInfo.InvariantCulture)}, {walkComponent.GetCurrentTile().m_y.ToString(CultureInfo.InvariantCulture)}]");
+
+                __result = true;
+                return false;
+            }
 
             __result = false;
             return false;
@@ -380,37 +395,52 @@ namespace ModGameChanges.Lopital
 
             float skillLevel = employeeComponent.GetSkillLevel(Skills.Vanilla.SKILL_JANITOR_QUALIF_EFFICIENCY);
 
-            Vector2i dirtyTile = Vector2i.ZERO_VECTOR;
             if (UnityEngine.Random.Range(Skills.SkillLevelMinimum, Skills.SkillLevelMaximum) < skillLevel)
             {
-                dirtyTile = MapScriptInterface.Instance.FindClosestDirtyTileInARoom(__instance.m_state.m_room.GetEntity(), walkComponent.GetCurrentTile());
+                Vector2i dirtyTile = Vector2i.ZERO_VECTOR;
 
-                if (janitorManager != null)
+                if (UnityEngine.Random.Range(Skills.SkillLevelMinimum, Skills.SkillLevelMaximum) < skillLevel)
                 {
-                    float points = UnityEngine.Random.Range(0f, 1f) * (float)Tweakable.Vanilla.MainSkillPoints();
+                    dirtyTile = MapScriptInterface.Instance.FindClosestDirtyTileInARoom(__instance.m_state.m_room.GetEntity(), walkComponent.GetCurrentTile());
 
-                    janitorManager.GetComponent<EmployeeComponent>().AddSkillPoints(Skills.Vanilla.DLC_SKILL_JANITOR_SPEC_MANAGER, (int)points, false);
+                    if ((dirtyTile != Vector2i.ZERO_VECTOR) && (janitorManager != null))
+                    {
+                        float points = UnityEngine.Random.Range(0f, 1f) * (float)Tweakable.Vanilla.MainSkillPoints();
+
+                        janitorManager.GetComponent<EmployeeComponent>().AddSkillPoints(Skills.Vanilla.DLC_SKILL_JANITOR_SPEC_MANAGER, (int)points, false);
+                    }
+                }
+                else
+                {
+                    dirtyTile = MapScriptInterface.Instance.FindDirtiestTileInARoom(__instance.m_state.m_room.GetEntity(), false, BehaviorJanitorPatch.DirtinessThreshold);
+
+                    if ((dirtyTile != Vector2i.ZERO_VECTOR) && (janitorManager != null))
+                    {
+                        float points = UnityEngine.Random.Range(0f, 0.5f) * (float)Tweakable.Vanilla.MainSkillPoints();
+
+                        janitorManager.GetComponent<EmployeeComponent>().AddSkillPoints(Skills.Vanilla.DLC_SKILL_JANITOR_SPEC_MANAGER, (int)points, false);
+                    }
+                }
+
+                if (dirtyTile != Vector2i.ZERO_VECTOR)
+                {
+                    employeeComponent.AddSkillPoints(Skills.Vanilla.SKILL_JANITOR_QUALIF_EFFICIENCY, Tweakable.Vanilla.MainSkillPoints(), true);
+
+                    __instance.GetComponent<WalkComponent>().SetDestination(dirtyTile, __instance.m_state.m_room.GetEntity().GetFloorIndex(), MovementType.WALKING);
+
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, dirty tile [{dirtyTile.m_x.ToString(CultureInfo.InvariantCulture)}, {dirtyTile.m_y.ToString(CultureInfo.InvariantCulture)}], current tile [{walkComponent.GetCurrentTile().m_x.ToString(CultureInfo.InvariantCulture)}, {walkComponent.GetCurrentTile().m_y.ToString(CultureInfo.InvariantCulture)}]");
+
+                    __result = true;
+                    return false;
+                }
+                else
+                {
+                    __result = false;
+                    return false;
                 }
             }
-            else
-            {
-                dirtyTile = MapScriptInterface.Instance.FindDirtiestTileInARoom(__instance.m_state.m_room.GetEntity(), false, BehaviorJanitorPatch.DirtinessThreshold);
 
-                if (janitorManager != null)
-                {
-                    float points = UnityEngine.Random.Range(0f, 0.5f) * (float)Tweakable.Vanilla.MainSkillPoints();
-
-                    janitorManager.GetComponent<EmployeeComponent>().AddSkillPoints(Skills.Vanilla.DLC_SKILL_JANITOR_SPEC_MANAGER, (int)points, false);
-                }
-            }
-
-            employeeComponent.AddSkillPoints(Skills.Vanilla.SKILL_JANITOR_QUALIF_EFFICIENCY, Tweakable.Vanilla.MainSkillPoints(), true);
-
-            __instance.GetComponent<WalkComponent>().SetDestination(dirtyTile, __instance.m_state.m_room.GetEntity().GetFloorIndex(), MovementType.WALKING);
-
-            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, dirty tile [{dirtyTile.m_x.ToString(CultureInfo.InvariantCulture)}, {dirtyTile.m_y.ToString(CultureInfo.InvariantCulture)}], current tile [{walkComponent.GetCurrentTile().m_x.ToString(CultureInfo.InvariantCulture)}, {walkComponent.GetCurrentTile().m_y.ToString(CultureInfo.InvariantCulture)}]");
-
-            __result = true;
+            __result = false;
             return false;
         }
 
@@ -461,7 +491,7 @@ namespace ModGameChanges.Lopital
             float dirtLevel = floor.m_mapPersistentData.m_tiles[walkComponent.GetCurrentTile().m_x, walkComponent.GetCurrentTile().m_y].m_dirtLevel;
 
             float cleaningTime = (dirtType == DirtType.DIRT) ? Tweakable.Mod.CleaningTimeDirt() : Tweakable.Mod.CleaningTimeBlood();
-            float skillLevel = employeeComponent.GetSkillLevel(Skills.Vanilla.SKILL_JANITOR_QUALIF_EFFICIENCY);
+            float skillLevel = employeeComponent.GetSkillLevel(Skills.Vanilla.SKILL_JANITOR_QUALIF_DEXTERITY);
 
             Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, dirt {dirtType}, dirt level {dirtLevel.ToString(CultureInfo.InvariantCulture)}, cleaning time {cleaningTime.ToString(CultureInfo.InvariantCulture)}, skill level {skillLevel.ToString(CultureInfo.InvariantCulture)}");
 
