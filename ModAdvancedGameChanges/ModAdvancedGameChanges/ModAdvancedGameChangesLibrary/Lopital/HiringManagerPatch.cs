@@ -1,9 +1,8 @@
 ﻿using GLib;
 using HarmonyLib;
 using Lopital;
-using System.Linq;
 
-namespace ModGameChanges.Lopital
+namespace ModAdvancedGameChanges .Lopital
 {
     [HarmonyPatch(typeof(HiringManager))]
     public static class HiringManagerPatch

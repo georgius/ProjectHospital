@@ -6,7 +6,7 @@ using System.Reflection;
 using HarmonyLib;
 using ModAdvancedGameChanges.Constants;
 
-namespace ModGameChanges
+namespace ModAdvancedGameChanges 
 {
     [HarmonyPatch(typeof(ViewSettings))]
     public static class ViewSettingsPatch

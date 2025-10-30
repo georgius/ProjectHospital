@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Reflection;
 using HarmonyLib;
-using ModGameChanges;
+using ModAdvancedGameChanges;
 
 // Note: .NET framework version needs to be set to 3.5
-[assembly: AssemblyTitle("ModGameChanges")] // ENTER MOD TITLE
+[assembly: AssemblyTitle("ModAdvancedGameChanges ")] // ENTER MOD TITLE
 [assembly: AssemblyFileVersion("1.0.0.0")] // MOD VERSION
 [assembly: AssemblyVersion("1.2.0.0")] // GAME VERSION
 

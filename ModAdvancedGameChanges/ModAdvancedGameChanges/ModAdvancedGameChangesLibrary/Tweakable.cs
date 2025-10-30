@@ -2,7 +2,7 @@
 using System;
 using System.Globalization;
 
-namespace ModGameChanges
+namespace ModAdvancedGameChanges 
 {
     public static class Tweakable
     {

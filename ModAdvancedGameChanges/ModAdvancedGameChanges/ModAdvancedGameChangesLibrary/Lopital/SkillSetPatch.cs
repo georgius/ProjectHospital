@@ -1,7 +1,6 @@
 ﻿using HarmonyLib;
 using Lopital;
 using ModAdvancedGameChanges.Constants;
-using ModGameChanges;
 using System;
 
 namespace ModAdvancedGameChanges.Lopital

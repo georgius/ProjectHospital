@@ -5,7 +5,7 @@ using ModAdvancedGameChanges.Constants;
 using System.Globalization;
 using UnityEngine;
 
-namespace ModGameChanges.Lopital
+namespace ModAdvancedGameChanges .Lopital
 {
     [HarmonyPatch(typeof(Skill))]
     public static class SkillPatch

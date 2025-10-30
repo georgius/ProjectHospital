@@ -1,12 +1,11 @@
 ﻿using GLib;
 using HarmonyLib;
 using Lopital;
-using ModAdvancedGameChanges;
 using ModAdvancedGameChanges.Constants;
 using System;
 using System.Globalization;
 
-namespace ModGameChanges.Lopital
+namespace ModAdvancedGameChanges .Lopital
 {
     [HarmonyPatch(typeof(EmployeeComponent))]
     public static class EmployeeComponentPatch

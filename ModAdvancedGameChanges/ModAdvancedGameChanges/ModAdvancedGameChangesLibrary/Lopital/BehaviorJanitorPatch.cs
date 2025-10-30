@@ -8,7 +8,7 @@ using System.Globalization;
 using System.Reflection;
 using UnityEngine;
 
-namespace ModGameChanges.Lopital
+namespace ModAdvancedGameChanges .Lopital
 {
     [HarmonyPatch(typeof(BehaviorJanitor))]
     public static class BehaviorJanitorPatch
@@ -30,7 +30,7 @@ namespace ModGameChanges.Lopital
             employeeComponent.m_state.m_department = MapScriptInterface.Instance.GetActiveDepartment();
             employeeComponent.m_state.m_startDay = DayTime.Instance.GetDay();
 
-            Vector3i position = BehaviorJanitorPatch.GetCommonRoomFreePlace(__instance);
+            Vector3i position = BehaviorPatch.GetCommonRoomFreePlace(__instance);
 
             if (position == Vector3i.ZERO_VECTOR)
             {
@@ -157,7 +157,7 @@ namespace ModGameChanges.Lopital
             else
             {
                 // by default, go to common room
-                Vector3i position = BehaviorJanitorPatch.GetCommonRoomFreePlace(__instance);
+                Vector3i position = BehaviorPatch.GetCommonRoomFreePlace(__instance);
 
                 if (position != Vector3i.ZERO_VECTOR)
                 {
@@ -616,7 +616,7 @@ namespace ModGameChanges.Lopital
             {
                 Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, trying to find common room");
 
-                Vector3i position = BehaviorJanitorPatch.GetCommonRoomFreePlace(__instance);
+                Vector3i position = BehaviorPatch.GetCommonRoomFreePlace(__instance);
 
                 if (position == Vector3i.ZERO_VECTOR)
                 {
@@ -767,7 +767,7 @@ namespace ModGameChanges.Lopital
                         || ((homeRoomType != null) && (!homeRoomType.HasTag(Tags.Mod.JanitorTrainingWorkspace)) && (!BehaviorJanitorPatch.HandleGoHomeFulfillNeedsTraining(__instance))))
                     {
                         // by default, go to common room
-                        Vector3i position = BehaviorJanitorPatch.GetCommonRoomFreePlace(__instance);
+                        Vector3i position = BehaviorPatch.GetCommonRoomFreePlace(__instance);
 
                         if (position != Vector3i.ZERO_VECTOR)
                         {
@@ -846,7 +846,7 @@ namespace ModGameChanges.Lopital
                             // find and go to common room
                             Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, not in common room");
 
-                            Vector3i position = BehaviorJanitorPatch.GetCommonRoomFreePlace(__instance);
+                            Vector3i position = BehaviorPatch.GetCommonRoomFreePlace(__instance);
 
                             if (position != Vector3i.ZERO_VECTOR)
                             {
@@ -891,7 +891,7 @@ namespace ModGameChanges.Lopital
 
                         Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, filling free time");
 
-                        Vector3i position = BehaviorJanitorPatch.GetCommonRoomFreePlace(__instance);
+                        Vector3i position = BehaviorPatch.GetCommonRoomFreePlace(__instance);
 
                         if (position != Vector3i.ZERO_VECTOR)
                         {
@@ -920,7 +920,7 @@ namespace ModGameChanges.Lopital
 
                         Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, filling free time");
 
-                        Vector3i position = BehaviorJanitorPatch.GetCommonRoomFreePlace(__instance);
+                        Vector3i position = BehaviorPatch.GetCommonRoomFreePlace(__instance);
 
                         if (position != Vector3i.ZERO_VECTOR)
                         {
@@ -1400,61 +1400,6 @@ namespace ModGameChanges.Lopital
             MethodInfo methodInfo = type.GetMethod("UpdateCleaningTime", BindingFlags.NonPublic | BindingFlags.Instance);
 
             methodInfo.Invoke(instance, null);
-        }
-
-        private static Vector3i GetCommonRoomFreePlace(BehaviorJanitor instance)
-        {
-            GameDBRoomType commonRoomType = Database.Instance.GetEntry<GameDBRoomType>(RoomTypes.Vanilla.CommonRoom);
-            EmployeeComponent employeeComponent = instance.GetComponent<EmployeeComponent>();
-
-            List<Room> commonRooms = MapScriptInterface.Instance.FindValidRoomsWithType(commonRoomType, employeeComponent.m_state.m_department.GetEntity());
-            int minDistance = int.MaxValue;
-            Vector3i selectedVector = Vector3i.ZERO_VECTOR;
-
-            foreach (var commonRoom in commonRooms)
-            {
-                Vector2i position = MapScriptInterface.Instance.GetRandomFreePosition(commonRoom, AccessRights.STAFF);
-                if (position != Vector2i.ZERO_VECTOR)
-                {
-                    Vector3i vector = new Vector3i(position.m_x, position.m_y, commonRoom.GetFloorIndex());
-                    int distance = (vector - selectedVector).LengthSquared();
-
-                    if (distance < minDistance)
-                    {
-                        minDistance = distance;
-                        selectedVector = vector;
-                    }
-                }
-            }
-
-            if (selectedVector != Vector3i.ZERO_VECTOR)
-            {
-                return selectedVector;
-            }
-
-            // no free space in any common room in department
-            foreach (var department in Hospital.Instance.m_departments)
-            {
-                List<Room> departmentCommonRooms = MapScriptInterface.Instance.FindValidRoomsWithType(commonRoomType, department);
-
-                foreach (var commonRoom in departmentCommonRooms)
-                {
-                    Vector2i position = MapScriptInterface.Instance.GetRandomFreePosition(commonRoom, AccessRights.STAFF);
-                    if (position != Vector2i.ZERO_VECTOR)
-                    {
-                        Vector3i vector = new Vector3i(position.m_x, position.m_y, commonRoom.GetFloorIndex());
-                        int distance = (vector - selectedVector).LengthSquared();
-
-                        if (distance < minDistance)
-                        {
-                            minDistance = distance;
-                            selectedVector = vector;
-                        }
-                    }
-                }
-            }
-
-            return selectedVector;
         }
 
         private static Vector3i FindAnyDirtyTile(BehaviorJanitor instance)

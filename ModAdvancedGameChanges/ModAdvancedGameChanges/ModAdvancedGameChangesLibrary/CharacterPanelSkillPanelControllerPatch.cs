@@ -2,7 +2,6 @@
 using HarmonyLib;
 using Lopital;
 using ModAdvancedGameChanges.Constants;
-using ModGameChanges;
 
 namespace ModAdvancedGameChanges
 {
