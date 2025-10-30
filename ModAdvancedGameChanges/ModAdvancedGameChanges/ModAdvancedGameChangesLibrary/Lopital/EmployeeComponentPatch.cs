@@ -13,8 +13,14 @@ namespace ModGameChanges.Lopital
     {
         [HarmonyPrefix]
         [HarmonyPatch(typeof(EmployeeComponent), nameof(EmployeeComponent.AddExperiencePoints))]
-        public static void AddExperiencePoints(int points, EmployeeComponent __instance)
+        public static bool AddExperiencePoints(int points, EmployeeComponent __instance)
         {
+            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enableNonLinearSkillLeveling[SettingsManager.Instance.m_viewSettings].m_value))
+            {
+                // Allow original method to run
+                return true;
+            }
+
             // it seems that original code is "optimized" or something similar
             // the GetPointsNeededForNextLevel() patched method is not called for unknown reason
             bool runOriginalCode = true;
@@ -27,7 +33,7 @@ namespace ModGameChanges.Lopital
                     {
                         bool levelUp = false;
 
-                        float num = (float)points * (Tweakable.Vanilla.LevelingRatePercent() / 100f);
+                        float num = (float)points * Tweakable.Vanilla.LevelingRatePercent();
                         if (__instance.m_entity.GetComponent<PerkComponent>().m_perkSet.HasPerk(Perks.Vanilla.FastLearner))
                         {
                             num *= 1.1f;
@@ -56,7 +62,7 @@ namespace ModGameChanges.Lopital
 
                         int nextLevelPoints = __instance.GetPointsNeededForNextLevel();
 
-                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, level: {__instance.m_state.m_level.ToString(CultureInfo.InvariantCulture)}, allowed level: {doctorMaxLevel.ToString(CultureInfo.InvariantCulture)}, points: {__instance.m_state.m_points.ToString(CultureInfo.InvariantCulture)}, required points: {nextLevelPoints.ToString(CultureInfo.InvariantCulture)}");
+                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, level: {__instance.m_state.m_level.ToString(CultureInfo.InvariantCulture)}, allowed level: {doctorMaxLevel.ToString(CultureInfo.InvariantCulture)}, points: {points.ToString(CultureInfo.InvariantCulture)}, added: {((int)num).ToString(CultureInfo.InvariantCulture)}, actual: {__instance.m_state.m_points.ToString(CultureInfo.InvariantCulture)}, required points: {nextLevelPoints.ToString(CultureInfo.InvariantCulture)}");
 
                         if (__instance.m_state.m_points >= nextLevelPoints)
                         {
@@ -128,24 +134,21 @@ namespace ModGameChanges.Lopital
 
             if (runOriginalCode)
             {
-                float num = (float)points * (Database.Instance.GetEntry<GameDBTweakableFloat>(Tweakables.Vanilla.LevelingRatePercent).Value / 100f);
+                float num = (float)points * Tweakable.Vanilla.LevelingRatePercent();
                 if (__instance.m_entity.GetComponent<PerkComponent>().m_perkSet.HasPerk(Perks.Vanilla.FastLearner))
                 {
-                    __instance.m_state.m_points += (int)num * 110 / 100;
+                    num *= 1.1f;
                 }
                 else if (__instance.m_entity.GetComponent<PerkComponent>().m_perkSet.HasPerk(Perks.Vanilla.SlowLearner))
                 {
-                    __instance.m_state.m_points += (int)num * 90 / 100;
-                }
-                else
-                {
-                    __instance.m_state.m_points += (int)num;
+                    num *= 0.9f;
                 }
 
+                __instance.m_state.m_points += (int)num;
                 int maxLevel = (__instance.m_entity.GetComponent<BehaviorDoctor>() == null) ? 3 : 5;
                 int nextLevelPoints = __instance.GetPointsNeededForNextLevel();
 
-                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, required points: {nextLevelPoints.ToString(CultureInfo.InvariantCulture)}");
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, points: {points.ToString(CultureInfo.InvariantCulture)}, added: {((int)num).ToString(CultureInfo.InvariantCulture)}, actual: {__instance.m_state.m_points.ToString(CultureInfo.InvariantCulture)}, required points: {nextLevelPoints.ToString(CultureInfo.InvariantCulture)}");
 
                 if (__instance.m_state.m_points >= nextLevelPoints && __instance.m_state.m_level < maxLevel)
                 {
@@ -237,6 +240,8 @@ namespace ModGameChanges.Lopital
                     }
                 }
             }
+
+            return false;
         }
 
         [HarmonyPrefix]
@@ -528,52 +533,39 @@ namespace ModGameChanges.Lopital
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(EmployeeComponent), nameof(EmployeeComponent.ToggleTraining))]
-        public static bool ToggleTrainingPrefix(Skill skill, EmployeeComponent __instance)
+        [HarmonyPatch(typeof(EmployeeComponent), nameof(EmployeeComponent.ResetWorkspace))]
+        public static bool ResetWorkspace(bool resetRoom, EmployeeComponent __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_staffShiftsEqual[SettingsManager.Instance.m_viewSettings].m_value))
             {
                 // Allow original method to run
                 return true;
             }
 
-            GameDBRoomType homeRoomType = __instance.GetHomeRoomType();
-
-            if ((homeRoomType != null)
-                && (
-                    homeRoomType.HasTag(Tags.Mod.DoctorTrainingWorkspace)
-                    || homeRoomType.HasTag(Tags.Mod.NurseTrainingWorkspace)
-                    || homeRoomType.HasTag(Tags.Mod.LabSpecialistTrainingWorkspace)
-                    || homeRoomType.HasTag(Tags.Mod.JanitorTrainingWorkspace)
-                    ))
+            BehaviorJanitor behaviorJanitor = __instance.m_entity.GetComponent<BehaviorJanitor>();
+            if (behaviorJanitor != null)
             {
-                // employee is in training department, employee is in training workspace
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, returned cart");
 
-                if (__instance.m_state.m_trainingData.m_trainingSkillsToTrain.Contains(skill.m_gameDBSkill.Entry))
+                behaviorJanitor.m_state.m_cart.GetEntity().User = null;
+                behaviorJanitor.m_state.m_cart.GetEntity().SetAttachedToCharacter(false);
+                behaviorJanitor.m_state.m_cart.GetEntity().StopSounds();
+                behaviorJanitor.m_state.m_cartAvailable = false;
+
+                if (MapScriptInterface.Instance.MoveObject(behaviorJanitor.m_state.m_cart.GetEntity(), behaviorJanitor.m_state.m_cartHomeTile))
                 {
-                    if (__instance.m_state.m_trainingData.m_trainingSkillsToTrain.IndexOf(skill.m_gameDBSkill.Entry) == 0)
-                    {
-                        if (__instance.m_state.m_trainingData.m_trainingSkillsToTrain.Count != 1)
-                        {
-                            __instance.m_state.m_trainingData.m_trainingRemainingHours = 1;
-                        }
-                    }
-                    __instance.m_state.m_trainingData.m_trainingSkillsToTrain.Remove(skill.m_gameDBSkill.Entry);
+                    behaviorJanitor.m_state.m_cart.GetEntity().Orientation = behaviorJanitor.m_state.m_cartHomeOrientation;
                 }
                 else
                 {
-                    if (__instance.m_state.m_trainingData.m_trainingSkillsToTrain.Count == 0)
-                    {
-                        __instance.m_state.m_trainingData.m_trainingRemainingHours = 1;
-                    }
-
-                    __instance.m_state.m_trainingData.m_trainingSkillsToTrain.Add(skill.m_gameDBSkill.Entry);
-                    __instance.m_state.m_trainingData.m_trainingInitialSkillLevels.Put(skill.m_gameDBSkill.Entry, skill.m_level);
+                    Hospital.Instance.m_floors[behaviorJanitor.m_state.m_cart.GetEntity().GetFloorIndex()].m_movingObjects.Remove(behaviorJanitor.m_state.m_cart.GetEntity());
+                    behaviorJanitor.m_state.m_cart.GetEntity().m_state.m_department.GetEntity().RemoveObject(behaviorJanitor.m_state.m_cart.GetEntity());
+                    behaviorJanitor.m_state.m_cart.GetEntity().Destroy();
                 }
+                behaviorJanitor.m_state.m_cart.GetEntity().StopSounds();
+                behaviorJanitor.m_state.m_cart = null;
 
-                __instance.m_state.m_department.GetEntity().Validate();
-
-                return false;
+                behaviorJanitor.m_state.m_cartAvailable = false;
             }
 
             return true;
@@ -665,6 +657,58 @@ namespace ModGameChanges.Lopital
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(EmployeeComponent), nameof(EmployeeComponent.ToggleTraining))]
+        public static bool ToggleTrainingPrefix(Skill skill, EmployeeComponent __instance)
+        {
+            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            GameDBRoomType homeRoomType = __instance.GetHomeRoomType();
+
+            if ((homeRoomType != null)
+                && (
+                    homeRoomType.HasTag(Tags.Mod.DoctorTrainingWorkspace)
+                    || homeRoomType.HasTag(Tags.Mod.NurseTrainingWorkspace)
+                    || homeRoomType.HasTag(Tags.Mod.LabSpecialistTrainingWorkspace)
+                    || homeRoomType.HasTag(Tags.Mod.JanitorTrainingWorkspace)
+                    ))
+            {
+                // employee is in training department, employee is in training workspace
+
+                if (__instance.m_state.m_trainingData.m_trainingSkillsToTrain.Contains(skill.m_gameDBSkill.Entry))
+                {
+                    if (__instance.m_state.m_trainingData.m_trainingSkillsToTrain.IndexOf(skill.m_gameDBSkill.Entry) == 0)
+                    {
+                        if (__instance.m_state.m_trainingData.m_trainingSkillsToTrain.Count != 1)
+                        {
+                            __instance.m_state.m_trainingData.m_trainingRemainingHours = 1;
+                        }
+                    }
+                    __instance.m_state.m_trainingData.m_trainingSkillsToTrain.Remove(skill.m_gameDBSkill.Entry);
+                }
+                else
+                {
+                    if (__instance.m_state.m_trainingData.m_trainingSkillsToTrain.Count == 0)
+                    {
+                        __instance.m_state.m_trainingData.m_trainingRemainingHours = 1;
+                    }
+
+                    __instance.m_state.m_trainingData.m_trainingSkillsToTrain.Add(skill.m_gameDBSkill.Entry);
+                    __instance.m_state.m_trainingData.m_trainingInitialSkillLevels.Put(skill.m_gameDBSkill.Entry, skill.m_level);
+                }
+
+                __instance.m_state.m_department.GetEntity().Validate();
+
+                return false;
+            }
+
+            return true;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(EmployeeComponent), nameof(EmployeeComponent.UpdateTraining))]
         public static bool UpdateTrainingPrefix(ProcedureComponent procedureComponent, EmployeeComponent __instance, ref bool __result)
         {
@@ -716,7 +760,7 @@ namespace ModGameChanges.Lopital
                 float points = Tweakable.Mod.TrainingHourPoints();
                 points *= UnityEngine.Random.Range(0f, 3f);
 
-                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"01 Employee: {__instance.m_entity.Name}, points {points.ToString(CultureInfo.InvariantCulture)}");
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, points {points.ToString(CultureInfo.InvariantCulture)}");
 
                 if (__instance.m_state.m_supervisor != null)
                 {
@@ -727,7 +771,7 @@ namespace ModGameChanges.Lopital
                     BehaviorDoctor doctor = chief.GetComponent<BehaviorDoctor>();
                     BehaviorJanitor janitor = chief.GetComponent<BehaviorJanitor>();
 
-                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"02 Employee: {__instance.m_entity.Name}, chief {chief.Name}, doctor {doctor != null}, janitor {janitor != null}");
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, chief {chief.Name}, doctor {doctor != null}, janitor {janitor != null}");
 
                     if (janitor != null)
                     {
@@ -735,14 +779,14 @@ namespace ModGameChanges.Lopital
 
                         Skill managementSkill = chiefEmployeeComponent.m_state.m_skillSet.GetSkill(Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.DLC_SKILL_JANITOR_SPEC_MANAGER));
 
-                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"03 Employee: {__instance.m_entity.Name}, management skill level {(managementSkill?.m_level ?? 0f).ToString(CultureInfo.InvariantCulture)}");
+                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, management skill level {(managementSkill?.m_level ?? 0f).ToString(CultureInfo.InvariantCulture)}");
 
                         if (managementSkill != null)
                         {
                             points *= UnityEngine.Random.Range(0f, managementSkill.m_level);
                         }
 
-                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"04 Employee: {__instance.m_entity.Name}, points {points.ToString(CultureInfo.InvariantCulture)}");
+                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, points {points.ToString(CultureInfo.InvariantCulture)}");
                     }
                     if (doctor != null)
                     {
@@ -750,14 +794,14 @@ namespace ModGameChanges.Lopital
 
                         Skill medicineSkill = chiefEmployeeComponent.m_state.m_skillSet.GetSkill(Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.SKILL_DOC_QUALIF_GENERAL_MEDICINE));
 
-                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"05 Employee: {__instance.m_entity.Name}, general medicine skill level {(medicineSkill?.m_level ?? 0f).ToString(CultureInfo.InvariantCulture)}");
+                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, general medicine skill level {(medicineSkill?.m_level ?? 0f).ToString(CultureInfo.InvariantCulture)}");
 
                         if (medicineSkill != null)
                         {
                             points *= UnityEngine.Random.Range(0f, medicineSkill.m_level);
                         }
 
-                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"06 Employee: {__instance.m_entity.Name}, points {points.ToString(CultureInfo.InvariantCulture)}");
+                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, points {points.ToString(CultureInfo.InvariantCulture)}");
                     }
                 }
 
