@@ -1142,7 +1142,8 @@ namespace ModAdvancedGameChanges .Lopital
 
                 bool canGoToWorkplace = (oppositeShiftEmployee == null) ||
                     ((oppositeShiftEmployee != null) && ((oppositeShiftEmployee.GetComponent<BehaviorJanitor>().m_state.m_janitorState == BehaviorJanitorState.AtHome)
-                        || (oppositeShiftEmployee.GetComponent<BehaviorJanitor>().m_state.m_janitorState == BehaviorJanitorState.GoingHome)));
+                        || (oppositeShiftEmployee.GetComponent<BehaviorJanitor>().m_state.m_janitorState == BehaviorJanitorState.GoingHome)
+                        || (oppositeShiftEmployee.GetComponent<BehaviorJanitor>().m_state.m_janitorState == BehaviorJanitorState.FiredAtHome)));
 
                 Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {instance.m_entity.Name}, opposite shift employee: {oppositeShiftEmployee?.Name ?? "NULL"}, state: {oppositeShiftEmployee?.GetComponent<BehaviorJanitor>().m_state.m_janitorState.ToString() ?? "NULL"}");
 
