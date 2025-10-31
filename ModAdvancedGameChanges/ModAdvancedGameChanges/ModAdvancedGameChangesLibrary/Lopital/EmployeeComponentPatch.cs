@@ -1014,7 +1014,73 @@ namespace ModAdvancedGameChanges .Lopital
                 __instance.m_state.m_trainingData.m_trainingSkillsToTrain.Clear();
             }
 
-            return true;
+            __instance.m_state.m_department.GetEntity().RemoveCharacter(__instance.m_entity);
+            __instance.m_state.m_department = department;
+            __instance.m_state.m_department.GetEntity().AddCharacter(__instance.m_entity);
+            Hospital.Instance.ValidateDepartments();
+            __instance.m_state.m_department.GetEntity().SetChiefDoctor(0, false);
+            __instance.ResetWorkspace(false);
+            __instance.SwitchDressCodeColors(department, true);
+
+            // go to common room
+            if (__instance.m_entity.GetComponent<BehaviorDoctor>() != null)            
+            {
+                BehaviorDoctor doctor = __instance.m_entity.GetComponent<BehaviorDoctor>();
+                Vector3i position = BehaviorPatch.GetCommonRoomFreePlace(doctor);
+
+                if (position != Vector3i.ZERO_VECTOR)
+                {
+                    __instance.m_entity.GetComponent<WalkComponent>().SetDestination(new Vector2i(position.m_x, position.m_y), position.m_z, MovementType.WALKING);
+
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, going to common room");
+                }
+
+                doctor.SwitchState(DoctorState.FillingFreeTime);
+            }
+            if (__instance.m_entity.GetComponent<BehaviorNurse>() != null)
+            {
+                BehaviorNurse nurse = __instance.m_entity.GetComponent<BehaviorNurse>();
+                Vector3i position = BehaviorPatch.GetCommonRoomFreePlace(nurse);
+
+                if (position != Vector3i.ZERO_VECTOR)
+                {
+                    __instance.m_entity.GetComponent<WalkComponent>().SetDestination(new Vector2i(position.m_x, position.m_y), position.m_z, MovementType.WALKING);
+
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, going to common room");
+                }
+
+                nurse.SwitchState(NurseState.FillingFreeTime);
+            }
+            if (__instance.m_entity.GetComponent<BehaviorLabSpecialist>() != null)
+            {
+                BehaviorLabSpecialist labSpecialist = __instance.m_entity.GetComponent<BehaviorLabSpecialist>();
+                Vector3i position = BehaviorPatch.GetCommonRoomFreePlace(labSpecialist);
+
+                if (position != Vector3i.ZERO_VECTOR)
+                {
+                    __instance.m_entity.GetComponent<WalkComponent>().SetDestination(new Vector2i(position.m_x, position.m_y), position.m_z, MovementType.WALKING);
+
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, going to common room");
+                }
+
+                labSpecialist.SwitchState(LabSpecialistState.FillingFreeTime);
+            }
+            if (__instance.m_entity.GetComponent<BehaviorJanitor>() != null)
+            {
+                BehaviorJanitor janitor = __instance.m_entity.GetComponent<BehaviorJanitor>();
+                Vector3i position = BehaviorPatch.GetCommonRoomFreePlace(janitor);
+
+                if (position != Vector3i.ZERO_VECTOR)
+                {
+                    __instance.m_entity.GetComponent<WalkComponent>().SetDestination(new Vector2i(position.m_x, position.m_y), position.m_z, MovementType.WALKING);
+
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, going to common room");
+                }
+
+                janitor.SwitchState(BehaviorJanitorState.FillingFreeTime);
+            }
+
+            return false;
         }
 
         [HarmonyPrefix]
