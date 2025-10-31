@@ -104,6 +104,86 @@ namespace ModAdvancedGameChanges.Lopital
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorLabSpecialist), nameof(BehaviorLabSpecialist.GoToWorkplace))]
+        public static bool GoToWorkplacePrefix(BehaviorLabSpecialist __instance)
+        {
+            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            EmployeeComponent employeeComponent = __instance.GetComponent<EmployeeComponent>();
+            WalkComponent walkComponent = __instance.GetComponent<WalkComponent>(); ;
+            GameDBRoomType homeRoomType = employeeComponent?.GetHomeRoomType();
+
+            __instance.CancelBrowsing();
+
+            if (employeeComponent.GetWorkChair() != null)
+            {
+                TileObject workChair = employeeComponent.GetWorkChair();
+                if (!walkComponent.IsSittingOn(workChair) && !walkComponent.IsWalkingTo(workChair))
+                {
+                    walkComponent.GoSit(workChair, MovementType.WALKING);
+
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, going to chair");
+
+                    __instance.SwitchState(LabSpecialistState.GoingToWorkplace);
+                }
+            }
+            else if (BehaviorLabSpecialistPatch.GetWorkDeskMod(__instance) != null)
+            {
+                Vector2f defaultUsePosition = BehaviorLabSpecialistPatch.GetWorkDeskMod(__instance).GetDefaultUsePosition();
+                if (defaultUsePosition.subtract(walkComponent.m_state.m_currentPosition).length() > 0.25f)
+                {
+                    walkComponent.SetDestination(defaultUsePosition, BehaviorLabSpecialistPatch.GetWorkDeskMod(__instance).GetFloorIndex(), MovementType.WALKING);
+
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, going to work desk");
+
+                    __instance.SwitchState(LabSpecialistState.GoingToWorkplace);
+                }
+            }
+            else if (employeeComponent.m_state.m_workPlacePosition != walkComponent.GetCurrentTile())
+            {
+                walkComponent.SetDestination(employeeComponent.m_state.m_workPlacePosition, employeeComponent.m_state.m_workPlaceFloorIndex, MovementType.WALKING);
+
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, going to work place position");
+
+                __instance.SwitchState(LabSpecialistState.GoingToWorkplace);
+            }
+            else
+            {
+                // by default, go to common room
+                Vector3i position = BehaviorPatch.GetCommonRoomFreePlace(__instance);
+
+                if (position != Vector3i.ZERO_VECTOR)
+                {
+                    __instance.GetComponent<WalkComponent>().SetDestination(new Vector2i(position.m_x, position.m_y), position.m_z, MovementType.WALKING);
+
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, going to common room");
+
+                    __instance.SwitchState(LabSpecialistState.GoingToWorkplace);
+                }
+            }
+
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorLabSpecialist), nameof(BehaviorLabSpecialist.IsHidden))]
+        public static bool IsHidden(BehaviorLabSpecialist __instance, ref bool __result)
+        {
+            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            __result = __instance.m_state.m_labSpecialistState == LabSpecialistState.AtHome || __instance.m_state.m_labSpecialistState == LabSpecialistState.FiredAtHome;
+            return false;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(BehaviorLabSpecialist), "UpdateStateAtHome")]
         public static bool UpdateStateAtHomePrefix(BehaviorLabSpecialist __instance)
         {
@@ -163,7 +243,7 @@ namespace ModAdvancedGameChanges.Lopital
 
                 Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, arrived to hospital");
 
-                employeeComponent.CheckChiefNodiagnoseDepartment(true);
+                employeeComponent.CheckChiefNodiagnoseDepartment(false);
                 employeeComponent.CheckRoomSatisfactionBonuses();
                 employeeComponent.CheckMoodModifiers(__instance.IsBookmarked());
                 employeeComponent.CheckBossModifiers();
@@ -304,6 +384,55 @@ namespace ModAdvancedGameChanges.Lopital
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorLabSpecialist), "UpdateStateGoingToWorkplace")]
+        public static bool UpdateStateGoingToWorkplacePrefix(BehaviorLabSpecialist __instance)
+        {
+            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            if (!__instance.GetComponent<WalkComponent>().IsBusy())
+            {
+                EmployeeComponent employeeComponent = __instance.GetComponent<EmployeeComponent>();
+                GameDBRoomType homeRoomType = employeeComponent?.GetHomeRoomType();
+
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, arrived to workplace");
+
+                employeeComponent.CheckRoomSatisfactionBonuses();
+                employeeComponent.CheckMoodModifiers(__instance.IsBookmarked());
+                __instance.CancelBrowsing();
+
+                if (!BehaviorLabSpecialistPatch.HandleGoHomeFulfillNeedsTraining(__instance))
+                {
+                    if ((homeRoomType != null) && homeRoomType.HasTag(Tags.Mod.LabSpecialistTrainingWorkspace))
+                    {
+                        TileObject entity = employeeComponent.m_state.m_workDesk.GetEntity();
+                        if (entity != null)
+                        {
+                            entity.SetLightEnabled(true);
+                            entity.GetComponent<AnimatedObjectComponent>().ForceFrame(1);
+                        }
+
+                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, nothing to do, filling free time");
+                        __instance.SwitchState(LabSpecialistState.FillingFreeTime);
+                    }
+                    else
+                    {
+                        if (!__instance.GetComponent<WalkComponent>().IsOnBiohazard())
+                        {
+                            __instance.GetComponent<AnimModelComponent>().RevertToDefaultClothes(false);
+                        }
+                        __instance.SwitchState(LabSpecialistState.Idle);
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(BehaviorLabSpecialist), "UpdateStateIdle")]
         public static bool UpdateStateIdlePrefix(float deltaTime, BehaviorLabSpecialist __instance)
         {
@@ -322,6 +451,81 @@ namespace ModAdvancedGameChanges.Lopital
             if (!BehaviorLabSpecialistPatch.HandleGoHomeFulfillNeedsTraining(__instance))
             {
                 // lab specialist has nothing to do
+            }
+
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorLabSpecialist), nameof(BehaviorLabSpecialist.UpdateTraining))]
+        public static bool UpdateTrainingPrefix(BehaviorLabSpecialist __instance)
+        {
+            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            EmployeeComponent employeeComponent = __instance.GetComponent<EmployeeComponent>();
+            GameDBRoomType homeRoomType = employeeComponent?.GetHomeRoomType();
+
+            employeeComponent.CheckRoomSatisfactionBonuses();
+            employeeComponent.CheckMoodModifiers(__instance.IsBookmarked());
+
+            if ((homeRoomType != null) && homeRoomType.HasTag(Tags.Mod.LabSpecialistTrainingWorkspace))
+            {
+                if (employeeComponent.UpdateTraining(__instance.GetComponent<ProcedureComponent>()))
+                {
+                    // training was finished
+
+                    if (!BehaviorLabSpecialistPatch.HandleGoHomeFulfillNeedsTraining(__instance))
+                    {
+                        // default case, training is not possible more
+                        __instance.SwitchState(LabSpecialistState.FillingFreeTime);
+
+                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, filling free time");
+
+                        Vector3i position = BehaviorPatch.GetCommonRoomFreePlace(__instance);
+
+                        if (position != Vector3i.ZERO_VECTOR)
+                        {
+                            __instance.GetComponent<WalkComponent>().SetDestination(new Vector2i(position.m_x, position.m_y), position.m_z, MovementType.WALKING);
+
+                            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, going to common room");
+                        }
+
+                        return false;
+                    }
+                }
+
+                return false;
+            }
+            else
+            {
+                // regular janitor lab specialist
+                if (employeeComponent.UpdateTraining(__instance.GetComponent<ProcedureComponent>()))
+                {
+                    // training was finished
+
+                    if (!BehaviorLabSpecialistPatch.HandleGoHomeFulfillNeedsGoToWorkplace(__instance))
+                    {
+                        // default case, training is not possible more
+                        __instance.SwitchState(LabSpecialistState.FillingFreeTime);
+
+                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, filling free time");
+
+                        Vector3i position = BehaviorPatch.GetCommonRoomFreePlace(__instance);
+
+                        if (position != Vector3i.ZERO_VECTOR)
+                        {
+                            __instance.GetComponent<WalkComponent>().SetDestination(new Vector2i(position.m_x, position.m_y), position.m_z, MovementType.WALKING);
+
+                            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, going to common room");
+                        }
+
+                        return false;
+                    }
+                }
             }
 
             return false;
@@ -519,6 +723,14 @@ namespace ModAdvancedGameChanges.Lopital
             MethodInfo methodInfo = type.GetMethod("CheckNeeds", BindingFlags.NonPublic | BindingFlags.Instance);
 
             return (bool)methodInfo.Invoke(instance, new object[] { AccessRights.STAFF });
+        }
+
+        private static TileObject GetWorkDeskMod(BehaviorLabSpecialist instance)
+        {
+            Type type = typeof(BehaviorLabSpecialist);
+            MethodInfo methodInfo = type.GetMethod("GetWorkDesk", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            return (TileObject)methodInfo.Invoke(instance, null);
         }
     }
 }
