@@ -114,4 +114,19 @@
         <PrefabsTag>ui_prefab_training</PrefabsTag>
 	</GameDBDepartment>
 	
+	<GameDBSkill ID="SKILL_LAB_SPECIALIST_SPEC_HEMATOLOGY">
+        <AbbreviationLocID>SKILL_LAB_SPECIALIST_SPEC_HEMATOLOGY_DESCRIPTION</AbbreviationLocID>
+        <IconIndex>2382</IconIndex>
+    </GameDBSkill>
+	
+	<GameDBSkill ID="SKILL_LAB_SPECIALIST_SPEC_MICROBIOLOGY">
+        <AbbreviationLocID>SKILL_LAB_SPECIALIST_SPEC_MICROBIOLOGY_DESCRIPTION</AbbreviationLocID>
+        <IconIndex>2334</IconIndex>
+    </GameDBSkill>
+	
+	<GameDBSkill ID="SKILL_LAB_SPECIALIST_SPEC_HISTOLOGY">
+        <AbbreviationLocID>SKILL_LAB_SPECIALIST_SPEC_HISTOLOGY_DESCRIPTION</AbbreviationLocID>
+        <IconIndex>2340</IconIndex>
+    </GameDBSkill>
+	
 </Database>

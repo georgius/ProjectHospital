@@ -23,13 +23,23 @@
 			</GameDBLocalizedString>
 			
 			<GameDBLocalizedString>
+				<LocID>AGC_OPTION_FORCE_EMPLOYEE_LOWEST_HIRE_LEVEL</LocID>
+				<Text>[AGC] Force employee lowest hire level</Text>
+			</GameDBLocalizedString>
+			
+			<GameDBLocalizedString>
+				<LocID>AGC_OPTION_LAB_EMPLOYEE_BIOCHEMISTRY</LocID>
+				<Text>[AGC] Biochemistry lab employee (requires restart)</Text>
+			</GameDBLocalizedString>
+			
+			<GameDBLocalizedString>
 				<LocID>AGC_OPTION_LIMIT_CLINIC_DOCTORS_LEVEL</LocID>
 				<Text>[AGC] Limit clinic doctors level</Text>
 			</GameDBLocalizedString>
 			
 			<GameDBLocalizedString>
-				<LocID>AGC_OPTION_FORCE_EMPLOYEE_LOWEST_HIRE_LEVEL</LocID>
-				<Text>[AGC] Force employee lowest hire level</Text>
+				<LocID>AGC_OPTION_STAFF_LUNCH_NIGHT</LocID>
+				<Text>[AGC] Night shift staff lunch</Text>
 			</GameDBLocalizedString>
 			
 			<GameDBLocalizedString>
@@ -40,11 +50,6 @@
 			<GameDBLocalizedString>
 				<LocID>AGC_OPTION_TRAINING_DEPARTMENT</LocID>
 				<Text>[AGC] Training department (requires restart)</Text>
-			</GameDBLocalizedString>
-			
-			<GameDBLocalizedString>
-				<LocID>AGC_OPTION_STAFF_LUNCH_NIGHT</LocID>
-				<Text>[AGC] Night shift staff lunch</Text>
 			</GameDBLocalizedString>
 			
 			<GameDBLocalizedString>

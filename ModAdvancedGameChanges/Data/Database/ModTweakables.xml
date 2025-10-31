@@ -16,22 +16,40 @@
 		<Value>20000</Value>
 	</GameDBTweakableInt>
 	<GameDBTweakableInt ID="AGC_TWEAKABLE_NURSE_LEVEL_POINTS_2">
+		<Value>40000</Value>
+	</GameDBTweakableInt>
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_NURSE_LEVEL_POINTS_3">
+		<Value>80000</Value>
+	</GameDBTweakableInt>
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_NURSE_LEVEL_POINTS_4">
 		<Value>160000</Value>
 	</GameDBTweakableInt>
-	
+
 	<GameDBTweakableInt ID="AGC_TWEAKABLE_LAB_SPECIALIST_LEVEL_POINTS_1">
 		<Value>20000</Value>
 	</GameDBTweakableInt>
 	<GameDBTweakableInt ID="AGC_TWEAKABLE_LAB_SPECIALIST_LEVEL_POINTS_2">
-		<Value>16000</Value>
+		<Value>40000</Value>
+	</GameDBTweakableInt>
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_LAB_SPECIALIST_LEVEL_POINTS_3">
+		<Value>80000</Value>
+	</GameDBTweakableInt>
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_LAB_SPECIALIST_LEVEL_POINTS_4">
+		<Value>160000</Value>
 	</GameDBTweakableInt>
 	
 	<GameDBTweakableInt ID="AGC_TWEAKABLE_JANITOR_LEVEL_POINTS_1">
 		<Value>20000</Value>
 	</GameDBTweakableInt>
 	<GameDBTweakableInt ID="AGC_TWEAKABLE_JANITOR_LEVEL_POINTS_2">
-		<Value>160000</Value>
+		<Value>40000</Value>
 	</GameDBTweakableInt>
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_JANITOR_LEVEL_POINTS_3">
+		<Value>80000</Value>
+	</GameDBTweakableInt>
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_JANITOR_LEVEL_POINTS_4">
+		<Value>160000</Value>
+	</GameDBTweakableInt>	
 	
 	<GameDBTweakableInt ID="AGC_TWEAKABLE_SKILL_LEVELS">
 		<!--
@@ -48,19 +66,19 @@
 	</GameDBTweakableInt>
 
 	<GameDBTweakableInt ID="AGC_TWEAKABLE_SKILL_POINTS_0">
-		<Value>200</Value>
+		<Value>300</Value>
 	</GameDBTweakableInt>
 	<GameDBTweakableInt ID="AGC_TWEAKABLE_SKILL_POINTS_1">
-		<Value>400</Value>
+		<Value>600</Value>
 	</GameDBTweakableInt>
 	<GameDBTweakableInt ID="AGC_TWEAKABLE_SKILL_POINTS_2">
-		<Value>800</Value>
+		<Value>1200</Value>
 	</GameDBTweakableInt>
 	<GameDBTweakableInt ID="AGC_TWEAKABLE_SKILL_POINTS_3">
-		<Value>1600</Value>
+		<Value>2400</Value>
 	</GameDBTweakableInt>
 	<GameDBTweakableInt ID="AGC_TWEAKABLE_SKILL_POINTS_4">
-		<Value>3200</Value>
+		<Value>4800</Value>
 	</GameDBTweakableInt>
 	
 	<GameDBTweakableInt ID="AGC_TWEAKABLE_ENABLE_EXTRA_LEVELING_PERCENT">

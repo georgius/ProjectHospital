@@ -107,6 +107,259 @@ namespace ModAdvancedGameChanges .Lopital
 
                         runOriginalCode = false;
                     }
+                    else if (__instance.m_entity.GetComponent<BehaviorNurse>() != null)
+                    {
+                        bool levelUp = false;
+
+                        float num = (float)points * Tweakable.Vanilla.LevelingRatePercent();
+                        if (__instance.m_entity.GetComponent<PerkComponent>().m_perkSet.HasPerk(Perks.Vanilla.FastLearner))
+                        {
+                            num *= 1.1f;
+                        }
+                        else if (__instance.m_entity.GetComponent<PerkComponent>().m_perkSet.HasPerk(Perks.Vanilla.SlowLearner))
+                        {
+                            num *= 0.9f;
+                        }
+
+                        __instance.m_state.m_points += (int)num;
+
+                        int maxLevel = Levels.Nurses.NurseSpecialist;
+
+                        if (__instance.m_state.m_level >= maxLevel)
+                        {
+                            __instance.m_state.m_level = maxLevel;
+                            __instance.m_state.m_points = 0;
+                        }
+
+                        int nextLevelPoints = __instance.GetPointsNeededForNextLevel();
+
+                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, level: {__instance.m_state.m_level.ToString(CultureInfo.InvariantCulture)}, allowed level: {maxLevel.ToString(CultureInfo.InvariantCulture)}, points: {points.ToString(CultureInfo.InvariantCulture)}, added: {((int)num).ToString(CultureInfo.InvariantCulture)}, actual: {__instance.m_state.m_points.ToString(CultureInfo.InvariantCulture)}, required points: {nextLevelPoints.ToString(CultureInfo.InvariantCulture)}");
+
+                        if (__instance.m_state.m_points >= Tweakable.Mod.NurseLevelPoints(1))
+                        {
+                            if (__instance.m_state.m_skillSet.m_specialization1 == null)
+                            {
+                                GameDBSkill[] skills = new GameDBSkill[]
+                                {
+                                    Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.SKILL_NURSE_SPEC_RECEPTIONIST),
+                                    Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.SKILL_NURSE_SPEC_MEDICAL_SURGERY),
+                                    Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.SKILL_NURSE_SPEC_CLINICAL_SPECIALIST)
+                                };
+
+                                __instance.m_state.m_skillSet.m_specialization1 = new Skill(skills[UnityEngine.Random.Range(0, skills.Length)], Skills.SkillLevelMinimum);
+
+                                NotificationManager.GetInstance().AddMessage(
+                                    __instance.m_entity, "NOTIF_CHARACTER_LEVELED_UP_FIRST_SPECIALIZATION",
+                                    StringTable.GetInstance().GetLocalizedText(EmployeeComponent.sm_levelLocalizationIDsLabSpecialist[__instance.m_state.m_level], new string[0]),
+                                    string.Empty, string.Empty, 0, 0, 0, 0, null, null);
+
+                                levelUp = true;
+                            }
+                        }
+
+                        if (__instance.m_state.m_points >= nextLevelPoints)
+                        {
+                            __instance.m_state.m_points = 0;
+                            if (__instance.m_state.m_level < maxLevel)
+                            {
+                                __instance.m_state.m_level++;
+                                levelUp = true;
+
+                                NotificationManager.GetInstance().AddMessage(__instance.m_entity, "NOTIF_CHARACTER_LEVELED_UP", StringTable.GetInstance().GetLocalizedText(EmployeeComponent.sm_levelLocalizationIDsDoctor[__instance.m_state.m_level], new string[0]), string.Empty, string.Empty, 0, 0, 0, 0, null, null);
+                            }
+                        }
+
+                        if (levelUp)
+                        {
+                            __instance.m_state.m_leveledUpAfterHire = true;
+                            if (__instance.m_entity.GetComponent<PerkComponent>().m_perkSet.HasHiddenPerk(Perks.Vanilla.FastLearner))
+                            {
+                                __instance.m_entity.GetComponent<PerkComponent>().m_perkSet.RevealPerk(Perks.Vanilla.FastLearner);
+                            }
+                            if (__instance.m_entity.GetComponent<PerkComponent>().m_perkSet.HasHiddenPerk(Perks.Vanilla.SlowLearner))
+                            {
+                                __instance.m_entity.GetComponent<PerkComponent>().m_perkSet.RevealPerk(Perks.Vanilla.SlowLearner);
+                            }
+                        }
+
+                        runOriginalCode = false;
+                    }
+                    else if (__instance.m_entity.GetComponent<BehaviorLabSpecialist>() != null)
+                    {
+                        bool levelUp = false;
+
+                        float num = (float)points * Tweakable.Vanilla.LevelingRatePercent();
+                        if (__instance.m_entity.GetComponent<PerkComponent>().m_perkSet.HasPerk(Perks.Vanilla.FastLearner))
+                        {
+                            num *= 1.1f;
+                        }
+                        else if (__instance.m_entity.GetComponent<PerkComponent>().m_perkSet.HasPerk(Perks.Vanilla.SlowLearner))
+                        {
+                            num *= 0.9f;
+                        }
+
+                        __instance.m_state.m_points += (int)num;
+
+                        int maxLevel = Levels.LabSpecialists.MasterScientist;
+
+                        if (__instance.m_state.m_level >= maxLevel)
+                        {
+                            __instance.m_state.m_level = maxLevel;
+                            __instance.m_state.m_points = 0;
+                        }
+
+                        int nextLevelPoints = __instance.GetPointsNeededForNextLevel();
+
+                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, level: {__instance.m_state.m_level.ToString(CultureInfo.InvariantCulture)}, allowed level: {maxLevel.ToString(CultureInfo.InvariantCulture)}, points: {points.ToString(CultureInfo.InvariantCulture)}, added: {((int)num).ToString(CultureInfo.InvariantCulture)}, actual: {__instance.m_state.m_points.ToString(CultureInfo.InvariantCulture)}, required points: {nextLevelPoints.ToString(CultureInfo.InvariantCulture)}");
+
+                        if (__instance.m_state.m_points >= Tweakable.Mod.LabSpecialistLevelPoints(1))
+                        {
+                            if (__instance.m_state.m_skillSet.m_specialization1 == null)
+                            {
+                                GameDBSkill[] skills = new GameDBSkill[]
+                                {
+                                    Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.SKILL_LAB_SPECIALIST_SPEC_BIOCHEMISTRY),
+                                    Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.SKILL_LAB_SPECIALIST_SPEC_USG),
+                                    Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.SKILL_LAB_SPECIALIST_SPEC_CARDIOLOGY),
+                                    Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.SKILL_LAB_SPECIALIST_SPEC_NEUROLOGY)
+                                };
+
+                                __instance.m_state.m_skillSet.m_specialization1 = new Skill(skills[UnityEngine.Random.Range(0, skills.Length)], Skills.SkillLevelMinimum);
+
+                                NotificationManager.GetInstance().AddMessage(
+                                    __instance.m_entity, "NOTIF_CHARACTER_LEVELED_UP_FIRST_SPECIALIZATION", 
+                                    StringTable.GetInstance().GetLocalizedText(EmployeeComponent.sm_levelLocalizationIDsLabSpecialist[__instance.m_state.m_level], new string[0]), 
+                                    string.Empty, string.Empty, 0, 0, 0, 0, null, null);
+
+                                levelUp = true;
+                            }
+                        }
+
+                        //if (__instance.m_state.m_points >= Tweakable.Mod.LabSpecialistLevelPoints(3))
+                        //{
+                        //    if (__instance.m_state.m_skillSet.m_specialization2 == null)
+                        //    {
+                        //        GameDBSkill[] skills = new GameDBSkill[]
+                        //        {
+                        //            Database.Instance.GetEntry<GameDBSkill>("SKILL_LAB_SPECIALIST_SPEC_HEMATOLOGY"),
+                        //            Database.Instance.GetEntry<GameDBSkill>("SKILL_LAB_SPECIALIST_SPEC_MICROBIOLOGY"),
+                        //            Database.Instance.GetEntry<GameDBSkill>("SKILL_LAB_SPECIALIST_SPEC_HISTOLOGY")
+                        //        };
+
+                        //        __instance.m_state.m_skillSet.m_specialization1 = new Skill(skills[UnityEngine.Random.Range(0, skills.Length)], Skills.SkillLevelMinimum);
+
+                        //        NotificationManager.GetInstance().AddMessage(
+                        //            __instance.m_entity, "NOTIF_CHARACTER_LEVELED_UP_SECOND_SPECIALIZATION",
+                        //            StringTable.GetInstance().GetLocalizedText(EmployeeComponent.sm_levelLocalizationIDsLabSpecialist[__instance.m_state.m_level], new string[0]),
+                        //            string.Empty, string.Empty, 0, 0, 0, 0, null, null);
+
+                        //        levelUp = true;
+                        //    }
+                        //}
+
+                        if (__instance.m_state.m_points >= nextLevelPoints)
+                        {
+                            __instance.m_state.m_points = 0;
+                            if (__instance.m_state.m_level < maxLevel)
+                            {
+                                __instance.m_state.m_level++;
+                                levelUp = true;
+
+                                NotificationManager.GetInstance().AddMessage(__instance.m_entity, "NOTIF_CHARACTER_LEVELED_UP", StringTable.GetInstance().GetLocalizedText(EmployeeComponent.sm_levelLocalizationIDsDoctor[__instance.m_state.m_level], new string[0]), string.Empty, string.Empty, 0, 0, 0, 0, null, null);
+                            }
+                        }
+
+                        if (levelUp)
+                        {
+                            __instance.m_state.m_leveledUpAfterHire = true;
+                            if (__instance.m_entity.GetComponent<PerkComponent>().m_perkSet.HasHiddenPerk(Perks.Vanilla.FastLearner))
+                            {
+                                __instance.m_entity.GetComponent<PerkComponent>().m_perkSet.RevealPerk(Perks.Vanilla.FastLearner);
+                            }
+                            if (__instance.m_entity.GetComponent<PerkComponent>().m_perkSet.HasHiddenPerk(Perks.Vanilla.SlowLearner))
+                            {
+                                __instance.m_entity.GetComponent<PerkComponent>().m_perkSet.RevealPerk(Perks.Vanilla.SlowLearner);
+                            }
+                        }
+
+                        runOriginalCode = false;
+                    }
+                    else if (__instance.m_entity.GetComponent<BehaviorJanitor>() != null)
+                    {
+                        bool levelUp = false;
+
+                        float num = (float)points * Tweakable.Vanilla.LevelingRatePercent();
+                        if (__instance.m_entity.GetComponent<PerkComponent>().m_perkSet.HasPerk(Perks.Vanilla.FastLearner))
+                        {
+                            num *= 1.1f;
+                        }
+                        else if (__instance.m_entity.GetComponent<PerkComponent>().m_perkSet.HasPerk(Perks.Vanilla.SlowLearner))
+                        {
+                            num *= 0.9f;
+                        }
+
+                        __instance.m_state.m_points += (int)num;
+
+                        int maxLevel = Levels.Janitors.MasterJanitor;
+
+                        if (__instance.m_state.m_level >= maxLevel)
+                        {
+                            __instance.m_state.m_level = maxLevel;
+                            __instance.m_state.m_points = 0;
+                        }
+
+                        int nextLevelPoints = __instance.GetPointsNeededForNextLevel();
+
+                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, level: {__instance.m_state.m_level.ToString(CultureInfo.InvariantCulture)}, allowed level: {maxLevel.ToString(CultureInfo.InvariantCulture)}, points: {points.ToString(CultureInfo.InvariantCulture)}, added: {((int)num).ToString(CultureInfo.InvariantCulture)}, actual: {__instance.m_state.m_points.ToString(CultureInfo.InvariantCulture)}, required points: {nextLevelPoints.ToString(CultureInfo.InvariantCulture)}");
+
+                        if (__instance.m_state.m_points >= Tweakable.Mod.JanitorLevelPoints(1))
+                        {
+                            if (Tweakable.Vanilla.DlcHospitalServicesEnabled() && (__instance.m_state.m_skillSet.m_specialization1 == null))
+                            {
+                                GameDBSkill[] skills = new GameDBSkill[]
+                                {
+                                    Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.DLC_SKILL_JANITOR_SPEC_VENDOR),
+                                    Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.DLC_SKILL_JANITOR_SPEC_MANAGER)
+                                };
+
+                                __instance.m_state.m_skillSet.m_specialization1 = new Skill(skills[UnityEngine.Random.Range(0, skills.Length)], Skills.SkillLevelMinimum);
+
+                                NotificationManager.GetInstance().AddMessage(
+                                    __instance.m_entity, "NOTIF_CHARACTER_LEVELED_UP_FIRST_SPECIALIZATION",
+                                    StringTable.GetInstance().GetLocalizedText(EmployeeComponent.sm_levelLocalizationIDsLabSpecialist[__instance.m_state.m_level], new string[0]),
+                                    string.Empty, string.Empty, 0, 0, 0, 0, null, null);
+
+                                levelUp = true;
+                            }
+                        }
+
+                        if (__instance.m_state.m_points >= nextLevelPoints)
+                        {
+                            __instance.m_state.m_points = 0;
+                            if (__instance.m_state.m_level < maxLevel)
+                            {
+                                __instance.m_state.m_level++;
+                                levelUp = true;
+
+                                NotificationManager.GetInstance().AddMessage(__instance.m_entity, "NOTIF_CHARACTER_LEVELED_UP", StringTable.GetInstance().GetLocalizedText(EmployeeComponent.sm_levelLocalizationIDsDoctor[__instance.m_state.m_level], new string[0]), string.Empty, string.Empty, 0, 0, 0, 0, null, null);
+                            }
+                        }
+
+                        if (levelUp)
+                        {
+                            __instance.m_state.m_leveledUpAfterHire = true;
+                            if (__instance.m_entity.GetComponent<PerkComponent>().m_perkSet.HasHiddenPerk(Perks.Vanilla.FastLearner))
+                            {
+                                __instance.m_entity.GetComponent<PerkComponent>().m_perkSet.RevealPerk(Perks.Vanilla.FastLearner);
+                            }
+                            if (__instance.m_entity.GetComponent<PerkComponent>().m_perkSet.HasHiddenPerk(Perks.Vanilla.SlowLearner))
+                            {
+                                __instance.m_entity.GetComponent<PerkComponent>().m_perkSet.RevealPerk(Perks.Vanilla.SlowLearner);
+                            }
+                        }
+
+                        runOriginalCode = false;
+                    }
                 }
                 else if (ViewSettingsPatch.m_limitClinicDoctorsLevel[SettingsManager.Instance.m_viewSettings].m_value)
                 {
@@ -327,15 +580,90 @@ namespace ModAdvancedGameChanges .Lopital
             }
             else if (__instance.m_entity.GetComponent<BehaviorNurse>() != null)
             {
-                __result = Tweakable.Mod.NurseLevelPoints(Math.Max(Levels.Nurses.NursingIntern, Math.Min(Levels.Nurses.RegisteredNurse, __instance.m_state.m_level)));
+                // between Levels.Nurses.NursingIntern and Levels.Nurses.RegisteredNurse are two "levels":
+                // AGC_TWEAKABLE_NURSE_LEVEL_POINTS_1 and AGC_TWEAKABLE_NURSE_LEVEL_POINTS_2
+
+                // between Levels.Nurses.RegisteredNurse and Levels.Nurses.NurseSpecialist are two "levels":
+                // AGC_TWEAKABLE_NURSE_LEVEL_POINTS_3 and AGC_TWEAKABLE_NURSE_LEVEL_POINTS_4
+
+                // we have return correct sum by __instance.m_state.m_level
+
+                switch (__instance.m_state.m_level)
+                {
+                    case Levels.Nurses.NursingIntern:
+                        {
+                            __result = Tweakable.Mod.JanitorLevelPoints(1) + Tweakable.Mod.JanitorLevelPoints(2);
+                        }
+                        break;
+                    case Levels.Nurses.RegisteredNurse:
+                        {
+                            __result = Tweakable.Mod.JanitorLevelPoints(3) + Tweakable.Mod.JanitorLevelPoints(4);
+                        }
+                        break;
+                    default:
+                        {
+                            __result = Tweakable.Mod.JanitorLevelPoints(4);
+                        }
+                        break;
+                }
             }
             else if (__instance.m_entity.GetComponent<BehaviorLabSpecialist>() != null)
             {
-                __result = Tweakable.Mod.LabSpecialistLevelPoints(Math.Max(Levels.LabSpecialists.JuniorScientist, Math.Min(Levels.LabSpecialists.SeniorScientist, __instance.m_state.m_level)));
+                // between Levels.LabSpecialists.JuniorScientist and Levels.LabSpecialists.SeniorScientist are two "levels":
+                // AGC_TWEAKABLE_LAB_SPECIALIST_LEVEL_POINTS_1 and AGC_TWEAKABLE_LAB_SPECIALIST_LEVEL_POINTS_2
+
+                // between Levels.LabSpecialists.SeniorScientist and Levels.LabSpecialists.MasterScientist are two "levels":
+                // AGC_TWEAKABLE_LAB_SPECIALIST_LEVEL_POINTS_3 and AGC_TWEAKABLE_LAB_SPECIALIST_LEVEL_POINTS_4
+
+                // we have return correct sum by __instance.m_state.m_level
+
+                switch (__instance.m_state.m_level)
+                {
+                    case Levels.LabSpecialists.JuniorScientist:
+                        {
+                            __result = Tweakable.Mod.LabSpecialistLevelPoints(1) + Tweakable.Mod.LabSpecialistLevelPoints(2);
+                        }
+                        break;
+                    case Levels.LabSpecialists.SeniorScientist:
+                        {
+                            __result = Tweakable.Mod.LabSpecialistLevelPoints(3) + Tweakable.Mod.LabSpecialistLevelPoints(4);
+                        }
+                        break;
+                    default:
+                        {
+                            __result = Tweakable.Mod.LabSpecialistLevelPoints(4);
+                        }
+                        break;
+                }
             }
             else
             {
-                __result = Tweakable.Mod.JanitorLevelPoints(Math.Max(Levels.Janitors.Janitor, Math.Min(Levels.Janitors.SeniorJanitor, __instance.m_state.m_level)));
+                // between Levels.Janitors.Janitor and Levels.Janitors.SeniorJanitor are two "levels":
+                // AGC_TWEAKABLE_JANITOR_LEVEL_POINTS_1 and AGC_TWEAKABLE_JANITOR_LEVEL_POINTS_2
+
+                // between Levels.Janitors.SeniorJanitor and Levels.Janitors.MasterJanitor are two "levels":
+                // AGC_TWEAKABLE_JANITOR_LEVEL_POINTS_3 and AGC_TWEAKABLE_JANITOR_LEVEL_POINTS_4
+
+                // we have return correct sum by __instance.m_state.m_level
+
+                switch (__instance.m_state.m_level)
+                {
+                    case Levels.Janitors.Janitor:
+                        {
+                            __result = Tweakable.Mod.JanitorLevelPoints(1) + Tweakable.Mod.JanitorLevelPoints(2);
+                        }
+                        break;
+                    case Levels.Janitors.SeniorJanitor:
+                        {
+                            __result = Tweakable.Mod.JanitorLevelPoints(3) + Tweakable.Mod.JanitorLevelPoints(4);
+                        }
+                        break;
+                    default:
+                        {
+                            __result = Tweakable.Mod.JanitorLevelPoints(4);
+                        }
+                        break;
+                }
             }
 
             return false;
