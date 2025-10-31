@@ -18,7 +18,7 @@ namespace ModAdvancedGameChanges
             Tweakable.CheckClinicDoctorsMaxLevel();
             Tweakable.CheckEmployeeLevelPoints(5, Tweakables.Mod.AGC_TWEAKABLE_DOCTOR_LEVEL_POINTS_FORMAT);              // doctors
             Tweakable.CheckEmployeeLevelPoints(3, Tweakables.Mod.AGC_TWEAKABLE_NURSE_LEVEL_POINTS_FORMAT);               // nurses
-            Tweakable.CheckEmployeeLevelPoints(3, Tweakables.Mod.AGC_TWEAKABLE_LAB_SPECIALIST_LEVEL_POINTS_FORMAT);      // lab specialists
+            Tweakable.CheckEmployeeLevelPoints(5, Tweakables.Mod.AGC_TWEAKABLE_LAB_SPECIALIST_LEVEL_POINTS_FORMAT);      // lab specialists
             Tweakable.CheckEmployeeLevelPoints(3, Tweakables.Mod.AGC_TWEAKABLE_JANITOR_LEVEL_POINTS_FORMAT);             // janitors
             Tweakable.CheckTrainingHourPoints();
             Tweakable.CheckMainSkillPoints();

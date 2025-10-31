@@ -44,7 +44,7 @@ namespace ModAdvancedGameChanges .Lopital
 
                         __instance.m_state.m_points += (int)num;
 
-                        int doctorMaxLevel = 5;
+                        int doctorMaxLevel = Levels.Doctors.Specialist;
                         if (__instance.IsClinicEmployee())
                         {
                             if (ViewSettingsPatch.m_limitClinicDoctorsLevel[SettingsManager.Instance.m_viewSettings].m_value)
@@ -71,19 +71,20 @@ namespace ModAdvancedGameChanges .Lopital
                                 __instance.m_state.m_level++;
                                 levelUp = true;
                                 string titleLocID = "NOTIF_CHARACTER_LEVELED_UP";
-                                if (__instance.m_state.m_level == 2)
+                                if (__instance.m_state.m_level == Levels.Doctors.Resident)
                                 {
                                     titleLocID = "NOTIF_CHARACTER_LEVELED_UP_FIRST_SPECIALIZATION";
                                 }
-                                else if (__instance.m_state.m_level == 4 && __instance.m_entity.GetComponent<BehaviorDoctor>() != null)
+                                else if ((__instance.m_state.m_level == Levels.Doctors.Fellow) && (__instance.m_entity.GetComponent<BehaviorDoctor>() != null))
                                 {
                                     titleLocID = "NOTIF_CHARACTER_LEVELED_UP_SECOND_SPECIALIZATION";
                                 }
-                                if (__instance.m_state.m_level > 1 && __instance.m_state.m_skillSet.m_specialization1 == null)
+
+                                if ((__instance.m_state.m_level > Levels.Doctors.Intern) && (__instance.m_state.m_skillSet.m_specialization1 == null))
                                 {
                                     __instance.m_state.m_skillSet.AddFirstSpecialization();
                                 }
-                                if (__instance.m_state.m_level > 3 && __instance.m_state.m_skillSet.m_specialization1 != null && __instance.m_state.m_skillSet.m_specialization2 == null)
+                                if ((__instance.m_state.m_level > Levels.Doctors.Attending) && (__instance.m_state.m_skillSet.m_specialization1 != null) && (__instance.m_state.m_skillSet.m_specialization2 == null))
                                 {
                                     __instance.m_state.m_skillSet.AddSecondSpecialization(__instance.m_state.m_department.GetEntity().GetDepartmentType(), 1f);
                                 }
@@ -111,7 +112,7 @@ namespace ModAdvancedGameChanges .Lopital
                 {
                     if (__instance.m_entity.GetComponent<BehaviorDoctor>() != null)
                     {
-                        int doctorMaxLevel = 5;
+                        int doctorMaxLevel = Levels.Doctors.Specialist;
                         if (__instance.IsClinicEmployee())
                         {
                             doctorMaxLevel = Tweakable.Mod.AllowedClinicDoctorsLevel();
@@ -144,12 +145,12 @@ namespace ModAdvancedGameChanges .Lopital
                 }
 
                 __instance.m_state.m_points += (int)num;
-                int maxLevel = (__instance.m_entity.GetComponent<BehaviorDoctor>() == null) ? 3 : 5;
+                int maxLevel = (__instance.m_entity.GetComponent<BehaviorDoctor>() == null) ? Levels.Nurses.NurseSpecialist : Levels.Doctors.Specialist;
                 int nextLevelPoints = __instance.GetPointsNeededForNextLevel();
 
                 Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, points: {points.ToString(CultureInfo.InvariantCulture)}, added: {((int)num).ToString(CultureInfo.InvariantCulture)}, actual: {__instance.m_state.m_points.ToString(CultureInfo.InvariantCulture)}, required points: {nextLevelPoints.ToString(CultureInfo.InvariantCulture)}");
 
-                if (__instance.m_state.m_points >= nextLevelPoints && __instance.m_state.m_level < maxLevel)
+                if ((__instance.m_state.m_points >= nextLevelPoints) && (__instance.m_state.m_level < maxLevel))
                 {
                     __instance.m_state.m_points -= nextLevelPoints;
                     __instance.m_state.m_level++;
@@ -162,30 +163,36 @@ namespace ModAdvancedGameChanges .Lopital
                     {
                         __instance.m_entity.GetComponent<PerkComponent>().m_perkSet.RevealPerk(Perks.Vanilla.SlowLearner);
                     }
-                    string titleLocID = "NOTIF_CHARACTER_LEVELED_UP";
-                    if (__instance.m_state.m_level == 2)
-                    {
-                        titleLocID = "NOTIF_CHARACTER_LEVELED_UP_FIRST_SPECIALIZATION";
-                    }
-                    else if (__instance.m_state.m_level == 4 && __instance.m_entity.GetComponent<BehaviorDoctor>() != null)
-                    {
-                        titleLocID = "NOTIF_CHARACTER_LEVELED_UP_SECOND_SPECIALIZATION";
-                    }
+
                     if (__instance.m_entity.GetComponent<BehaviorDoctor>() != null)
                     {
-                        if (__instance.m_state.m_level > 1 && __instance.m_state.m_skillSet.m_specialization1 == null)
+                        if ((__instance.m_state.m_level > Levels.Doctors.Intern) && (__instance.m_state.m_skillSet.m_specialization1 == null))
                         {
                             __instance.m_state.m_skillSet.AddFirstSpecialization();
                         }
-                        if (__instance.m_state.m_level > 3 && __instance.m_state.m_skillSet.m_specialization1 != null && __instance.m_state.m_skillSet.m_specialization2 == null)
+                        if ((__instance.m_state.m_level > Levels.Doctors.Attending) && (__instance.m_state.m_skillSet.m_specialization1 != null) && (__instance.m_state.m_skillSet.m_specialization2 == null))
                         {
                             __instance.m_state.m_skillSet.AddSecondSpecialization(__instance.m_state.m_department.GetEntity().GetDepartmentType(), 1f);
                         }
+
+                        string titleLocID = "NOTIF_CHARACTER_LEVELED_UP";
+                        switch (__instance.m_state.m_level)
+                        {
+                            case Levels.Doctors.Resident:
+                                titleLocID = "NOTIF_CHARACTER_LEVELED_UP_FIRST_SPECIALIZATION";
+                                break;
+                            case Levels.Doctors.Fellow:
+                                titleLocID = "NOTIF_CHARACTER_LEVELED_UP_SECOND_SPECIALIZATION";
+                                break;
+                            default:
+                                break;
+                        }
+
                         NotificationManager.GetInstance().AddMessage(__instance.m_entity, titleLocID, StringTable.GetInstance().GetLocalizedText(EmployeeComponent.sm_levelLocalizationIDsDoctor[__instance.m_state.m_level], new string[0]), string.Empty, string.Empty, 0, 0, 0, 0, null, null);
                     }
                     else if (__instance.m_entity.GetComponent<BehaviorNurse>() != null)
                     {
-                        if (__instance.m_state.m_level > 1 && __instance.m_state.m_skillSet.m_specialization1 == null)
+                        if ((__instance.m_state.m_level > Levels.Nurses.NursingIntern) && (__instance.m_state.m_skillSet.m_specialization1 == null))
                         {
                             GameDBSkill[] array = new GameDBSkill[]
                             {
@@ -195,11 +202,22 @@ namespace ModAdvancedGameChanges .Lopital
                             };
                             __instance.m_state.m_skillSet.m_specialization1 = new Skill(array[UnityEngine.Random.Range(0, array.Length)], Skills.SkillLevelMinimum);
                         }
+
+                        string titleLocID = "NOTIF_CHARACTER_LEVELED_UP";
+                        switch (__instance.m_state.m_level)
+                        {
+                            case Levels.Nurses.RegisteredNurse:
+                                titleLocID = "NOTIF_CHARACTER_LEVELED_UP_FIRST_SPECIALIZATION";
+                                break;
+                            default:
+                                break;
+                        }
+
                         NotificationManager.GetInstance().AddMessage(__instance.m_entity, titleLocID, StringTable.GetInstance().GetLocalizedText(EmployeeComponent.sm_levelLocalizationIDsNurse[__instance.m_state.m_level], new string[0]), string.Empty, string.Empty, 0, 0, 0, 0, null, null);
                     }
                     else if (__instance.m_entity.GetComponent<BehaviorLabSpecialist>() != null)
                     {
-                        if (__instance.m_state.m_level > 1 && __instance.m_state.m_skillSet.m_specialization1 == null)
+                        if ((__instance.m_state.m_level > Levels.LabSpecialists.JuniorScientist) && (__instance.m_state.m_skillSet.m_specialization1 == null))
                         {
                             GameDBSkill[] array2 = new GameDBSkill[]
                             {
@@ -210,25 +228,41 @@ namespace ModAdvancedGameChanges .Lopital
                             };
                             __instance.m_state.m_skillSet.m_specialization1 = new Skill(array2[UnityEngine.Random.Range(0, array2.Length)], Skills.SkillLevelMinimum);
                         }
+
+                        string titleLocID = "NOTIF_CHARACTER_LEVELED_UP";
+                        switch (__instance.m_state.m_level)
+                        {
+                            case Levels.LabSpecialists.SeniorScientist:
+                                titleLocID = "NOTIF_CHARACTER_LEVELED_UP_FIRST_SPECIALIZATION";
+                                break;
+                            default:
+                                break;
+                        }
+
                         NotificationManager.GetInstance().AddMessage(__instance.m_entity, titleLocID, StringTable.GetInstance().GetLocalizedText(EmployeeComponent.sm_levelLocalizationIDsLabSpecialist[__instance.m_state.m_level], new string[0]), string.Empty, string.Empty, 0, 0, 0, 0, null, null);
                     }
                     else if (__instance.m_entity.GetComponent<BehaviorJanitor>() != null)
                     {
-                        if (Tweakable.Vanilla.DlcHospitalServicesEnabled() && __instance.m_state.m_level > 1 && __instance.m_state.m_skillSet.m_specialization1 == null)
-                        {
-                            titleLocID = "NOTIF_CHARACTER_LEVELED_UP_FIRST_SPECIALIZATION";
+                        string titleLocID = "NOTIF_CHARACTER_LEVELED_UP";
 
+                        if (Tweakable.Vanilla.DlcHospitalServicesEnabled() && (__instance.m_state.m_level > Levels.Janitors.Janitor) && (__instance.m_state.m_skillSet.m_specialization1 == null))
+                        {
                             GameDBSkill[] array = new GameDBSkill[]
                             {
                                 Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.DLC_SKILL_JANITOR_SPEC_VENDOR),
                                 Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.DLC_SKILL_JANITOR_SPEC_MANAGER)
                             };
 
+                            switch (__instance.m_state.m_level)
+                            {
+                                case Levels.Janitors.SeniorJanitor:
+                                    titleLocID = "NOTIF_CHARACTER_LEVELED_UP_FIRST_SPECIALIZATION";
+                                    break;
+                                default:
+                                    break;
+                            }
+
                             __instance.m_state.m_skillSet.m_specialization1 = new Skill(array[UnityEngine.Random.Range(0, array.Length)], Skills.SkillLevelMinimum);
-                        }
-                        else
-                        {
-                            titleLocID = "NOTIF_CHARACTER_LEVELED_UP";
                         }
                             
                         NotificationManager.GetInstance().AddMessage(__instance.m_entity, titleLocID, StringTable.GetInstance().GetLocalizedText(EmployeeComponent.sm_levelLocalizationIDsJanitor[__instance.m_state.m_level], new string[0]), string.Empty, string.Empty, 0, 0, 0, 0, null, null);
@@ -289,19 +323,19 @@ namespace ModAdvancedGameChanges .Lopital
 
             if (__instance.m_entity.GetComponent<BehaviorDoctor>() != null)
             {
-                __result = Tweakable.Mod.DoctorLevelPoints(Math.Max(1, Math.Min(4, __instance.m_state.m_level)));
+                __result = Tweakable.Mod.DoctorLevelPoints(Math.Max(Levels.Doctors.Intern, Math.Min(Levels.Doctors.Fellow, __instance.m_state.m_level)));
             }
             else if (__instance.m_entity.GetComponent<BehaviorNurse>() != null)
             {
-                __result = Tweakable.Mod.NurseLevelPoints(Math.Max(1, Math.Min(2, __instance.m_state.m_level)));
+                __result = Tweakable.Mod.NurseLevelPoints(Math.Max(Levels.Nurses.NursingIntern, Math.Min(Levels.Nurses.RegisteredNurse, __instance.m_state.m_level)));
             }
             else if (__instance.m_entity.GetComponent<BehaviorLabSpecialist>() != null)
             {
-                __result = Tweakable.Mod.LabSpecialistLevelPoints(Math.Max(1, Math.Min(2, __instance.m_state.m_level)));
+                __result = Tweakable.Mod.LabSpecialistLevelPoints(Math.Max(Levels.LabSpecialists.JuniorScientist, Math.Min(Levels.LabSpecialists.SeniorScientist, __instance.m_state.m_level)));
             }
             else
             {
-                __result = Tweakable.Mod.JanitorLevelPoints(Math.Max(1, Math.Min(2, __instance.m_state.m_level)));
+                __result = Tweakable.Mod.JanitorLevelPoints(Math.Max(Levels.Janitors.Janitor, Math.Min(Levels.Janitors.SeniorJanitor, __instance.m_state.m_level)));
             }
 
             return false;

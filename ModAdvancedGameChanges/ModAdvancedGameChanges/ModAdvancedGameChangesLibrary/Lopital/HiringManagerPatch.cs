@@ -1,6 +1,7 @@
 ﻿using GLib;
 using HarmonyLib;
 using Lopital;
+using ModAdvancedGameChanges.Constants;
 
 namespace ModAdvancedGameChanges .Lopital
 {
@@ -23,7 +24,7 @@ namespace ModAdvancedGameChanges .Lopital
             {
                 for (int i = availableCharacters.m_availableNormalDoctors.Count; i < numberOfCharactersForHire; i++)
                 {
-                    Entity entity = LopitalEntityFactory.CreateCharacterDoctor(gameDBDepartment, null, Vector2i.ZERO_VECTOR, 1, 1, null, null);
+                    Entity entity = LopitalEntityFactory.CreateCharacterDoctor(gameDBDepartment, null, Vector2i.ZERO_VECTOR, Levels.Doctors.Intern, Levels.Doctors.Intern, null, null);
                     entity.GetComponent<EmployeeComponent>().m_state.m_hiredForDepartment = gameDBDepartment;
                     entity.GetComponent<EmployeeComponent>().m_state.m_hiredLevel = entity.GetComponent<EmployeeComponent>().m_state.m_level;
                     entity.GetComponent<EmployeeComponent>().m_state.m_hiredSalaryRandomization = UnityEngine.Random.Range(0f, 1f);
@@ -37,7 +38,7 @@ namespace ModAdvancedGameChanges .Lopital
             {
                 for (int i = availableCharacters.m_availableDoctorsWithInterns.Count; i < numberOfCharactersForHire; i++)
                 {
-                    Entity entity = LopitalEntityFactory.CreateCharacterDoctor(gameDBDepartment, null, Vector2i.ZERO_VECTOR, 1, 1, null, null);
+                    Entity entity = LopitalEntityFactory.CreateCharacterDoctor(gameDBDepartment, null, Vector2i.ZERO_VECTOR, Levels.Doctors.Intern, Levels.Doctors.Intern, null, null);
                     entity.GetComponent<EmployeeComponent>().m_state.m_hiredForDepartment = gameDBDepartment;
                     entity.GetComponent<EmployeeComponent>().m_state.m_hiredLevel = entity.GetComponent<EmployeeComponent>().m_state.m_level;
                     entity.GetComponent<EmployeeComponent>().m_state.m_hiredSalaryRandomization = UnityEngine.Random.Range(0f, 1f);
@@ -69,7 +70,7 @@ namespace ModAdvancedGameChanges .Lopital
             {
                 for (int i = availableCharacters.m_availableNormalNurses.Count; i < numberOfCharactersForHire; i++)
                 {
-                    Entity entity = LopitalEntityFactory.CreateCharacterNurse(null, Vector2i.ZERO_VECTOR, 1, 1, null, null);
+                    Entity entity = LopitalEntityFactory.CreateCharacterNurse(null, Vector2i.ZERO_VECTOR, Levels.Nurses.NursingIntern, Levels.Nurses.NursingIntern, null, null);
                     entity.GetComponent<EmployeeComponent>().m_state.m_hiredForDepartment = gameDBDepartment;
                     entity.GetComponent<EmployeeComponent>().m_state.m_hiredLevel = entity.GetComponent<EmployeeComponent>().m_state.m_level;
                     entity.GetComponent<EmployeeComponent>().m_state.m_hiredSalaryRandomization = UnityEngine.Random.Range(0f, 1f);
@@ -98,7 +99,7 @@ namespace ModAdvancedGameChanges .Lopital
             {
                 for (int i = availableCharacters.m_availableTechnologists.Count; i < numberOfCharactersForHire; i++)
                 {
-                    Entity entity10 = LopitalEntityFactory.CreateCharacterLabSpecialist(gameDBDepartment, null, Vector2i.ZERO_VECTOR, 1, 1, null, null);
+                    Entity entity10 = LopitalEntityFactory.CreateCharacterLabSpecialist(gameDBDepartment, null, Vector2i.ZERO_VECTOR, Levels.LabSpecialists.JuniorScientist, Levels.LabSpecialists.JuniorScientist, null, null);
                     entity10.GetComponent<EmployeeComponent>().m_state.m_hiredForDepartment = gameDBDepartment;
                     entity10.GetComponent<EmployeeComponent>().m_state.m_hiredLevel = entity10.GetComponent<EmployeeComponent>().m_state.m_level;
                     entity10.GetComponent<EmployeeComponent>().m_state.m_hiredSalaryRandomization = UnityEngine.Random.Range(0f, 1f);
@@ -153,7 +154,7 @@ namespace ModAdvancedGameChanges .Lopital
             {
                 for (int i = availableCharacters.m_availableNormalJanitors.Count; i < numberOfCharactersForHire; i++)
                 {
-                    Entity entity19 = LopitalEntityFactory.CreateCharacterJanitor(null, Vector2i.ZERO_VECTOR, 1, 1, null, null);
+                    Entity entity19 = LopitalEntityFactory.CreateCharacterJanitor(null, Vector2i.ZERO_VECTOR, Levels.Janitors.Janitor, Levels.Janitors.Janitor, null, null);
                     entity19.GetComponent<EmployeeComponent>().m_state.m_hiredForDepartment = gameDBDepartment;
                     entity19.GetComponent<EmployeeComponent>().m_state.m_hiredLevel = entity19.GetComponent<EmployeeComponent>().m_state.m_level;
                     entity19.GetComponent<EmployeeComponent>().m_state.m_hiredSalaryRandomization = UnityEngine.Random.Range(0f, 1f);
