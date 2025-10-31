@@ -31,8 +31,8 @@ namespace ModAdvancedGameChanges
                 MapEditorUIController.Instance.m_hiringPanel.GetComponent<HiringPanelController>().SortHiringSpecializationsButtons(true);
 
                 MapEditorUIController.Instance.m_hiringPanel.GetComponent<HiringPanelController>().SetCharacterType(
-                    LopitalTypes.CharacterAdvancedBiochemist, 
-                    2323, 
+                    LopitalTypes.CharacterAdvancedBiochemist,
+                    Icons.ICON_BIOCHEMISTRY_MANAGEMENT - 4, 
                     StringTable.GetInstance().GetLocalizedText(Skills.Vanilla.SKILL_LAB_SPECIALIST_SPEC_BIOCHEMISTRY, new string[0]));
 
                 __instance.SetEmployeeNumbers(shift, true);

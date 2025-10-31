@@ -34,6 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CharacterPanelSkillPanelControllerPatch.cs" />
+    <Compile Include="Constants\Icons.cs" />
     <Compile Include="Constants\Levels.cs" />
     <Compile Include="Constants\Needs.cs" />
     <Compile Include="Constants\RoomTypes.cs" />
