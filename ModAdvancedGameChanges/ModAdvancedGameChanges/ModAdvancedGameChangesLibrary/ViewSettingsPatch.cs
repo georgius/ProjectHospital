@@ -21,6 +21,7 @@ namespace ModAdvancedGameChanges
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_staffShiftsEqual = new Dictionary<ViewSettings, GenericFlag<bool>>();
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_trainingDepartment = new Dictionary<ViewSettings, GenericFlag<bool>>();
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_staffLunchNight = new Dictionary<ViewSettings, GenericFlag<bool>>();
+        public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_labEmployeeBiochemistry = new Dictionary<ViewSettings, GenericFlag<bool>>();
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(ViewSettings), nameof(ViewSettings.Load))]
@@ -44,6 +45,7 @@ namespace ModAdvancedGameChanges
                     ViewSettingsPatch.m_forceEmployeeLowestHireLevel.Add(__instance, new GenericFlag<bool>("AGC_OPTION_FORCE_EMPLOYEE_LOWEST_HIRE_LEVEL", true));
                     ViewSettingsPatch.m_staffShiftsEqual.Add(__instance, new GenericFlag<bool>("AGC_OPTION_STAFF_SHIFTS_EQUAL", true));
                     ViewSettingsPatch.m_staffLunchNight.Add(__instance, new GenericFlag<bool>("AGC_OPTION_STAFF_LUNCH_NIGHT", true));
+                    ViewSettingsPatch.m_labEmployeeBiochemistry.Add(__instance, new GenericFlag<bool>("AGC_OPTION_LAB_EMPLOYEE_BIOCHEMISTRY", true));
 
                     if (Tweakable.Vanilla.DlcHospitalServicesEnabled())
                     {
@@ -58,6 +60,7 @@ namespace ModAdvancedGameChanges
                     boolFlags.Add(ViewSettingsPatch.m_forceEmployeeLowestHireLevel[__instance]);
                     boolFlags.Add(ViewSettingsPatch.m_staffShiftsEqual[__instance]);
                     boolFlags.Add(ViewSettingsPatch.m_staffLunchNight[__instance]);
+                    boolFlags.Add(ViewSettingsPatch.m_labEmployeeBiochemistry[__instance]);
 
                     if (Tweakable.Vanilla.DlcHospitalServicesEnabled())
                     {
@@ -130,6 +133,39 @@ namespace ModAdvancedGameChanges
                             }
                         }
                         break;
+                    }
+                }
+            }
+
+            if (ViewSettingsPatch.m_labEmployeeBiochemistry[__instance].m_value)
+            {
+                var departmentType = typeof(GameDBDepartment);
+
+                var lab = Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.MedicalLaboratories);
+
+                var labQualificationProperty = departmentType.GetProperty(nameof(GameDBDepartment.LabQualification), BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                var labQualificationPropertySetMethod = labQualificationProperty.GetSetMethod(true);
+
+                labQualificationPropertySetMethod.Invoke(lab, new object[] { new DatabaseEntryRef<GameDBSkill>(Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.SKILL_LAB_SPECIALIST_SPEC_BIOCHEMISTRY)) });
+
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Medical laboratories department, changed lab qualification to {Skills.Vanilla.SKILL_LAB_SPECIALIST_SPEC_BIOCHEMISTRY}");
+
+                var scienceSkill = Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.SKILL_LAB_SPECIALIST_QUALIF_SCIENCE_EDUCATION);
+
+                var roomType = typeof(GameDBRoomType);
+
+                var requiredSkillProperty = roomType.GetProperty(nameof(GameDBRoomType.RequiredSkill), BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                var requiredSkillPropertySetMethod = requiredSkillProperty.GetSetMethod(true);
+
+                foreach (var requiredRoom in lab.RequiredRoomsClinic)
+                {
+                    var requiredRoomType = requiredRoom.RoomDatabaseEntryRef.Entry;
+
+                    if ((requiredRoomType.RequiredSkill != null) && (requiredRoomType.RequiredSkill.Entry == scienceSkill))
+                    {
+                        requiredSkillPropertySetMethod.Invoke(requiredRoomType, new object[] { new DatabaseEntryRef<GameDBSkill>(Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.SKILL_LAB_SPECIALIST_SPEC_BIOCHEMISTRY)) });
+
+                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Medical laboratories department, room type {requiredRoomType.DatabaseID}, changed required skill to {Skills.Vanilla.SKILL_LAB_SPECIALIST_SPEC_BIOCHEMISTRY}");
                     }
                 }
             }
