@@ -41,6 +41,7 @@
     <Compile Include="Debug.cs" />
     <Compile Include="Constants\Departments.cs" />
     <Compile Include="Constants\Localizations.cs" />
+    <Compile Include="Lopital\BehaviorDoctorPatch.cs" />
     <Compile Include="Lopital\BehaviorJanitorPatch.cs" />
     <Compile Include="DepartmentManagementLogisticsHybridControllerPatch.cs" />
     <Compile Include="Lopital\BehaviorLabSpecialistPatch.cs" />
