@@ -45,6 +45,7 @@
     <Compile Include="Lopital\BehaviorJanitorPatch.cs" />
     <Compile Include="DepartmentManagementLogisticsHybridControllerPatch.cs" />
     <Compile Include="Lopital\BehaviorLabSpecialistPatch.cs" />
+    <Compile Include="Lopital\BehaviorNursePatch.cs" />
     <Compile Include="Lopital\BehaviorPatch.cs" />
     <Compile Include="Lopital\EmployeeComponentPatch.cs" />
     <Compile Include="Lopital\HiringManagerPatch.cs" />
