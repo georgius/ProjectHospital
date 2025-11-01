@@ -873,18 +873,14 @@ namespace ModAdvancedGameChanges .Lopital
                 __instance.m_entity.GetComponent<MoodComponent>().AddSatisfactionModifier(Moods.Vanilla.Hangover);
             }
 
-            BehaviorJanitor behaviorJanitor = __instance.m_entity.GetComponent<BehaviorJanitor>();
-            if (behaviorJanitor != null)
-            {
-                // janitors don't have commuting state as doctors, nurses and lab specialists
-                // we just keep them at home longer time
+            // doctors, nurses, lab specialists have "Commute" state
+            // janitors have "Walking" state
 
-                float commuteTime = __instance.m_state.m_commuteTime;
+            float commuteTime = __instance.m_state.m_commuteTime;
 
-                __instance.SetSimpleCommuteDuration();
+            __instance.SetSimpleCommuteDuration();
 
-                __instance.m_state.m_commuteTime += commuteTime;
-            }
+            __instance.m_state.m_commuteTime += commuteTime;
 
             Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} Commute time: {__instance.m_state.m_commuteTime.ToString(CultureInfo.InvariantCulture)}");
 
@@ -995,14 +991,14 @@ namespace ModAdvancedGameChanges .Lopital
             if ((!overMidnight) && (dayTimeHours >= startCommuteTime) && (dayTimeHours <= endCommuteTime)
                 && (dayTimeHours > (shift.StartTime + __instance.m_state.m_commuteTime)))
             {
-                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} Commute time: {__instance.m_state.m_commuteTime.ToString(CultureInfo.InvariantCulture)} Shift start time: {shift.StartTime.ToString(CultureInfo.InvariantCulture)} Day time: {dayTimeHours.ToString(CultureInfo.InvariantCulture)}");
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} Commute time: {__instance.m_state.m_commuteTime.ToString(CultureInfo.InvariantCulture)} Shift start time: {shift.StartTime.ToString(CultureInfo.InvariantCulture)}");
 
                 __result = true;
             }
             else if (overMidnight && ((dayTimeHours >= startCommuteTime) || (dayTimeHours <= endCommuteTime))
                 && (dayTimeHours > (shift.StartTime + __instance.m_state.m_commuteTime)))
             {
-                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} Commute time: {__instance.m_state.m_commuteTime.ToString(CultureInfo.InvariantCulture)} Shift start time: {shift.StartTime.ToString(CultureInfo.InvariantCulture)} Day time: {dayTimeHours.ToString(CultureInfo.InvariantCulture)}, over midnight");
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} Commute time: {__instance.m_state.m_commuteTime.ToString(CultureInfo.InvariantCulture)} Shift start time: {shift.StartTime.ToString(CultureInfo.InvariantCulture)}, over midnight");
 
                 __result = true;
             }
