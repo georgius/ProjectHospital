@@ -41,7 +41,6 @@
     <Compile Include="Debug.cs" />
     <Compile Include="Constants\Departments.cs" />
     <Compile Include="Constants\Localizations.cs" />
-    <Compile Include="HiringPanelControllerPatch.cs" />
     <Compile Include="Lopital\BehaviorJanitorPatch.cs" />
     <Compile Include="DepartmentManagementLogisticsHybridControllerPatch.cs" />
     <Compile Include="Lopital\BehaviorLabSpecialistPatch.cs" />
@@ -50,7 +49,6 @@
     <Compile Include="Lopital\EmployeeComponentPatch.cs" />
     <Compile Include="Lopital\HiringManagerPatch.cs" />
     <Compile Include="Lopital\HospitalPatch.cs" />
-    <Compile Include="LogisticsWorkspacePanelControllerPatch.cs" />
     <Compile Include="Lopital\MapScriptInterfacePatch.cs" />
     <Compile Include="Lopital\SkillPatch.cs" />
     <Compile Include="Lopital\SkillSetPatch.cs" />

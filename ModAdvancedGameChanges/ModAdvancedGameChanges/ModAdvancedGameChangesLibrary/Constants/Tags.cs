@@ -18,6 +18,14 @@
 
             public const string JanitorAdminWorkplace = "janitor_admin_workplace";
             public const string JanitorWorkspace = "janitor_workspace";
+
+            public const string HospitalizationWorkspace = "hospitalization_workspace";
+            public const string SonographyUnit = "sonography_unit";
+            public const string CardioUnit = "cardio_unit";
+            public const string NeurologyUnit = "neurology_unit";
+            public const string Pharmacy = "pharmacy";
+            public const string GiftShop = "gift_shop";
+            public const string JanitorAdmin = "janitor_admin";
         }
     }
 }
