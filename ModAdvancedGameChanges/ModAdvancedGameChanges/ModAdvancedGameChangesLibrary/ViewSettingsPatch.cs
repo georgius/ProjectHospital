@@ -137,35 +137,38 @@ namespace ModAdvancedGameChanges
                 }
             }
 
-            if (ViewSettingsPatch.m_labEmployeeBiochemistry[__instance].m_value)
+            if (ViewSettingsPatch.m_enabled)
             {
-                var departmentType = typeof(GameDBDepartment);
-
-                var lab = Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.MedicalLaboratories);
-
-                var labQualificationProperty = departmentType.GetProperty(nameof(GameDBDepartment.LabQualification), BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                var labQualificationPropertySetMethod = labQualificationProperty.GetSetMethod(true);
-
-                labQualificationPropertySetMethod.Invoke(lab, new object[] { new DatabaseEntryRef<GameDBSkill>(Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.SKILL_LAB_SPECIALIST_SPEC_BIOCHEMISTRY)) });
-
-                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Medical laboratories department, changed lab qualification to {Skills.Vanilla.SKILL_LAB_SPECIALIST_SPEC_BIOCHEMISTRY}");
-
-                var scienceSkill = Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.SKILL_LAB_SPECIALIST_QUALIF_SCIENCE_EDUCATION);
-
-                var roomType = typeof(GameDBRoomType);
-
-                var requiredSkillProperty = roomType.GetProperty(nameof(GameDBRoomType.RequiredSkill), BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                var requiredSkillPropertySetMethod = requiredSkillProperty.GetSetMethod(true);
-
-                foreach (var requiredRoom in lab.RequiredRoomsClinic)
+                if (ViewSettingsPatch.m_labEmployeeBiochemistry[__instance].m_value)
                 {
-                    var requiredRoomType = requiredRoom.RoomDatabaseEntryRef.Entry;
+                    var departmentType = typeof(GameDBDepartment);
 
-                    if ((requiredRoomType.RequiredSkill != null) && (requiredRoomType.RequiredSkill.Entry == scienceSkill))
+                    var lab = Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.MedicalLaboratories);
+
+                    var labQualificationProperty = departmentType.GetProperty(nameof(GameDBDepartment.LabQualification), BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                    var labQualificationPropertySetMethod = labQualificationProperty.GetSetMethod(true);
+
+                    labQualificationPropertySetMethod.Invoke(lab, new object[] { new DatabaseEntryRef<GameDBSkill>(Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.SKILL_LAB_SPECIALIST_SPEC_BIOCHEMISTRY)) });
+
+                    Debug.Log(System.Reflection.MethodBase.GetCurrentMethod(), $"Medical laboratories department, changed lab qualification to {Skills.Vanilla.SKILL_LAB_SPECIALIST_SPEC_BIOCHEMISTRY}");
+
+                    var scienceSkill = Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.SKILL_LAB_SPECIALIST_QUALIF_SCIENCE_EDUCATION);
+
+                    var roomType = typeof(GameDBRoomType);
+
+                    var requiredSkillProperty = roomType.GetProperty(nameof(GameDBRoomType.RequiredSkill), BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                    var requiredSkillPropertySetMethod = requiredSkillProperty.GetSetMethod(true);
+
+                    foreach (var requiredRoom in lab.RequiredRoomsClinic)
                     {
-                        requiredSkillPropertySetMethod.Invoke(requiredRoomType, new object[] { new DatabaseEntryRef<GameDBSkill>(Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.SKILL_LAB_SPECIALIST_SPEC_BIOCHEMISTRY)) });
+                        var requiredRoomType = requiredRoom.RoomDatabaseEntryRef.Entry;
 
-                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Medical laboratories department, room type {requiredRoomType.DatabaseID}, changed required skill to {Skills.Vanilla.SKILL_LAB_SPECIALIST_SPEC_BIOCHEMISTRY}");
+                        if ((requiredRoomType.RequiredSkill != null) && (requiredRoomType.RequiredSkill.Entry == scienceSkill))
+                        {
+                            requiredSkillPropertySetMethod.Invoke(requiredRoomType, new object[] { new DatabaseEntryRef<GameDBSkill>(Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.SKILL_LAB_SPECIALIST_SPEC_BIOCHEMISTRY)) });
+
+                            Debug.Log(System.Reflection.MethodBase.GetCurrentMethod(), $"Medical laboratories department, room type {requiredRoomType.DatabaseID}, changed required skill to {Skills.Vanilla.SKILL_LAB_SPECIALIST_SPEC_BIOCHEMISTRY}");
+                        }
                     }
                 }
             }
