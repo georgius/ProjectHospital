@@ -34,7 +34,7 @@ namespace ModAdvancedGameChanges.Lopital
             if (position == Vector3i.ZERO_VECTOR)
             {
                 // not found common room, stay at home
-                BehaviorNursePatch.GoHomeMod(__instance);
+                BehaviorNursePatch.GoHome(__instance);
                 return false;
             }
 
@@ -528,7 +528,7 @@ namespace ModAdvancedGameChanges.Lopital
             return false;
         }
 
-        private static bool GoHomeMod(BehaviorNurse instance)
+        private static bool GoHome(BehaviorNurse instance)
         {
             EmployeeComponent employeeComponent = instance.GetComponent<EmployeeComponent>();
 
@@ -612,7 +612,7 @@ namespace ModAdvancedGameChanges.Lopital
             EmployeeComponent employeeComponent = instance.GetComponent<EmployeeComponent>();
 
             // check if nurse needs to go home
-            if (BehaviorNursePatch.GoHomeMod(instance))
+            if (BehaviorNursePatch.GoHome(instance))
             {
                 Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {instance.m_entity.Name}, going home");
                 return true;
