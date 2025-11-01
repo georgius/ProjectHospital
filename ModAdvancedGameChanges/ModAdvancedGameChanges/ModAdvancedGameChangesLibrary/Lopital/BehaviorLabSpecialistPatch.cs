@@ -179,7 +179,7 @@ namespace ModAdvancedGameChanges.Lopital
                 return true;
             }
 
-            __result = __instance.m_state.m_labSpecialistState == LabSpecialistState.AtHome || __instance.m_state.m_labSpecialistState == LabSpecialistState.FiredAtHome;
+            __result = (__instance.m_state.m_labSpecialistState == LabSpecialistState.AtHome) || (__instance.m_state.m_labSpecialistState == LabSpecialistState.FiredAtHome);
             return false;
         }
 
@@ -502,7 +502,7 @@ namespace ModAdvancedGameChanges.Lopital
             }
             else
             {
-                // regular janitor lab specialist
+                // regular lab specialist
                 if (employeeComponent.UpdateTraining(__instance.GetComponent<ProcedureComponent>()))
                 {
                     // training was finished
