@@ -531,6 +531,40 @@ namespace ModAdvancedGameChanges .Lopital
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(EmployeeComponent), nameof(EmployeeComponent.GetRoleCount))]
+        public static bool GetRoleCount(EmployeeComponent __instance, ref int __result)
+        {
+            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            if (__instance.m_state.m_department.GetEntity().GetDepartmentType() == Database.Instance.GetEntry<GameDBDepartment>(Departments.Mod.TrainingDepartment))
+            {
+                // employee is in training department
+
+                GameDBRoomType homeRoomType = __instance.GetHomeRoomType();
+
+                if ((homeRoomType != null)
+                    && (
+                        homeRoomType.HasTag(Tags.Mod.DoctorTrainingWorkspace)
+                        || homeRoomType.HasTag(Tags.Mod.NurseTrainingWorkspace)
+                        || homeRoomType.HasTag(Tags.Mod.LabSpecialistTrainingWorkspace)
+                        || homeRoomType.HasTag(Tags.Mod.JanitorTrainingWorkspace)
+                        ))
+                {
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} in training workplace");
+
+                    __result = 0;
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(EmployeeComponent), nameof(EmployeeComponent.CheckAnyRoleAssigned))]
         public static bool CheckAnyRoleAssignedPrefix(EmployeeComponent __instance)
         {
