@@ -908,28 +908,56 @@ namespace ModAdvancedGameChanges .Lopital
             {
                 Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, returned cart");
 
-                behaviorJanitor.m_state.m_cart.GetEntity().User = null;
-                behaviorJanitor.m_state.m_cart.GetEntity().SetAttachedToCharacter(false);
-                behaviorJanitor.m_state.m_cart.GetEntity().StopSounds();
-                behaviorJanitor.m_state.m_cartAvailable = false;
+                if (behaviorJanitor.m_state.m_cart != null)
+                {
+                    behaviorJanitor.m_state.m_cart.GetEntity().User = null;
+                    behaviorJanitor.m_state.m_cart.GetEntity().SetAttachedToCharacter(false);
+                    behaviorJanitor.m_state.m_cart.GetEntity().StopSounds();
+                    behaviorJanitor.m_state.m_cartAvailable = false;
 
-                if (MapScriptInterface.Instance.MoveObject(behaviorJanitor.m_state.m_cart.GetEntity(), behaviorJanitor.m_state.m_cartHomeTile))
-                {
-                    behaviorJanitor.m_state.m_cart.GetEntity().Orientation = behaviorJanitor.m_state.m_cartHomeOrientation;
+                    if (MapScriptInterface.Instance.MoveObject(behaviorJanitor.m_state.m_cart.GetEntity(), behaviorJanitor.m_state.m_cartHomeTile))
+                    {
+                        behaviorJanitor.m_state.m_cart.GetEntity().Orientation = behaviorJanitor.m_state.m_cartHomeOrientation;
+                    }
+                    else
+                    {
+                        Hospital.Instance.m_floors[behaviorJanitor.m_state.m_cart.GetEntity().GetFloorIndex()].m_movingObjects.Remove(behaviorJanitor.m_state.m_cart.GetEntity());
+                        behaviorJanitor.m_state.m_cart.GetEntity().m_state.m_department.GetEntity().RemoveObject(behaviorJanitor.m_state.m_cart.GetEntity());
+                        behaviorJanitor.m_state.m_cart.GetEntity().Destroy();
+                    }
+                    behaviorJanitor.m_state.m_cart.GetEntity().StopSounds();
                 }
-                else
-                {
-                    Hospital.Instance.m_floors[behaviorJanitor.m_state.m_cart.GetEntity().GetFloorIndex()].m_movingObjects.Remove(behaviorJanitor.m_state.m_cart.GetEntity());
-                    behaviorJanitor.m_state.m_cart.GetEntity().m_state.m_department.GetEntity().RemoveObject(behaviorJanitor.m_state.m_cart.GetEntity());
-                    behaviorJanitor.m_state.m_cart.GetEntity().Destroy();
-                }
-                behaviorJanitor.m_state.m_cart.GetEntity().StopSounds();
+
                 behaviorJanitor.m_state.m_cart = null;
-
                 behaviorJanitor.m_state.m_cartAvailable = false;
             }
 
-            return true;
+            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, reset workplace");
+            if (MapScriptInterface.Instance.GetTileReservedBy(__instance.m_state.m_workPlacePosition, __instance.m_state.m_workPlaceFloorIndex) == __instance.m_entity)
+            {
+                MapScriptInterface.Instance.FreeTile(__instance.m_state.m_workPlacePosition, __instance.m_state.m_workPlaceFloorIndex);
+            }
+            if ((__instance.m_state.m_workDesk.GetEntity() != null) && (__instance.m_state.m_workDesk.GetEntity().m_state.m_workspaceOwnerDay == __instance.m_entity))
+            {
+                __instance.m_state.m_workDesk.GetEntity().m_state.m_workspaceOwnerDay = null;
+            }
+            if ((__instance.m_state.m_workDesk.GetEntity() != null) && (__instance.m_state.m_workDesk.GetEntity().m_state.m_workspaceOwnerNight == __instance.m_entity))
+            {
+                __instance.m_state.m_workDesk.GetEntity().m_state.m_workspaceOwnerNight = null;
+            }
+            
+            __instance.ResetWorkChair();
+            __instance.m_state.m_workDesk = null;
+            __instance.m_state.m_workPlacePosition = Vector2i.ZERO_VECTOR;
+            __instance.m_state.m_workPlaceFloorIndex = 0;
+
+            if (resetRoom)
+            {
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, reset home room");
+                __instance.m_state.m_homeRoom = null;
+            }
+
+            return false;
         }
 
         [HarmonyPrefix]
@@ -990,36 +1018,41 @@ namespace ModAdvancedGameChanges .Lopital
         [HarmonyPatch(typeof(EmployeeComponent), nameof(EmployeeComponent.SwitchDepartment))]
         public static bool SwitchDepartmentPrefix(Department department, EmployeeComponent __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
             }
 
-            GameDBRoomType homeRoomType = __instance.GetHomeRoomType();
+            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, switching department from {__instance.m_state.m_department.GetEntity().GetDepartmentType().DatabaseID} to {department.GetDepartmentType().DatabaseID}");
 
-            if ((homeRoomType != null)
-                && (
-                    homeRoomType.HasTag(Tags.Mod.DoctorTrainingWorkspace)
-                    || homeRoomType.HasTag(Tags.Mod.NurseTrainingWorkspace)
-                    || homeRoomType.HasTag(Tags.Mod.LabSpecialistTrainingWorkspace)
-                    || homeRoomType.HasTag(Tags.Mod.JanitorTrainingWorkspace)
-                    ))
+            if (ViewSettingsPatch.m_enabledTrainingDepartment)
             {
-                // employee in training department, employee is in training workspace
+                GameDBRoomType homeRoomType = __instance.GetHomeRoomType();
 
-                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, switch department, reset training");
+                if ((homeRoomType != null)
+                    && (
+                        homeRoomType.HasTag(Tags.Mod.DoctorTrainingWorkspace)
+                        || homeRoomType.HasTag(Tags.Mod.NurseTrainingWorkspace)
+                        || homeRoomType.HasTag(Tags.Mod.LabSpecialistTrainingWorkspace)
+                        || homeRoomType.HasTag(Tags.Mod.JanitorTrainingWorkspace)
+                        ))
+                {
+                    // employee in training department, employee is in training workspace
 
-                __instance.m_state.m_trainingData.m_trainingRemainingHours = 0;
-                __instance.m_state.m_trainingData.m_trainingSkillsToTrain.Clear();
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, reset training");
+
+                    __instance.m_state.m_trainingData.m_trainingRemainingHours = 0;
+                    __instance.m_state.m_trainingData.m_trainingSkillsToTrain.Clear();
+                }
             }
 
+            __instance.ResetWorkspace(true);
             __instance.m_state.m_department.GetEntity().RemoveCharacter(__instance.m_entity);
             __instance.m_state.m_department = department;
             __instance.m_state.m_department.GetEntity().AddCharacter(__instance.m_entity);
             Hospital.Instance.ValidateDepartments();
             __instance.m_state.m_department.GetEntity().SetChiefDoctor(0, false);
-            __instance.ResetWorkspace(false);
             __instance.SwitchDressCodeColors(department, true);
 
             // go to common room

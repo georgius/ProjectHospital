@@ -143,7 +143,7 @@ namespace ModAdvancedGameChanges.Lopital
                     __instance.SwitchState(LabSpecialistState.GoingToWorkplace);
                 }
             }
-            else if (employeeComponent.m_state.m_workPlacePosition != walkComponent.GetCurrentTile())
+            else if ((employeeComponent.m_state.m_workPlacePosition != Vector2i.ZERO_VECTOR) && (employeeComponent.m_state.m_workPlacePosition != walkComponent.GetCurrentTile()))
             {
                 walkComponent.SetDestination(employeeComponent.m_state.m_workPlacePosition, employeeComponent.m_state.m_workPlaceFloorIndex, MovementType.WALKING);
 
@@ -160,9 +160,9 @@ namespace ModAdvancedGameChanges.Lopital
                 {
                     __instance.GetComponent<WalkComponent>().SetDestination(new Vector2i(position.m_x, position.m_y), position.m_z, MovementType.WALKING);
 
-                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, going to common room");
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, no workplace, going to common room, filling free time");
 
-                    __instance.SwitchState(LabSpecialistState.GoingToWorkplace);
+                    __instance.SwitchState(LabSpecialistState.FillingFreeTime);
                 }
             }
 
@@ -640,13 +640,18 @@ namespace ModAdvancedGameChanges.Lopital
             {
                 EmployeeComponent employeeComponent = instance.GetComponent<EmployeeComponent>();
 
-                GameDBRoomType homeRoomType = employeeComponent?.GetHomeRoomType();
+                GameDBRoomType homeRoomType = employeeComponent.GetHomeRoomType();
+                WalkComponent walkComponent = instance.GetComponent<WalkComponent>();
                 Entity oppositeShiftEmployee = employeeComponent.GetOppositeShiftEmployee();
 
                 bool canGoToWorkplace = (oppositeShiftEmployee == null) ||
                     ((oppositeShiftEmployee != null) && ((oppositeShiftEmployee.GetComponent<BehaviorLabSpecialist>().m_state.m_labSpecialistState == LabSpecialistState.AtHome)
                         || (oppositeShiftEmployee.GetComponent<BehaviorLabSpecialist>().m_state.m_labSpecialistState == LabSpecialistState.GoingHome)
                         || (oppositeShiftEmployee.GetComponent<BehaviorLabSpecialist>().m_state.m_labSpecialistState == LabSpecialistState.FiredAtHome)));
+
+                canGoToWorkplace &= ((employeeComponent.GetWorkChair() != null)
+                    || (BehaviorLabSpecialistPatch.GetWorkDeskMod(instance) != null)
+                    || ((employeeComponent.m_state.m_workPlacePosition != Vector2i.ZERO_VECTOR) && (employeeComponent.m_state.m_workPlacePosition != walkComponent.GetCurrentTile())));
 
                 Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {instance.m_entity.Name}, opposite shift employee: {oppositeShiftEmployee?.Name ?? "NULL"}, state: {oppositeShiftEmployee?.GetComponent<BehaviorLabSpecialist>().m_state.m_labSpecialistState.ToString() ?? "NULL"}");
 

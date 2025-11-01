@@ -1137,13 +1137,18 @@ namespace ModAdvancedGameChanges .Lopital
             if (!BehaviorJanitorPatch.HandleGoHomeFulfillNeeds(instance))
             {
                 EmployeeComponent employeeComponent = instance.GetComponent<EmployeeComponent>();
-                GameDBRoomType homeRoomType = employeeComponent?.GetHomeRoomType();
+                WalkComponent walkComponent = instance.GetComponent<WalkComponent>();
+                GameDBRoomType homeRoomType = employeeComponent.GetHomeRoomType();
                 Entity oppositeShiftEmployee = employeeComponent.GetOppositeShiftEmployee();
 
                 bool canGoToWorkplace = (oppositeShiftEmployee == null) ||
                     ((oppositeShiftEmployee != null) && ((oppositeShiftEmployee.GetComponent<BehaviorJanitor>().m_state.m_janitorState == BehaviorJanitorState.AtHome)
                         || (oppositeShiftEmployee.GetComponent<BehaviorJanitor>().m_state.m_janitorState == BehaviorJanitorState.GoingHome)
                         || (oppositeShiftEmployee.GetComponent<BehaviorJanitor>().m_state.m_janitorState == BehaviorJanitorState.FiredAtHome)));
+
+                canGoToWorkplace &= ((employeeComponent.GetWorkChair() != null)
+                    || (BehaviorJanitorPatch.GetWorkDeskMod(instance) != null)
+                    || ((employeeComponent.m_state.m_workPlacePosition != Vector2i.ZERO_VECTOR) && (employeeComponent.m_state.m_workPlacePosition != walkComponent.GetCurrentTile())));
 
                 Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {instance.m_entity.Name}, opposite shift employee: {oppositeShiftEmployee?.Name ?? "NULL"}, state: {oppositeShiftEmployee?.GetComponent<BehaviorJanitor>().m_state.m_janitorState.ToString() ?? "NULL"}");
 
