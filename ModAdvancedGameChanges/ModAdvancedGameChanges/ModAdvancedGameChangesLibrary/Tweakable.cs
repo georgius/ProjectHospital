@@ -26,17 +26,19 @@ namespace ModAdvancedGameChanges
             Tweakable.CheckCleaningTimeDirt();
             Tweakable.CheckCleaningTimeBlood();
             Tweakable.CheckJanitorManagerCleaningBonusPercent();
+            Tweakable.CheckPatientLeaveTimeHours();
+            Tweakable.CheckPatientLeaveWarningHours();
         }
 
         public static void CheckNonLinearSkillLevelingConfiguration()
         {
-            var skillLevels = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_SKILL_LEVELS);
-            if (skillLevels.Value < 1)
+            var value = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_SKILL_LEVELS);
+            if (value.Value < 1)
             {
                 throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_SKILL_LEVELS}' must be greater than zero.");
             }
 
-            for (int i = 0; i < skillLevels.Value; i++)
+            for (int i = 0; i < value.Value; i++)
             {
                 var name = String.Format(CultureInfo.InvariantCulture, Tweakables.Mod.AGC_TWEAKABLE_SKILL_POINTS_FORMAT, i);
                 var skillPoints = Tweakable.EnsureExists<GameDBTweakableInt>(name);
@@ -56,12 +58,12 @@ namespace ModAdvancedGameChanges
 
         public static void CheckClinicDoctorsMaxLevel()
         {
-            var allowedLevel = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_ALLOWED_CLINIC_DOCTORS_LEVEL);
-            if (allowedLevel.Value < 1)
+            var value = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_ALLOWED_CLINIC_DOCTORS_LEVEL);
+            if (value.Value < 1)
             {
                 throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_ALLOWED_CLINIC_DOCTORS_LEVEL}' must be greater than zero.");
             }
-            if (allowedLevel.Value > 5)
+            if (value.Value > 5)
             {
                 throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_ALLOWED_CLINIC_DOCTORS_LEVEL}' must be lower than six.");
             }
@@ -82,8 +84,8 @@ namespace ModAdvancedGameChanges
 
         public static void CheckTrainingHourPoints()
         {
-            var points = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_TRAINING_HOUR_POINTS);
-            if (points.Value < 1)
+            var value = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_TRAINING_HOUR_POINTS);
+            if (value.Value < 1)
             {
                 throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_TRAINING_HOUR_POINTS}' must be greater than zero.");
             }
@@ -91,8 +93,8 @@ namespace ModAdvancedGameChanges
 
         public static void CheckMainSkillPoints()
         {
-            var points = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_MAIN_SKILL_POINTS);
-            if (points.Value < 1)
+            var value = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_MAIN_SKILL_POINTS);
+            if (value.Value < 1)
             {
                 throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_MAIN_SKILL_POINTS}' must be greater than zero.");
             }
@@ -100,8 +102,8 @@ namespace ModAdvancedGameChanges
 
         public static void CheckJanitorDexteritySkillPoints()
         {
-            var points = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_JANITOR_DEXTERITY_SKILL_POINTS);
-            if (points.Value < 1)
+            var value = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_JANITOR_DEXTERITY_SKILL_POINTS);
+            if (value.Value < 1)
             {
                 throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_JANITOR_DEXTERITY_SKILL_POINTS}' must be greater than zero.");
             }
@@ -109,8 +111,8 @@ namespace ModAdvancedGameChanges
 
         public static void CheckCleaningTimeDirt()
         {
-            var points = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_CLEANING_TIME_DIRT);
-            if (points.Value < 1)
+            var value = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_CLEANING_TIME_DIRT);
+            if (value.Value < 1)
             {
                 throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_CLEANING_TIME_DIRT}' must be greater than zero.");
             }
@@ -118,8 +120,8 @@ namespace ModAdvancedGameChanges
 
         public static void CheckCleaningTimeBlood()
         {
-            var points = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_CLEANING_TIME_BLOOD);
-            if (points.Value < 1)
+            var value = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_CLEANING_TIME_BLOOD);
+            if (value.Value < 1)
             {
                 throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_CLEANING_TIME_BLOOD}' must be greater than zero.");
             }
@@ -127,14 +129,33 @@ namespace ModAdvancedGameChanges
 
         public static void CheckJanitorManagerCleaningBonusPercent()
         {
-            var points = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_JANITOR_MANAGER_CLEANING_BONUS_PERCENT);
-            if (points.Value < 1)
+            var value = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_JANITOR_MANAGER_CLEANING_BONUS_PERCENT);
+            if (value.Value < 1)
             {
                 throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_JANITOR_MANAGER_CLEANING_BONUS_PERCENT}' must be greater than zero.");
             }
-            if (points.Value > 100)
+            if (value.Value > 100)
             {
                 throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_JANITOR_MANAGER_CLEANING_BONUS_PERCENT}' must be less than 100.");
+            }
+        }
+
+
+        public static void CheckPatientLeaveTimeHours()
+        {
+            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Vanilla.TWEAKABLE_PATIENT_LEAVE_TIME_HOURS);
+            if (value.Value < 1)
+            {
+                throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_PATIENT_LEAVE_TIME_HOURS}' must be greater than zero.");
+            }
+        }
+
+        public static void CheckPatientLeaveWarningHours()
+        {
+            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Vanilla.TWEAKABLE_PATIENT_LEAVE_WARNING_HOURS);
+            if (value.Value < 1)
+            {
+                throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_PATIENT_LEAVE_WARNING_HOURS}' must be greater than zero.");
             }
         }
 
@@ -211,7 +232,7 @@ namespace ModAdvancedGameChanges
         {
             public static float LevelingRatePercent()
             {
-                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Vanilla.LevelingRatePercent).Value;
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Vanilla.LEVELING_RATE_PERCENT).Value;
             }
 
             public static bool DlcHospitalServicesEnabled()
@@ -234,6 +255,16 @@ namespace ModAdvancedGameChanges
             public static int JanitorManagerCleaningBonusPercent()
             {
                 return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_JANITOR_MANAGER_CLEANING_BONUS_PERCENT).Value;
+            }
+
+            public static float PatientLeaveTimeHours()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_PATIENT_LEAVE_TIME_HOURS).Value;
+            }
+
+            public static float PatientLeaveWarningHours()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_PATIENT_LEAVE_WARNING_HOURS).Value;
             }
         }
     }

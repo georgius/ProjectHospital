@@ -4,8 +4,6 @@
     {
         public static class Mod
         {
-            public const string HospitalServicesEnabled = "DLC_ADMIN_PATHOLOGY_ENABLED";
-
             public const string AGC_TWEAKABLE_SKILL_LEVELS = "AGC_TWEAKABLE_SKILL_LEVELS";
 
             public const string AGC_TWEAKABLE_SKILL_POINTS_FORMAT = "AGC_TWEAKABLE_SKILL_POINTS_{0}";
@@ -32,13 +30,16 @@
 
         public static class Vanilla
         {
-            public const string LevelingRatePercent = "LEVELING_RATE_PERCENT";
+            public const string LEVELING_RATE_PERCENT = "LEVELING_RATE_PERCENT";
 
             public const string DLC_ADMIN_PATHOLOGY_ENABLED = "DLC_ADMIN_PATHOLOGY_ENABLED";
 
             public const string TWEAKABLE_MAIN_SKILL_POINTS = "TWEAKABLE_MAIN_SKILL_POINTS";
             public const string TWEAKABLE_JANITOR_DEXTERITY_SKILL_POINTS = "TWEAKABLE_JANITOR_DEXTERITY_SKILL_POINTS";
             public const string TWEAKABLE_JANITOR_MANAGER_CLEANING_BONUS_PERCENT = "TWEAKABLE_JANITOR_MANAGER_CLEANING_BONUS_PERCENT";
+
+            public const string TWEAKABLE_PATIENT_LEAVE_TIME_HOURS = "TWEAKABLE_PATIENT_LEAVE_TIME_HOURS";
+            public const string TWEAKABLE_PATIENT_LEAVE_WARNING_HOURS = "TWEAKABLE_PATIENT_LEAVE_WARNING_HOURS";
         }
     }
 }
