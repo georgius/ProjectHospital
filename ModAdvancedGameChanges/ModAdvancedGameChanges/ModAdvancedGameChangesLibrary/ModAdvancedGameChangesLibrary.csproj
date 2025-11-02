@@ -39,6 +39,7 @@
     <Compile Include="Constants\Icons.cs" />
     <Compile Include="Constants\Levels.cs" />
     <Compile Include="Constants\Needs.cs" />
+    <Compile Include="Constants\Notifications.cs" />
     <Compile Include="Constants\RoomTypes.cs" />
     <Compile Include="Debug.cs" />
     <Compile Include="Constants\Departments.cs" />
@@ -49,6 +50,7 @@
     <Compile Include="Lopital\BehaviorLabSpecialistPatch.cs" />
     <Compile Include="Lopital\BehaviorNursePatch.cs" />
     <Compile Include="Lopital\BehaviorPatch.cs" />
+    <Compile Include="Lopital\BehaviorPatientPatch.cs" />
     <Compile Include="Lopital\EmployeeComponentPatch.cs" />
     <Compile Include="Lopital\HiringManagerPatch.cs" />
     <Compile Include="Lopital\HospitalPatch.cs" />
