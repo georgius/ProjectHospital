@@ -132,12 +132,12 @@ namespace ModAdvancedGameChanges .Lopital
                     __instance.SwitchState(BehaviorJanitorState.GoingToWorkplace);
                 }
             }
-            else if (BehaviorJanitorPatch.GetWorkDeskMod(__instance) != null)
+            else if (BehaviorJanitorPatch.GetWorkDeskInternal(__instance) != null)
             {
-                Vector2f defaultUsePosition = BehaviorJanitorPatch.GetWorkDeskMod(__instance).GetDefaultUsePosition();
+                Vector2f defaultUsePosition = BehaviorJanitorPatch.GetWorkDeskInternal(__instance).GetDefaultUsePosition();
                 if (defaultUsePosition.subtract(walkComponent.m_state.m_currentPosition).length() > 0.25f)
                 {
-                    walkComponent.SetDestination(defaultUsePosition, BehaviorJanitorPatch.GetWorkDeskMod(__instance).GetFloorIndex(), MovementType.WALKING);
+                    walkComponent.SetDestination(defaultUsePosition, BehaviorJanitorPatch.GetWorkDeskInternal(__instance).GetFloorIndex(), MovementType.WALKING);
 
                     Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, going to work desk");
 
@@ -250,10 +250,10 @@ namespace ModAdvancedGameChanges .Lopital
 
             if ((homeRoomType != null) && homeRoomType.HasAnyTag(new string[] { Tags.Vanilla.JanitorAdminWorkplace, Tags.Mod.JanitorTrainingWorkspace }))
             {
-                BehaviorJanitorPatch.FreeObjectMod(__instance);
-                BehaviorJanitorPatch.FreeTileMod(__instance);
-                BehaviorJanitorPatch.FreeRoomMod(__instance);
-                BehaviorJanitorPatch.GoReturnCartMod(__instance);
+                BehaviorJanitorPatch.FreeObjectInternal(__instance);
+                BehaviorJanitorPatch.FreeTileInternal(__instance);
+                BehaviorJanitorPatch.FreeRoomInternal(__instance);
+                BehaviorJanitorPatch.GoReturnCartInternal(__instance);
             }
             else
             {
@@ -263,7 +263,7 @@ namespace ModAdvancedGameChanges .Lopital
 
                     __instance.GetComponent<AnimModelComponent>().PlayAnimation("stand_mop", true);
 
-                    BehaviorJanitorPatch.UpdateCleaningTimeMod(__instance);
+                    BehaviorJanitorPatch.UpdateCleaningTimeInternal(__instance);
 
                     Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, cleaning time {__instance.m_state.m_cleaningTime.ToString(CultureInfo.InvariantCulture)}");
 
@@ -280,22 +280,22 @@ namespace ModAdvancedGameChanges .Lopital
 
                     __instance.m_state.m_cleaningTime = -1f;
 
-                    if (!BehaviorJanitorPatch.TryToSelectTileInCurrentRoomMod(__instance))
+                    if (!BehaviorJanitorPatch.TryToSelectTileInCurrentRoomInternal(__instance))
                     {
                         Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, dirty tile in current room not found");
 
-                        if (!BehaviorJanitorPatch.TryToSelectTileInARoomMod(__instance))
+                        if (!BehaviorJanitorPatch.TryToSelectTileInARoomInternal(__instance))
                         {
                             Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, dirty tile in room not found");
 
-                            if (!BehaviorJanitorPatch.TryToSelectIndoorTileMod(__instance, BehaviorJanitorPatch.DirtinessThreshold))
+                            if (!BehaviorJanitorPatch.TryToSelectIndoorTileInternal(__instance, BehaviorJanitorPatch.DirtinessThreshold))
                             {
                                 Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, dirty tile not found");
 
-                                BehaviorJanitorPatch.FreeObjectMod(__instance);
-                                BehaviorJanitorPatch.FreeTileMod(__instance);
-                                BehaviorJanitorPatch.FreeRoomMod(__instance);
-                                BehaviorJanitorPatch.GoReturnCartMod(__instance);
+                                BehaviorJanitorPatch.FreeObjectInternal(__instance);
+                                BehaviorJanitorPatch.FreeTileInternal(__instance);
+                                BehaviorJanitorPatch.FreeRoomInternal(__instance);
+                                BehaviorJanitorPatch.GoReturnCartInternal(__instance);
                             }
                         }
                     }
@@ -649,14 +649,14 @@ namespace ModAdvancedGameChanges .Lopital
 
                 if (BehaviorJanitorPatch.IsNeededHandleGoHome(__instance) || BehaviorJanitorPatch.IsNeededHandleFullfillNeeds(__instance) || BehaviorJanitorPatch.IsNeededHandleTraining(__instance))
                 {
-                    BehaviorJanitorPatch.FreeObjectMod(__instance);
-                    BehaviorJanitorPatch.FreeTileMod(__instance);
-                    BehaviorJanitorPatch.FreeRoomMod(__instance);
-                    BehaviorJanitorPatch.GoReturnCartMod(__instance);
+                    BehaviorJanitorPatch.FreeObjectInternal(__instance);
+                    BehaviorJanitorPatch.FreeTileInternal(__instance);
+                    BehaviorJanitorPatch.FreeRoomInternal(__instance);
+                    BehaviorJanitorPatch.GoReturnCartInternal(__instance);
                 }
                 else
                 {
-                    BehaviorJanitorPatch.SelectNextActionMod(__instance);
+                    BehaviorJanitorPatch.SelectNextActionInternal(__instance);
                 }
 
                 __instance.m_state.m_workingTime += deltaTime;
@@ -719,7 +719,7 @@ namespace ModAdvancedGameChanges .Lopital
                     {
                         if (__instance.m_state.m_cart == null)
                         {
-                            BehaviorJanitorPatch.FindCartMod(__instance);
+                            BehaviorJanitorPatch.FindCartInternal(__instance);
                         }
 
                         if (__instance.m_state.m_cart != null)
@@ -1120,7 +1120,7 @@ namespace ModAdvancedGameChanges .Lopital
             }
 
             // check if janitor needs to fulfill his/her needs
-            if (BehaviorJanitorPatch.CheckNeedsMod(instance))
+            if (BehaviorJanitorPatch.CheckNeedsInternal(instance))
             {
                 instance.m_entity.GetComponent<SpeechComponent>().HideBubble();
                 instance.SwitchState(BehaviorJanitorState.FulfillingNeeds);
@@ -1147,7 +1147,7 @@ namespace ModAdvancedGameChanges .Lopital
                         || (oppositeShiftEmployee.GetComponent<BehaviorJanitor>().m_state.m_janitorState == BehaviorJanitorState.FiredAtHome)));
 
                 canGoToWorkplace &= ((employeeComponent.GetWorkChair() != null)
-                    || (BehaviorJanitorPatch.GetWorkDeskMod(instance) != null)
+                    || (BehaviorJanitorPatch.GetWorkDeskInternal(instance) != null)
                     || ((employeeComponent.m_state.m_workPlacePosition != Vector2i.ZERO_VECTOR) && (employeeComponent.m_state.m_workPlacePosition != walkComponent.GetCurrentTile())));
 
                 Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {instance.m_entity.Name}, opposite shift employee: {oppositeShiftEmployee?.Name ?? "NULL"}, state: {oppositeShiftEmployee?.GetComponent<BehaviorJanitor>().m_state.m_janitorState.ToString() ?? "NULL"}");
@@ -1233,7 +1233,7 @@ namespace ModAdvancedGameChanges .Lopital
             return true;
         }
 
-        private static bool CheckNeedsMod(BehaviorJanitor instance)
+        private static bool CheckNeedsInternal(BehaviorJanitor instance)
         {
             Type type = typeof(BehaviorJanitor);
             MethodInfo methodInfo = type.GetMethod("CheckNeeds", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -1241,7 +1241,7 @@ namespace ModAdvancedGameChanges .Lopital
             return (bool)methodInfo.Invoke(instance, null);
         }
 
-        private static void FindCartMod(BehaviorJanitor instance)
+        private static void FindCartInternal(BehaviorJanitor instance)
         {
             Type type = typeof(BehaviorJanitor);
             MethodInfo methodInfo = type.GetMethod("FindCart", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -1249,7 +1249,7 @@ namespace ModAdvancedGameChanges .Lopital
             methodInfo.Invoke(instance, null);
         }
 
-        private static void FreeObjectMod(BehaviorJanitor instance)
+        private static void FreeObjectInternal(BehaviorJanitor instance)
         {
             Type type = typeof(BehaviorJanitor);
             MethodInfo methodInfo = type.GetMethod("FreeObject", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -1257,7 +1257,7 @@ namespace ModAdvancedGameChanges .Lopital
             methodInfo.Invoke(instance, null);
         }
 
-        private static void FreeRoomMod(BehaviorJanitor instance)
+        private static void FreeRoomInternal(BehaviorJanitor instance)
         {
             Type type = typeof(BehaviorJanitor);
             MethodInfo methodInfo = type.GetMethod("FreeRoom", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -1265,7 +1265,7 @@ namespace ModAdvancedGameChanges .Lopital
             methodInfo.Invoke(instance, null);
         }
 
-        private static void FreeTileMod(BehaviorJanitor instance)
+        private static void FreeTileInternal(BehaviorJanitor instance)
         {
             Type type = typeof(BehaviorJanitor);
             MethodInfo methodInfo = type.GetMethod("FreeTile", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -1273,7 +1273,7 @@ namespace ModAdvancedGameChanges .Lopital
             methodInfo.Invoke(instance, null);
         }
 
-        private static void GoReturnCartMod(BehaviorJanitor instance)
+        private static void GoReturnCartInternal(BehaviorJanitor instance)
         {
             Type type = typeof(BehaviorJanitor);
             MethodInfo methodInfo = type.GetMethod("GoReturnCart", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -1281,7 +1281,7 @@ namespace ModAdvancedGameChanges .Lopital
             methodInfo.Invoke(instance, null);
         }
 
-        private static TileObject GetWorkDeskMod(BehaviorJanitor instance)
+        private static TileObject GetWorkDeskInternal(BehaviorJanitor instance)
         {
             Type type = typeof(BehaviorJanitor);
             MethodInfo methodInfo = type.GetMethod("GetWorkDesk", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -1325,7 +1325,7 @@ namespace ModAdvancedGameChanges .Lopital
             return false;
         }
 
-        private static bool TryToSelectIndoorTileMod(BehaviorJanitor instance, int threshold)
+        private static bool TryToSelectIndoorTileInternal(BehaviorJanitor instance, int threshold)
         {
             Type type = typeof(BehaviorJanitor);
             MethodInfo methodInfo = type.GetMethod("TryToSelectIndoorTile", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -1333,7 +1333,7 @@ namespace ModAdvancedGameChanges .Lopital
             return (bool)methodInfo.Invoke(instance, new object[] { threshold });
         }
 
-        private static bool TryToSelectTileInARoomMod(BehaviorJanitor instance)
+        private static bool TryToSelectTileInARoomInternal(BehaviorJanitor instance)
         {
             Type type = typeof(BehaviorJanitor);
             MethodInfo methodInfo = type.GetMethod("TryToSelectTileInARoom", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -1341,7 +1341,7 @@ namespace ModAdvancedGameChanges .Lopital
             return (bool)methodInfo.Invoke(instance, null);
         }
 
-        private static bool TryToSelectTileInCurrentRoomMod(BehaviorJanitor instance)
+        private static bool TryToSelectTileInCurrentRoomInternal(BehaviorJanitor instance)
         {
             Type type = typeof(BehaviorJanitor);
             MethodInfo methodInfo = type.GetMethod("TryToSelectTileInCurrentRoom", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -1349,7 +1349,7 @@ namespace ModAdvancedGameChanges .Lopital
             return (bool)methodInfo.Invoke(instance, null);
         }
 
-        private static void SelectNextActionMod(BehaviorJanitor instance)
+        private static void SelectNextActionInternal(BehaviorJanitor instance)
         {
             Type type = typeof(BehaviorJanitor);
             MethodInfo methodInfo = type.GetMethod("SelectNextAction", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -1357,7 +1357,7 @@ namespace ModAdvancedGameChanges .Lopital
             methodInfo.Invoke(instance, null);
         }
 
-        private static void UpdateCleaningTimeMod(BehaviorJanitor instance)
+        private static void UpdateCleaningTimeInternal(BehaviorJanitor instance)
         {
             Type type = typeof(BehaviorJanitor);
             MethodInfo methodInfo = type.GetMethod("UpdateCleaningTime", BindingFlags.NonPublic | BindingFlags.Instance);

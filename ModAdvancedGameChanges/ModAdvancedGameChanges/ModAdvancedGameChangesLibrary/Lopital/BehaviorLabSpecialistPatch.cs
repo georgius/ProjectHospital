@@ -131,12 +131,12 @@ namespace ModAdvancedGameChanges.Lopital
                     __instance.SwitchState(LabSpecialistState.GoingToWorkplace);
                 }
             }
-            else if (BehaviorLabSpecialistPatch.GetWorkDeskMod(__instance) != null)
+            else if (BehaviorLabSpecialistPatch.GetWorkDeskInternal(__instance) != null)
             {
-                Vector2f defaultUsePosition = BehaviorLabSpecialistPatch.GetWorkDeskMod(__instance).GetDefaultUsePosition();
+                Vector2f defaultUsePosition = BehaviorLabSpecialistPatch.GetWorkDeskInternal(__instance).GetDefaultUsePosition();
                 if (defaultUsePosition.subtract(walkComponent.m_state.m_currentPosition).length() > 0.25f)
                 {
-                    walkComponent.SetDestination(defaultUsePosition, BehaviorLabSpecialistPatch.GetWorkDeskMod(__instance).GetFloorIndex(), MovementType.WALKING);
+                    walkComponent.SetDestination(defaultUsePosition, BehaviorLabSpecialistPatch.GetWorkDeskInternal(__instance).GetFloorIndex(), MovementType.WALKING);
 
                     Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, going to work desk");
 
@@ -622,7 +622,7 @@ namespace ModAdvancedGameChanges.Lopital
             }
 
             // check if lab specialist needs to fulfill his/her needs
-            if (BehaviorLabSpecialistPatch.CheckNeedsMod(instance))
+            if (BehaviorLabSpecialistPatch.CheckNeedsInternal(instance))
             {
                 instance.m_entity.GetComponent<SpeechComponent>().HideBubble();
                 instance.SwitchState(LabSpecialistState.FulfillingNeeds);
@@ -650,7 +650,7 @@ namespace ModAdvancedGameChanges.Lopital
                         || (oppositeShiftEmployee.GetComponent<BehaviorLabSpecialist>().m_state.m_labSpecialistState == LabSpecialistState.FiredAtHome)));
 
                 canGoToWorkplace &= ((employeeComponent.GetWorkChair() != null)
-                    || (BehaviorLabSpecialistPatch.GetWorkDeskMod(instance) != null)
+                    || (BehaviorLabSpecialistPatch.GetWorkDeskInternal(instance) != null)
                     || ((employeeComponent.m_state.m_workPlacePosition != Vector2i.ZERO_VECTOR) && (employeeComponent.m_state.m_workPlacePosition != walkComponent.GetCurrentTile())));
 
                 Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {instance.m_entity.Name}, opposite shift employee: {oppositeShiftEmployee?.Name ?? "NULL"}, state: {oppositeShiftEmployee?.GetComponent<BehaviorLabSpecialist>().m_state.m_labSpecialistState.ToString() ?? "NULL"}");
@@ -723,7 +723,7 @@ namespace ModAdvancedGameChanges.Lopital
             return true;
         }
 
-        private static bool CheckNeedsMod(BehaviorLabSpecialist instance)
+        private static bool CheckNeedsInternal(BehaviorLabSpecialist instance)
         {
             Type type = typeof(BehaviorLabSpecialist);
             MethodInfo methodInfo = type.GetMethod("CheckNeeds", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -731,7 +731,7 @@ namespace ModAdvancedGameChanges.Lopital
             return (bool)methodInfo.Invoke(instance, new object[] { AccessRights.STAFF });
         }
 
-        private static TileObject GetWorkDeskMod(BehaviorLabSpecialist instance)
+        private static TileObject GetWorkDeskInternal(BehaviorLabSpecialist instance)
         {
             Type type = typeof(BehaviorLabSpecialist);
             MethodInfo methodInfo = type.GetMethod("GetWorkDesk", BindingFlags.NonPublic | BindingFlags.Instance);

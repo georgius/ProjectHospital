@@ -34,7 +34,7 @@ namespace ModAdvancedGameChanges.Lopital
                 }
 
                 Department emergencyDepartment = MapScriptInterface.Instance.GetDepartmentOfType(Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.Emergency));
-                entity.GetComponent<BehaviorPatient>().m_state.m_fVisitTime = __instance.GetVisitTimeMod((float)index, (float)patientCounter, smoothDistribution, emergencyDepartment);
+                entity.GetComponent<BehaviorPatient>().m_state.m_fVisitTime = __instance.GetVisitTimeInternal((float)index, (float)patientCounter, smoothDistribution, emergencyDepartment);
 
                 entity.GetComponent<BehaviorPatient>().m_state.m_patientState = PatientState.Spawned;
                 entity.GetComponent<CharacterPersonalInfoComponent>().m_personalInfo.m_insuranceCompany = __instance.m_gameDBInsuranceCompany.Entry;
@@ -47,7 +47,7 @@ namespace ModAdvancedGameChanges.Lopital
             return true;
         }
 
-        private static float GetVisitTimeMod(this InsuranceCompany instance, float patientIndex, float totalPatients, bool smoothDistribution, Department department)
+        private static float GetVisitTimeInternal(this InsuranceCompany instance, float patientIndex, float totalPatients, bool smoothDistribution, Department department)
         {
             Type type = typeof(InsuranceCompany);
             MethodInfo methodInfo = type.GetMethod("GetVisitTime", BindingFlags.NonPublic | BindingFlags.Instance);

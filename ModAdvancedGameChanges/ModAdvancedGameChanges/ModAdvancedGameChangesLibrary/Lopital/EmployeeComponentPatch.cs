@@ -70,14 +70,14 @@ namespace ModAdvancedGameChanges .Lopital
                             {
                                 __instance.m_state.m_level++;
                                 levelUp = true;
-                                string titleLocID = "NOTIF_CHARACTER_LEVELED_UP";
+                                string titleLocID = Notifications.Vanilla.NOTIF_CHARACTER_LEVELED_UP;
                                 if (__instance.m_state.m_level == Levels.Doctors.Resident)
                                 {
-                                    titleLocID = "NOTIF_CHARACTER_LEVELED_UP_FIRST_SPECIALIZATION";
+                                    titleLocID = Notifications.Vanilla.NOTIF_CHARACTER_LEVELED_UP_FIRST_SPECIALIZATION;
                                 }
                                 else if ((__instance.m_state.m_level == Levels.Doctors.Fellow) && (__instance.m_entity.GetComponent<BehaviorDoctor>() != null))
                                 {
-                                    titleLocID = "NOTIF_CHARACTER_LEVELED_UP_SECOND_SPECIALIZATION";
+                                    titleLocID = Notifications.Vanilla.NOTIF_CHARACTER_LEVELED_UP_SECOND_SPECIALIZATION;
                                 }
 
                                 if ((__instance.m_state.m_level > Levels.Doctors.Intern) && (__instance.m_state.m_skillSet.m_specialization1 == null))
@@ -149,7 +149,7 @@ namespace ModAdvancedGameChanges .Lopital
                                 __instance.m_state.m_skillSet.m_specialization1 = new Skill(skills[UnityEngine.Random.Range(0, skills.Length)], Skills.SkillLevelMinimum);
 
                                 NotificationManager.GetInstance().AddMessage(
-                                    __instance.m_entity, "NOTIF_CHARACTER_LEVELED_UP_FIRST_SPECIALIZATION",
+                                    __instance.m_entity, Notifications.Vanilla.NOTIF_CHARACTER_LEVELED_UP_FIRST_SPECIALIZATION,
                                     StringTable.GetInstance().GetLocalizedText(EmployeeComponent.sm_levelLocalizationIDsLabSpecialist[__instance.m_state.m_level], new string[0]),
                                     string.Empty, string.Empty, 0, 0, 0, 0, null, null);
 
@@ -165,7 +165,7 @@ namespace ModAdvancedGameChanges .Lopital
                                 __instance.m_state.m_level++;
                                 levelUp = true;
 
-                                NotificationManager.GetInstance().AddMessage(__instance.m_entity, "NOTIF_CHARACTER_LEVELED_UP", StringTable.GetInstance().GetLocalizedText(EmployeeComponent.sm_levelLocalizationIDsDoctor[__instance.m_state.m_level], new string[0]), string.Empty, string.Empty, 0, 0, 0, 0, null, null);
+                                NotificationManager.GetInstance().AddMessage(__instance.m_entity, Notifications.Vanilla.NOTIF_CHARACTER_LEVELED_UP, StringTable.GetInstance().GetLocalizedText(EmployeeComponent.sm_levelLocalizationIDsDoctor[__instance.m_state.m_level], new string[0]), string.Empty, string.Empty, 0, 0, 0, 0, null, null);
                             }
                         }
 
@@ -227,7 +227,7 @@ namespace ModAdvancedGameChanges .Lopital
                                 __instance.m_state.m_skillSet.m_specialization1 = new Skill(skills[UnityEngine.Random.Range(0, skills.Length)], Skills.SkillLevelMinimum);
 
                                 NotificationManager.GetInstance().AddMessage(
-                                    __instance.m_entity, "NOTIF_CHARACTER_LEVELED_UP_FIRST_SPECIALIZATION", 
+                                    __instance.m_entity, Notifications.Vanilla.NOTIF_CHARACTER_LEVELED_UP_FIRST_SPECIALIZATION, 
                                     StringTable.GetInstance().GetLocalizedText(EmployeeComponent.sm_levelLocalizationIDsLabSpecialist[__instance.m_state.m_level], new string[0]), 
                                     string.Empty, string.Empty, 0, 0, 0, 0, null, null);
 
@@ -265,7 +265,7 @@ namespace ModAdvancedGameChanges .Lopital
                                 __instance.m_state.m_level++;
                                 levelUp = true;
 
-                                NotificationManager.GetInstance().AddMessage(__instance.m_entity, "NOTIF_CHARACTER_LEVELED_UP", StringTable.GetInstance().GetLocalizedText(EmployeeComponent.sm_levelLocalizationIDsDoctor[__instance.m_state.m_level], new string[0]), string.Empty, string.Empty, 0, 0, 0, 0, null, null);
+                                NotificationManager.GetInstance().AddMessage(__instance.m_entity, Notifications.Vanilla.NOTIF_CHARACTER_LEVELED_UP, StringTable.GetInstance().GetLocalizedText(EmployeeComponent.sm_levelLocalizationIDsDoctor[__instance.m_state.m_level], new string[0]), string.Empty, string.Empty, 0, 0, 0, 0, null, null);
                             }
                         }
 
@@ -325,7 +325,7 @@ namespace ModAdvancedGameChanges .Lopital
                                 __instance.m_state.m_skillSet.m_specialization1 = new Skill(skills[UnityEngine.Random.Range(0, skills.Length)], Skills.SkillLevelMinimum);
 
                                 NotificationManager.GetInstance().AddMessage(
-                                    __instance.m_entity, "NOTIF_CHARACTER_LEVELED_UP_FIRST_SPECIALIZATION",
+                                    __instance.m_entity, Notifications.Vanilla.NOTIF_CHARACTER_LEVELED_UP_FIRST_SPECIALIZATION,
                                     StringTable.GetInstance().GetLocalizedText(EmployeeComponent.sm_levelLocalizationIDsLabSpecialist[__instance.m_state.m_level], new string[0]),
                                     string.Empty, string.Empty, 0, 0, 0, 0, null, null);
 
@@ -341,7 +341,7 @@ namespace ModAdvancedGameChanges .Lopital
                                 __instance.m_state.m_level++;
                                 levelUp = true;
 
-                                NotificationManager.GetInstance().AddMessage(__instance.m_entity, "NOTIF_CHARACTER_LEVELED_UP", StringTable.GetInstance().GetLocalizedText(EmployeeComponent.sm_levelLocalizationIDsDoctor[__instance.m_state.m_level], new string[0]), string.Empty, string.Empty, 0, 0, 0, 0, null, null);
+                                NotificationManager.GetInstance().AddMessage(__instance.m_entity, Notifications.Vanilla.NOTIF_CHARACTER_LEVELED_UP, StringTable.GetInstance().GetLocalizedText(EmployeeComponent.sm_levelLocalizationIDsDoctor[__instance.m_state.m_level], new string[0]), string.Empty, string.Empty, 0, 0, 0, 0, null, null);
                             }
                         }
 
@@ -428,14 +428,14 @@ namespace ModAdvancedGameChanges .Lopital
                             __instance.m_state.m_skillSet.AddSecondSpecialization(__instance.m_state.m_department.GetEntity().GetDepartmentType(), 1f);
                         }
 
-                        string titleLocID = "NOTIF_CHARACTER_LEVELED_UP";
+                        string titleLocID = Notifications.Vanilla.NOTIF_CHARACTER_LEVELED_UP;
                         switch (__instance.m_state.m_level)
                         {
                             case Levels.Doctors.Resident:
-                                titleLocID = "NOTIF_CHARACTER_LEVELED_UP_FIRST_SPECIALIZATION";
+                                titleLocID = Notifications.Vanilla.NOTIF_CHARACTER_LEVELED_UP_FIRST_SPECIALIZATION;
                                 break;
                             case Levels.Doctors.Fellow:
-                                titleLocID = "NOTIF_CHARACTER_LEVELED_UP_SECOND_SPECIALIZATION";
+                                titleLocID = Notifications.Vanilla.NOTIF_CHARACTER_LEVELED_UP_SECOND_SPECIALIZATION;
                                 break;
                             default:
                                 break;
@@ -456,11 +456,11 @@ namespace ModAdvancedGameChanges .Lopital
                             __instance.m_state.m_skillSet.m_specialization1 = new Skill(array[UnityEngine.Random.Range(0, array.Length)], Skills.SkillLevelMinimum);
                         }
 
-                        string titleLocID = "NOTIF_CHARACTER_LEVELED_UP";
+                        string titleLocID = Notifications.Vanilla.NOTIF_CHARACTER_LEVELED_UP;
                         switch (__instance.m_state.m_level)
                         {
                             case Levels.Nurses.RegisteredNurse:
-                                titleLocID = "NOTIF_CHARACTER_LEVELED_UP_FIRST_SPECIALIZATION";
+                                titleLocID = Notifications.Vanilla.NOTIF_CHARACTER_LEVELED_UP_FIRST_SPECIALIZATION;
                                 break;
                             default:
                                 break;
@@ -482,11 +482,11 @@ namespace ModAdvancedGameChanges .Lopital
                             __instance.m_state.m_skillSet.m_specialization1 = new Skill(array2[UnityEngine.Random.Range(0, array2.Length)], Skills.SkillLevelMinimum);
                         }
 
-                        string titleLocID = "NOTIF_CHARACTER_LEVELED_UP";
+                        string titleLocID = Notifications.Vanilla.NOTIF_CHARACTER_LEVELED_UP;
                         switch (__instance.m_state.m_level)
                         {
                             case Levels.LabSpecialists.SeniorScientist:
-                                titleLocID = "NOTIF_CHARACTER_LEVELED_UP_FIRST_SPECIALIZATION";
+                                titleLocID = Notifications.Vanilla.NOTIF_CHARACTER_LEVELED_UP_FIRST_SPECIALIZATION;
                                 break;
                             default:
                                 break;
@@ -496,7 +496,7 @@ namespace ModAdvancedGameChanges .Lopital
                     }
                     else if (__instance.m_entity.GetComponent<BehaviorJanitor>() != null)
                     {
-                        string titleLocID = "NOTIF_CHARACTER_LEVELED_UP";
+                        string titleLocID = Notifications.Vanilla.NOTIF_CHARACTER_LEVELED_UP;
 
                         if (Tweakable.Vanilla.DlcHospitalServicesEnabled() && (__instance.m_state.m_level > Levels.Janitors.Janitor) && (__instance.m_state.m_skillSet.m_specialization1 == null))
                         {
@@ -509,7 +509,7 @@ namespace ModAdvancedGameChanges .Lopital
                             switch (__instance.m_state.m_level)
                             {
                                 case Levels.Janitors.SeniorJanitor:
-                                    titleLocID = "NOTIF_CHARACTER_LEVELED_UP_FIRST_SPECIALIZATION";
+                                    titleLocID = Notifications.Vanilla.NOTIF_CHARACTER_LEVELED_UP_FIRST_SPECIALIZATION;
                                     break;
                                 default:
                                     break;
@@ -522,7 +522,7 @@ namespace ModAdvancedGameChanges .Lopital
                     }
                     else
                     {
-                        NotificationManager.GetInstance().AddMessage(__instance.m_entity, "NOTIF_CHARACTER_LEVELED_UP", "TODO", string.Empty, string.Empty, 0, 0, 0, 0, null, null);
+                        NotificationManager.GetInstance().AddMessage(__instance.m_entity, Notifications.Vanilla.NOTIF_CHARACTER_LEVELED_UP, "TODO", string.Empty, string.Empty, 0, 0, 0, 0, null, null);
                     }
                 }
             }
@@ -890,8 +890,8 @@ namespace ModAdvancedGameChanges .Lopital
                     Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} not found free space for training");
 
                     NotificationManager.GetInstance().AddMessage(
-                        __instance.m_entity, 
-                        "NOTIF_TRAINING_FULL", 
+                        __instance.m_entity,
+                        Notifications.Vanilla.NOTIF_TRAINING_FULL, 
                         StringTable.GetInstance().GetLocalizedText(__instance.m_state.m_trainingData.m_trainingSkillsToTrain[0].m_id.ToString(), new string[0]), 
                         string.Empty, string.Empty, 0, 0, 0, 0, null, null);
 
@@ -933,7 +933,7 @@ namespace ModAdvancedGameChanges .Lopital
 
                 if (perkComponent.m_perkSet.HasHiddenPerk(Perks.Vanilla.Alcoholism))
                 {
-                    NotificationManager.GetInstance().AddMessage(__instance.m_entity, "NOTIF_EMPLOYEE_GOT_DRUNK", string.Empty, string.Empty, string.Empty, 0, 0, 0, 0, null, null);
+                    NotificationManager.GetInstance().AddMessage(__instance.m_entity, Notifications.Vanilla.NOTIF_EMPLOYEE_GOT_DRUNK, string.Empty, string.Empty, string.Empty, 0, 0, 0, 0, null, null);
                     perkComponent.m_perkSet.RevealPerk(Perks.Vanilla.Alcoholism);
                 }
 
@@ -1331,8 +1331,8 @@ namespace ModAdvancedGameChanges .Lopital
                     Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name} training finished, skill {skill.m_gameDBSkill.Entry.DatabaseID} on maximum level, removing from training");
 
                     NotificationManager.GetInstance().AddMessage(
-                        __instance.m_entity, 
-                        "NOTIF_TRAINING_FINISHED", 
+                        __instance.m_entity,
+                        Notifications.Vanilla.NOTIF_TRAINING_FINISHED, 
                         StringTable.GetInstance().GetLocalizedText(skill.m_gameDBSkill.m_id.ToString(), new string[0]), 
                         string.Empty, 
                         string.Empty, 
