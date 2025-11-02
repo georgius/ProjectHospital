@@ -6,6 +6,7 @@
         {
             public const string Hangover = "SAT_MOD_HUNGOVER";
             public const string Rested = "SAT_MOD_RESTED";
+            public const string Untreated = "SAT_MOD_UNTREATED";
         }
     }
 }
