@@ -1130,8 +1130,6 @@ namespace ModAdvancedGameChanges .Lopital
 
                     Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, going to common room");
                 }
-
-                doctor.SwitchState(DoctorState.FillingFreeTime);
             }
             if (__instance.m_entity.GetComponent<BehaviorNurse>() != null)
             {
@@ -1144,8 +1142,6 @@ namespace ModAdvancedGameChanges .Lopital
 
                     Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, going to common room");
                 }
-
-                nurse.SwitchState(NurseState.FillingFreeTime);
             }
             if (__instance.m_entity.GetComponent<BehaviorLabSpecialist>() != null)
             {
@@ -1158,8 +1154,6 @@ namespace ModAdvancedGameChanges .Lopital
 
                     Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, going to common room");
                 }
-
-                labSpecialist.SwitchState(LabSpecialistState.FillingFreeTime);
             }
             if (__instance.m_entity.GetComponent<BehaviorJanitor>() != null)
             {
@@ -1172,8 +1166,6 @@ namespace ModAdvancedGameChanges .Lopital
 
                     Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"Employee: {__instance.m_entity.Name}, going to common room");
                 }
-
-                janitor.SwitchState(BehaviorJanitorState.FillingFreeTime);
             }
 
             return false;

@@ -33,6 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CharacterPanelControllerPatch.cs" />
     <Compile Include="CharacterPanelRolesPanelControllerPatch.cs" />
     <Compile Include="CharacterPanelSkillPanelControllerPatch.cs" />
     <Compile Include="Constants\Icons.cs" />
