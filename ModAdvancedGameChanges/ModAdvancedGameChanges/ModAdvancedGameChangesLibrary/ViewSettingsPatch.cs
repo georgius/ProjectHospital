@@ -22,6 +22,7 @@ namespace ModAdvancedGameChanges
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_trainingDepartment = new Dictionary<ViewSettings, GenericFlag<bool>>();
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_staffLunchNight = new Dictionary<ViewSettings, GenericFlag<bool>>();
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_labEmployeeBiochemistry = new Dictionary<ViewSettings, GenericFlag<bool>>();
+        public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_patientsThroughEmergency = new Dictionary<ViewSettings, GenericFlag<bool>>();
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(ViewSettings), nameof(ViewSettings.Load))]
@@ -46,6 +47,7 @@ namespace ModAdvancedGameChanges
                     ViewSettingsPatch.m_staffShiftsEqual.Add(__instance, new GenericFlag<bool>("AGC_OPTION_STAFF_SHIFTS_EQUAL", true));
                     ViewSettingsPatch.m_staffLunchNight.Add(__instance, new GenericFlag<bool>("AGC_OPTION_STAFF_LUNCH_NIGHT", true));
                     ViewSettingsPatch.m_labEmployeeBiochemistry.Add(__instance, new GenericFlag<bool>("AGC_OPTION_LAB_EMPLOYEE_BIOCHEMISTRY", true));
+                    ViewSettingsPatch.m_patientsThroughEmergency.Add(__instance, new GenericFlag<bool>("AGC_OPTION_PATIENTS_ONLY_EMERGENCY", true));
 
                     if (Tweakable.Vanilla.DlcHospitalServicesEnabled())
                     {
@@ -61,6 +63,7 @@ namespace ModAdvancedGameChanges
                     boolFlags.Add(ViewSettingsPatch.m_staffShiftsEqual[__instance]);
                     boolFlags.Add(ViewSettingsPatch.m_staffLunchNight[__instance]);
                     boolFlags.Add(ViewSettingsPatch.m_labEmployeeBiochemistry[__instance]);
+                    boolFlags.Add(ViewSettingsPatch.m_patientsThroughEmergency[__instance]);
 
                     if (Tweakable.Vanilla.DlcHospitalServicesEnabled())
                     {

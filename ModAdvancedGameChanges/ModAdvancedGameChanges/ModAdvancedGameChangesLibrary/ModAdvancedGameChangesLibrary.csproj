@@ -52,6 +52,7 @@
     <Compile Include="Lopital\EmployeeComponentPatch.cs" />
     <Compile Include="Lopital\HiringManagerPatch.cs" />
     <Compile Include="Lopital\HospitalPatch.cs" />
+    <Compile Include="Lopital\InsuranceCompanyPatch.cs" />
     <Compile Include="Lopital\MapScriptInterfacePatch.cs" />
     <Compile Include="Lopital\SkillPatch.cs" />
     <Compile Include="Lopital\SkillSetPatch.cs" />

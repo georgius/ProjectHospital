@@ -38,6 +38,11 @@
 			</GameDBLocalizedString>
 			
 			<GameDBLocalizedString>
+				<LocID>AGC_OPTION_PATIENTS_ONLY_EMERGENCY</LocID>
+				<Text>[AGC] Patients go through emergency</Text>
+			</GameDBLocalizedString>
+			
+			<GameDBLocalizedString>
 				<LocID>AGC_OPTION_STAFF_LUNCH_NIGHT</LocID>
 				<Text>[AGC] Night shift staff lunch</Text>
 			</GameDBLocalizedString>
@@ -124,7 +129,7 @@
 			<!-- fixed description of janitor walking state -->
 			<GameDBLocalizedString>
 				<LocID>JANITOR_STATE_Walking</LocID>                       
-				<Text>Walking</Text>  
+				<Text>Commuting</Text>  
 			</GameDBLocalizedString>
            
 		</LocalizedStrings>
