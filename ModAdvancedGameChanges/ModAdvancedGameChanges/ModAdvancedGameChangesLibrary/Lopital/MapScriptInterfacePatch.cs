@@ -1,6 +1,7 @@
 ﻿using GLib;
 using HarmonyLib;
 using Lopital;
+using System.Collections.Generic;
 
 namespace ModAdvancedGameChanges.Lopital
 {
@@ -111,6 +112,86 @@ namespace ModAdvancedGameChanges.Lopital
             }
 
             return false;
+        }
+
+        public static Vector3i GetRandomFreePlaceInRoomTypeInDepartment(Behavior instance, string roomType, Department department, AccessRights accessRights)
+        {
+            GameDBRoomType gameRoomType = Database.Instance.GetEntry<GameDBRoomType>(roomType);
+            if (gameRoomType == null)
+            {
+                return Vector3i.ZERO_VECTOR;
+            }
+
+            WalkComponent walkComponent = instance.GetComponent<WalkComponent>();
+            Vector3i instancePosition = new Vector3i(walkComponent.GetCurrentTile().m_x, walkComponent.GetCurrentTile().m_y, walkComponent.GetFloorIndex());
+
+            List<Room> departmentRooms = MapScriptInterface.Instance.FindValidRoomsWithType(gameRoomType, department);
+            int minDistance = int.MaxValue;
+            Vector3i selectedPosition = Vector3i.ZERO_VECTOR;
+
+            foreach (var departmentRoom in departmentRooms)
+            {
+                Vector2i position = MapScriptInterface.Instance.GetRandomFreePosition(departmentRoom, accessRights);
+                if (position != Vector2i.ZERO_VECTOR)
+                {
+                    Vector3i roomPosition = new Vector3i(position.m_x, position.m_y, departmentRoom.GetFloorIndex());
+                    int distance = (roomPosition - instancePosition).LengthSquared();
+
+                    if (distance < minDistance)
+                    {
+                        minDistance = distance;
+                        selectedPosition = roomPosition;
+                    }
+                }
+            }
+
+            return selectedPosition;
+        }
+
+        public static Vector3i GetRandomFreePlaceInRoomTypeAnywhere(Behavior instance, string roomType, AccessRights accessRights)
+        {
+            GameDBRoomType gameRoomType = Database.Instance.GetEntry<GameDBRoomType>(roomType);
+            if (gameRoomType == null)
+            {
+                return Vector3i.ZERO_VECTOR;
+            }
+
+            WalkComponent walkComponent = instance.GetComponent<WalkComponent>();
+            Vector3i instancePosition = new Vector3i(walkComponent.GetCurrentTile().m_x, walkComponent.GetCurrentTile().m_y, walkComponent.GetFloorIndex());
+
+            int minDistance = int.MaxValue;
+            Vector3i selectedPosition = Vector3i.ZERO_VECTOR;
+
+            foreach (var department in Hospital.Instance.m_departments)
+            {
+                List<Room> departmentRooms = MapScriptInterface.Instance.FindValidRoomsWithType(gameRoomType, department);
+
+                foreach (var departmentRoom in departmentRooms)
+                {
+                    Vector2i position = MapScriptInterface.Instance.GetRandomFreePosition(departmentRoom, accessRights);
+                    if (position != Vector2i.ZERO_VECTOR)
+                    {
+                        Vector3i roomPosition = new Vector3i(position.m_x, position.m_y, departmentRoom.GetFloorIndex());
+                        int distance = (roomPosition - instancePosition).LengthSquared();
+
+                        if (distance < minDistance)
+                        {
+                            minDistance = distance;
+                            selectedPosition = roomPosition;
+                        }
+                    }
+                }
+            }
+
+            return selectedPosition;
+        }
+
+        public static Vector3i GetRandomFreePlaceInRoomTypePreferDepartment(Behavior instance, string roomType, Department department, AccessRights accessRights)
+        {
+            Vector3i position = MapScriptInterfacePatch.GetRandomFreePlaceInRoomTypeInDepartment(instance, roomType, department, accessRights);
+            position = (position != Vector3i.ZERO_VECTOR) ? position : MapScriptInterfacePatch.GetRandomFreePlaceInRoomTypeAnywhere(instance, roomType, accessRights);
+
+            return position;
         }
     }
 }
