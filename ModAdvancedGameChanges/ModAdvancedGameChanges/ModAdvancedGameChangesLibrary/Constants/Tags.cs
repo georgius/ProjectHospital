@@ -15,6 +15,7 @@
             public const string CommonRoom = "common_room";
             public const string Rest = "rest";
             public const string Classroom = "classroom";
+            public const string Sitting = "sitting";
 
             public const string JanitorAdminWorkplace = "janitor_admin_workplace";
             public const string JanitorWorkspace = "janitor_workspace";

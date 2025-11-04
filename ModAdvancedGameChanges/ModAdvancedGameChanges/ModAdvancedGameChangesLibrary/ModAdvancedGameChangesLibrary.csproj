@@ -36,6 +36,7 @@
     <Compile Include="CharacterPanelControllerPatch.cs" />
     <Compile Include="CharacterPanelRolesPanelControllerPatch.cs" />
     <Compile Include="CharacterPanelSkillPanelControllerPatch.cs" />
+    <Compile Include="Constants\Animations.cs" />
     <Compile Include="Constants\EmployeeRoles.cs" />
     <Compile Include="Constants\Icons.cs" />
     <Compile Include="Constants\Levels.cs" />

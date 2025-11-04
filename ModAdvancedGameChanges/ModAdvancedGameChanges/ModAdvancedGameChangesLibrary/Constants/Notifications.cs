@@ -15,6 +15,8 @@
 
             public const string NOTIF_PATIENT_LONG_VISIT = "NOTIF_PATIENT_LONG_VISIT";
             public const string NOTIF_WRONG_DIAGNOSIS_RETURNS = "NOTIF_WRONG_DIAGNOSIS_RETURNS";
+
+            public const string NOTIF_NO_WAITING_ROOM = "NOTIF_NO_WAITING_ROOM";
         }
     }
 }
