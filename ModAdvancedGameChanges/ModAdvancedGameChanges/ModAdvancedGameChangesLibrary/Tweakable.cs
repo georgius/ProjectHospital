@@ -259,12 +259,12 @@ namespace ModAdvancedGameChanges
 
             public static float PatientLeaveTimeHours()
             {
-                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_PATIENT_LEAVE_TIME_HOURS).Value;
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Vanilla.TWEAKABLE_PATIENT_LEAVE_TIME_HOURS).Value;
             }
 
             public static float PatientLeaveWarningHours()
             {
-                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_PATIENT_LEAVE_WARNING_HOURS).Value;
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Vanilla.TWEAKABLE_PATIENT_LEAVE_WARNING_HOURS).Value;
             }
         }
     }
