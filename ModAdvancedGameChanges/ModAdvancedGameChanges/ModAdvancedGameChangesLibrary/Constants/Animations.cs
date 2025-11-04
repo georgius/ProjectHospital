@@ -4,9 +4,10 @@
     {
         public static class Vanilla
         {
-            public const string StandIdle = "stand_idle";
-
             public const string Mop = "stand_mop";
+
+            public const string StandIdle = "stand_idle";
+            public const string SitIdleHoldPhone = "sit_idle_hold_phone";
         }
     }
 }
