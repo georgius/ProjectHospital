@@ -1373,6 +1373,6 @@ namespace ModAdvancedGameChanges .Lopital
             return new Vector3i(tile.m_x, tile.m_y, (tile == Vector2i.ZERO_VECTOR) ? 0 : floorIndex);
         }
 
-        public const int DirtinessThreshold = 12;
+        public const int DirtinessThreshold = 20;
     }
 }

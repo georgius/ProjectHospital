@@ -957,10 +957,43 @@ namespace ModAdvancedGameChanges .Lopital
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(EmployeeComponent), nameof(EmployeeComponent.ResetWorkChair))]
+        public static bool ResetWorkChairPrefix(EmployeeComponent __instance)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            TileObject chair = __instance.GetWorkChair();
+
+            if (chair != null)
+            {
+                if (chair.User == __instance.m_entity)
+                {
+                    chair.User = null;
+                }
+
+                if (chair.m_state.m_workspaceOwnerDay == __instance.m_entity)
+                {
+                    chair.m_state.m_workspaceOwnerDay = null;
+                }
+
+                if (chair.m_state.m_workspaceOwnerNight == __instance.m_entity)
+                {
+                    chair.m_state.m_workspaceOwnerNight = null;
+                }
+            }
+
+            return false;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(EmployeeComponent), nameof(EmployeeComponent.ResetWorkspace))]
         public static bool ResetWorkspacePrefix(bool resetRoom, EmployeeComponent __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_staffShiftsEqual[SettingsManager.Instance.m_viewSettings].m_value))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
