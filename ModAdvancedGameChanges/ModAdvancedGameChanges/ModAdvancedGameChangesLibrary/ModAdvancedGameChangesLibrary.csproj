@@ -59,6 +59,7 @@
     <Compile Include="Lopital\InsuranceCompanyPatch.cs" />
     <Compile Include="Lopital\MapScriptInterfacePatch.cs" />
     <Compile Include="Lopital\ProcedureScriptNeedBoredomPatch.cs" />
+    <Compile Include="Lopital\ProcedureScriptNeedHungerPatch.cs" />
     <Compile Include="Lopital\SkillPatch.cs" />
     <Compile Include="Lopital\SkillSetPatch.cs" />
     <Compile Include="ModAdvancedGameChanges.cs" />
