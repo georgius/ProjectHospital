@@ -12,7 +12,7 @@ namespace ModAdvancedGameChanges .Lopital
     {
         [HarmonyPrefix]
         [HarmonyPatch(typeof(EmployeeComponent), nameof(EmployeeComponent.AddExperiencePoints))]
-        public static bool AddExperiencePoints(int points, EmployeeComponent __instance)
+        public static bool AddExperiencePointsPrefix(int points, EmployeeComponent __instance)
         {
             if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enableNonLinearSkillLeveling[SettingsManager.Instance.m_viewSettings].m_value))
             {
@@ -532,7 +532,7 @@ namespace ModAdvancedGameChanges .Lopital
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(EmployeeComponent), nameof(EmployeeComponent.GetRoleCount))]
-        public static bool GetRoleCount(EmployeeComponent __instance, ref int __result)
+        public static bool GetRoleCountPrefix(EmployeeComponent __instance, ref int __result)
         {
             if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
             {
@@ -958,7 +958,7 @@ namespace ModAdvancedGameChanges .Lopital
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(EmployeeComponent), nameof(EmployeeComponent.ResetWorkspace))]
-        public static bool ResetWorkspace(bool resetRoom, EmployeeComponent __instance)
+        public static bool ResetWorkspacePrefix(bool resetRoom, EmployeeComponent __instance)
         {
             if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_staffShiftsEqual[SettingsManager.Instance.m_viewSettings].m_value))
             {

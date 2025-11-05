@@ -64,7 +64,7 @@ namespace ModAdvancedGameChanges .Lopital
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(Skill), nameof(Skill.GetPointsNeededForNextLevel))]
-        public static bool GetPointsNeededForNextLevel(Skill __instance, ref int __result)
+        public static bool GetPointsNeededForNextLevelPrefix(Skill __instance, ref int __result)
         {
             if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enableNonLinearSkillLeveling[SettingsManager.Instance.m_viewSettings].m_value))
             {

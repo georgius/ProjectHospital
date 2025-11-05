@@ -169,7 +169,7 @@ namespace ModAdvancedGameChanges.Lopital
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(BehaviorNurse), nameof(BehaviorNurse.IsHidden))]
-        public static bool IsHidden(BehaviorNurse __instance, ref bool __result)
+        public static bool IsHiddenPrefix(BehaviorNurse __instance, ref bool __result)
         {
             if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
             {
