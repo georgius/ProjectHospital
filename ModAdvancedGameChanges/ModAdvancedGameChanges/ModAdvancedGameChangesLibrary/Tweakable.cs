@@ -28,6 +28,10 @@ namespace ModAdvancedGameChanges
             Tweakable.CheckJanitorManagerCleaningBonusPercent();
             Tweakable.CheckPatientLeaveTimeHours();
             Tweakable.CheckPatientLeaveWarningHours();
+            Tweakable.CheckFulfillNeedsThreshold();
+            Tweakable.CheckFulfillNeedsCriticalThreshold();
+            Tweakable.CheckFulfillNeedsReductionMinimum();
+            Tweakable.CheckFulfillNeedsReductionMaximum();
         }
 
         public static void CheckNonLinearSkillLevelingConfiguration()
@@ -136,10 +140,9 @@ namespace ModAdvancedGameChanges
             }
             if (value.Value > 100)
             {
-                throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_JANITOR_MANAGER_CLEANING_BONUS_PERCENT}' must be less than 100.");
+                throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_JANITOR_MANAGER_CLEANING_BONUS_PERCENT}' must be less than or equal to 100.");
             }
         }
-
 
         public static void CheckPatientLeaveTimeHours()
         {
@@ -156,6 +159,58 @@ namespace ModAdvancedGameChanges
             if (value.Value < 1)
             {
                 throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_PATIENT_LEAVE_WARNING_HOURS}' must be greater than zero.");
+            }
+        }
+
+        public static void CheckFulfillNeedsThreshold()
+        {
+            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_THRESHOLD);
+            if (value.Value < 1)
+            {
+                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_THRESHOLD}' must be greater than zero.");
+            }
+            if (value.Value > 100)
+            {
+                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_THRESHOLD}' must be less than or equal to 100.");
+            }
+        }
+
+        public static void CheckFulfillNeedsCriticalThreshold()
+        {
+            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_CRITICAL_THRESHOLD);
+            if (value.Value < 1)
+            {
+                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_CRITICAL_THRESHOLD}' must be greater than zero.");
+            }
+            if (value.Value > 100)
+            {
+                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_CRITICAL_THRESHOLD}' must be less than or equal to 100.");
+            }
+        }
+
+        public static void CheckFulfillNeedsReductionMinimum()
+        {
+            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REDUCTION_RANGE_MINIMUM);
+            if (value.Value < 1)
+            {
+                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REDUCTION_RANGE_MINIMUM}' must be greater than zero.");
+            }
+            if (value.Value > 100)
+            {
+                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REDUCTION_RANGE_MINIMUM}' must be less than or equal to 100.");
+            }
+        }
+
+        public static void CheckFulfillNeedsReductionMaximum()
+        {
+            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REDUCTION_RANGE_MAXIMUM);
+            if (value.Value < 1)
+            {
+                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REDUCTION_RANGE_MAXIMUM}' must be greater than zero.");
+            }
+            if (value.Value > 100)
+            {
+                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REDUCTION_RANGE_MAXIMUM}' must be less than or equal to 100.");
             }
         }
 
@@ -225,6 +280,26 @@ namespace ModAdvancedGameChanges
             public static int CleaningTimeBlood()
             {
                 return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_CLEANING_TIME_BLOOD).Value;
+            }
+
+            public static float FulfillNeedsThreshold()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_THRESHOLD).Value;
+            }
+
+            public static float FulfillNeedsCriticalThreshold()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_CRITICAL_THRESHOLD).Value;
+            }
+
+            public static float FulfillNeedsReductionMinimum()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REDUCTION_RANGE_MINIMUM).Value;
+            }
+
+            public static float FulfillNeedsReductionMaximum()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REDUCTION_RANGE_MAXIMUM).Value;
             }
         }
 

@@ -19,7 +19,7 @@
 			
 			<GameDBLocalizedString>
 				<LocID>AGC_OPTION_ENABLE_NON_LINEAR_SKILL_LEVELING</LocID>
-				<Text>[AGC] Enable non-linear skill leveling</Text>
+				<Text>[AGC] Non-linear skill leveling</Text>
 			</GameDBLocalizedString>
 			
 			<GameDBLocalizedString>
@@ -40,6 +40,11 @@
 			<GameDBLocalizedString>
 				<LocID>AGC_OPTION_PATIENTS_ONLY_EMERGENCY</LocID>
 				<Text>[AGC] Patients go through emergency</Text>
+			</GameDBLocalizedString>
+			
+			<GameDBLocalizedString>
+				<LocID>AGC_OPTION_FULFILLING_NEEDS_CHANGES</LocID>
+				<Text>[AGC] Fulfilling needs changes</Text>
 			</GameDBLocalizedString>
 			
 			<GameDBLocalizedString>

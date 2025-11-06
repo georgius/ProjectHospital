@@ -119,4 +119,17 @@
 	<GameDBTweakableInt ID="TWEAKABLE_JANITOR_DEXTERITY_SKILL_POINTS">
 		<Value>1</Value>
 	</GameDBTweakableInt>
+	
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_FULFILL_NEEDS_THRESHOLD">
+		<Value>60</Value>
+	</GameDBTweakableFloat>
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_FULFILL_NEEDS_CRITICAL_THRESHOLD">
+		<Value>85</Value>
+	</GameDBTweakableFloat>
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_FULFILL_NEEDS_REDUCTION_RANGE_MINIMUM">
+		<Value>25</Value>
+	</GameDBTweakableFloat>
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_FULFILL_NEEDS_REDUCTION_RANGE_MAXIMUM">
+		<Value>75</Value>
+	</GameDBTweakableFloat>
 </Database>

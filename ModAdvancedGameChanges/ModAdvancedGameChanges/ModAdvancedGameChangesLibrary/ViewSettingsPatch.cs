@@ -16,13 +16,14 @@ namespace ModAdvancedGameChanges
 
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_debug = new Dictionary<ViewSettings, GenericFlag<bool>>();
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_enableNonLinearSkillLeveling = new Dictionary<ViewSettings, GenericFlag<bool>>();
-        public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_limitClinicDoctorsLevel = new Dictionary<ViewSettings, GenericFlag<bool>>();
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_forceEmployeeLowestHireLevel = new Dictionary<ViewSettings, GenericFlag<bool>>();
+        public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_fulfillingNeedsChanges = new Dictionary<ViewSettings, GenericFlag<bool>>();
+        public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_labEmployeeBiochemistry = new Dictionary<ViewSettings, GenericFlag<bool>>();
+        public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_limitClinicDoctorsLevel = new Dictionary<ViewSettings, GenericFlag<bool>>();
+        public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_patientsThroughEmergency = new Dictionary<ViewSettings, GenericFlag<bool>>();
+        public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_staffLunchNight = new Dictionary<ViewSettings, GenericFlag<bool>>();
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_staffShiftsEqual = new Dictionary<ViewSettings, GenericFlag<bool>>();
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_trainingDepartment = new Dictionary<ViewSettings, GenericFlag<bool>>();
-        public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_staffLunchNight = new Dictionary<ViewSettings, GenericFlag<bool>>();
-        public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_labEmployeeBiochemistry = new Dictionary<ViewSettings, GenericFlag<bool>>();
-        public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_patientsThroughEmergency = new Dictionary<ViewSettings, GenericFlag<bool>>();
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(ViewSettings), nameof(ViewSettings.Load))]
@@ -42,12 +43,13 @@ namespace ModAdvancedGameChanges
 
                     ViewSettingsPatch.m_debug.Add(__instance, new GenericFlag<bool>("AGC_OPTION_DEBUG", false));
                     ViewSettingsPatch.m_enableNonLinearSkillLeveling.Add(__instance, new GenericFlag<bool>("AGC_OPTION_ENABLE_NON_LINEAR_SKILL_LEVELING", true));
-                    ViewSettingsPatch.m_limitClinicDoctorsLevel.Add(__instance, new GenericFlag<bool>("AGC_OPTION_LIMIT_CLINIC_DOCTORS_LEVEL", true));
                     ViewSettingsPatch.m_forceEmployeeLowestHireLevel.Add(__instance, new GenericFlag<bool>("AGC_OPTION_FORCE_EMPLOYEE_LOWEST_HIRE_LEVEL", true));
-                    ViewSettingsPatch.m_staffShiftsEqual.Add(__instance, new GenericFlag<bool>("AGC_OPTION_STAFF_SHIFTS_EQUAL", true));
-                    ViewSettingsPatch.m_staffLunchNight.Add(__instance, new GenericFlag<bool>("AGC_OPTION_STAFF_LUNCH_NIGHT", true));
+                    ViewSettingsPatch.m_fulfillingNeedsChanges.Add(__instance, new GenericFlag<bool>("AGC_OPTION_FULFILLING_NEEDS_CHANGES", true));
                     ViewSettingsPatch.m_labEmployeeBiochemistry.Add(__instance, new GenericFlag<bool>("AGC_OPTION_LAB_EMPLOYEE_BIOCHEMISTRY", true));
+                    ViewSettingsPatch.m_limitClinicDoctorsLevel.Add(__instance, new GenericFlag<bool>("AGC_OPTION_LIMIT_CLINIC_DOCTORS_LEVEL", true));
                     ViewSettingsPatch.m_patientsThroughEmergency.Add(__instance, new GenericFlag<bool>("AGC_OPTION_PATIENTS_ONLY_EMERGENCY", true));
+                    ViewSettingsPatch.m_staffLunchNight.Add(__instance, new GenericFlag<bool>("AGC_OPTION_STAFF_LUNCH_NIGHT", true));
+                    ViewSettingsPatch.m_staffShiftsEqual.Add(__instance, new GenericFlag<bool>("AGC_OPTION_STAFF_SHIFTS_EQUAL", true));
 
                     if (Tweakable.Vanilla.DlcHospitalServicesEnabled())
                     {
@@ -58,13 +60,14 @@ namespace ModAdvancedGameChanges
 
                     boolFlags.Add(ViewSettingsPatch.m_debug[__instance]);
                     boolFlags.Add(ViewSettingsPatch.m_enableNonLinearSkillLeveling[__instance]);
-                    boolFlags.Add(ViewSettingsPatch.m_limitClinicDoctorsLevel[__instance]);
                     boolFlags.Add(ViewSettingsPatch.m_forceEmployeeLowestHireLevel[__instance]);
+                    boolFlags.Add(ViewSettingsPatch.m_fulfillingNeedsChanges[__instance]);
+                    boolFlags.Add(ViewSettingsPatch.m_labEmployeeBiochemistry[__instance]);
+                    boolFlags.Add(ViewSettingsPatch.m_limitClinicDoctorsLevel[__instance]);
+                    boolFlags.Add(ViewSettingsPatch.m_patientsThroughEmergency[__instance]);
                     boolFlags.Add(ViewSettingsPatch.m_staffShiftsEqual[__instance]);
                     boolFlags.Add(ViewSettingsPatch.m_staffLunchNight[__instance]);
-                    boolFlags.Add(ViewSettingsPatch.m_labEmployeeBiochemistry[__instance]);
-                    boolFlags.Add(ViewSettingsPatch.m_patientsThroughEmergency[__instance]);
-
+                    
                     if (Tweakable.Vanilla.DlcHospitalServicesEnabled())
                     {
                         boolFlags.Add(ViewSettingsPatch.m_trainingDepartment[__instance]);
