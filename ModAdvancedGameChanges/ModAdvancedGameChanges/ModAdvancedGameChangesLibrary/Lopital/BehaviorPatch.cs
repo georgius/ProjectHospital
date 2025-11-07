@@ -49,6 +49,44 @@ namespace ModAdvancedGameChanges.Lopital
             }
         }
 
-        
+
+        public static bool ReceiveMessage(Message message, Behavior instance, bool patient)
+        {
+            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_fulfillingNeedsChanges[SettingsManager.Instance.m_viewSettings].m_value))
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            if (message.m_messageID == Messages.BLADDER_REDUCED)
+            {
+                instance.GetComponent<MoodComponent>().GetNeed(Needs.Vanilla.Bladder).ReduceRandomized(message.m_mainParameter, instance.GetComponent<MoodComponent>());
+
+                return false;
+            }
+
+            if (message.m_messageID == Messages.HUNGER_REDUCED)
+            {
+                instance.GetComponent<MoodComponent>().GetNeed(patient ? Needs.Vanilla.HungerPatient : Needs.Vanilla.HungerStaff).ReduceRandomized(message.m_mainParameter, instance.GetComponent<MoodComponent>());
+
+                return false;
+            }
+
+            if (message.m_messageID == Messages.BOREDOM_REDUCED)
+            {
+                instance.GetComponent<MoodComponent>().GetNeed(Needs.Vanilla.Boredom).ReduceRandomized(message.m_mainParameter, instance.GetComponent<MoodComponent>());
+
+                return false;
+            }
+
+            if (message.m_messageID == Messages.REST_REDUCED)
+            {
+                instance.GetComponent<MoodComponent>().GetNeed(Needs.Vanilla.Rest).ReduceRandomized(message.m_mainParameter, instance.GetComponent<MoodComponent>());
+
+                return false;
+            }
+
+            return true;
+        }
     }
 }

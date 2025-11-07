@@ -88,7 +88,8 @@ namespace ModAdvancedGameChanges .Lopital
             List<Need> needsSortedFromMostCritical = __instance.GetComponent<MoodComponent>().GetNeedsSortedFromMostCritical();
             foreach (Need need in needsSortedFromMostCritical)
             {
-                if (((need.m_currentValue > UnityEngine.Random.Range(Needs.NeedThreshold, Needs.NeedMaximum)) || (need.m_currentValue > Needs.NeedThresholdCritical)) && __instance.GetComponent<ProcedureComponent>().GetProcedureAvailabilty(need.m_gameDBNeed.Entry.Procedure, __instance.m_entity, employeeComponent.m_state.m_department.GetEntity(), AccessRights.STAFF_ONLY, EquipmentListRules.ONLY_FREE_SAME_FLOOR) == ProcedureSceneAvailability.AVAILABLE)
+                if (((need.m_currentValue > UnityEngine.Random.Range(Tweakable.Mod.FulfillNeedsThreshold(), Needs.NeedMaximum)) || (need.m_currentValue > Tweakable.Mod.FulfillNeedsCriticalThreshold())) 
+                    && __instance.GetComponent<ProcedureComponent>().GetProcedureAvailabilty(need.m_gameDBNeed.Entry.Procedure, __instance.m_entity, employeeComponent.m_state.m_department.GetEntity(), AccessRights.STAFF_ONLY, EquipmentListRules.ONLY_FREE_SAME_FLOOR) == ProcedureSceneAvailability.AVAILABLE)
                 {
                     Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, fulfilling need {need.m_gameDBNeed.Entry.DatabaseID}");
 
@@ -223,14 +224,7 @@ namespace ModAdvancedGameChanges .Lopital
 
             Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name} Message received: {message.m_messageID}");
 
-            if (message.m_messageID == Messages.REST_REDUCED)
-            {
-                __instance.GetComponent<MoodComponent>().GetNeed(Needs.Vanilla.Rest).ReduceRandomized(message.m_mainParameter, __instance.GetComponent<MoodComponent>());
-
-                return false;
-            }
-
-            return true;
+            return BehaviorPatch.ReceiveMessage(message, __instance, false);
         }
 
         [HarmonyPrefix]
@@ -1092,7 +1086,8 @@ namespace ModAdvancedGameChanges .Lopital
             List<Need> needsSortedFromMostCritical = instance.GetComponent<MoodComponent>().GetNeedsSortedFromMostCritical();
             foreach (Need need in needsSortedFromMostCritical)
             {
-                if (((need.m_currentValue > UnityEngine.Random.Range(Needs.NeedThreshold, Needs.NeedMaximum)) || (need.m_currentValue > Needs.NeedThresholdCritical)) && instance.GetComponent<ProcedureComponent>().GetProcedureAvailabilty(need.m_gameDBNeed.Entry.Procedure, instance.m_entity, employeeComponent.m_state.m_department.GetEntity(), AccessRights.STAFF_ONLY, EquipmentListRules.ONLY_FREE_SAME_FLOOR) == ProcedureSceneAvailability.AVAILABLE)
+                if (((need.m_currentValue > UnityEngine.Random.Range(Tweakable.Mod.FulfillNeedsThreshold(), Needs.NeedMaximum)) || (need.m_currentValue > Tweakable.Mod.FulfillNeedsCriticalThreshold()))
+                    && instance.GetComponent<ProcedureComponent>().GetProcedureAvailabilty(need.m_gameDBNeed.Entry.Procedure, instance.m_entity, employeeComponent.m_state.m_department.GetEntity(), AccessRights.STAFF_ONLY, EquipmentListRules.ONLY_FREE_SAME_FLOOR) == ProcedureSceneAvailability.AVAILABLE)
                 {
                     return true;
                 }
