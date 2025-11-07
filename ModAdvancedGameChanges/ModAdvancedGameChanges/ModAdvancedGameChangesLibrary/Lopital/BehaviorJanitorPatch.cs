@@ -665,6 +665,8 @@ namespace ModAdvancedGameChanges .Lopital
 
                 if (BehaviorJanitorPatch.IsNeededHandleGoHome(__instance) || BehaviorJanitorPatch.IsNeededHandleFullfillNeeds(__instance) || BehaviorJanitorPatch.IsNeededHandleTraining(__instance))
                 {
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, needed to go home, fulfill needs or to go to training");
+
                     BehaviorJanitorPatch.FreeObjectInternal(__instance);
                     BehaviorJanitorPatch.FreeTileInternal(__instance);
                     BehaviorJanitorPatch.FreeRoomInternal(__instance);
@@ -987,14 +989,7 @@ namespace ModAdvancedGameChanges .Lopital
 
                 if (!BehaviorJanitorPatch.HandleGoHomeFulfillNeedsTraining(__instance))
                 {
-                    if (BehaviorJanitorPatch.HandleGoHomeFulfillNeedsGoToWorkplace(__instance))
-                    {
-                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, going to workplace");
-
-                        __instance.GoToWorkPlace();
-                        __instance.SwitchState(BehaviorJanitorState.GoingToWorkplace);
-                    }
-                    else
+                    if (!BehaviorJanitorPatch.HandleGoHomeFulfillNeedsGoToWorkplace(__instance))
                     {
                         Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, nothing to do");
 
