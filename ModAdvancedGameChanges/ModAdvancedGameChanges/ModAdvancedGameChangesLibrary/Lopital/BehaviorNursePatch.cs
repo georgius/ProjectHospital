@@ -183,6 +183,27 @@ namespace ModAdvancedGameChanges.Lopital
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorNurse), nameof(BehaviorNurse.SwitchState))]
+        public static bool SwitchStatePrefix(NurseState state, BehaviorNurse __instance)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            if (__instance.m_state.m_nurseState != state)
+            {
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, switching state from {__instance.m_state.m_nurseState} to {state}");
+
+                __instance.m_state.m_nurseState = state;
+                __instance.m_state.m_timeInState = 0f;
+            }
+
+            return false;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(BehaviorNurse), nameof(BehaviorNurse.ReceiveMessage))]
         public static bool ReceiveMessagePrefix(Message message, BehaviorNurse __instance)
         {

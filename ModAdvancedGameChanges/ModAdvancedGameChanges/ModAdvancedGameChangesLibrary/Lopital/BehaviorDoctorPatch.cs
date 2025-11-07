@@ -183,6 +183,28 @@ namespace ModAdvancedGameChanges.Lopital
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorDoctor), nameof(BehaviorDoctor.SwitchState))]
+        public static bool SwitchStatePrefix(DoctorState state, BehaviorDoctor __instance)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            if (__instance.m_state.m_doctorState != state)
+            {
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, switching state from {__instance.m_state.m_doctorState} to {state}");
+
+                __instance.m_state.m_doctorState = state;
+                __instance.m_state.m_timeInState = 0f;
+                __instance.m_state.m_timeCounter = 0f;
+            }
+
+            return false;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(BehaviorDoctor), nameof(BehaviorDoctor.ReceiveMessage))]
         public static bool ReceiveMessagePrefix(Message message, BehaviorDoctor __instance)
         {

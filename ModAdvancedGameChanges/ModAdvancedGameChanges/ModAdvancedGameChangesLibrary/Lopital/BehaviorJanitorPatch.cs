@@ -186,8 +186,11 @@ namespace ModAdvancedGameChanges .Lopital
 
             if (__instance.m_state.m_cart != null && __instance.m_state.m_cart.GetEntity() != null && __instance.m_state.m_cart.GetEntity().m_state.m_position != Vector2i.ZERO_VECTOR)
             {
-                __instance.GetComponent<WalkComponent>().SetDestination(__instance.m_state.m_cart.GetEntity().m_state.m_position, __instance.m_state.m_cart.GetEntity().GetFloorIndex(), MovementType.WALKING);
-                __instance.SwitchState(BehaviorJanitorState.GoingToReturnCart);
+                //__instance.GetComponent<WalkComponent>().SetDestination(__instance.m_state.m_cart.GetEntity().m_state.m_position, __instance.m_state.m_cart.GetEntity().GetFloorIndex(), MovementType.WALKING);
+                //__instance.SwitchState(BehaviorJanitorState.ReturningCart);
+
+                __instance.GetComponent<WalkComponent>().SetDestination(__instance.m_state.m_cartHomeTile, __instance.m_state.m_cartHomeFloorIndex, MovementType.WALKING);
+                __instance.SwitchState(BehaviorJanitorState.ReturningCart);
             }
             else
             {
@@ -292,6 +295,27 @@ namespace ModAdvancedGameChanges .Lopital
                         }
                     }
                 }
+            }
+
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorJanitor), nameof(BehaviorJanitor.SwitchState))]
+        public static bool SwitchStatePrefix(BehaviorJanitorState state, BehaviorJanitor __instance)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            if (__instance.m_state.m_janitorState != state)
+            {
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, switching state from {__instance.m_state.m_janitorState} to {state}");
+
+                __instance.m_state.m_janitorState = state;
+                __instance.m_state.m_timeInState = 0f;
             }
 
             return false;
