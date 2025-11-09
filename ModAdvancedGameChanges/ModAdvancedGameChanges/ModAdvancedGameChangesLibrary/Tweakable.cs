@@ -33,6 +33,7 @@ namespace ModAdvancedGameChanges
             Tweakable.CheckFulfillNeedsReductionMinimum();
             Tweakable.CheckFulfillNeedsReductionMaximum();
             Tweakable.CheckRestMinutes();
+            Tweakable.CheckFreeTimeSkillPoints();
         }
 
         public static void CheckNonLinearSkillLevelingConfiguration()
@@ -224,6 +225,15 @@ namespace ModAdvancedGameChanges
             }
         }
 
+        public static void CheckFreeTimeSkillPoints()
+        {
+            var value = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_REPEAT_ACTION_FREE_TIME_SKILL_POINTS);
+            if (value.Value < 1)
+            {
+                throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_REPEAT_ACTION_FREE_TIME_SKILL_POINTS}' must be greater than zero.");
+            }
+        }
+
         public static T EnsureExists<T>(string tweakable) where T : DatabaseEntry
         {
             var entry = Tweakable.GetTweakable<T>(tweakable);
@@ -355,6 +365,11 @@ namespace ModAdvancedGameChanges
             public static float PatientLeaveWarningHours()
             {
                 return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Vanilla.TWEAKABLE_PATIENT_LEAVE_WARNING_HOURS).Value;
+            }
+
+            public static int FreeTimeSkillPoints()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_REPEAT_ACTION_FREE_TIME_SKILL_POINTS).Value;
             }
         }
     }

@@ -10,6 +10,7 @@
             public const string Alcoholism = "PERK_ALCOHOLISM";
             public const string Chemist = "PERK_CHEMIST";
             public const string Scholar = "PERK_SCHOLAR";
+            public const string Gamer = "PERK_GAMER";
         }
     }
 }
