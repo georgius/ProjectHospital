@@ -177,6 +177,24 @@ namespace ModAdvancedGameChanges
                         }
                     }
                 }
+
+                if (ViewSettingsPatch.m_fulfillingNeedsChanges[__instance].m_value)
+                {
+                    Debug.Log(System.Reflection.MethodBase.GetCurrentMethod(), $"Removing requirements for {Needs.Vanilla.Rest} procedure");
+
+                    var restNeed = Database.Instance.GetEntry<GameDBNeed>(Needs.Vanilla.Rest);
+
+                    var procedureType = typeof(GameDBProcedure);
+
+                    var requiredEquipmentProperty = procedureType.GetProperty(nameof(GameDBProcedure.RequiredEquipment), BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                    var requiredEquipmentPropertySetMethod = requiredEquipmentProperty.GetSetMethod(true);
+
+                    var requiredRoomTagsProperty = procedureType.GetProperty(nameof(GameDBProcedure.RequiredRoomTags), BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                    var requiredRoomTagsSetMethod = requiredRoomTagsProperty.GetSetMethod(true);
+
+                    requiredEquipmentPropertySetMethod.Invoke(restNeed.Procedure, new object[] { null });
+                    requiredRoomTagsSetMethod.Invoke(restNeed.Procedure, new object[] { null });
+                }
             }
         }
 
