@@ -132,4 +132,8 @@
 	<GameDBTweakableFloat ID="AGC_TWEAKABLE_FULFILL_NEEDS_REDUCTION_RANGE_MAXIMUM">
 		<Value>75</Value>
 	</GameDBTweakableFloat>
+	
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_REST_MINUTES">
+		<Value>20</Value>
+	</GameDBTweakableFloat>
 </Database>

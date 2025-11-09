@@ -53,6 +53,8 @@ namespace ModAdvancedGameChanges.Lopital
             // try to find appropriate place in home room
             if ((__instance.m_stateData.m_procedureScene.m_equipment[0] == null) && (mainCharacter.GetComponent<EmployeeComponent>().m_state.m_homeRoom != null))
             {
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{mainCharacter?.Name ?? "NULL"}, searching in home room");
+
                 __instance.m_stateData.m_procedureScene.m_equipment[0] = MapScriptInterface.Instance.FindClosestFreeObjectWithTags(
                     mainCharacter, mainCharacter, 
                     mainCharacter.GetComponent<WalkComponent>().GetCurrentTile(), 
@@ -63,14 +65,18 @@ namespace ModAdvancedGameChanges.Lopital
             // try to find appropriate place in department in common room
             if (__instance.m_stateData.m_procedureScene.m_equipment[0] == null)
             {
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{mainCharacter?.Name ?? "NULL"}, searching in common room in department");
+
                 __instance.m_stateData.m_procedureScene.m_equipment[0] = MapScriptInterface.Instance.FindClosestFreeObjectWithTags(
                     mainCharacter.GetComponent<WalkComponent>().GetCurrentTile(), mainCharacter.GetComponent<WalkComponent>().GetFloorIndex(), 
                     department, new string[] { tag }, AccessRights.STAFF, Database.Instance.GetEntry<GameDBRoomType>(RoomTypes.Vanilla.CommonRoom));
             }
 
-            // try to find appropriate place in and common room
+            // try to find appropriate place in any common room
             if (__instance.m_stateData.m_procedureScene.m_equipment[0] == null)
             {
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{mainCharacter?.Name ?? "NULL"}, searching in common room");
+
                 __instance.m_stateData.m_procedureScene.m_equipment[0] = MapScriptInterface.Instance.FindClosestCenterObjectWithTagShortestPath(
                     mainCharacter.GetComponent<WalkComponent>().GetCurrentTile(), mainCharacter.GetComponent<WalkComponent>().GetFloorIndex(), 
                     tag, AccessRights.STAFF, new string[] { RoomTypes.Vanilla.CommonRoom }, false, true, null, null);
@@ -177,7 +183,7 @@ namespace ModAdvancedGameChanges.Lopital
             }
 
             Entity mainCharacter = __instance.m_stateData.m_procedureScene.MainCharacter;
-            if (DayTime.Instance.IngameTimeHoursToRealTimeSeconds(0.5f) < __instance.m_stateData.m_timeInState)
+            if (DayTime.Instance.IngameTimeHoursToRealTimeSeconds(Tweakable.Mod.RestMinutes() / 60f) < __instance.m_stateData.m_timeInState)
             {
                 mainCharacter.GetComponent<Behavior>().ReceiveMessage(new Message(Messages.REST_REDUCED, 1f));
                 __instance.m_stateData.m_timeInState = 0f;

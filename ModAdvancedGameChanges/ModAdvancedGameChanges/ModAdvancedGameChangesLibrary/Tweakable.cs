@@ -32,6 +32,7 @@ namespace ModAdvancedGameChanges
             Tweakable.CheckFulfillNeedsCriticalThreshold();
             Tweakable.CheckFulfillNeedsReductionMinimum();
             Tweakable.CheckFulfillNeedsReductionMaximum();
+            Tweakable.CheckRestMinutes();
         }
 
         public static void CheckNonLinearSkillLevelingConfiguration()
@@ -214,6 +215,15 @@ namespace ModAdvancedGameChanges
             }
         }
 
+        public static void CheckRestMinutes()
+        {
+            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_REST_MINUTES);
+            if (value.Value < 1)
+            {
+                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_REST_MINUTES}' must be greater than zero.");
+            }
+        }
+
         public static T EnsureExists<T>(string tweakable) where T : DatabaseEntry
         {
             var entry = Tweakable.GetTweakable<T>(tweakable);
@@ -300,6 +310,11 @@ namespace ModAdvancedGameChanges
             public static float FulfillNeedsReductionMaximum()
             {
                 return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REDUCTION_RANGE_MAXIMUM).Value;
+            }
+
+            public static float RestMinutes()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_REST_MINUTES).Value;
             }
         }
 
