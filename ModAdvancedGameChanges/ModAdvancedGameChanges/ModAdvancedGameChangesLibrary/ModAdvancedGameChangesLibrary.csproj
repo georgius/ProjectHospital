@@ -43,6 +43,8 @@
     <Compile Include="Constants\Needs.cs" />
     <Compile Include="Constants\Notifications.cs" />
     <Compile Include="Constants\RoomTypes.cs" />
+    <Compile Include="Constants\SatisfationModifiers.cs" />
+    <Compile Include="Constants\Speeches.cs" />
     <Compile Include="Debug.cs" />
     <Compile Include="Constants\Departments.cs" />
     <Compile Include="Constants\Localizations.cs" />
@@ -62,10 +64,11 @@
     <Compile Include="Lopital\ProcedureScriptControlNurseFreeTimePatch.cs" />
     <Compile Include="Lopital\ProcedureScriptNeedBoredomPatch.cs" />
     <Compile Include="Lopital\ProcedureScriptNeedHungerPatch.cs" />
+    <Compile Include="Lopital\ProcedureScriptPatch.cs" />
+    <Compile Include="Lopital\ProcedureScriptStaffLunchPatch.cs" />
     <Compile Include="Lopital\SkillPatch.cs" />
     <Compile Include="Lopital\SkillSetPatch.cs" />
     <Compile Include="ModAdvancedGameChanges.cs" />
-    <Compile Include="Constants\Moods.cs" />
     <Compile Include="Constants\Perks.cs" />
     <Compile Include="Constants\Procedures.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
