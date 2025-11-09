@@ -57,48 +57,7 @@ namespace ModAdvancedGameChanges .Lopital
                 return true;
             }
 
-            EmployeeComponent employeeComponent = __instance.GetComponent<EmployeeComponent>();
-            GameDBSchedule shift = (employeeComponent.m_state.m_shift == Shift.DAY) ?
-                Database.Instance.GetEntry<GameDBSchedule>(Schedules.Vanilla.SCHEDULE_OPENING_HOURS_STAFF) :
-                Database.Instance.GetEntry<GameDBSchedule>(Schedules.Vanilla.SCHEDULE_OPENING_HOURS_STAFF_NIGHT);
-
-            // check if janitor should go to lunch
-            if ((!__instance.m_state.m_hadLunch) &&
-                ((DayTime.Instance.IsScheduledActionTime(Schedules.Vanilla.SCHEDULE_STAFF_LUNCH, true) && (DayTime.Instance.GetShift() == Shift.DAY) && (employeeComponent.m_state.m_shift == Shift.DAY) && (DayTime.Instance.GetDayTimeHours() < shift.EndTime)) ||
-                (DayTime.Instance.IsScheduledActionTime(Schedules.Mod.SCHEDULE_STAFF_LUNCH_NIGHT, true) && (DayTime.Instance.GetShift() == Shift.NIGHT) && (employeeComponent.m_state.m_shift == Shift.NIGHT) && (DayTime.Instance.GetDayTimeHours() < shift.EndTime) && ViewSettingsPatch.m_staffLunchNight[SettingsManager.Instance.m_viewSettings].m_value)))
-            {
-                GameDBProcedure staffLunchProcedure = Database.Instance.GetEntry<GameDBProcedure>(Procedures.Vanilla.StaffLunch);
-
-                if (__instance.GetComponent<ProcedureComponent>().GetProcedureAvailabilty(
-                    staffLunchProcedure, __instance.m_entity, __instance.GetDepartment(), AccessRights.STAFF, EquipmentListRules.ONLY_FREE_SAME_FLOOR_PREFER_DPT) == ProcedureSceneAvailability.AVAILABLE)
-                {
-                    __instance.GetComponent<ProcedureComponent>().StartProcedure(staffLunchProcedure, __instance.m_entity, __instance.GetDepartment(), AccessRights.STAFF, EquipmentListRules.ONLY_FREE_SAME_FLOOR_PREFER_DPT);
-                    __instance.m_state.m_hadLunch = true;
-                    __instance.CancelUsingComputer();
-                    __instance.m_entity.GetComponent<SpeechComponent>().HideBubble();
-                    __instance.SwitchState(BehaviorJanitorState.FulfillingNeeds);
-
-                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, going to lunch");
-
-                    __result = true;
-                    return false;
-                }
-            }
-
-            List<Need> needsSortedFromMostCritical = __instance.GetComponent<MoodComponent>().GetNeedsSortedFromMostCritical();
-            foreach (Need need in needsSortedFromMostCritical)
-            {
-                if (((need.m_currentValue > UnityEngine.Random.Range(Tweakable.Mod.FulfillNeedsThreshold(), Needs.NeedMaximum)) || (need.m_currentValue > Tweakable.Mod.FulfillNeedsCriticalThreshold())) 
-                    && __instance.GetComponent<ProcedureComponent>().GetProcedureAvailabilty(need.m_gameDBNeed.Entry.Procedure, __instance.m_entity, employeeComponent.m_state.m_department.GetEntity(), AccessRights.STAFF_ONLY, EquipmentListRules.ONLY_FREE_SAME_FLOOR) == ProcedureSceneAvailability.AVAILABLE)
-                {
-                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, fulfilling need {need.m_gameDBNeed.Entry.DatabaseID}");
-
-                    __instance.GetComponent<ProcedureComponent>().StartProcedure(need.m_gameDBNeed.Entry.Procedure, __instance.m_entity, employeeComponent.m_state.m_department.GetEntity(), AccessRights.STAFF_ONLY, EquipmentListRules.ONLY_FREE_SAME_FLOOR);
-                    
-                    __result = true;
-                    return false;
-                }
-            }
+            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, this method should not be called!");
 
             __result = false;
             return false;
@@ -186,9 +145,6 @@ namespace ModAdvancedGameChanges .Lopital
 
             if (__instance.m_state.m_cart != null && __instance.m_state.m_cart.GetEntity() != null && __instance.m_state.m_cart.GetEntity().m_state.m_position != Vector2i.ZERO_VECTOR)
             {
-                //__instance.GetComponent<WalkComponent>().SetDestination(__instance.m_state.m_cart.GetEntity().m_state.m_position, __instance.m_state.m_cart.GetEntity().GetFloorIndex(), MovementType.WALKING);
-                //__instance.SwitchState(BehaviorJanitorState.ReturningCart);
-
                 __instance.GetComponent<WalkComponent>().SetDestination(__instance.m_state.m_cartHomeTile, __instance.m_state.m_cartHomeFloorIndex, MovementType.WALKING);
                 __instance.SwitchState(BehaviorJanitorState.ReturningCart);
             }
@@ -523,13 +479,12 @@ namespace ModAdvancedGameChanges .Lopital
                 cleaningTime *= UnityEngine.Random.Range(0.5f, 1f);
             }
 
-            BehaviorJanitor janitorManager = null;
             float penalty = 1f;
             float bonus = 0f;
 
             if (employeeComponent.m_state.m_supervisor != null)
             {
-                janitorManager = employeeComponent.m_state.m_supervisor.GetEntity()?.GetComponent<BehaviorJanitor>();
+                BehaviorJanitor janitorManager = employeeComponent.m_state.m_supervisor.GetEntity()?.GetComponent<BehaviorJanitor>();
 
                 if (janitorManager != null)
                 {
@@ -665,7 +620,7 @@ namespace ModAdvancedGameChanges .Lopital
 
                 if (BehaviorJanitorPatch.IsNeededHandleGoHome(__instance) || BehaviorJanitorPatch.IsNeededHandleFullfillNeeds(__instance) || BehaviorJanitorPatch.IsNeededHandleTraining(__instance))
                 {
-                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, needed to go home, fulfill needs or to go to training");
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, needed to go home, to fulfill needs or to go to training");
 
                     BehaviorJanitorPatch.FreeObjectInternal(__instance);
                     BehaviorJanitorPatch.FreeTileInternal(__instance);
@@ -845,33 +800,51 @@ namespace ModAdvancedGameChanges .Lopital
                 return true;
             }
 
-            EmployeeComponent employeeComponent = __instance.GetComponent<EmployeeComponent>();
-            GameDBRoomType homeRoomType = employeeComponent?.GetHomeRoomType();
+            // need to fulfill some needs
+            // check if not fulfilling
+
+            if ((__instance.GetComponent<ProcedureComponent>().m_state.m_currentProcedureScript != null)
+                && (__instance.GetComponent<ProcedureComponent>().m_state.m_currentProcedureScript.GetEntity().m_stateData.m_state == ProcedureScriptPatch.STATE_RESERVED))
+            {
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, planned procedure {__instance.GetComponent<ProcedureComponent>().m_state.m_currentProcedureScript.GetEntity().m_stateData.m_scriptName}, activating");
+
+                __instance.GetComponent<ProcedureComponent>().m_state.m_currentProcedureScript.GetEntity().Activate();
+
+                return false;
+            }
 
             if (!__instance.GetComponent<ProcedureComponent>().IsBusy())
             {
-                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, fulfilling need finished");
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, fulfilling need finished or not started yet");
 
-                if (!BehaviorJanitorPatch.HandleGoHomeFulfillNeeds(__instance))
+                EmployeeComponent employeeComponent = __instance.GetComponent<EmployeeComponent>();
+                GameDBRoomType homeRoomType = employeeComponent?.GetHomeRoomType();
+
+                if (!__instance.GetComponent<ProcedureComponent>().IsBusy())
                 {
-                    if ((homeRoomType == null)
-                        || ((homeRoomType != null) && homeRoomType.HasTag(Tags.Mod.JanitorTrainingWorkspace) && (!BehaviorJanitorPatch.HandleGoHomeFulfillNeedsGoToWorkplace(__instance)))
-                        || ((homeRoomType != null) && (!homeRoomType.HasTag(Tags.Mod.JanitorTrainingWorkspace)) && (!BehaviorJanitorPatch.HandleGoHomeFulfillNeedsTraining(__instance))))
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, fulfilling need finished");
+
+                    if (!BehaviorJanitorPatch.HandleGoHomeFulfillNeeds(__instance))
                     {
-                        // by default, go to common room
-                        Vector3i position = MapScriptInterfacePatch.GetRandomFreePlaceInRoomTypePreferDepartment(__instance, RoomTypes.Vanilla.CommonRoom, employeeComponent.m_state.m_department.GetEntity(), AccessRights.STAFF);
-
-                        if (position != Vector3i.ZERO_VECTOR)
+                        if ((homeRoomType == null)
+                            || ((homeRoomType != null) && homeRoomType.HasTag(Tags.Mod.JanitorTrainingWorkspace) && (!BehaviorJanitorPatch.HandleGoHomeFulfillNeedsGoToWorkplace(__instance)))
+                            || ((homeRoomType != null) && (!homeRoomType.HasTag(Tags.Mod.JanitorTrainingWorkspace)) && (!BehaviorJanitorPatch.HandleGoHomeFulfillNeedsTraining(__instance))))
                         {
-                            __instance.GetComponent<WalkComponent>().SetDestination(new Vector2i(position.m_x, position.m_y), position.m_z, MovementType.WALKING);
+                            // by default, go to common room
+                            Vector3i position = MapScriptInterfacePatch.GetRandomFreePlaceInRoomTypePreferDepartment(__instance, RoomTypes.Vanilla.CommonRoom, employeeComponent.m_state.m_department.GetEntity(), AccessRights.STAFF);
 
-                            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, going to common room");
+                            if (position != Vector3i.ZERO_VECTOR)
+                            {
+                                __instance.GetComponent<WalkComponent>().SetDestination(new Vector2i(position.m_x, position.m_y), position.m_z, MovementType.WALKING);
 
-                            __instance.SwitchState(BehaviorJanitorState.FillingFreeTime);
-                        }
-                        else
-                        {
-                            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, common room room not found");
+                                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, going to common room");
+
+                                __instance.SwitchState(BehaviorJanitorState.FillingFreeTime);
+                            }
+                            else
+                            {
+                                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, common room room not found");
+                            }
                         }
                     }
                 }
@@ -1015,9 +988,9 @@ namespace ModAdvancedGameChanges .Lopital
 
             if (!__instance.GetComponent<WalkComponent>().IsBusy())
             {
-                EmployeeComponent employeeComponent = __instance.GetComponent<EmployeeComponent>();
-
                 Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, arrived to hospital");
+
+                EmployeeComponent employeeComponent = __instance.GetComponent<EmployeeComponent>();
 
                 employeeComponent.CheckChiefNodiagnoseDepartment(true);
                 employeeComponent.CheckRoomSatisfactionBonuses();
@@ -1089,6 +1062,12 @@ namespace ModAdvancedGameChanges .Lopital
 
         private static bool IsNeededHandleFullfillNeeds(BehaviorJanitor instance)
         {
+            if (instance.GetComponent<ProcedureComponent>().m_state.m_currentProcedureScript != null)
+            {
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{instance.m_entity.Name}, planned procedure {instance.GetComponent<ProcedureComponent>().m_state.m_currentProcedureScript.GetEntity().m_stateData.m_scriptName}");
+                return true;
+            }
+
             EmployeeComponent employeeComponent = instance.GetComponent<EmployeeComponent>();
             GameDBSchedule shift = (employeeComponent.m_state.m_shift == Shift.DAY) ?
                 Database.Instance.GetEntry<GameDBSchedule>(Schedules.Vanilla.SCHEDULE_OPENING_HOURS_STAFF) :
@@ -1099,16 +1078,37 @@ namespace ModAdvancedGameChanges .Lopital
                 ((DayTime.Instance.IsScheduledActionTime(Schedules.Vanilla.SCHEDULE_STAFF_LUNCH, true) && (DayTime.Instance.GetShift() == Shift.DAY) && (employeeComponent.m_state.m_shift == Shift.DAY) && (DayTime.Instance.GetDayTimeHours() < shift.EndTime)) ||
                 (DayTime.Instance.IsScheduledActionTime(Schedules.Mod.SCHEDULE_STAFF_LUNCH_NIGHT, true) && (DayTime.Instance.GetShift() == Shift.NIGHT) && (employeeComponent.m_state.m_shift == Shift.NIGHT) && (DayTime.Instance.GetDayTimeHours() < shift.EndTime) && ViewSettingsPatch.m_staffLunchNight[SettingsManager.Instance.m_viewSettings].m_value)))
             {
-                return true;
+                GameDBProcedure staffLunchProcedure = Database.Instance.GetEntry<GameDBProcedure>(Procedures.Vanilla.StaffLunch);
+
+                if (instance.GetComponent<ProcedureComponent>().GetProcedureAvailabilty(staffLunchProcedure, instance.m_entity, instance.GetDepartment(), AccessRights.STAFF_ONLY, EquipmentListRules.ONLY_FREE_SAME_FLOOR_PREFER_DPT) == ProcedureSceneAvailability.AVAILABLE)
+                {
+                    if (instance.GetComponent<ProcedureComponent>().m_state.m_currentProcedureScript == null)
+                    {
+                        instance.GetComponent<ProcedureComponent>().StartProcedure(staffLunchProcedure, instance.m_entity, instance.GetDepartment(), AccessRights.STAFF_ONLY, EquipmentListRules.ONLY_FREE_SAME_FLOOR_PREFER_DPT);
+                        instance.GetComponent<ProcedureComponent>().m_state.m_currentProcedureScript.GetEntity().SwitchState(ProcedureScriptPatch.STATE_RESERVED);
+
+                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{instance.m_entity.Name}, planning lunch");
+                        return true;
+                    }
+                }
             }
 
             List<Need> needsSortedFromMostCritical = instance.GetComponent<MoodComponent>().GetNeedsSortedFromMostCritical();
             foreach (Need need in needsSortedFromMostCritical)
             {
-                if (((need.m_currentValue > UnityEngine.Random.Range(Tweakable.Mod.FulfillNeedsThreshold(), Needs.NeedMaximum)) || (need.m_currentValue > Tweakable.Mod.FulfillNeedsCriticalThreshold()))
-                    && instance.GetComponent<ProcedureComponent>().GetProcedureAvailabilty(need.m_gameDBNeed.Entry.Procedure, instance.m_entity, employeeComponent.m_state.m_department.GetEntity(), AccessRights.STAFF_ONLY, EquipmentListRules.ONLY_FREE_SAME_FLOOR) == ProcedureSceneAvailability.AVAILABLE)
+                if ((need.m_currentValue > UnityEngine.Random.Range(Tweakable.Mod.FulfillNeedsThreshold(), Needs.NeedMaximum)) || (need.m_currentValue > Tweakable.Mod.FulfillNeedsCriticalThreshold()))                    
                 {
-                    return true;
+                    if (instance.GetComponent<ProcedureComponent>().GetProcedureAvailabilty(need.m_gameDBNeed.Entry.Procedure, instance.m_entity, instance.GetDepartment(), AccessRights.STAFF_ONLY, EquipmentListRules.ONLY_FREE_SAME_FLOOR_PREFER_DPT) == ProcedureSceneAvailability.AVAILABLE)
+                    {
+                        if (instance.GetComponent<ProcedureComponent>().m_state.m_currentProcedureScript == null)
+                        {
+                            instance.GetComponent<ProcedureComponent>().StartProcedure(need.m_gameDBNeed.Entry.Procedure, instance.m_entity, instance.GetDepartment(), AccessRights.STAFF_ONLY, EquipmentListRules.ONLY_FREE_SAME_FLOOR_PREFER_DPT);
+                            instance.GetComponent<ProcedureComponent>().m_state.m_currentProcedureScript.GetEntity().SwitchState(ProcedureScriptPatch.STATE_RESERVED);
+
+                            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{instance.m_entity.Name}, planning fulfilling need {need.m_gameDBNeed.Entry.DatabaseID}");
+                            return true;
+                        }
+                    }
                 }
             }
 
@@ -1132,7 +1132,7 @@ namespace ModAdvancedGameChanges .Lopital
             }
 
             // check if janitor needs to fulfill his/her needs
-            if (BehaviorJanitorPatch.CheckNeedsInternal(instance))
+            if (BehaviorJanitorPatch.IsNeededHandleFullfillNeeds(instance))
             {
                 instance.m_entity.GetComponent<SpeechComponent>().HideBubble();
                 instance.SwitchState(BehaviorJanitorState.FulfillingNeeds);
@@ -1144,6 +1144,27 @@ namespace ModAdvancedGameChanges .Lopital
             return false;
         }
 
+        public static bool CanGoToWorkplace(BehaviorJanitor instance)
+        {
+            EmployeeComponent employeeComponent = instance.GetComponent<EmployeeComponent>();
+            WalkComponent walkComponent = instance.GetComponent<WalkComponent>();
+            GameDBRoomType homeRoomType = employeeComponent.GetHomeRoomType();
+            Entity oppositeShiftEmployee = employeeComponent.GetOppositeShiftEmployee();
+
+            bool canGoToWorkplace = (oppositeShiftEmployee == null) ||
+                    ((oppositeShiftEmployee != null) && ((oppositeShiftEmployee.GetComponent<BehaviorJanitor>().m_state.m_janitorState == BehaviorJanitorState.AtHome)
+                        || (oppositeShiftEmployee.GetComponent<BehaviorJanitor>().m_state.m_janitorState == BehaviorJanitorState.GoingHome)
+                        || (oppositeShiftEmployee.GetComponent<BehaviorJanitor>().m_state.m_janitorState == BehaviorJanitorState.FiredAtHome)));
+
+            canGoToWorkplace &= ((employeeComponent.GetWorkChair() != null)
+                || (BehaviorJanitorPatch.GetWorkDeskInternal(instance) != null)
+                || ((employeeComponent.m_state.m_workPlacePosition != Vector2i.ZERO_VECTOR) && (employeeComponent.m_state.m_workPlacePosition != walkComponent.GetCurrentTile())));
+
+            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{instance.m_entity.Name}, opposite shift employee: {oppositeShiftEmployee?.Name ?? "NULL"}, state: {oppositeShiftEmployee?.GetComponent<BehaviorJanitor>().m_state.m_janitorState.ToString() ?? "NULL"}");
+
+            return canGoToWorkplace;
+        }
+
         public static bool HandleGoHomeFulfillNeedsGoToWorkplace(BehaviorJanitor instance)
         {
             if (!BehaviorJanitorPatch.HandleGoHomeFulfillNeeds(instance))
@@ -1153,18 +1174,7 @@ namespace ModAdvancedGameChanges .Lopital
                 GameDBRoomType homeRoomType = employeeComponent.GetHomeRoomType();
                 Entity oppositeShiftEmployee = employeeComponent.GetOppositeShiftEmployee();
 
-                bool canGoToWorkplace = (oppositeShiftEmployee == null) ||
-                    ((oppositeShiftEmployee != null) && ((oppositeShiftEmployee.GetComponent<BehaviorJanitor>().m_state.m_janitorState == BehaviorJanitorState.AtHome)
-                        || (oppositeShiftEmployee.GetComponent<BehaviorJanitor>().m_state.m_janitorState == BehaviorJanitorState.GoingHome)
-                        || (oppositeShiftEmployee.GetComponent<BehaviorJanitor>().m_state.m_janitorState == BehaviorJanitorState.FiredAtHome)));
-
-                canGoToWorkplace &= ((employeeComponent.GetWorkChair() != null)
-                    || (BehaviorJanitorPatch.GetWorkDeskInternal(instance) != null)
-                    || ((employeeComponent.m_state.m_workPlacePosition != Vector2i.ZERO_VECTOR) && (employeeComponent.m_state.m_workPlacePosition != walkComponent.GetCurrentTile())));
-
-                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{instance.m_entity.Name}, opposite shift employee: {oppositeShiftEmployee?.Name ?? "NULL"}, state: {oppositeShiftEmployee?.GetComponent<BehaviorJanitor>().m_state.m_janitorState.ToString() ?? "NULL"}");
-
-                if (canGoToWorkplace)
+                if (BehaviorJanitorPatch.CanGoToWorkplace(instance))
                 {
                     Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{instance.m_entity.Name}, can go to workplace");
 
@@ -1243,14 +1253,6 @@ namespace ModAdvancedGameChanges .Lopital
             }
 
             return true;
-        }
-
-        private static bool CheckNeedsInternal(BehaviorJanitor instance)
-        {
-            Type type = typeof(BehaviorJanitor);
-            MethodInfo methodInfo = type.GetMethod("CheckNeeds", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            return (bool)methodInfo.Invoke(instance, null);
         }
 
         private static void FindCartInternal(BehaviorJanitor instance)
