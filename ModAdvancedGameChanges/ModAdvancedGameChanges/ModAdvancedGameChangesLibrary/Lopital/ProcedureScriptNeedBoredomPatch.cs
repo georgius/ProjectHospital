@@ -41,14 +41,14 @@ namespace ModAdvancedGameChanges.Lopital
 			if (mainCharacter.GetComponent<WalkComponent>().IsSitting())
 			{
 				mainCharacter.GetComponent<AnimModelComponent>().PlayAnimation(Animations.Vanilla.SitIdleHoldPhone, true);
-				mainCharacter.GetComponent<SpeechComponent>().SetBubble("BUBBLE_BORED", 5f);
+				mainCharacter.GetComponent<SpeechComponent>().SetBubble(Speeches.Vanilla.Bored, 5f);
 				__instance.SwitchState(ProcedureScriptNeedBoredom.STATE_ON_PHONE);
 
 				return false;
 			}
 
 			mainCharacter.GetComponent<AnimModelComponent>().PlayAnimation(Animations.Vanilla.StandIdle, true);
-			mainCharacter.GetComponent<SpeechComponent>().SetBubble("BUBBLE_BORED", 5f);
+			mainCharacter.GetComponent<SpeechComponent>().SetBubble(Speeches.Vanilla.Bored, 5f);
 			__instance.SwitchState(ProcedureScriptNeedBoredom.STATE_STANDING_YAWNING);
 
 			return false;
