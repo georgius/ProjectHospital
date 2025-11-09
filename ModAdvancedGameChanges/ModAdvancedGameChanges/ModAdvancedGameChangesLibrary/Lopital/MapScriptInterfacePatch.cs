@@ -114,7 +114,7 @@ namespace ModAdvancedGameChanges.Lopital
             return false;
         }
 
-        public static Vector3i GetRandomFreePlaceInRoomTypeInDepartment(Behavior instance, string roomType, Department department, AccessRights accessRights)
+        public static Vector3i GetRandomFreePlaceInRoomTypeInDepartment(WalkComponent walkComponent, string roomType, Department department, AccessRights accessRights)
         {
             GameDBRoomType gameRoomType = Database.Instance.GetEntry<GameDBRoomType>(roomType);
             if (gameRoomType == null)
@@ -122,7 +122,6 @@ namespace ModAdvancedGameChanges.Lopital
                 return Vector3i.ZERO_VECTOR;
             }
 
-            WalkComponent walkComponent = instance.GetComponent<WalkComponent>();
             Vector3i instancePosition = new Vector3i(walkComponent.GetCurrentTile().m_x, walkComponent.GetCurrentTile().m_y, walkComponent.GetFloorIndex());
 
             List<Room> departmentRooms = MapScriptInterface.Instance.FindValidRoomsWithType(gameRoomType, department);
@@ -148,7 +147,7 @@ namespace ModAdvancedGameChanges.Lopital
             return selectedPosition;
         }
 
-        public static Vector3i GetRandomFreePlaceInRoomTypeAnywhere(Behavior instance, string roomType, AccessRights accessRights)
+        public static Vector3i GetRandomFreePlaceInRoomTypeAnywhere(WalkComponent walkComponent, string roomType, AccessRights accessRights)
         {
             GameDBRoomType gameRoomType = Database.Instance.GetEntry<GameDBRoomType>(roomType);
             if (gameRoomType == null)
@@ -156,7 +155,6 @@ namespace ModAdvancedGameChanges.Lopital
                 return Vector3i.ZERO_VECTOR;
             }
 
-            WalkComponent walkComponent = instance.GetComponent<WalkComponent>();
             Vector3i instancePosition = new Vector3i(walkComponent.GetCurrentTile().m_x, walkComponent.GetCurrentTile().m_y, walkComponent.GetFloorIndex());
 
             int minDistance = int.MaxValue;
@@ -186,12 +184,17 @@ namespace ModAdvancedGameChanges.Lopital
             return selectedPosition;
         }
 
-        public static Vector3i GetRandomFreePlaceInRoomTypePreferDepartment(Behavior instance, string roomType, Department department, AccessRights accessRights)
+        public static Vector3i GetRandomFreePlaceInRoomTypePreferDepartment(WalkComponent walkComponent, string roomType, Department department, AccessRights accessRights)
         {
-            Vector3i position = MapScriptInterfacePatch.GetRandomFreePlaceInRoomTypeInDepartment(instance, roomType, department, accessRights);
-            position = (position != Vector3i.ZERO_VECTOR) ? position : MapScriptInterfacePatch.GetRandomFreePlaceInRoomTypeAnywhere(instance, roomType, accessRights);
+            Vector3i position = MapScriptInterfacePatch.GetRandomFreePlaceInRoomTypeInDepartment(walkComponent, roomType, department, accessRights);
+            position = (position != Vector3i.ZERO_VECTOR) ? position : MapScriptInterfacePatch.GetRandomFreePlaceInRoomTypeAnywhere(walkComponent, roomType, accessRights);
 
             return position;
+        }
+
+        public static Vector3i GetRandomFreePlaceInRoomTypePreferDepartment(Behavior instance, string roomType, Department department, AccessRights accessRights)
+        {
+            return MapScriptInterfacePatch.GetRandomFreePlaceInRoomTypePreferDepartment(instance.GetComponent<WalkComponent>(), roomType, department, accessRights);
         }
     }
 }
