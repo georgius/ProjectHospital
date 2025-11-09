@@ -121,7 +121,7 @@
 	</GameDBTweakableInt>
 	
 	<GameDBTweakableFloat ID="AGC_TWEAKABLE_FULFILL_NEEDS_THRESHOLD">
-		<Value>60</Value>
+		<Value>50</Value>
 	</GameDBTweakableFloat>
 	<GameDBTweakableFloat ID="AGC_TWEAKABLE_FULFILL_NEEDS_CRITICAL_THRESHOLD">
 		<Value>85</Value>
