@@ -14,9 +14,13 @@
         {
             public const string Distraction = "distraction";
             public const string CommonRoom = "common_room";
+            public const string Dressing = "dressing";
+            public const string Education = "education";
             public const string Rest = "rest";
             public const string Classroom = "classroom";
             public const string Sitting = "sitting";
+            public const string Television = "tv_common";
+            public const string Washing = "washing";
 
             public const string JanitorAdminWorkplace = "janitor_admin_workplace";
             public const string JanitorWorkspace = "janitor_workspace";
