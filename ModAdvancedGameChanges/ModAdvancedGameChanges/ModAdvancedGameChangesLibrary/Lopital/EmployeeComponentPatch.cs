@@ -937,7 +937,7 @@ namespace ModAdvancedGameChanges .Lopital
                     perkComponent.m_perkSet.RevealPerk(Perks.Vanilla.Alcoholism);
                 }
 
-                __instance.m_entity.GetComponent<MoodComponent>().AddSatisfactionModifier(Moods.Vanilla.Hangover);
+                __instance.m_entity.GetComponent<MoodComponent>().AddSatisfactionModifier(SatisfationModifiers.Vanilla.Hangover);
             }
 
             // doctors, nurses, lab specialists have "Commute" state
