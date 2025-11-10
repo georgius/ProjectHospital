@@ -2,8 +2,6 @@
 using HarmonyLib;
 using Lopital;
 using ModAdvancedGameChanges.Constants;
-using System;
-using System.Reflection;
 
 namespace ModAdvancedGameChanges.Lopital
 {
@@ -28,10 +26,10 @@ namespace ModAdvancedGameChanges.Lopital
                 __instance.SetParam(ProcedureScriptControlNurseFreeTimePatch.PARAM_EDUCATION_OBJECT_NOT_FOUND, 0f);
                 ProcedureScriptControlNurseFreeTimePatch.ScholarChooseRoomAndEquipment(__instance);
             }
-            //else if (mainCharacter.GetComponent<PerkComponent>().m_perkSet.HasPerk(Perks.Vanilla.Gamer))
-            //{
-            //    //ProcedureScriptControlNurseFreeTimePatch.GamerChooseRoomAndEquipment(__instance);
-            //}
+            else if (mainCharacter.GetComponent<PerkComponent>().m_perkSet.HasPerk(Perks.Vanilla.Gamer))
+            {
+                ProcedureScriptControlNurseFreeTimePatch.GamerChooseRoomAndEquipment(__instance);
+            }
             else
             {
                 ProcedureScriptControlNurseFreeTimePatch.RestChooseRoomAndEquipment(__instance);
@@ -89,6 +87,18 @@ namespace ModAdvancedGameChanges.Lopital
                     break;
 
                 // gamer rest
+                case ProcedureScriptControlNurseFreeTimePatch.STATE_GAMER_GOING_TO_OBJECT:
+                    ProcedureScriptControlNurseFreeTimePatch.UpdateStateGamerGoingToObject(__instance);
+                    break;
+                case ProcedureScriptControlNurseFreeTimePatch.STATE_GAMER_BLOCKED:
+                    ProcedureScriptControlNurseFreeTimePatch.UpdateStateGamerBlocked(__instance);
+                    break;
+                case ProcedureScriptControlNurseFreeTimePatch.STATE_GAMER_RESTING:
+                    ProcedureScriptControlNurseFreeTimePatch.UpdateStateGamerResting(__instance);
+                    break;
+                case ProcedureScriptControlNurseFreeTimePatch.STATE_GAMER_SIT_ON_REST_OBJECT:
+                    ProcedureScriptControlNurseFreeTimePatch.UpdateStateGamerSitOnRestObject(__instance);
+                    break;
 
                 default:
                     break;
@@ -199,6 +209,125 @@ namespace ModAdvancedGameChanges.Lopital
             return result;
         }
 
+        public static void GamerChooseRoomAndEquipment(ProcedureScriptControlNurseFreeTime instance)
+        {
+            Entity mainCharacter = instance.m_stateData.m_procedureScene.MainCharacter;
+            Department department = mainCharacter.GetComponent<EmployeeComponent>().m_state.m_department.GetEntity();
+
+            instance.m_stateData.m_procedureScene.m_equipment[0] = ProcedureScriptControlNurseFreeTimePatch.FindClosestFreeObject(instance, Tags.Vanilla.Rest);
+
+            if (instance.m_stateData.m_procedureScene.m_equipment[0] != null)
+            {
+                instance.MoveCharacter(mainCharacter, instance.GetEquipment(0).GetDefaultUsePosition(), instance.GetEquipment(0).GetFloorIndex());
+                instance.SwitchState(ProcedureScriptControlNurseFreeTimePatch.STATE_GAMER_GOING_TO_OBJECT);
+            }
+            else
+            {
+                if (mainCharacter.GetComponent<MoodComponent>().HasSatisfactionModifier(SatisfationModifiers.Vanilla.Entertained))
+                {
+                    mainCharacter.GetComponent<MoodComponent>().RemoveSatisfactionModifier(SatisfationModifiers.Vanilla.Entertained);
+                }
+
+                if (!mainCharacter.GetComponent<MoodComponent>().HasSatisfactionModifier(SatisfationModifiers.Vanilla.Bored))
+                {
+                    mainCharacter.GetComponent<SpeechComponent>().SetBubble(Speeches.Vanilla.Bored, 5f);
+                    mainCharacter.GetComponent<MoodComponent>().AddSatisfactionModifier(SatisfationModifiers.Vanilla.Bored);
+                }
+
+                instance.SwitchState(ProcedureScriptControlNurseFreeTimePatch.STATE_GAMER_BLOCKED);
+            }
+        }
+
+        public static void UpdateStateGamerBlocked(ProcedureScriptControlNurseFreeTime instance)
+        {
+            Entity mainCharacter = instance.m_stateData.m_procedureScene.MainCharacter;
+            Department department = mainCharacter.GetComponent<EmployeeComponent>().m_state.m_department.GetEntity();
+
+            if (instance.m_stateData.m_timeInState < DayTime.Instance.IngameTimeHoursToRealTimeSeconds(Tweakable.Mod.RestMinutes() / 60f))
+            {
+                ProcedureScriptControlNurseFreeTimePatch.RestChooseRoomAndEquipment(instance);
+            }
+            else
+            {
+                // not rested, finish procedure script
+                instance.SwitchState(ProcedureScriptControlNurseFreeTime.STATE_IDLE);
+            }
+        }
+
+        public static void UpdateStateGamerGoingToObject(ProcedureScriptControlNurseFreeTime instance)
+        {
+            Entity mainCharacter = instance.m_stateData.m_procedureScene.MainCharacter;
+
+            if (!mainCharacter.GetComponent<WalkComponent>().IsBusy())
+            {
+                if (instance.GetEquipment(0).User == null)
+                {
+                    // object is not reserved
+                    mainCharacter.GetComponent<UseComponent>().ReserveObject(instance.GetEquipment(0));
+
+                    // sit on object
+                    mainCharacter.GetComponent<WalkComponent>().GoSit(instance.GetEquipment(0), MovementType.WALKING);
+
+                    instance.SwitchState(ProcedureScriptControlNurseFreeTimePatch.STATE_GAMER_SIT_ON_REST_OBJECT);
+                }
+                else
+                {
+                    mainCharacter.GetComponent<SpeechComponent>().SetBubble(Speeches.Vanilla.Question, -1f);
+                    instance.SwitchState(ProcedureScriptControlNurseFreeTimePatch.STATE_GAMER_BLOCKED);
+                }
+            }
+        }
+
+        public static void UpdateStateGamerResting(ProcedureScriptControlNurseFreeTime instance)
+        {
+            Entity mainCharacter = instance.m_stateData.m_procedureScene.MainCharacter;
+
+            if (DayTime.Instance.IngameTimeHoursToRealTimeSeconds(Tweakable.Mod.RestMinutes() * UnityEngine.Random.Range(0.33f, 0.66f) / 60f) < instance.m_stateData.m_timeInState)
+            {
+                mainCharacter.GetComponent<Behavior>().ReceiveMessage(new Message(Messages.REST_REDUCED, 1f));
+                instance.m_stateData.m_timeInState = 0f;
+
+                // free reserved object
+                if (instance.GetEquipment(0).User == instance)
+                {
+                    mainCharacter.GetComponent<UseComponent>().Deactivate();
+                    instance.GetEquipment(0).User = null;
+                }
+
+                if (mainCharacter.GetComponent<MoodComponent>().HasSatisfactionModifier(SatisfationModifiers.Vanilla.Bored))
+                {
+                    mainCharacter.GetComponent<MoodComponent>().RemoveSatisfactionModifier(SatisfationModifiers.Vanilla.Bored);
+                }
+                mainCharacter.GetComponent<MoodComponent>().AddSatisfactionModifier(SatisfationModifiers.Vanilla.Entertained);
+
+                if (mainCharacter.GetComponent<PerkComponent>().m_perkSet.HasHiddenPerk(Perks.Vanilla.Spartan))
+                {
+                    mainCharacter.GetComponent<PerkComponent>().m_perkSet.RevealPerk(Perks.Vanilla.Spartan);
+                }
+
+                mainCharacter.GetComponent<PropComponent>().m_state.m_prop = null;
+                mainCharacter.GetComponent<SpeechComponent>().HideBubble();
+
+                // we are done
+                instance.SwitchState(ProcedureScriptControlNurseFreeTime.STATE_IDLE);
+            }
+        }
+
+        public static void UpdateStateGamerSitOnRestObject(ProcedureScriptControlNurseFreeTime instance)
+        {
+            Entity mainCharacter = instance.m_stateData.m_procedureScene.MainCharacter;
+
+            if (!mainCharacter.GetComponent<WalkComponent>().IsBusy())
+            {
+                mainCharacter.GetComponent<PropComponent>().m_state.m_prop = "phone";
+                mainCharacter.GetComponent<SpeechComponent>().SetBubble(Speeches.Vanilla.Game, -1f);
+
+                mainCharacter.GetComponent<AnimModelComponent>().PlayAnimation(Animations.Vanilla.SitIdleHoldPhone, true);
+
+                instance.SwitchState(ProcedureScriptControlNurseFreeTimePatch.STATE_GAMER_RESTING);
+            }
+        }
+
         public static void RestChooseRoomAndEquipment(ProcedureScriptControlNurseFreeTime instance)
         {
             Entity mainCharacter = instance.m_stateData.m_procedureScene.MainCharacter;
@@ -290,6 +419,11 @@ namespace ModAdvancedGameChanges.Lopital
                     mainCharacter.GetComponent<MoodComponent>().RemoveSatisfactionModifier(SatisfationModifiers.Vanilla.Bored);
                 }
                 mainCharacter.GetComponent<MoodComponent>().AddSatisfactionModifier(SatisfationModifiers.Vanilla.Entertained);
+
+                if (mainCharacter.GetComponent<PerkComponent>().m_perkSet.HasHiddenPerk(Perks.Vanilla.Spartan))
+                {
+                    mainCharacter.GetComponent<PerkComponent>().m_perkSet.RevealPerk(Perks.Vanilla.Spartan);
+                }
 
                 // we are done
                 instance.SwitchState(ProcedureScriptControlNurseFreeTime.STATE_IDLE);
@@ -476,6 +610,11 @@ namespace ModAdvancedGameChanges.Lopital
                     }
                 }
 
+                if (mainCharacter.GetComponent<PerkComponent>().m_perkSet.HasHiddenPerk(Perks.Vanilla.Spartan))
+                {
+                    mainCharacter.GetComponent<PerkComponent>().m_perkSet.RevealPerk(Perks.Vanilla.Spartan);
+                }
+
                 // we are done
                 instance.SwitchState(ProcedureScriptControlNurseFreeTime.STATE_IDLE);
             }
@@ -542,6 +681,11 @@ namespace ModAdvancedGameChanges.Lopital
                 }
             }
         }
+
+        public const string STATE_GAMER_GOING_TO_OBJECT = "STATE_GAMER_GOING_TO_OBJECT";
+        public const string STATE_GAMER_BLOCKED = "STATE_GAMER_BLOCKED";
+        public const string STATE_GAMER_RESTING = "STATE_GAMER_RESTING";
+        public const string STATE_GAMER_SIT_ON_REST_OBJECT = "STATE_GAMER_SIT_ON_REST_OBJECT";
 
         public const string STATE_REST_GOING_TO_OBJECT = "STATE_REST_GOING_TO_OBJECT";
         public const string STATE_REST_BLOCKED = "STATE_REST_BLOCKED";
