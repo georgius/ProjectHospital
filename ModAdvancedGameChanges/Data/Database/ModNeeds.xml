@@ -2,16 +2,6 @@
 
 	<GameDBNeed ID="NEED_REST">
 		<Procedure>
-            <RequiredEquipmentList>
-                <RequiredEquipment>
-                    <Tag>rest</Tag>
-                </RequiredEquipment>
-            </RequiredEquipmentList>
-            
-            <RequiredRoomTags>
-                <Tag>common_room</Tag>
-            </RequiredRoomTags>
-            
             <ProcedureScript>ProcedureScriptControlNurseFreeTime</ProcedureScript>
         </Procedure>
         <SatisfactionModifierSatisfied>SAT_MOD_RESTED</SatisfactionModifierSatisfied>

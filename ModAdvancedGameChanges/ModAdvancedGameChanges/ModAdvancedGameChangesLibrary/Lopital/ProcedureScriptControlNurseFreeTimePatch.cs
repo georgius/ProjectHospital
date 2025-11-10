@@ -12,7 +12,7 @@ namespace ModAdvancedGameChanges.Lopital
         [HarmonyPatch(typeof(ProcedureScriptControlNurseFreeTime), nameof(ProcedureScriptControlNurseFreeTime.Activate))]
         public static bool ActivatePrefix(ProcedureScriptControlNurseFreeTime __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_fulfillingNeedsChanges[SettingsManager.Instance.m_viewSettings].m_value))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
@@ -42,7 +42,7 @@ namespace ModAdvancedGameChanges.Lopital
         [HarmonyPatch(typeof(ProcedureScriptControlNurseFreeTime), nameof(ProcedureScriptControlNurseFreeTime.ScriptUpdate))]
         public static bool ScriptUpdatePrefix(float deltaTime, ProcedureScriptControlNurseFreeTime __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_fulfillingNeedsChanges[SettingsManager.Instance.m_viewSettings].m_value))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;

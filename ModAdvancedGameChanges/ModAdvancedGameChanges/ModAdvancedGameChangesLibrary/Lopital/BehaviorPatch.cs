@@ -52,7 +52,7 @@ namespace ModAdvancedGameChanges.Lopital
 
         public static bool ReceiveMessage(Message message, Behavior instance, bool patient)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_fulfillingNeedsChanges[SettingsManager.Instance.m_viewSettings].m_value))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;

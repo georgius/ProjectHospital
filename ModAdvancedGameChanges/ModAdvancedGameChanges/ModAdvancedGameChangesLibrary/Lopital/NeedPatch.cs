@@ -13,7 +13,7 @@ namespace ModAdvancedGameChanges.Lopital
         [HarmonyPatch(typeof(Need), nameof(Need.ReduceRandomized))]
         public static bool ReduceRandomizedPrefix(float value, MoodComponent moodComponent, Need __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_fulfillingNeedsChanges[SettingsManager.Instance.m_viewSettings].m_value))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;

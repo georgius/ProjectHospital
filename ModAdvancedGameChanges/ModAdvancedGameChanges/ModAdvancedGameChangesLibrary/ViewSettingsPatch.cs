@@ -17,7 +17,6 @@ namespace ModAdvancedGameChanges
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_debug = new Dictionary<ViewSettings, GenericFlag<bool>>();
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_enableNonLinearSkillLeveling = new Dictionary<ViewSettings, GenericFlag<bool>>();
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_forceEmployeeLowestHireLevel = new Dictionary<ViewSettings, GenericFlag<bool>>();
-        public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_fulfillingNeedsChanges = new Dictionary<ViewSettings, GenericFlag<bool>>();
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_labEmployeeBiochemistry = new Dictionary<ViewSettings, GenericFlag<bool>>();
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_limitClinicDoctorsLevel = new Dictionary<ViewSettings, GenericFlag<bool>>();
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_patientsThroughEmergency = new Dictionary<ViewSettings, GenericFlag<bool>>();
@@ -44,7 +43,6 @@ namespace ModAdvancedGameChanges
                     ViewSettingsPatch.m_debug.Add(__instance, new GenericFlag<bool>("AGC_OPTION_DEBUG", false));
                     ViewSettingsPatch.m_enableNonLinearSkillLeveling.Add(__instance, new GenericFlag<bool>("AGC_OPTION_ENABLE_NON_LINEAR_SKILL_LEVELING", true));
                     ViewSettingsPatch.m_forceEmployeeLowestHireLevel.Add(__instance, new GenericFlag<bool>("AGC_OPTION_FORCE_EMPLOYEE_LOWEST_HIRE_LEVEL", true));
-                    ViewSettingsPatch.m_fulfillingNeedsChanges.Add(__instance, new GenericFlag<bool>("AGC_OPTION_FULFILLING_NEEDS_CHANGES", true));
                     ViewSettingsPatch.m_labEmployeeBiochemistry.Add(__instance, new GenericFlag<bool>("AGC_OPTION_LAB_EMPLOYEE_BIOCHEMISTRY", true));
                     ViewSettingsPatch.m_limitClinicDoctorsLevel.Add(__instance, new GenericFlag<bool>("AGC_OPTION_LIMIT_CLINIC_DOCTORS_LEVEL", true));
                     ViewSettingsPatch.m_patientsThroughEmergency.Add(__instance, new GenericFlag<bool>("AGC_OPTION_PATIENTS_ONLY_EMERGENCY", true));
@@ -61,7 +59,6 @@ namespace ModAdvancedGameChanges
                     boolFlags.Add(ViewSettingsPatch.m_debug[__instance]);
                     boolFlags.Add(ViewSettingsPatch.m_enableNonLinearSkillLeveling[__instance]);
                     boolFlags.Add(ViewSettingsPatch.m_forceEmployeeLowestHireLevel[__instance]);
-                    boolFlags.Add(ViewSettingsPatch.m_fulfillingNeedsChanges[__instance]);
                     boolFlags.Add(ViewSettingsPatch.m_labEmployeeBiochemistry[__instance]);
                     boolFlags.Add(ViewSettingsPatch.m_limitClinicDoctorsLevel[__instance]);
                     boolFlags.Add(ViewSettingsPatch.m_patientsThroughEmergency[__instance]);
@@ -176,24 +173,6 @@ namespace ModAdvancedGameChanges
                             Debug.Log(System.Reflection.MethodBase.GetCurrentMethod(), $"Medical laboratories department, room type {requiredRoomType.DatabaseID}, changed required skill to {Skills.Vanilla.SKILL_LAB_SPECIALIST_SPEC_BIOCHEMISTRY}");
                         }
                     }
-                }
-
-                if (ViewSettingsPatch.m_fulfillingNeedsChanges[__instance].m_value)
-                {
-                    Debug.Log(System.Reflection.MethodBase.GetCurrentMethod(), $"Removing requirements for {Needs.Vanilla.Rest} procedure");
-
-                    var restNeed = Database.Instance.GetEntry<GameDBNeed>(Needs.Vanilla.Rest);
-
-                    var procedureType = typeof(GameDBProcedure);
-
-                    var requiredEquipmentProperty = procedureType.GetProperty(nameof(GameDBProcedure.RequiredEquipment), BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                    var requiredEquipmentPropertySetMethod = requiredEquipmentProperty.GetSetMethod(true);
-
-                    var requiredRoomTagsProperty = procedureType.GetProperty(nameof(GameDBProcedure.RequiredRoomTags), BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                    var requiredRoomTagsSetMethod = requiredRoomTagsProperty.GetSetMethod(true);
-
-                    requiredEquipmentPropertySetMethod.Invoke(restNeed.Procedure, new object[] { null });
-                    requiredRoomTagsSetMethod.Invoke(restNeed.Procedure, new object[] { null });
                 }
             }
         }

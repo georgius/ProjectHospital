@@ -43,11 +43,6 @@
 			</GameDBLocalizedString>
 			
 			<GameDBLocalizedString>
-				<LocID>AGC_OPTION_FULFILLING_NEEDS_CHANGES</LocID>
-				<Text>[AGC] Fulfilling needs changes</Text>
-			</GameDBLocalizedString>
-			
-			<GameDBLocalizedString>
 				<LocID>AGC_OPTION_STAFF_LUNCH_NIGHT</LocID>
 				<Text>[AGC] Night shift staff lunch</Text>
 			</GameDBLocalizedString>
