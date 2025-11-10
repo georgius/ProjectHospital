@@ -4,6 +4,7 @@ using Lopital;
 using ModAdvancedGameChanges.Constants;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Reflection;
 using UnityEngine;
 
@@ -56,47 +57,7 @@ namespace ModAdvancedGameChanges.Lopital
                 return true;
             }
 
-            EmployeeComponent employeeComponent = __instance.GetComponent<EmployeeComponent>();
-            GameDBSchedule shift = (employeeComponent.m_state.m_shift == Shift.DAY) ?
-                Database.Instance.GetEntry<GameDBSchedule>(Schedules.Vanilla.SCHEDULE_OPENING_HOURS_STAFF) :
-                Database.Instance.GetEntry<GameDBSchedule>(Schedules.Vanilla.SCHEDULE_OPENING_HOURS_STAFF_NIGHT);
-
-            // check if doctor should go to lunch
-            if ((!__instance.m_state.m_hadLunch) &&
-                ((DayTime.Instance.IsScheduledActionTime(Schedules.Vanilla.SCHEDULE_STAFF_LUNCH, true) && (DayTime.Instance.GetShift() == Shift.DAY) && (employeeComponent.m_state.m_shift == Shift.DAY) && (DayTime.Instance.GetDayTimeHours() < shift.EndTime)) ||
-                (DayTime.Instance.IsScheduledActionTime(Schedules.Mod.SCHEDULE_STAFF_LUNCH_NIGHT, true) && (DayTime.Instance.GetShift() == Shift.NIGHT) && (employeeComponent.m_state.m_shift == Shift.NIGHT) && (DayTime.Instance.GetDayTimeHours() < shift.EndTime) && ViewSettingsPatch.m_staffLunchNight[SettingsManager.Instance.m_viewSettings].m_value)))
-            {
-                GameDBProcedure staffLunchProcedure = Database.Instance.GetEntry<GameDBProcedure>(Procedures.Vanilla.StaffLunch);
-
-                if (__instance.GetComponent<ProcedureComponent>().GetProcedureAvailabilty(
-                    staffLunchProcedure, __instance.m_entity, __instance.GetDepartment(), AccessRights.STAFF, EquipmentListRules.ONLY_FREE_SAME_FLOOR_PREFER_DPT) == ProcedureSceneAvailability.AVAILABLE)
-                {
-                    __instance.GetComponent<ProcedureComponent>().StartProcedure(staffLunchProcedure, __instance.m_entity, __instance.GetDepartment(), AccessRights.STAFF, EquipmentListRules.ONLY_FREE_SAME_FLOOR_PREFER_DPT);
-                    __instance.m_state.m_hadLunch = true;
-                    __instance.m_entity.GetComponent<SpeechComponent>().HideBubble();
-                    __instance.SwitchState(DoctorState.FulfilingNeeds);
-
-                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, going to lunch");
-
-                    __result = true;
-                    return false;
-                }
-            }
-
-            List<Need> needsSortedFromMostCritical = __instance.GetComponent<MoodComponent>().GetNeedsSortedFromMostCritical();
-            foreach (Need need in needsSortedFromMostCritical)
-            {
-                if (((need.m_currentValue > UnityEngine.Random.Range(Tweakable.Mod.FulfillNeedsThreshold(), Needs.NeedMaximum)) || (need.m_currentValue > Tweakable.Mod.FulfillNeedsCriticalThreshold()))
-                    && __instance.GetComponent<ProcedureComponent>().GetProcedureAvailabilty(need.m_gameDBNeed.Entry.Procedure, __instance.m_entity, employeeComponent.m_state.m_department.GetEntity(), AccessRights.STAFF_ONLY, EquipmentListRules.ONLY_FREE_SAME_FLOOR) == ProcedureSceneAvailability.AVAILABLE)
-                {
-                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, fulfilling need {need.m_gameDBNeed.Entry.DatabaseID}");
-
-                    __instance.GetComponent<ProcedureComponent>().StartProcedure(need.m_gameDBNeed.Entry.Procedure, __instance.m_entity, employeeComponent.m_state.m_department.GetEntity(), AccessRights.STAFF_ONLY, EquipmentListRules.ONLY_FREE_SAME_FLOOR);
-
-                    __result = true;
-                    return false;
-                }
-            }
+            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, this method should not be called!");
 
             __result = false;
             return false;
@@ -381,33 +342,51 @@ namespace ModAdvancedGameChanges.Lopital
                 return true;
             }
 
-            EmployeeComponent employeeComponent = __instance.GetComponent<EmployeeComponent>();
-            GameDBRoomType homeRoomType = employeeComponent?.GetHomeRoomType();
+            // need to fulfill some needs
+            // check if not fulfilling
+
+            if ((__instance.GetComponent<ProcedureComponent>().m_state.m_currentProcedureScript != null)
+                && (__instance.GetComponent<ProcedureComponent>().m_state.m_currentProcedureScript.GetEntity().m_stateData.m_state == ProcedureScriptPatch.STATE_RESERVED))
+            {
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, planned procedure {__instance.GetComponent<ProcedureComponent>().m_state.m_currentProcedureScript.GetEntity().m_stateData.m_scriptName}, activating");
+
+                __instance.GetComponent<ProcedureComponent>().m_state.m_currentProcedureScript.GetEntity().Activate();
+
+                return false;
+            }
 
             if (!__instance.GetComponent<ProcedureComponent>().IsBusy())
             {
-                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, fulfilling need finished");
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, fulfilling need finished or not started yet");
 
-                if (!BehaviorDoctorPatch.HandleGoHomeFulfillNeeds(__instance))
+                EmployeeComponent employeeComponent = __instance.GetComponent<EmployeeComponent>();
+                GameDBRoomType homeRoomType = employeeComponent?.GetHomeRoomType();
+
+                if (!__instance.GetComponent<ProcedureComponent>().IsBusy())
                 {
-                    if ((homeRoomType == null)
-                        || ((homeRoomType != null) && homeRoomType.HasTag(Tags.Mod.DoctorTrainingWorkspace) && (!BehaviorDoctorPatch.HandleGoHomeFulfillNeedsGoToWorkplace(__instance)))
-                        || ((homeRoomType != null) && (!homeRoomType.HasTag(Tags.Mod.DoctorTrainingWorkspace)) && (!BehaviorDoctorPatch.HandleGoHomeFulfillNeedsTraining(__instance))))
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, fulfilling need finished");
+
+                    if (!BehaviorDoctorPatch.HandleGoHomeFulfillNeeds(__instance))
                     {
-                        // by default, go to common room
-                        Vector3i position = MapScriptInterfacePatch.GetRandomFreePlaceInRoomTypePreferDepartment(__instance, RoomTypes.Vanilla.CommonRoom, employeeComponent.m_state.m_department.GetEntity(), AccessRights.STAFF);
-
-                        if (position != Vector3i.ZERO_VECTOR)
+                        if ((homeRoomType == null)
+                            || ((homeRoomType != null) && homeRoomType.HasTag(Tags.Mod.DoctorTrainingWorkspace) && (!BehaviorDoctorPatch.HandleGoHomeFulfillNeedsGoToWorkplace(__instance)))
+                            || ((homeRoomType != null) && (!homeRoomType.HasTag(Tags.Mod.DoctorTrainingWorkspace)) && (!BehaviorDoctorPatch.HandleGoHomeFulfillNeedsTraining(__instance))))
                         {
-                            __instance.GetComponent<WalkComponent>().SetDestination(new Vector2i(position.m_x, position.m_y), position.m_z, MovementType.WALKING);
+                            // by default, go to common room
+                            Vector3i position = MapScriptInterfacePatch.GetRandomFreePlaceInRoomTypePreferDepartment(__instance, RoomTypes.Vanilla.CommonRoom, employeeComponent.m_state.m_department.GetEntity(), AccessRights.STAFF);
 
-                            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, going to common room");
+                            if (position != Vector3i.ZERO_VECTOR)
+                            {
+                                __instance.GetComponent<WalkComponent>().SetDestination(new Vector2i(position.m_x, position.m_y), position.m_z, MovementType.WALKING);
 
-                            __instance.SwitchState(DoctorState.FillingFreeTime);
-                        }
-                        else
-                        {
-                            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, common room room not found");
+                                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, going to common room");
+
+                                __instance.SwitchState(DoctorState.FillingFreeTime);
+                            }
+                            else
+                            {
+                                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, common room room not found");
+                            }
                         }
                     }
                 }
@@ -612,6 +591,12 @@ namespace ModAdvancedGameChanges.Lopital
 
         private static bool IsNeededHandleFullfillNeeds(BehaviorDoctor instance)
         {
+            if (instance.GetComponent<ProcedureComponent>().m_state.m_currentProcedureScript != null)
+            {
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{instance.m_entity.Name}, planned procedure {instance.GetComponent<ProcedureComponent>().m_state.m_currentProcedureScript.GetEntity().m_stateData.m_scriptName}");
+                return true;
+            }
+
             EmployeeComponent employeeComponent = instance.GetComponent<EmployeeComponent>();
             GameDBSchedule shift = (employeeComponent.m_state.m_shift == Shift.DAY) ?
                 Database.Instance.GetEntry<GameDBSchedule>(Schedules.Vanilla.SCHEDULE_OPENING_HOURS_STAFF) :
@@ -622,16 +607,37 @@ namespace ModAdvancedGameChanges.Lopital
                 ((DayTime.Instance.IsScheduledActionTime(Schedules.Vanilla.SCHEDULE_STAFF_LUNCH, true) && (DayTime.Instance.GetShift() == Shift.DAY) && (employeeComponent.m_state.m_shift == Shift.DAY) && (DayTime.Instance.GetDayTimeHours() < shift.EndTime)) ||
                 (DayTime.Instance.IsScheduledActionTime(Schedules.Mod.SCHEDULE_STAFF_LUNCH_NIGHT, true) && (DayTime.Instance.GetShift() == Shift.NIGHT) && (employeeComponent.m_state.m_shift == Shift.NIGHT) && (DayTime.Instance.GetDayTimeHours() < shift.EndTime) && ViewSettingsPatch.m_staffLunchNight[SettingsManager.Instance.m_viewSettings].m_value)))
             {
-                return true;
+                GameDBProcedure staffLunchProcedure = Database.Instance.GetEntry<GameDBProcedure>(Procedures.Vanilla.StaffLunch);
+
+                if (instance.GetComponent<ProcedureComponent>().GetProcedureAvailabilty(staffLunchProcedure, instance.m_entity, instance.GetDepartment(), AccessRights.STAFF_ONLY, EquipmentListRules.ONLY_FREE_SAME_FLOOR_PREFER_DPT) == ProcedureSceneAvailability.AVAILABLE)
+                {
+                    if (instance.GetComponent<ProcedureComponent>().m_state.m_currentProcedureScript == null)
+                    {
+                        instance.GetComponent<ProcedureComponent>().StartProcedure(staffLunchProcedure, instance.m_entity, instance.GetDepartment(), AccessRights.STAFF_ONLY, EquipmentListRules.ONLY_FREE_SAME_FLOOR_PREFER_DPT);
+                        instance.GetComponent<ProcedureComponent>().m_state.m_currentProcedureScript.GetEntity().SwitchState(ProcedureScriptPatch.STATE_RESERVED);
+
+                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{instance.m_entity.Name}, planning lunch");
+                        return true;
+                    }
+                }
             }
 
             List<Need> needsSortedFromMostCritical = instance.GetComponent<MoodComponent>().GetNeedsSortedFromMostCritical();
             foreach (Need need in needsSortedFromMostCritical)
             {
-                if (((need.m_currentValue > UnityEngine.Random.Range(Tweakable.Mod.FulfillNeedsThreshold(), Needs.NeedMaximum)) || (need.m_currentValue > Tweakable.Mod.FulfillNeedsCriticalThreshold()))
-                    && instance.GetComponent<ProcedureComponent>().GetProcedureAvailabilty(need.m_gameDBNeed.Entry.Procedure, instance.m_entity, employeeComponent.m_state.m_department.GetEntity(), AccessRights.STAFF_ONLY, EquipmentListRules.ONLY_FREE_SAME_FLOOR) == ProcedureSceneAvailability.AVAILABLE)
+                if ((need.m_currentValue > UnityEngine.Random.Range(Tweakable.Mod.FulfillNeedsThreshold(), Needs.NeedMaximum)) || (need.m_currentValue > Tweakable.Mod.FulfillNeedsCriticalThreshold()))
                 {
-                    return true;
+                    if (instance.GetComponent<ProcedureComponent>().GetProcedureAvailabilty(need.m_gameDBNeed.Entry.Procedure, instance.m_entity, instance.GetDepartment(), AccessRights.STAFF_ONLY, EquipmentListRules.ONLY_FREE_SAME_FLOOR_PREFER_DPT) == ProcedureSceneAvailability.AVAILABLE)
+                    {
+                        if (instance.GetComponent<ProcedureComponent>().m_state.m_currentProcedureScript == null)
+                        {
+                            instance.GetComponent<ProcedureComponent>().StartProcedure(need.m_gameDBNeed.Entry.Procedure, instance.m_entity, instance.GetDepartment(), AccessRights.STAFF_ONLY, EquipmentListRules.ONLY_FREE_SAME_FLOOR_PREFER_DPT);
+                            instance.GetComponent<ProcedureComponent>().m_state.m_currentProcedureScript.GetEntity().SwitchState(ProcedureScriptPatch.STATE_RESERVED);
+
+                            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{instance.m_entity.Name}, planning fulfilling need {need.m_gameDBNeed.Entry.DatabaseID}, need value {need.m_currentValue.ToString(CultureInfo.InvariantCulture)}");
+                            return true;
+                        }
+                    }
                 }
             }
 
@@ -655,7 +661,7 @@ namespace ModAdvancedGameChanges.Lopital
             }
 
             // check if doctor needs to fulfill his/her needs
-            if (BehaviorDoctorPatch.CheckNeedsInternal(instance))
+            if (BehaviorDoctorPatch.IsNeededHandleFullfillNeeds(instance))
             {
                 instance.m_entity.GetComponent<SpeechComponent>().HideBubble();
                 instance.SwitchState(DoctorState.FulfilingNeeds);
@@ -754,14 +760,6 @@ namespace ModAdvancedGameChanges.Lopital
             }
 
             return true;
-        }
-
-        private static bool CheckNeedsInternal(BehaviorDoctor instance)
-        {
-            Type type = typeof(BehaviorDoctor);
-            MethodInfo methodInfo = type.GetMethod("CheckNeeds", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            return (bool)methodInfo.Invoke(instance, new object[] { AccessRights.STAFF_ONLY });
         }
 
         private static TileObject GetWorkDeskInternal(BehaviorDoctor instance)
