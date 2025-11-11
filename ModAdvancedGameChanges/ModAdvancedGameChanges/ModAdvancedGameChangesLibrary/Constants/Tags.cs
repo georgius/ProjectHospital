@@ -13,6 +13,7 @@
         public static class Vanilla
         {
             public const string Distraction = "distraction";
+            public const string Dryer = "dryer";
             public const string CommonRoom = "common_room";
             public const string Dressing = "dressing";
             public const string Education = "education";

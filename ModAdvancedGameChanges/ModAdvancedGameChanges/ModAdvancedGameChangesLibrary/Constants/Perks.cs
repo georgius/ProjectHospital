@@ -11,6 +11,7 @@
             public const string Chemist = "PERK_CHEMIST";
             public const string Scholar = "PERK_SCHOLAR";
             public const string Gamer = "PERK_GAMER";
+            public const string Germaphobe = "PERK_GERMAPHOBE";
             public const string Spartan = "PERK_SPARTAN";
         }
     }

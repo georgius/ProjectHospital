@@ -9,6 +9,7 @@
             public const string Game = "BUBBLE_GAME";
             public const string Question = "BUBBLE_QUESTION";
             public const string Television = "BUBBLE_TV";
+            public const string WC = "BUBBLE_WC";
         }
     }
 }
