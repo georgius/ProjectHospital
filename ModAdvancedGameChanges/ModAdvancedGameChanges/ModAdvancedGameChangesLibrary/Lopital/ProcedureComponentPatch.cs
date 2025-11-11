@@ -19,6 +19,8 @@ namespace ModAdvancedGameChanges.Lopital
                 return true;
             }
 
+            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{mainCharacter?.Name ?? "NULL"}, starting procedure {procedure.DatabaseID}, script {procedure.ProcedureScript}");
+
             ProcedureScript procedureScript = LopitalEntityFactory.InstantiateProcedureScript(procedure);
             procedureScript.Init(200U);
 
@@ -41,6 +43,8 @@ namespace ModAdvancedGameChanges.Lopital
                 // Allow original method to run
                 return true;
             }
+
+            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{patient?.Name ?? "NULL"}, starting procedure {procedure.DatabaseID}, script {procedure.ProcedureScript}");
 
             ProcedureScript procedureScript = LopitalEntityFactory.InstantiateProcedureScript(procedure);
             procedureScript.Init(200U);
@@ -65,12 +69,15 @@ namespace ModAdvancedGameChanges.Lopital
                 return true;
             }
 
+            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{patient?.Name ?? "NULL"}, starting procedure {procedure.DatabaseID}, script {procedure.ProcedureScript}");
+
             ProcedureScript procedureScript = LopitalEntityFactory.InstantiateProcedureScript(procedure);
             procedureScript.Init(200U);
 
             ProcedureScene procedureScene = ProcedureSceneFactory.CreateProcedureScene(procedure, patient, doctor, nurse, labSpecialist, accessRights, null, ProcedureSceneType.INSTANTIATION, equipmentListRules);
             procedureScript.m_stateData.m_procedureScene = procedureScene;
             __instance.m_state.m_currentProcedureScript = procedureScript;
+            __instance.m_state.m_currentProcedureScript.GetEntity().m_stateData.m_procedure = procedure;
             procedureScript.Activate();
 
             return false;
