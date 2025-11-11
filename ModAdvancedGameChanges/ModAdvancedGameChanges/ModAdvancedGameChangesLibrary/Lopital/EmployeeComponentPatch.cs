@@ -1388,4 +1388,3 @@ namespace ModAdvancedGameChanges .Lopital
         }
     }
 }
-
