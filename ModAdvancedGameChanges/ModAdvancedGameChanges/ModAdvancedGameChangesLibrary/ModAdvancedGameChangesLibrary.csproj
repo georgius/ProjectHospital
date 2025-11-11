@@ -63,6 +63,7 @@
     <Compile Include="Lopital\NeedPatch.cs" />
     <Compile Include="Lopital\ProcedureComponentPatch.cs" />
     <Compile Include="Lopital\ProcedureScriptControlNurseFreeTimePatch.cs" />
+    <Compile Include="Lopital\ProcedureScriptNeedBladderPatch.cs" />
     <Compile Include="Lopital\ProcedureScriptNeedBoredomPatch.cs" />
     <Compile Include="Lopital\ProcedureScriptNeedHungerPatch.cs" />
     <Compile Include="Lopital\ProcedureScriptPatch.cs" />
