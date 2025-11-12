@@ -39,6 +39,7 @@ namespace ModAdvancedGameChanges.Lopital
                 return true;
             }
 
+            __instance.m_stateData.m_timeInState += deltaTime;
             switch (__instance.m_stateData.m_state)
             {
                 case ProcedureScriptNeedBladderPatch.STATE_SEARCHING_ROOM:
@@ -71,7 +72,6 @@ namespace ModAdvancedGameChanges.Lopital
 
             return false;
         }
-
 
         public static void UpdateStateSearchingRoom(ProcedureScriptNeedBladder instance)
         {
