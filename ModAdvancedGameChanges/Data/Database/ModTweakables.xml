@@ -136,4 +136,18 @@
 	<GameDBTweakableFloat ID="AGC_TWEAKABLE_REST_MINUTES">
 		<Value>20</Value>
 	</GameDBTweakableFloat>
+	
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_PATIENT_VENDING_PAYMENT_MINIMUM">
+		<Value>5</Value>
+	</GameDBTweakableInt>
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_PATIENT_VENDING_PAYMENT_MAXIMUM">
+		<Value>10</Value>
+	</GameDBTweakableInt>
+	
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_EMPLOYEE_VENDING_PAYMENT_MINIMUM">
+		<Value>2</Value>
+	</GameDBTweakableInt>
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_EMPLOYEE_VENDING_PAYMENT_MAXIMUM">
+		<Value>5</Value>
+	</GameDBTweakableInt>
 </Database>

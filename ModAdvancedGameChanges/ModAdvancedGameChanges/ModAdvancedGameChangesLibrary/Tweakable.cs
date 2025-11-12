@@ -34,6 +34,10 @@ namespace ModAdvancedGameChanges
             Tweakable.CheckFulfillNeedsReductionMaximum();
             Tweakable.CheckRestMinutes();
             Tweakable.CheckFreeTimeSkillPoints();
+            Tweakable.CheckPatientVendingPaymentMinimum();
+            Tweakable.CheckPatientVendingPaymentMaximum();
+            Tweakable.CheckEmployeeVendingPaymentMinimum();
+            Tweakable.CheckEmployeeVendingPaymentMaximum();
         }
 
         public static void CheckNonLinearSkillLevelingConfiguration()
@@ -206,9 +210,9 @@ namespace ModAdvancedGameChanges
         public static void CheckFulfillNeedsReductionMaximum()
         {
             var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REDUCTION_RANGE_MAXIMUM);
-            if (value.Value < 1)
+            if (value.Value < Tweakable.Mod.FulfillNeedsReductionMinimum())
             {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REDUCTION_RANGE_MAXIMUM}' must be greater than zero.");
+                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REDUCTION_RANGE_MAXIMUM}' must be greater than or equal to {Tweakable.Mod.FulfillNeedsReductionMinimum().ToString(CultureInfo.InvariantCulture)}.");
             }
             if (value.Value > 100)
             {
@@ -222,6 +226,42 @@ namespace ModAdvancedGameChanges
             if (value.Value < 1)
             {
                 throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_REST_MINUTES}' must be greater than zero.");
+            }
+        }
+
+        public static void CheckPatientVendingPaymentMinimum()
+        {
+            var value = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PATIENT_VENDING_PAYMENT_MINIMUM);
+            if (value.Value < 0)
+            {
+                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PATIENT_VENDING_PAYMENT_MINIMUM}' must be greater than or equal to zero.");
+            }
+        }
+
+        public static void CheckPatientVendingPaymentMaximum()
+        {
+            var value = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PATIENT_VENDING_PAYMENT_MAXIMUM);
+            if (value.Value < Tweakable.Mod.PatientVendingPaymentMinimum())
+            {
+                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PATIENT_VENDING_PAYMENT_MAXIMUM}' must be greater than or equal to {Tweakable.Mod.PatientVendingPaymentMinimum().ToString(CultureInfo.InvariantCulture)}.");
+            }
+        }
+
+        public static void CheckEmployeeVendingPaymentMinimum()
+        {
+            var value = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_EMPLOYEE_VENDING_PAYMENT_MINIMUM);
+            if (value.Value < 0)
+            {
+                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EMPLOYEE_VENDING_PAYMENT_MINIMUM}' must be greater than or equal to zero.");
+            }
+        }
+
+        public static void CheckEmployeeVendingPaymentMaximum()
+        {
+            var value = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_EMPLOYEE_VENDING_PAYMENT_MAXIMUM);
+            if (value.Value < Tweakable.Mod.EmployeeVendingPaymentMinimum())
+            {
+                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EMPLOYEE_VENDING_PAYMENT_MAXIMUM}' must be greater than or equal to {Tweakable.Mod.EmployeeVendingPaymentMinimum().ToString(CultureInfo.InvariantCulture)}.");
             }
         }
 
@@ -325,6 +365,26 @@ namespace ModAdvancedGameChanges
             public static float RestMinutes()
             {
                 return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_REST_MINUTES).Value;
+            }
+
+            public static int PatientVendingPaymentMinimum()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PATIENT_VENDING_PAYMENT_MINIMUM).Value;
+            }
+
+            public static int PatientVendingPaymentMaximum()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PATIENT_VENDING_PAYMENT_MAXIMUM).Value;
+            }
+
+            public static int EmployeeVendingPaymentMinimum()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_EMPLOYEE_VENDING_PAYMENT_MINIMUM).Value;
+            }
+
+            public static int EmployeeVendingPaymentMaximum()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_EMPLOYEE_VENDING_PAYMENT_MAXIMUM).Value;
             }
         }
 

@@ -6,6 +6,7 @@
         {
             public const string Bored = "BUBBLE_BORED";
             public const string FreeTime = "BUBBLE_FREETIME";
+            public const string Food = "BUBBLE_FOOD";
             public const string Game = "BUBBLE_GAME";
             public const string Question = "BUBBLE_QUESTION";
             public const string Television = "BUBBLE_TV";

@@ -21,6 +21,7 @@
             public const string Classroom = "classroom";
             public const string Sitting = "sitting";
             public const string Television = "tv_common";
+            public const string Vending = "vending";
             public const string Washing = "washing";
 
             public const string JanitorAdminWorkplace = "janitor_admin_workplace";
