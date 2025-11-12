@@ -165,11 +165,7 @@ namespace ModAdvancedGameChanges.Lopital
                 }
 
                 // free reserved object
-                if (instance.GetEquipment(0).User == instance)
-                {
-                    mainCharacter.GetComponent<UseComponent>().Deactivate();
-                    instance.GetEquipment(0).User = null;
-                }
+                instance.GetEquipment(0).User = null;
 
                 if (mainCharacter.GetComponent<PerkComponent>().m_perkSet.HasHiddenPerk(Perks.Vanilla.Spartan))
                 {

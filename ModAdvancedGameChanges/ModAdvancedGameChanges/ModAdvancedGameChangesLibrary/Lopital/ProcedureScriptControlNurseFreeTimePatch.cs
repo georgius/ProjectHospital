@@ -288,11 +288,7 @@ namespace ModAdvancedGameChanges.Lopital
                 instance.m_stateData.m_timeInState = 0f;
 
                 // free reserved object
-                if (instance.GetEquipment(0).User == instance)
-                {
-                    mainCharacter.GetComponent<UseComponent>().Deactivate();
-                    instance.GetEquipment(0).User = null;
-                }
+                instance.GetEquipment(0).User = null;
 
                 if (mainCharacter.GetComponent<MoodComponent>().HasSatisfactionModifier(SatisfationModifiers.Vanilla.Bored))
                 {
@@ -386,7 +382,6 @@ namespace ModAdvancedGameChanges.Lopital
 
                     // sit on object
                     mainCharacter.GetComponent<WalkComponent>().GoSit(instance.GetEquipment(0), MovementType.WALKING);
-
                     
                     instance.SwitchState(ProcedureScriptControlNurseFreeTimePatch.STATE_REST_SIT_ON_REST_OBJECT);
                 }
@@ -408,11 +403,7 @@ namespace ModAdvancedGameChanges.Lopital
                 instance.m_stateData.m_timeInState = 0f;
 
                 // free reserved object
-                if (instance.GetEquipment(0).User == instance)
-                {
-                    mainCharacter.GetComponent<UseComponent>().Deactivate();
-                    instance.GetEquipment(0).User = null;
-                }
+                instance.GetEquipment(0).User = null;
 
                 if (mainCharacter.GetComponent<MoodComponent>().HasSatisfactionModifier(SatisfationModifiers.Vanilla.Bored))
                 {
@@ -576,11 +567,7 @@ namespace ModAdvancedGameChanges.Lopital
                 instance.m_stateData.m_timeInState = 0f;
 
                 // free reserved object
-                if (instance.GetEquipment(0).User == instance)
-                {
-                    mainCharacter.GetComponent<UseComponent>().Deactivate();
-                    instance.GetEquipment(0).User = null;
-                }
+                instance.GetEquipment(0).User = null;
 
                 if (instance.GetParam(ProcedureScriptControlNurseFreeTimePatch.PARAM_EDUCATION_OBJECT_NOT_FOUND) == 0f)
                 {
@@ -662,11 +649,7 @@ namespace ModAdvancedGameChanges.Lopital
             if (!mainCharacter.GetComponent<UseComponent>().IsBusy())
             {
                 // free reserved object
-                if (instance.GetEquipment(0).User == instance)
-                {
-                    mainCharacter.GetComponent<UseComponent>().Deactivate();
-                    instance.GetEquipment(0).User = null;
-                }
+                instance.GetEquipment(0).User = null;
 
                 instance.m_stateData.m_procedureScene.m_equipment[0] = ProcedureScriptControlNurseFreeTimePatch.FindClosestFreeObject(instance, Tags.Vanilla.Rest);
 

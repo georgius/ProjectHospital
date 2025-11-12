@@ -243,11 +243,7 @@ namespace ModAdvancedGameChanges.Lopital
                 }
 
                 // free reserved object
-                if (instance.GetEquipment(0).User == instance)
-                {
-                    mainCharacter.GetComponent<UseComponent>().Deactivate();
-                    instance.GetEquipment(0).User = null;
-                }
+                instance.GetEquipment(0).User = null;
 
                 // try to find sink
                 Room room = MapScriptInterface.Instance.GetRoomAt(mainCharacter.GetComponent<WalkComponent>().GetCurrentTile(), mainCharacter.GetComponent<WalkComponent>().GetFloorIndex());
@@ -322,11 +318,7 @@ namespace ModAdvancedGameChanges.Lopital
             if (!mainCharacter.GetComponent<UseComponent>().IsBusy())
             {
                 // free reserved object
-                if (instance.GetEquipment(0).User == instance)
-                {
-                    mainCharacter.GetComponent<UseComponent>().Deactivate();
-                    instance.GetEquipment(0).User = null;
-                }
+                instance.GetEquipment(0).User = null;
 
                 if (mainCharacter.GetComponent<MoodComponent>().HasSatisfactionModifier(SatisfationModifiers.Vanilla.CouldNotWashHands))
                 {
@@ -393,11 +385,7 @@ namespace ModAdvancedGameChanges.Lopital
             if (!mainCharacter.GetComponent<UseComponent>().IsBusy())
             {
                 // free reserved object
-                if (instance.GetEquipment(0).User == instance)
-                {
-                    mainCharacter.GetComponent<UseComponent>().Deactivate();
-                    instance.GetEquipment(0).User = null;
-                }
+                instance.GetEquipment(0).User = null;
 
                 if (mainCharacter.GetComponent<MoodComponent>().HasSatisfactionModifier(SatisfationModifiers.Vanilla.CouldNotDryHands))
                 {

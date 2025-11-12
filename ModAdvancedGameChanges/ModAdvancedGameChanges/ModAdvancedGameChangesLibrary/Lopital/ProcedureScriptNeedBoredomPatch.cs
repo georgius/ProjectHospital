@@ -98,11 +98,7 @@ namespace ModAdvancedGameChanges.Lopital
 			if (!mainCharacter.GetComponent<UseComponent>().IsBusy())
 			{
 				// free reserved object
-				if (instance.GetEquipment(0).User == instance)
-				{
-					mainCharacter.GetComponent<UseComponent>().Deactivate();
-					instance.GetEquipment(0).User = null;
-				}
+				instance.GetEquipment(0).User = null;
 
 				mainCharacter.GetComponent<BehaviorPatient>().ReceiveMessage(new Message(Messages.BOREDOM_REDUCED, 1f));
 
