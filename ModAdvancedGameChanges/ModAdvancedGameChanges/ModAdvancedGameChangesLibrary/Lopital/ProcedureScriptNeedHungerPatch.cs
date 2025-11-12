@@ -87,8 +87,6 @@ namespace ModAdvancedGameChanges.Lopital
 
                     if (instance.GetEquipment(0).User == null)
                     {
-                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{mainCharacter?.Name ?? "NULL"}, object is not reserved");
-
                         // object is free, reserve object and continue
                         mainCharacter.GetComponent<UseComponent>().ReserveObject(instance.GetEquipment(0));
 
@@ -124,8 +122,6 @@ namespace ModAdvancedGameChanges.Lopital
                 }
                 else
                 {
-                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{mainCharacter?.Name ?? "NULL"}, using object");
-
                     instance.SwitchState(ProcedureScriptNeedHungerPatch.STATE_USING_OBJECT);
                     mainCharacter.GetComponent<UseComponent>().Activate(UseComponentMode.SINGLE_USE);
                 }
@@ -188,6 +184,6 @@ namespace ModAdvancedGameChanges.Lopital
 
         public const string STATE_GOING_TO_PLACE = "STATE_GOING_TO_PLACE";
         public const string STATE_GOING_TO_OBJECT = "STATE_GOING_TO_OBJECT";
-        public const string STATE_USING_OBJECT = "STATE_USING_WC";
+        public const string STATE_USING_OBJECT = "STATE_USING_OBJECT";
     }
 }
