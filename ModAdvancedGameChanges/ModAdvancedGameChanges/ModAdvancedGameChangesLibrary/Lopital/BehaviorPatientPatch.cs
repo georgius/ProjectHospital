@@ -420,7 +420,7 @@ namespace ModAdvancedGameChanges.Lopital
                 __instance.m_state.m_collapseProcedure = null;
                 __instance.m_state.m_collapseSymptom = null;
 
-                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, Error: reset a collapse still triggered with no critical symptoms left");
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, error: reset a collapse still triggered with no critical symptoms left");
             }
 
             if ((__instance.m_state.m_patientState != PatientState.Spawned) && (__instance.m_state.m_patientState != PatientState.ReservingAmbulance))
@@ -674,7 +674,7 @@ namespace ModAdvancedGameChanges.Lopital
                 
                 if ((room == null) || ((room.m_roomPersistentData.m_valid & RoomValidity.INACCESSIBLE_PATIENTS) != 0))
                 {
-                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name} destination waiting room not accessible");
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, destination waiting room not accessible");
 
                     __instance.FreeWaitingRoom();
                     __instance.SwitchState(PatientState.Idle);
@@ -762,7 +762,7 @@ namespace ModAdvancedGameChanges.Lopital
 
             if (!__instance.GetComponent<WalkComponent>().IsBusy())
             {
-                __instance.GetComponent<AnimModelComponent>().PlayAnimation("stand_idle", true);
+                __instance.GetComponent<AnimModelComponent>().PlayAnimation(Animations.Vanilla.StandIdle, true);
                 __instance.GetComponent<SpeechComponent>().HideBubble();
                 __instance.m_state.m_hidden = true;
                 __instance.m_state.m_eventState = PatientEventState.HOSPITAL_FINISHED;
@@ -821,7 +821,7 @@ namespace ModAdvancedGameChanges.Lopital
                         {
                             __instance.m_state.m_sentAway = true;
 
-                            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name} is immobile, sending home");
+                            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, is immobile, sending home");
 
                             __instance.SwitchState(PatientState.SpawnedFromDisabledInsurance);
                             __instance.GetComponent<AnimModelComponent>().FadeOut(0f);
@@ -878,7 +878,7 @@ namespace ModAdvancedGameChanges.Lopital
                 {
                     // do nothing at current momment
 
-                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name} nothing to do");
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, nothing to do");
 
                     if (__instance.GetComponent<AnimModelComponent>().IsIdle())
                     {
@@ -920,13 +920,13 @@ namespace ModAdvancedGameChanges.Lopital
 
             if ((instance.m_state.m_department != null)  && (!instance.m_state.m_department.CheckEntity()))
             {
-                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{instance.m_entity.Name} is assigned to a deleted department");
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{instance.m_entity.Name}, is assigned to a deleted department");
 
                 instance.m_state.m_department = null;
 
                 if (!instance.EnsureDepartmentInternal())
                 {
-                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{instance.m_entity.Name} no working emergency, sending patient home");
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{instance.m_entity.Name}, no working emergency, sending patient home");
 
                     instance.Leave(false, false, false);
 
@@ -938,7 +938,7 @@ namespace ModAdvancedGameChanges.Lopital
             {
                 if (Application.isEditor)
                 {
-                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{instance.m_entity.Name} is assigned to a {Departments.Vanilla.Default} department");
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{instance.m_entity.Name}, is assigned to a {Departments.Vanilla.Default} department");
                 }
 
                 instance.m_state.m_department.GetEntity().RemovePatient(instance.m_entity);
@@ -946,7 +946,7 @@ namespace ModAdvancedGameChanges.Lopital
 
                 if (!instance.EnsureDepartmentInternal())
                 {
-                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{instance.m_entity.Name} no working emergency, sending patient home");
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{instance.m_entity.Name}, no working emergency, sending patient home");
 
                     instance.Leave(false, false, false);
 
@@ -958,7 +958,7 @@ namespace ModAdvancedGameChanges.Lopital
                 && (instance.m_state.m_department.GetEntity().GetDepartmentType() == Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.Emergency))
                 && (!instance.EnsureDepartmentInternal()))
             {
-                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{instance.m_entity.Name} no working emergency, sending patient home");
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{instance.m_entity.Name}, no working emergency, sending patient home");
 
                 instance.Leave(false, false, false);
 
