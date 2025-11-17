@@ -196,5 +196,13 @@ namespace ModAdvancedGameChanges.Lopital
         {
             return MapScriptInterfacePatch.GetRandomFreePlaceInRoomTypePreferDepartment(instance.GetComponent<WalkComponent>(), roomType, department, accessRights);
         }
+
+        public static bool IsInDestinationRoom(Entity entity)
+        {
+            Room currentRoom = MapScriptInterface.Instance.GetRoomAt(entity.GetComponent<WalkComponent>());
+            Room destinationRoom = MapScriptInterface.Instance.GetRoomAt(entity.GetComponent<WalkComponent>().GetDestinationTile(), entity.GetComponent<WalkComponent>().m_state.m_destinationFloor);
+
+            return ((currentRoom != null) && (destinationRoom != null) && (currentRoom == destinationRoom));
+        }
     }
 }
