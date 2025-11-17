@@ -35,7 +35,7 @@ namespace ModAdvancedGameChanges.Lopital
 
                 Department emergencyDepartment = MapScriptInterface.Instance.GetDepartmentOfType(Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.Emergency));
                 entity.GetComponent<BehaviorPatient>().m_state.m_fVisitTime = __instance.GetVisitTimeInternal((float)index, (float)patientCounter, smoothDistribution, emergencyDepartment);
-
+                entity.GetComponent<BehaviorPatient>().m_state.m_fromReferral = false;
                 entity.GetComponent<BehaviorPatient>().m_state.m_patientState = PatientState.Spawned;
                 entity.GetComponent<CharacterPersonalInfoComponent>().m_personalInfo.m_insuranceCompany = __instance.m_gameDBInsuranceCompany.Entry;
                 patientSpawnSlot.m_patient = entity;
