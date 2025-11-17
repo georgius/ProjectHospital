@@ -34,50 +34,53 @@ namespace ModAdvancedGameChanges
             {
                 Tweakable.CheckConfiguration();
 
-                ViewSettingsPatch.m_enabled = true;
+                ViewSettingsPatch.m_enabled = AdvancedGameChanges.m_enabled;
 
-                if (!ViewSettingsPatch.m_enableNonLinearSkillLeveling.ContainsKey(__instance))
+                if (ViewSettingsPatch.m_enabled)
                 {
-                    Debug.Log(System.Reflection.MethodBase.GetCurrentMethod(), "Adding settings");
-
-                    ViewSettingsPatch.m_debug.Add(__instance, new GenericFlag<bool>("AGC_OPTION_DEBUG", false));
-                    ViewSettingsPatch.m_enableNonLinearSkillLeveling.Add(__instance, new GenericFlag<bool>("AGC_OPTION_ENABLE_NON_LINEAR_SKILL_LEVELING", true));
-                    ViewSettingsPatch.m_forceEmployeeLowestHireLevel.Add(__instance, new GenericFlag<bool>("AGC_OPTION_FORCE_EMPLOYEE_LOWEST_HIRE_LEVEL", true));
-                    ViewSettingsPatch.m_labEmployeeBiochemistry.Add(__instance, new GenericFlag<bool>("AGC_OPTION_LAB_EMPLOYEE_BIOCHEMISTRY", true));
-                    ViewSettingsPatch.m_limitClinicDoctorsLevel.Add(__instance, new GenericFlag<bool>("AGC_OPTION_LIMIT_CLINIC_DOCTORS_LEVEL", true));
-                    ViewSettingsPatch.m_patientsThroughEmergency.Add(__instance, new GenericFlag<bool>("AGC_OPTION_PATIENTS_ONLY_EMERGENCY", true));
-                    ViewSettingsPatch.m_staffLunchNight.Add(__instance, new GenericFlag<bool>("AGC_OPTION_STAFF_LUNCH_NIGHT", true));
-                    ViewSettingsPatch.m_staffShiftsEqual.Add(__instance, new GenericFlag<bool>("AGC_OPTION_STAFF_SHIFTS_EQUAL", true));
-
-                    if (Tweakable.Vanilla.DlcHospitalServicesEnabled())
+                    if (!ViewSettingsPatch.m_enableNonLinearSkillLeveling.ContainsKey(__instance))
                     {
-                        ViewSettingsPatch.m_trainingDepartment.Add(__instance, new GenericFlag<bool>("AGC_OPTION_TRAINING_DEPARTMENT", true));
+                        Debug.Log(System.Reflection.MethodBase.GetCurrentMethod(), "Adding settings");
+
+                        ViewSettingsPatch.m_debug.Add(__instance, new GenericFlag<bool>("AGC_OPTION_DEBUG", false));
+                        ViewSettingsPatch.m_enableNonLinearSkillLeveling.Add(__instance, new GenericFlag<bool>("AGC_OPTION_ENABLE_NON_LINEAR_SKILL_LEVELING", true));
+                        ViewSettingsPatch.m_forceEmployeeLowestHireLevel.Add(__instance, new GenericFlag<bool>("AGC_OPTION_FORCE_EMPLOYEE_LOWEST_HIRE_LEVEL", true));
+                        ViewSettingsPatch.m_labEmployeeBiochemistry.Add(__instance, new GenericFlag<bool>("AGC_OPTION_LAB_EMPLOYEE_BIOCHEMISTRY", true));
+                        ViewSettingsPatch.m_limitClinicDoctorsLevel.Add(__instance, new GenericFlag<bool>("AGC_OPTION_LIMIT_CLINIC_DOCTORS_LEVEL", true));
+                        ViewSettingsPatch.m_patientsThroughEmergency.Add(__instance, new GenericFlag<bool>("AGC_OPTION_PATIENTS_ONLY_EMERGENCY", true));
+                        ViewSettingsPatch.m_staffLunchNight.Add(__instance, new GenericFlag<bool>("AGC_OPTION_STAFF_LUNCH_NIGHT", true));
+                        ViewSettingsPatch.m_staffShiftsEqual.Add(__instance, new GenericFlag<bool>("AGC_OPTION_STAFF_SHIFTS_EQUAL", true));
+
+                        if (Tweakable.Vanilla.DlcHospitalServicesEnabled())
+                        {
+                            ViewSettingsPatch.m_trainingDepartment.Add(__instance, new GenericFlag<bool>("AGC_OPTION_TRAINING_DEPARTMENT", true));
+                        }
+
+                        var boolFlags = new List<GenericFlag<bool>>(__instance.m_allBoolFlags);
+
+                        boolFlags.Add(ViewSettingsPatch.m_debug[__instance]);
+                        boolFlags.Add(ViewSettingsPatch.m_enableNonLinearSkillLeveling[__instance]);
+                        boolFlags.Add(ViewSettingsPatch.m_forceEmployeeLowestHireLevel[__instance]);
+                        boolFlags.Add(ViewSettingsPatch.m_labEmployeeBiochemistry[__instance]);
+                        boolFlags.Add(ViewSettingsPatch.m_limitClinicDoctorsLevel[__instance]);
+                        boolFlags.Add(ViewSettingsPatch.m_patientsThroughEmergency[__instance]);
+                        boolFlags.Add(ViewSettingsPatch.m_staffShiftsEqual[__instance]);
+                        boolFlags.Add(ViewSettingsPatch.m_staffLunchNight[__instance]);
+
+                        if (Tweakable.Vanilla.DlcHospitalServicesEnabled())
+                        {
+                            boolFlags.Add(ViewSettingsPatch.m_trainingDepartment[__instance]);
+                        }
+
+                        __instance.m_allBoolFlags = boolFlags.ToArray();
                     }
 
-                    var boolFlags = new List<GenericFlag<bool>>(__instance.m_allBoolFlags);
-
-                    boolFlags.Add(ViewSettingsPatch.m_debug[__instance]);
-                    boolFlags.Add(ViewSettingsPatch.m_enableNonLinearSkillLeveling[__instance]);
-                    boolFlags.Add(ViewSettingsPatch.m_forceEmployeeLowestHireLevel[__instance]);
-                    boolFlags.Add(ViewSettingsPatch.m_labEmployeeBiochemistry[__instance]);
-                    boolFlags.Add(ViewSettingsPatch.m_limitClinicDoctorsLevel[__instance]);
-                    boolFlags.Add(ViewSettingsPatch.m_patientsThroughEmergency[__instance]);
-                    boolFlags.Add(ViewSettingsPatch.m_staffShiftsEqual[__instance]);
-                    boolFlags.Add(ViewSettingsPatch.m_staffLunchNight[__instance]);
-                    
-                    if (Tweakable.Vanilla.DlcHospitalServicesEnabled())
+                    // fix schedules
+                    GameDBSchedule[] schedules = Database.Instance.GetEntries<GameDBSchedule>();
+                    foreach (var schedule in schedules)
                     {
-                        boolFlags.Add(ViewSettingsPatch.m_trainingDepartment[__instance]);
+                        ViewSettingsPatch.FixScheduleTimes(schedule);
                     }
-
-                    __instance.m_allBoolFlags = boolFlags.ToArray();
-                }
-
-                // fix schedules
-                GameDBSchedule[] schedules = Database.Instance.GetEntries<GameDBSchedule>();
-                foreach (var schedule in schedules)
-                {
-                    ViewSettingsPatch.FixScheduleTimes(schedule);
                 }
             }
             catch (Exception ex)

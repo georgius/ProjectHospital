@@ -12,6 +12,8 @@ using ModAdvancedGameChanges;
 // on its own game object in Unity as soon as the main menu loads
 public class AdvancedGameChanges : HospitalMod 
 {
+    internal static bool m_enabled = false;
+
     public AdvancedGameChanges() 
         : base()
     {
@@ -26,6 +28,8 @@ public class AdvancedGameChanges : HospitalMod
             harmony.PatchAll(typeof(AdvancedGameChanges).Assembly);
 
             Debug.Log(System.Reflection.MethodBase.GetCurrentMethod(), "Booted up Harmony");
+
+            AdvancedGameChanges.m_enabled = true;
         }
         catch (Exception ex)
         {
