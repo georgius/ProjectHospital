@@ -21,9 +21,11 @@ namespace ModAdvancedGameChanges.Lopital
 
             float reduction = UnityEngine.Random.Range(Tweakable.Mod.FulfillNeedsReductionMinimum(), Tweakable.Mod.FulfillNeedsReductionMaximum());
 
-            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{moodComponent.m_entity.Name}, need {__instance.m_gameDBNeed.Entry.DatabaseID}, current value {__instance.m_currentValue.ToString(CultureInfo.InvariantCulture)}, reduction {reduction.ToString(CultureInfo.InvariantCulture)}");
+            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{moodComponent.m_entity.Name}, need {__instance.m_gameDBNeed.Entry.DatabaseID}, current value {__instance.m_currentValue.ToString(CultureInfo.InvariantCulture)}, reduction {reduction.ToString(CultureInfo.InvariantCulture)}, value {value.ToString(CultureInfo.InvariantCulture)}");
 
-            __instance.m_currentValue -= reduction;
+            value *= reduction / 100;
+
+            __instance.m_currentValue -= value;
             __instance.m_currentValue = Mathf.Max(Needs.NeedMinimum, Mathf.Min(Needs.NeedMaximum, __instance.m_currentValue));
 
             if ((__instance.m_currentValue < Tweakable.Mod.FulfillNeedsCriticalThreshold()) && (__instance.m_gameDBNeed.Entry.SatisfactionModifierCritical != null))

@@ -228,7 +228,7 @@ namespace ModAdvancedGameChanges.Lopital
 
             if (!mainCharacter.GetComponent<UseComponent>().IsBusy())
             {
-                mainCharacter.GetComponent<Behavior>().ReceiveMessage(new Message(Messages.BLADDER_REDUCED, 1f));
+                mainCharacter.GetComponent<Behavior>().ReceiveMessage(new Message(Messages.BLADDER_REDUCED, Tweakable.Mod.FulfillNeedsBladder()));
 
                 if (mainCharacter.GetComponent<PerkComponent>().m_perkSet.HasHiddenPerk(Perks.Vanilla.Spartan))
                 {

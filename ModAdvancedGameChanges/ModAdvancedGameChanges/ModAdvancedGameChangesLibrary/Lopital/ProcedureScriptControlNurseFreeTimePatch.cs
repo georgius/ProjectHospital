@@ -284,7 +284,7 @@ namespace ModAdvancedGameChanges.Lopital
 
             if (DayTime.Instance.IngameTimeHoursToRealTimeSeconds(Tweakable.Mod.RestMinutes() * UnityEngine.Random.Range(0.33f, 0.66f) / 60f) < instance.m_stateData.m_timeInState)
             {
-                mainCharacter.GetComponent<Behavior>().ReceiveMessage(new Message(Messages.REST_REDUCED, 1f));
+                mainCharacter.GetComponent<Behavior>().ReceiveMessage(new Message(Messages.REST_REDUCED, Tweakable.Mod.FulfillNeedsRestPlayGame()));
                 instance.m_stateData.m_timeInState = 0f;
 
                 // free reserved object
@@ -399,7 +399,7 @@ namespace ModAdvancedGameChanges.Lopital
 
             if (DayTime.Instance.IngameTimeHoursToRealTimeSeconds(Tweakable.Mod.RestMinutes() / 60f) < instance.m_stateData.m_timeInState)
             {
-                mainCharacter.GetComponent<Behavior>().ReceiveMessage(new Message(Messages.REST_REDUCED, 1f));
+                mainCharacter.GetComponent<Behavior>().ReceiveMessage(new Message(Messages.REST_REDUCED, Tweakable.Mod.FulfillNeedsRestSit()));
                 instance.m_stateData.m_timeInState = 0f;
 
                 // free reserved object
@@ -563,7 +563,7 @@ namespace ModAdvancedGameChanges.Lopital
 
             if (DayTime.Instance.IngameTimeHoursToRealTimeSeconds(Tweakable.Mod.RestMinutes() / 60f) < instance.m_stateData.m_timeInState)
             {
-                mainCharacter.GetComponent<Behavior>().ReceiveMessage(new Message(Messages.REST_REDUCED, 1f));
+                mainCharacter.GetComponent<Behavior>().ReceiveMessage(new Message(Messages.REST_REDUCED, Tweakable.Mod.FulfillNeedsRestStudy()));
                 instance.m_stateData.m_timeInState = 0f;
 
                 // free reserved object

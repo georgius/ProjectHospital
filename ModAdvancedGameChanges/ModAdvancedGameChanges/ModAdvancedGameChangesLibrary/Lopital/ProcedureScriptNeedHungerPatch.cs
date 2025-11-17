@@ -172,7 +172,7 @@ namespace ModAdvancedGameChanges.Lopital
                     mainCharacter.GetComponent<PerkComponent>().m_perkSet.RevealPerk(Perks.Vanilla.Spartan);
                 }
 
-                mainCharacter.GetComponent<Behavior>().ReceiveMessage(new Message(Messages.HUNGER_REDUCED, 1f));
+                mainCharacter.GetComponent<Behavior>().ReceiveMessage(new Message(Messages.HUNGER_REDUCED, Tweakable.Mod.FulfillNeedsHunger()));
 
                 instance.SwitchState(ProcedureScriptNeedHunger.STATE_IDLE);
             }
