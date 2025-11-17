@@ -32,6 +32,14 @@ namespace ModAdvancedGameChanges
             Tweakable.CheckFulfillNeedsCriticalThreshold();
             Tweakable.CheckFulfillNeedsReductionMinimum();
             Tweakable.CheckFulfillNeedsReductionMaximum();
+            Tweakable.CHeckFulfillNeedsBladder();
+            Tweakable.CheckFulfillNeedsBoredomUsingObject();
+            Tweakable.CheckFulfillNeedsBoredomUsingPhone();
+            Tweakable.CheckFulfillNeedsBoredomYawning();
+            Tweakable.CheckFulfillNeedsHunger();
+            Tweakable.CheckFulfillNeedsRestPlayGame();
+            Tweakable.CheckFulfillNeedsRestSit();
+            Tweakable.CheckFulfillNeedsRestStudy();
             Tweakable.CheckRestMinutes();
             Tweakable.CheckFreeTimeSkillPoints();
             Tweakable.CheckPatientVendingPaymentMinimum();
@@ -220,6 +228,110 @@ namespace ModAdvancedGameChanges
             }
         }
 
+        public static void CHeckFulfillNeedsBladder()
+        {
+            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_BLADDER);
+            if (value.Value < 1)
+            {
+                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_BLADDER}' must be greater than zero.");
+            }
+            if (value.Value > 100)
+            {
+                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_BLADDER}' must be less than or equal to 100.");
+            }
+        }
+
+        public static void CheckFulfillNeedsBoredomUsingObject()
+        {
+            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_BOREDOM_USING_OBJECT);
+            if (value.Value < 1)
+            {
+                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_BOREDOM_USING_OBJECT}' must be greater than zero.");
+            }
+            if (value.Value > 100)
+            {
+                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_BOREDOM_USING_OBJECT}' must be less than or equal to 100.");
+            }
+        }
+
+        public static void CheckFulfillNeedsBoredomUsingPhone()
+        {
+            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_BOREDOM_USING_PHONE);
+            if (value.Value < 1)
+            {
+                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_BOREDOM_USING_PHONE}' must be greater than zero.");
+            }
+            if (value.Value > 100)
+            {
+                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_BOREDOM_USING_PHONE}' must be less than or equal to 100.");
+            }
+        }
+
+        public static void CheckFulfillNeedsBoredomYawning()
+        {
+            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_BOREDOM_YAWNING);
+            if (value.Value < 1)
+            {
+                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_BOREDOM_YAWNING}' must be greater than zero.");
+            }
+            if (value.Value > 100)
+            {
+                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_BOREDOM_YAWNING}' must be less than or equal to 100.");
+            }
+        }
+
+        public static void CheckFulfillNeedsHunger()
+        {
+            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_HUNGER);
+            if (value.Value < 1)
+            {
+                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_HUNGER}' must be greater than zero.");
+            }
+            if (value.Value > 100)
+            {
+                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_HUNGER}' must be less than or equal to 100.");
+            }
+        }
+
+        public static void CheckFulfillNeedsRestPlayGame()
+        {
+            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REST_PLAY_GAME);
+            if (value.Value < 1)
+            {
+                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REST_PLAY_GAME}' must be greater than zero.");
+            }
+            if (value.Value > 100)
+            {
+                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REST_PLAY_GAME}' must be less than or equal to 100.");
+            }
+        }
+
+        public static void CheckFulfillNeedsRestSit()
+        {
+            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REST_SIT);
+            if (value.Value < 1)
+            {
+                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REST_SIT}' must be greater than zero.");
+            }
+            if (value.Value > 100)
+            {
+                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REST_SIT}' must be less than or equal to 100.");
+            }
+        }
+
+        public static void CheckFulfillNeedsRestStudy()
+        {
+            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REST_STUDY);
+            if (value.Value < 1)
+            {
+                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REST_STUDY}' must be greater than zero.");
+            }
+            if (value.Value > 100)
+            {
+                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REST_STUDY}' must be less than or equal to 100.");
+            }
+        }
+
         public static void CheckRestMinutes()
         {
             var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_REST_MINUTES);
@@ -360,6 +472,46 @@ namespace ModAdvancedGameChanges
             public static float FulfillNeedsReductionMaximum()
             {
                 return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REDUCTION_RANGE_MAXIMUM).Value;
+            }
+
+            public static float FulfillNeedsBladder()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_BLADDER).Value;
+            }
+
+            public static float FulfillNeedsBoredomUsingObject()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_BOREDOM_USING_OBJECT).Value;
+            }
+
+            public static float FulfillNeedsBoredomUsingPhone()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_BOREDOM_USING_PHONE).Value;
+            }
+
+            public static float FulfillNeedsBoredomYawning()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_BOREDOM_YAWNING).Value;
+            }
+
+            public static float FulfillNeedsHunger()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_HUNGER).Value;
+            }
+
+            public static float FulfillNeedsRestPlayGame()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REST_PLAY_GAME).Value;
+            }
+
+            public static float FulfillNeedsRestSit()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REST_SIT).Value;
+            }
+
+            public static float FulfillNeedsRestStudy()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REST_STUDY).Value;
             }
 
             public static float RestMinutes()

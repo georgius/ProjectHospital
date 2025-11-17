@@ -133,6 +133,34 @@
 		<Value>75</Value>
 	</GameDBTweakableFloat>
 	
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_FULFILL_NEEDS_BLADDER">
+		<Value>70</Value>
+	</GameDBTweakableFloat>
+	
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_FULFILL_NEEDS_BOREDOM_USING_OBJECT">
+		<Value>70</Value>
+	</GameDBTweakableFloat>
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_FULFILL_NEEDS_BOREDOM_USING_PHONE">
+		<Value>30</Value>
+	</GameDBTweakableFloat>
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_FULFILL_NEEDS_BOREDOM_YAWNING">
+		<Value>10</Value>
+	</GameDBTweakableFloat>
+	
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_FULFILL_NEEDS_HUNGER">
+		<Value>70</Value>
+	</GameDBTweakableFloat>
+	
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_FULFILL_NEEDS_REST_PLAY_GAME">
+		<Value>50</Value>
+	</GameDBTweakableFloat>
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_FULFILL_NEEDS_REST_SIT">
+		<Value>30</Value>
+	</GameDBTweakableFloat>
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_FULFILL_NEEDS_REST_STUDY">
+		<Value>50</Value>
+	</GameDBTweakableFloat>
+	
 	<GameDBTweakableFloat ID="AGC_TWEAKABLE_REST_MINUTES">
 		<Value>20</Value>
 	</GameDBTweakableFloat>

@@ -10,6 +10,8 @@
             public const string SitIdle = "sit_idle";
             public const string SitIdleHoldPhone = "sit_idle_hold_phone";
             public const string SitReadIdle = "sit_read_idle";
+
+            public const string WalkHoldPhone = "walk_hold_phone";
         }
     }
 }
