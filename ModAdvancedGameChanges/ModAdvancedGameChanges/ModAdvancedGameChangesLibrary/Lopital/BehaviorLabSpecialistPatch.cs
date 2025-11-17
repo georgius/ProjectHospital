@@ -51,7 +51,7 @@ namespace ModAdvancedGameChanges.Lopital
         [HarmonyPatch(typeof(BehaviorLabSpecialist), "CheckNeeds")]
         public static bool CheckNeedsPrefix(AccessRights accessRights, BehaviorLabSpecialist __instance, ref bool __result)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
@@ -338,7 +338,7 @@ namespace ModAdvancedGameChanges.Lopital
         [HarmonyPatch(typeof(BehaviorLabSpecialist), "UpdateStateFulfillingNeeds")]
         public static bool UpdateStateFulfillingNeedsPrefix(BehaviorLabSpecialist __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;

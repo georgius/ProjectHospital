@@ -51,7 +51,7 @@ namespace ModAdvancedGameChanges .Lopital
         [HarmonyPatch(typeof(BehaviorJanitor), "CheckNeeds")]
         public static bool CheckNeedsPrefix(BehaviorJanitor __instance, ref bool __result)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
@@ -794,7 +794,7 @@ namespace ModAdvancedGameChanges .Lopital
         [HarmonyPatch(typeof(BehaviorJanitor), "UpdateStateFulfillingNeeds")]
         public static bool UpdateStateFulfillingNeedsPrefix(BehaviorJanitor __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;

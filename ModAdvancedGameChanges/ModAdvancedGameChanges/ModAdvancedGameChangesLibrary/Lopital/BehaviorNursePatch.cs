@@ -51,7 +51,7 @@ namespace ModAdvancedGameChanges.Lopital
         [HarmonyPatch(typeof(BehaviorNurse), "CheckNeeds")]
         public static bool CheckNeedsPrefix(AccessRights accessRights, bool surgeryScheduled, BehaviorNurse __instance, ref bool __result)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
@@ -336,7 +336,7 @@ namespace ModAdvancedGameChanges.Lopital
         [HarmonyPatch(typeof(BehaviorNurse), "UpdateStateFulfillingNeeds")]
         public static bool UpdateStateFulfillingNeedsPrefix(BehaviorNurse __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
