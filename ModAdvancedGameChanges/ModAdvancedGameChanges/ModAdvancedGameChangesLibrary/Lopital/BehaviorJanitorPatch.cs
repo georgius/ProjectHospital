@@ -465,9 +465,12 @@ namespace ModAdvancedGameChanges .Lopital
             float cleaningTime = (dirtType == DirtType.DIRT) ? Tweakable.Mod.CleaningTimeDirt() : Tweakable.Mod.CleaningTimeBlood();
             float skillLevel = employeeComponent.GetSkillLevel(Skills.Vanilla.SKILL_JANITOR_QUALIF_DEXTERITY);
 
-            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, dirt {dirtType}, dirt level {dirtLevel.ToString(CultureInfo.InvariantCulture)}, cleaning time {cleaningTime.ToString(CultureInfo.InvariantCulture)}, skill level {skillLevel.ToString(CultureInfo.InvariantCulture)}");
+            float ratio = (skillLevel - Skills.SkillLevelMinimum) / (Skills.SkillLevelMaximum - Skills.SkillLevelMinimum);
+            float reduction = UnityEngine.Random.Range(Tweakable.Mod.SkillTimeReductionMinimum() * ratio, Tweakable.Mod.SkillTimeReductionMaximum() * ratio) / 100f;
 
-            cleaningTime *= dirtLevel / skillLevel;
+            cleaningTime = cleaningTime * dirtLevel * employeeComponent.GetEfficiencyTimeMultiplier() * (1 - reduction);
+
+            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, dirt {dirtType}, dirt level {dirtLevel.ToString(CultureInfo.InvariantCulture)}, cleaning time {cleaningTime.ToString(CultureInfo.InvariantCulture)}, skill level {skillLevel.ToString(CultureInfo.InvariantCulture)}");
 
             if (perkComponent.m_perkSet.HasPerk(Perks.Vanilla.Chemist))
             {
