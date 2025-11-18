@@ -17,7 +17,7 @@ namespace ModAdvancedGameChanges.Lopital
         [HarmonyPatch(typeof(BehaviorNurse), nameof(BehaviorNurse.AddToHospital))]
         public static bool AddToHospitalPrefix(BehaviorNurse __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
@@ -67,7 +67,7 @@ namespace ModAdvancedGameChanges.Lopital
         [HarmonyPatch(typeof(BehaviorNurse), nameof(BehaviorNurse.GoToWorkplace))]
         public static bool GoToWorkplacePrefix(BehaviorNurse __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
@@ -130,10 +130,51 @@ namespace ModAdvancedGameChanges.Lopital
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorNurse), nameof(BehaviorNurse.IsFree))]
+        public static bool IsFree(BehaviorNurse __instance, ref bool __result)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            // nurse is possibly free when:
+            // - is idle
+            // - going to workplace
+
+            switch (__instance.m_state.m_nurseState)
+            {
+                case NurseState.Idle:
+                case NurseState.GoingToWorkplace:
+                    {
+                        __result = true;
+
+                        // check if nurse have patient
+                        __result &= (__instance.CurrentPatient == null);
+
+                        // check if nurse is reserved by patient
+                        __result &= (__instance.GetComponent<EmployeeComponent>().m_state.m_reservedByPatient == null);
+
+                        // check if nurse is reserved by procedure
+                        __result &= String.IsNullOrEmpty(__instance.GetComponent<EmployeeComponent>().m_state.m_reservedForProcedureLocID);
+
+                        return false;
+                    }
+                default:
+                    break;
+            }
+
+            // default case
+            __result = false;
+            return false;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(BehaviorNurse), nameof(BehaviorNurse.IsHidden))]
         public static bool IsHiddenPrefix(BehaviorNurse __instance, ref bool __result)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
@@ -183,7 +224,7 @@ namespace ModAdvancedGameChanges.Lopital
         [HarmonyPatch(typeof(BehaviorNurse), "UpdateStateAtHome")]
         public static bool UpdateStateAtHomePrefix(BehaviorNurse __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
@@ -225,7 +266,7 @@ namespace ModAdvancedGameChanges.Lopital
         [HarmonyPatch(typeof(BehaviorNurse), "UpdateStateCommuting")]
         public static bool UpdateStateCommutingPrefix(BehaviorNurse __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
@@ -265,7 +306,7 @@ namespace ModAdvancedGameChanges.Lopital
         [HarmonyPatch(typeof(BehaviorNurse), "UpdateStateFillingFreeTime")]
         public static bool UpdateStateFillingFreeTimePrefix(float deltaTime, BehaviorNurse __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
@@ -399,7 +440,7 @@ namespace ModAdvancedGameChanges.Lopital
         [HarmonyPatch(typeof(BehaviorNurse), "UpdateStateGoingToWorkplace")]
         public static bool UpdateStateGoingToWorkplacePrefix(BehaviorNurse __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
@@ -448,7 +489,7 @@ namespace ModAdvancedGameChanges.Lopital
         [HarmonyPatch(typeof(BehaviorNurse), "UpdateStateIdle")]
         public static bool UpdateStateIdlePrefix(float deltaTime, BehaviorNurse __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
@@ -471,7 +512,7 @@ namespace ModAdvancedGameChanges.Lopital
         [HarmonyPatch(typeof(BehaviorNurse), nameof(BehaviorNurse.UpdateTraining))]
         public static bool UpdateTrainingPrefix(BehaviorNurse __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
