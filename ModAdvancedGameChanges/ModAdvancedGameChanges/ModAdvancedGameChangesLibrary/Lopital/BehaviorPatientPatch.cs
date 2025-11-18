@@ -5,6 +5,7 @@ using ModAdvancedGameChanges.Constants;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
@@ -572,6 +573,9 @@ namespace ModAdvancedGameChanges.Lopital
                     }
                     break;
                 case PatientState.GoingToReceptionist:
+                    {
+                        __instance.UpdateStateGoingToReceptionistInternal();
+                    }
                     break;
                 case PatientState.ExaminedAtReception:
                     break;
@@ -596,9 +600,6 @@ namespace ModAdvancedGameChanges.Lopital
                 case PatientState.WaitingSitting:
                     break;
                 case PatientState.WaitingStandingIdle:
-                    {
-                        __instance.UpdateStateGoingToWaitingRoomInternal();
-                    }
                     break;
                 case PatientState.WaitingBeingCalled:
                     break;
@@ -880,21 +881,20 @@ namespace ModAdvancedGameChanges.Lopital
                                 // we are on reception
                                 // check if there is receptionist
 
-                                Entity receptionist =
-                                    MapScriptInterface.Instance.FindNurseAssignedToARoomType(
-                                        Database.Instance.GetEntry<GameDBRoomType>(RoomTypes.Vanilla.Reception), false,
+                                List<Entity> receptionists =
+                                    MapScriptInterfacePatch.FindNursesAssignedToRoom(
+                                        currentRoom, false,
                                         __instance.m_state.m_department.GetEntity(),
                                         Database.Instance.GetEntry<GameDBEmployeeRole>(EmployeeRoles.Vanilla.Receptionist),
                                         Database.Instance.GetEntry<GameDBSkill>(Skills.Vanilla.SKILL_NURSE_SPEC_RECEPTIONIST));
 
-                                if (receptionist != null)
+                                if (receptionists.Count != 0)
                                 {
                                     if ((__instance.m_state.m_waitingRoom == null) || (__instance.m_state.m_waitingRoom.GetEntity() == null))
                                     {
                                         Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, no reception set");
 
-                                        __instance.m_state.m_waitingRoom = receptionist.GetComponent<EmployeeComponent>().m_state.m_homeRoom;
-
+                                        __instance.m_state.m_waitingRoom = currentRoom;
                                         __instance.m_state.m_waitingRoom.GetEntity().EnqueueCharacter(__instance.m_entity, true);
                                     }
 
@@ -903,9 +903,36 @@ namespace ModAdvancedGameChanges.Lopital
                                         __instance.m_state.m_chair = __instance.GetComponent<WalkComponent>().m_state.m_objectSittingOn;
                                     }
 
-                                    // ???
+                                    if (__instance.m_state.m_waitingRoom.GetEntity().IsCharactersTurn(__instance.m_entity))
+                                    {
+                                        Entity receptionist = receptionists
+                                            .Where(r => r.GetComponent<BehaviorNurse>().IsFree())
+                                            .OrderBy(r =>
+                                            {
+                                                Vector2i receptionistPosition = r.GetComponent<BehaviorNurse>().GetInteractionPosition();
+                                                Vector2i entityPosition = __instance.GetComponent<WalkComponent>().GetCurrentTile();
 
-                                    if (__instance.m_state.m_chair == null)
+                                                return (receptionistPosition - entityPosition).LengthSquared();
+                                            }).
+                                            FirstOrDefault();
+
+                                        if (receptionist != null)
+                                        {
+                                            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, on turn, going to receptionist {receptionist.Name}");
+
+                                            Vector2i interactionPosition = receptionist.GetComponent<BehaviorNurse>().GetInteractionPosition();
+
+                                            __instance.GetComponent<WalkComponent>().SetDestination(interactionPosition, receptionist.GetComponent<WalkComponent>().GetFloorIndex(), MovementType.WALKING);
+
+                                            __instance.FreeWaitingRoom();
+
+                                            __instance.m_state.m_nurse = receptionist;
+                                            receptionist.GetComponent<BehaviorNurse>().CurrentPatient = __instance.m_entity;
+
+                                            __instance.SwitchState(PatientState.GoingToReceptionist);
+                                        }
+                                    }
+                                    else if (__instance.m_state.m_chair == null)
                                     {
                                         Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, no chair");
 
@@ -960,99 +987,6 @@ namespace ModAdvancedGameChanges.Lopital
                                             }
                                         }
                                     }
-
-                                    //    if (!__instance.IsInWaitingRoom())
-                                    //    {
-                                    //        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, is not in reception");
-
-                                    //        if ((__instance.m_state.m_reservedWaitingRoomTile == Vector2i.ZERO_VECTOR) && __instance.TryToStandInternal(true, true))
-                                    //        {
-                                    //            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, going to reception");
-
-                                    //            __instance.SwitchState(PatientState.GoingToReception);
-                                    //            return false;
-                                    //        }
-
-                                    //        //if (!receptionist.GetComponent<WalkComponent>().IsBusy())
-                                    //        //{
-                                    //        //    __instance.m_state.m_reservedWaitingRoomTile = Vector2i.ZERO_VECTOR;
-                                    //        //    return false;
-                                    //        //}
-                                    //    }
-
-                                    //    if (__instance.IsInWaitingRoom())
-                                    //    {
-                                    //        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, in reception");
-
-                                    //        __instance.m_state.m_waitingRoom.GetEntity().EnqueueCharacter(__instance.m_entity, false);
-                                    //    }
-
-                                    //    if (__instance.IsInWaitingRoom() && receptionist.GetComponent<BehaviorNurse>().IsFree() && __instance.m_state.m_waitingRoom.GetEntity().IsCharactersTurn(__instance.m_entity))
-                                    //    {
-                                    //        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, on turn");
-
-                                    //        Vector2i interactionPosition = receptionist.GetComponent<BehaviorNurse>().GetInteractionPosition();
-                                    //        TileObject centerObjectAt = MapScriptInterface.Instance.GetCenterObjectAt(interactionPosition, receptionist.GetComponent<WalkComponent>().GetFloorIndex());
-
-                                    //        if ((centerObjectAt != null) && centerObjectAt.HasTag(Tags.Vanilla.Sitting))
-                                    //        {
-                                    //            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, going to sit");
-
-                                    //            __instance.GetComponent<WalkComponent>().GoSit(centerObjectAt, MovementType.WALKING);
-                                    //            __instance.m_state.m_chair = centerObjectAt;
-                                    //        }
-                                    //        else
-                                    //        {
-                                    //            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, going to receptionist");
-
-                                    //            __instance.GetComponent<WalkComponent>().SetDestination(interactionPosition, receptionist.GetComponent<WalkComponent>().GetFloorIndex(), MovementType.WALKING);
-                                    //        }
-
-                                    //        receptionist.GetComponent<BehaviorNurse>().CurrentPatient = __instance.m_entity;
-                                    //        __instance.m_state.m_nurse = receptionist;
-
-                                    //        __instance.FreeWaitingRoom();
-                                    //        __instance.m_state.m_chair = null;
-                                    //        __instance.SwitchState(PatientState.GoingToReceptionist);
-
-                                    //        return false;
-                                    //    }
-
-                                    //    if (__instance.IsInWaitingRoom() && (__instance.m_state.m_chair == null))
-                                    //    {
-                                    //        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, is in waiting room, no chair");
-
-                                    //        if (__instance.m_state.m_reservedWaitingRoomTile != Vector2i.ZERO_VECTOR)
-                                    //        {
-                                    //            MapScriptInterface.Instance.FreeTile(__instance.m_state.m_reservedWaitingRoomTile, receptionist.GetComponent<WalkComponent>().GetFloorIndex());
-                                    //            __instance.m_state.m_reservedWaitingRoomTile = Vector2i.ZERO_VECTOR;
-                                    //        }
-
-                                    //        TileObject chairObject = MapScriptInterface.Instance.FindClosestFreeObjectWithTag(__instance.m_entity, null, __instance.GetComponent<GridComponent>().GetGridPosition(), __instance.m_state.m_waitingRoom.GetEntity(), Tags.Vanilla.Sitting, AccessRights.PATIENT, false, null, false);
-                                    //        if (__instance.m_state.m_triedToSitAndFailed || (!__instance.TryToSitInternal(chairObject, false)))
-                                    //        {
-                                    //            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, no free seats");
-
-                                    //            if (__instance.TryToStandInternal(true, true))
-                                    //            {
-                                    //                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, found place to stand");
-
-                                    //                __instance.m_state.m_triedToSitAndFailed = false;
-                                    //            }
-
-                                    //            //if (__instance.m_state.m_waitingRoom != null)
-                                    //            //{
-                                    //            //    __instance.m_state.m_waitingRoom.GetEntity().DequeueCharacter(__instance.m_entity);
-                                    //            //}
-
-                                    //            //__instance.m_state.m_nurse = null;
-                                    //            //__instance.m_state.m_waitingRoom = null;
-                                    //            //__instance.m_state.m_chair = null;
-                                    //            //__instance.GoToEmergencyInternal();
-                                    //        }
-
-                                    //        return false;
-                                    //    }
                                 }
                                 else
                                 {
@@ -1249,6 +1183,37 @@ namespace ModAdvancedGameChanges.Lopital
                 }
 
                 // ???
+            }
+
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorPatient), "UpdateStateGoingToReceptionist")]
+        public static bool UpdateStateGoingToReceptionistPrefix(BehaviorPatient __instance)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            if (!__instance.GetComponent<WalkComponent>().IsBusy())
+            {
+                if ((__instance.m_state.m_nurse == null) || (__instance.m_state.m_nurse.GetEntity() == null))
+                {
+                    __instance.SwitchState(PatientState.Idle);
+                }
+                else if (__instance.m_state.m_nurse.GetEntity().GetComponent<BehaviorNurse>().m_state.m_nurseState == NurseState.Idle)
+                {
+                    // nurse is "idle"
+                    GameDBExamination examination = Database.Instance.GetEntry<GameDBExamination>(Examinations.Vanilla.Reception);
+
+                    __instance.GetComponent<ProcedureComponent>().StartExamination(
+                        examination, __instance.m_entity, null, __instance.m_state.m_nurse.GetEntity(), null, AccessRights.PATIENT_PROCEDURE, EquipmentListRules.ONLY_FREE);
+                    __instance.m_state.m_nurse.GetEntity().GetComponent<EmployeeComponent>().SetReserved(Examinations.Vanilla.Reception, __instance.m_entity);
+                    __instance.SwitchState(PatientState.ExaminedAtReception);
+                }
             }
 
             return false;
@@ -1532,6 +1497,14 @@ namespace ModAdvancedGameChanges.Lopital
         {
             Type type = typeof(BehaviorPatient);
             MethodInfo methodInfo = type.GetMethod("UpdateStateGoingToReception", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            methodInfo.Invoke(instance, null);
+        }
+
+        private static void UpdateStateGoingToReceptionistInternal(this BehaviorPatient instance)
+        {
+            Type type = typeof(BehaviorPatient);
+            MethodInfo methodInfo = type.GetMethod("UpdateStateGoingToReceptionist", BindingFlags.NonPublic | BindingFlags.Instance);
 
             methodInfo.Invoke(instance, null);
         }

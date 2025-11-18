@@ -197,6 +197,49 @@ namespace ModAdvancedGameChanges.Lopital
             return MapScriptInterfacePatch.GetRandomFreePlaceInRoomTypePreferDepartment(instance.GetComponent<WalkComponent>(), roomType, department, accessRights);
         }
 
+        public static List<Entity> FindNursesAssignedToRoom(Room room, bool hasToBeFree, Department department, GameDBEmployeeRole role, GameDBSkill skill)
+        {
+            List<Entity> result = new List<Entity>();
+
+            List<Department> departments = new List<Department>();
+            if (department != null)
+            {
+                departments.Add(department);
+            }
+            else
+            {
+                departments.AddRange(Hospital.Instance.m_departments);
+            }
+
+            foreach (Department queryDepartment in departments)
+            {
+                List<EntityIDPointer<Entity>> nurses = queryDepartment.m_departmentPersistentData.m_nurses;
+
+                foreach (EntityIDPointer<Entity> nursePointer in nurses)
+                {
+                    Entity nurse = nursePointer.GetEntity();
+                    BehaviorNurse behavior = nurse.GetComponent<BehaviorNurse>();
+                    EmployeeComponent employee = nurse.GetComponent<EmployeeComponent>();
+
+                    if ((employee != null)
+                        && (DayTime.Instance.GetShift() == employee.m_state.m_shift)
+                        && (employee.m_state.m_homeRoom != null)
+                        && (!employee.IsFired())
+                        && ((room == null) || (employee.m_state.m_homeRoom.GetEntity() == room))
+                        && ((department == null) || (employee.m_state.m_department.GetEntity() == department))
+                        && ((role == null) || employee.HasRole(role))
+                        && ((skill == null) || employee.m_state.m_skillSet.HasSkill(skill))
+                        && ((!hasToBeFree) || behavior.IsFree()))
+                    {
+                        result.Add(nurse);
+                    }
+                }
+            }
+
+            return result;
+        }
+
+
         public static bool IsInDestinationRoom(Entity entity)
         {
             Room currentRoom = MapScriptInterface.Instance.GetRoomAt(entity.GetComponent<WalkComponent>());
