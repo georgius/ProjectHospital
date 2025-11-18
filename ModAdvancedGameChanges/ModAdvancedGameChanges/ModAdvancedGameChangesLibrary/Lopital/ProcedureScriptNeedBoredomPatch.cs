@@ -137,7 +137,7 @@ namespace ModAdvancedGameChanges.Lopital
 				// free reserved object
 				instance.GetEquipment(0).User = null;
 
-				mainCharacter.GetComponent<BehaviorPatient>().ReceiveMessage(new Message(Messages.BOREDOM_REDUCED, Tweakable.Mod.FulfillNeedsBoredomUsingObject()));
+				mainCharacter.GetComponent<BehaviorPatient>().ReceiveMessage(new Message(Messages.BOREDOM_REDUCED, Tweakable.Mod.NeedBoredomUsingObject()));
 
 				if (mainCharacter.GetComponent<MoodComponent>().HasSatisfactionModifier(SatisfationModifiers.Vanilla.Bored))
 				{
@@ -159,7 +159,7 @@ namespace ModAdvancedGameChanges.Lopital
 			if (instance.m_stateData.m_timeInState > UnityEngine.Random.Range(10f, 15f))
 			{
 				mainCharacter.GetComponent<AnimModelComponent>().PlayAnimation(Animations.Vanilla.SitIdle, false);
-				mainCharacter.GetComponent<BehaviorPatient>().ReceiveMessage(new Message(Messages.BOREDOM_REDUCED, Tweakable.Mod.FulfillNeedsBoredomUsingPhone()));
+				mainCharacter.GetComponent<BehaviorPatient>().ReceiveMessage(new Message(Messages.BOREDOM_REDUCED, Tweakable.Mod.NeedBoredomUsingPhone()));
 
 				if (mainCharacter.GetComponent<MoodComponent>().HasSatisfactionModifier(SatisfationModifiers.Vanilla.Bored))
 				{
@@ -190,7 +190,7 @@ namespace ModAdvancedGameChanges.Lopital
 					mainCharacter.GetComponent<MoodComponent>().AddSatisfactionModifier(SatisfationModifiers.Vanilla.Bored);
 				}
 
-				mainCharacter.GetComponent<BehaviorPatient>().ReceiveMessage(new Message(Messages.BOREDOM_REDUCED, Tweakable.Mod.FulfillNeedsBoredomYawning()));
+				mainCharacter.GetComponent<BehaviorPatient>().ReceiveMessage(new Message(Messages.BOREDOM_REDUCED, Tweakable.Mod.NeedBoredomYawning()));
 				instance.SwitchState(ProcedureScriptNeedBoredom.STATE_IDLE);
 			}
 		}

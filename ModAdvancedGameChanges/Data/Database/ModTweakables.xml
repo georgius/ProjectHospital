@@ -88,6 +88,10 @@
 		<Value>60</Value>
 	</GameDBTweakableFloat>
 	
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_EFFICIENCY_MINIMUM">
+		<Value>20</Value>
+	</GameDBTweakableFloat>
+	
 	<GameDBTweakableFloat ID="AGC_TWEAKABLE_EFFICIENCY_SATISFACTION_MINIMUM">
 		<Value>45</Value>
 	</GameDBTweakableFloat>
@@ -109,10 +113,6 @@
 		<Value>40</Value>
 	</GameDBTweakableFloat>
 	
-	<GameDBTweakableFloat ID="AGC_TWEAKABLE_EFFICIENCY_MINIMUM">
-		<Value>20</Value>
-	</GameDBTweakableFloat>
-	
 	<GameDBTweakableInt ID="AGC_TWEAKABLE_ENABLE_EXTRA_LEVELING_PERCENT">
 		<!--
 		Enables or disables applying extra leveling percent.
@@ -132,82 +132,96 @@
 		<Value>3</Value>
 	</GameDBTweakableInt>
 	
-	<GameDBTweakableInt ID="AGC_TWEAKABLE_TRAINING_HOUR_POINTS">
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_TRAINING_HOUR_SKILL_POINTS">
 		<Value>10</Value>
 	</GameDBTweakableInt>
 	
-	<GameDBTweakableInt ID="AGC_TWEAKABLE_CLEANING_TIME_DIRT">
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_JANITOR_CLEANING_TIME_DIRT">
 		<!-- the cleaning time per dirt unit -->
 		<Value>1</Value>
 	</GameDBTweakableInt>
-	<GameDBTweakableInt ID="AGC_TWEAKABLE_CLEANING_TIME_BLOOD">
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_JANITOR_CLEANING_TIME_BLOOD">
 		<!-- the cleaning time per blood unit -->
 		<Value>5</Value>
 	</GameDBTweakableInt>
+	
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_NURSE_RECEPTION_BASE_TIME_QUESTION">
+		<Value>1</Value>
+	</GameDBTweakableInt>
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_NURSE_RECEPTION_BASE_TIME_DECISION">
+		<Value>3</Value>
+	</GameDBTweakableInt>
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_NURSE_RECEPTION_QUESTION_SKILL_POINTS">
+		<Value>1</Value>
+	</GameDBTweakableInt>
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_NURSE_RECEPTION_NEXT_QUESTION_SKILL_POINTS">
+		<Value>5</Value>
+	</GameDBTweakableInt>
+	
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_FULFILL_NEEDS_THRESHOLD">
+		<Value>50</Value>
+	</GameDBTweakableFloat>
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_FULFILL_NEEDS_THRESHOLD_CRITICAL">
+		<Value>85</Value>
+	</GameDBTweakableFloat>
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_FULFILL_NEEDS_REDUCTION_MINIMUM">
+		<Value>50</Value>
+	</GameDBTweakableFloat>
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_FULFILL_NEEDS_REDUCTION_MAXIMUM">
+		<Value>100</Value>
+	</GameDBTweakableFloat>
+	
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_NEED_BLADDER">
+		<Value>70</Value>
+	</GameDBTweakableFloat>
+	
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_NEED_BOREDOM_USING_OBJECT">
+		<Value>70</Value>
+	</GameDBTweakableFloat>
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_NEED_BOREDOM_USING_PHONE">
+		<Value>30</Value>
+	</GameDBTweakableFloat>
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_NEED_BOREDOM_YAWNING">
+		<Value>10</Value>
+	</GameDBTweakableFloat>
+	
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_NEED_HUNGER">
+		<Value>70</Value>
+	</GameDBTweakableFloat>
+	
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_NEED_REST_MINUTES">
+		<Value>20</Value>
+	</GameDBTweakableFloat>
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_NEED_REST_PLAY_GAME">
+		<Value>70</Value>
+	</GameDBTweakableFloat>
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_NEED_REST_SIT">
+		<Value>50</Value>
+	</GameDBTweakableFloat>
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_NEED_REST_STUDY">
+		<Value>60</Value>
+	</GameDBTweakableFloat>	
+	
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_VENDING_PAYMENT_PATIENT_MINIMUM">
+		<Value>5</Value>
+	</GameDBTweakableInt>
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_VENDING_PAYMENT_PATIENT_MAXIMUM">
+		<Value>10</Value>
+	</GameDBTweakableInt>
+	
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_VENDING_PAYMENT_EMPLOYEE_MINIMUM">
+		<Value>2</Value>
+	</GameDBTweakableInt>
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_VENDING_PAYMENT_EMPLOYEE_MAXIMUM">
+		<Value>5</Value>
+	</GameDBTweakableInt>
+	
+	<!-- vanilla -->
 	
 	<GameDBTweakableInt ID="TWEAKABLE_MAIN_SKILL_POINTS">
 		<Value>5</Value>   
 	</GameDBTweakableInt>
 	<GameDBTweakableInt ID="TWEAKABLE_JANITOR_DEXTERITY_SKILL_POINTS">
 		<Value>1</Value>
-	</GameDBTweakableInt>
-	
-	<GameDBTweakableFloat ID="AGC_TWEAKABLE_FULFILL_NEEDS_THRESHOLD">
-		<Value>50</Value>
-	</GameDBTweakableFloat>
-	<GameDBTweakableFloat ID="AGC_TWEAKABLE_FULFILL_NEEDS_CRITICAL_THRESHOLD">
-		<Value>85</Value>
-	</GameDBTweakableFloat>
-	<GameDBTweakableFloat ID="AGC_TWEAKABLE_FULFILL_NEEDS_REDUCTION_RANGE_MINIMUM">
-		<Value>25</Value>
-	</GameDBTweakableFloat>
-	<GameDBTweakableFloat ID="AGC_TWEAKABLE_FULFILL_NEEDS_REDUCTION_RANGE_MAXIMUM">
-		<Value>75</Value>
-	</GameDBTweakableFloat>
-	
-	<GameDBTweakableFloat ID="AGC_TWEAKABLE_FULFILL_NEEDS_BLADDER">
-		<Value>70</Value>
-	</GameDBTweakableFloat>
-	
-	<GameDBTweakableFloat ID="AGC_TWEAKABLE_FULFILL_NEEDS_BOREDOM_USING_OBJECT">
-		<Value>70</Value>
-	</GameDBTweakableFloat>
-	<GameDBTweakableFloat ID="AGC_TWEAKABLE_FULFILL_NEEDS_BOREDOM_USING_PHONE">
-		<Value>30</Value>
-	</GameDBTweakableFloat>
-	<GameDBTweakableFloat ID="AGC_TWEAKABLE_FULFILL_NEEDS_BOREDOM_YAWNING">
-		<Value>10</Value>
-	</GameDBTweakableFloat>
-	
-	<GameDBTweakableFloat ID="AGC_TWEAKABLE_FULFILL_NEEDS_HUNGER">
-		<Value>70</Value>
-	</GameDBTweakableFloat>
-	
-	<GameDBTweakableFloat ID="AGC_TWEAKABLE_FULFILL_NEEDS_REST_PLAY_GAME">
-		<Value>50</Value>
-	</GameDBTweakableFloat>
-	<GameDBTweakableFloat ID="AGC_TWEAKABLE_FULFILL_NEEDS_REST_SIT">
-		<Value>30</Value>
-	</GameDBTweakableFloat>
-	<GameDBTweakableFloat ID="AGC_TWEAKABLE_FULFILL_NEEDS_REST_STUDY">
-		<Value>50</Value>
-	</GameDBTweakableFloat>
-	
-	<GameDBTweakableFloat ID="AGC_TWEAKABLE_REST_MINUTES">
-		<Value>20</Value>
-	</GameDBTweakableFloat>
-	
-	<GameDBTweakableInt ID="AGC_TWEAKABLE_PATIENT_VENDING_PAYMENT_MINIMUM">
-		<Value>5</Value>
-	</GameDBTweakableInt>
-	<GameDBTweakableInt ID="AGC_TWEAKABLE_PATIENT_VENDING_PAYMENT_MAXIMUM">
-		<Value>10</Value>
-	</GameDBTweakableInt>
-	
-	<GameDBTweakableInt ID="AGC_TWEAKABLE_EMPLOYEE_VENDING_PAYMENT_MINIMUM">
-		<Value>2</Value>
-	</GameDBTweakableInt>
-	<GameDBTweakableInt ID="AGC_TWEAKABLE_EMPLOYEE_VENDING_PAYMENT_MAXIMUM">
-		<Value>5</Value>
 	</GameDBTweakableInt>
 </Database>

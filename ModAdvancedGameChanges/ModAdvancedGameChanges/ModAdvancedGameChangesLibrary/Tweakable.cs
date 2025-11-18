@@ -6,528 +6,121 @@ namespace ModAdvancedGameChanges
 {
     public static class Tweakable
     {
-        public static T GetTweakable<T>(string tweakable) where T : DatabaseEntry
-        {
-            return Database.Instance.GetEntry<T>(tweakable);
-        }
-
-        public static void CheckConfiguration()
-        {
-            Tweakable.CheckNonLinearSkillLevelingConfiguration();
-            Tweakable.CheckEnableExtraLevelingPercent();
-            Tweakable.CheckClinicDoctorsMaxLevel();
-            Tweakable.CheckEmployeeLevelPoints(5, Tweakables.Mod.AGC_TWEAKABLE_DOCTOR_LEVEL_POINTS_FORMAT);              // doctors
-            Tweakable.CheckEmployeeLevelPoints(5, Tweakables.Mod.AGC_TWEAKABLE_NURSE_LEVEL_POINTS_FORMAT);               // nurses
-            Tweakable.CheckEmployeeLevelPoints(5, Tweakables.Mod.AGC_TWEAKABLE_LAB_SPECIALIST_LEVEL_POINTS_FORMAT);      // lab specialists
-            Tweakable.CheckEmployeeLevelPoints(5, Tweakables.Mod.AGC_TWEAKABLE_JANITOR_LEVEL_POINTS_FORMAT);             // janitors
-            Tweakable.CheckTrainingHourPoints();
-            Tweakable.CheckMainSkillPoints();
-            Tweakable.CheckJanitorDexteritySkillPoints();
-            Tweakable.CheckCleaningTimeDirt();
-            Tweakable.CheckCleaningTimeBlood();
-            Tweakable.CheckJanitorManagerCleaningBonusPercent();
-            Tweakable.CheckPatientLeaveTimeHours();
-            Tweakable.CheckPatientLeaveWarningHours();
-            Tweakable.CheckFulfillNeedsThreshold();
-            Tweakable.CheckFulfillNeedsCriticalThreshold();
-            Tweakable.CheckFulfillNeedsReductionMinimum();
-            Tweakable.CheckFulfillNeedsReductionMaximum();
-            Tweakable.CHeckFulfillNeedsBladder();
-            Tweakable.CheckFulfillNeedsBoredomUsingObject();
-            Tweakable.CheckFulfillNeedsBoredomUsingPhone();
-            Tweakable.CheckFulfillNeedsBoredomYawning();
-            Tweakable.CheckFulfillNeedsHunger();
-            Tweakable.CheckFulfillNeedsRestPlayGame();
-            Tweakable.CheckFulfillNeedsRestSit();
-            Tweakable.CheckFulfillNeedsRestStudy();
-            Tweakable.CheckRestMinutes();
-            Tweakable.CheckFreeTimeSkillPoints();
-            Tweakable.CheckPatientVendingPaymentMinimum();
-            Tweakable.CheckPatientVendingPaymentMaximum();
-            Tweakable.CheckEmployeeVendingPaymentMinimum();
-            Tweakable.CheckEmployeeVendingPaymentMaximum();
-            Tweakable.CheckSkillTimeReductionMinimum();
-            Tweakable.CheckSkillTimeReductionMaximum();
-            Tweakable.CheckEfficiencySatisfactionMinimum();
-            Tweakable.CheckEfficiencySatisfactionMaximum();
-            Tweakable.CheckEfficiencyGoodBossMinimum();
-            Tweakable.CheckEfficiencyGoodBossMaximum();
-            Tweakable.CheckEfficiencyShiftPreferenceMinimum();
-            Tweakable.CheckEfficiencyShiftPreferenceMaximum();
-            Tweakable.CheckEfficiencyMinimum();
-        }
-
-        public static void CheckNonLinearSkillLevelingConfiguration()
-        {
-            var value = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_SKILL_LEVELS);
-            if (value.Value < 1)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_SKILL_LEVELS}' must be greater than zero.");
-            }
-
-            for (int i = 0; i < value.Value; i++)
-            {
-                var name = String.Format(CultureInfo.InvariantCulture, Tweakables.Mod.AGC_TWEAKABLE_SKILL_POINTS_FORMAT, i);
-                var skillPoints = Tweakable.EnsureExists<GameDBTweakableInt>(name);
-
-                if (skillPoints.Value < 1)
-                {
-                    throw new Exception($"The tweakable '{name}' must be greater than zero.");
-                }
-            }
-        }
-
-        public static void CheckEnableExtraLevelingPercent()
-        {
-            // the AGC_TWEAKABLE_ENABLE_EXTRA_LEVELING_PERCENT value is not relevant, we test it against 1
-            Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_ENABLE_EXTRA_LEVELING_PERCENT);
-        }
-
-        public static void CheckClinicDoctorsMaxLevel()
-        {
-            var value = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_ALLOWED_CLINIC_DOCTORS_LEVEL);
-            if (value.Value < 1)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_ALLOWED_CLINIC_DOCTORS_LEVEL}' must be greater than zero.");
-            }
-            if (value.Value > 5)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_ALLOWED_CLINIC_DOCTORS_LEVEL}' must be lower than six.");
-            }
-        }
-
-        public static void CheckEmployeeLevelPoints(int levels, string format)
-        {
-            for (int i = 1; i < levels ; i++)
-            {
-                var name = String.Format(CultureInfo.InvariantCulture, format, i);
-                var levelPoints = Tweakable.EnsureExists<GameDBTweakableInt>(name);
-                if (levelPoints.Value < 1)
-                {
-                    throw new Exception($"The tweakable '{name}' must be greater than zero.");
-                }
-            }
-        }
-
-        public static void CheckTrainingHourPoints()
-        {
-            var value = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_TRAINING_HOUR_POINTS);
-            if (value.Value < 1)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_TRAINING_HOUR_POINTS}' must be greater than zero.");
-            }
-        }
-
-        public static void CheckMainSkillPoints()
-        {
-            var value = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_MAIN_SKILL_POINTS);
-            if (value.Value < 1)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_MAIN_SKILL_POINTS}' must be greater than zero.");
-            }
-        }
-
-        public static void CheckJanitorDexteritySkillPoints()
-        {
-            var value = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_JANITOR_DEXTERITY_SKILL_POINTS);
-            if (value.Value < 1)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_JANITOR_DEXTERITY_SKILL_POINTS}' must be greater than zero.");
-            }
-        }
-
-        public static void CheckCleaningTimeDirt()
-        {
-            var value = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_CLEANING_TIME_DIRT);
-            if (value.Value < 1)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_CLEANING_TIME_DIRT}' must be greater than zero.");
-            }
-        }
-
-        public static void CheckCleaningTimeBlood()
-        {
-            var value = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_CLEANING_TIME_BLOOD);
-            if (value.Value < 1)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_CLEANING_TIME_BLOOD}' must be greater than zero.");
-            }
-        }
-
-        public static void CheckJanitorManagerCleaningBonusPercent()
-        {
-            var value = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_JANITOR_MANAGER_CLEANING_BONUS_PERCENT);
-            if (value.Value < 1)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_JANITOR_MANAGER_CLEANING_BONUS_PERCENT}' must be greater than zero.");
-            }
-            if (value.Value > 100)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_JANITOR_MANAGER_CLEANING_BONUS_PERCENT}' must be less than or equal to 100.");
-            }
-        }
-
-        public static void CheckPatientLeaveTimeHours()
-        {
-            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Vanilla.TWEAKABLE_PATIENT_LEAVE_TIME_HOURS);
-            if (value.Value <= 0f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_PATIENT_LEAVE_TIME_HOURS}' must be greater than zero.");
-            }
-        }
-
-        public static void CheckPatientLeaveWarningHours()
-        {
-            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Vanilla.TWEAKABLE_PATIENT_LEAVE_WARNING_HOURS);
-            if (value.Value <= 0f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_PATIENT_LEAVE_WARNING_HOURS}' must be greater than zero.");
-            }
-        }
-
-        public static void CheckFulfillNeedsThreshold()
-        {
-            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_THRESHOLD);
-            if (value.Value < 0f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_THRESHOLD}' must be greater than or equal to zero.");
-            }
-            if (value.Value > 100f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_THRESHOLD}' must be less than or equal to 100.");
-            }
-        }
-
-        public static void CheckFulfillNeedsCriticalThreshold()
-        {
-            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_CRITICAL_THRESHOLD);
-            if (value.Value < Tweakable.Mod.FulfillNeedsThreshold())
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_CRITICAL_THRESHOLD}' must be greater than or equal to {Tweakable.Mod.FulfillNeedsThreshold().ToString(CultureInfo.InvariantCulture)}.");
-            }
-            if (value.Value > 100f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_CRITICAL_THRESHOLD}' must be less than or equal to 100.");
-            }
-        }
-
-        public static void CheckFulfillNeedsReductionMinimum()
-        {
-            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REDUCTION_RANGE_MINIMUM);
-            if (value.Value < 0f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REDUCTION_RANGE_MINIMUM}' must be greater than or equal to zero.");
-            }
-            if (value.Value > 100f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REDUCTION_RANGE_MINIMUM}' must be less than or equal to 100.");
-            }
-        }
-
-        public static void CheckFulfillNeedsReductionMaximum()
-        {
-            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REDUCTION_RANGE_MAXIMUM);
-            if (value.Value < Tweakable.Mod.FulfillNeedsReductionMinimum())
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REDUCTION_RANGE_MAXIMUM}' must be greater than or equal to {Tweakable.Mod.FulfillNeedsReductionMinimum().ToString(CultureInfo.InvariantCulture)}.");
-            }
-            if (value.Value > 100f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REDUCTION_RANGE_MAXIMUM}' must be less than or equal to 100.");
-            }
-        }
-
-        public static void CHeckFulfillNeedsBladder()
-        {
-            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_BLADDER);
-            if (value.Value < 0f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_BLADDER}' must be greater than or equal to zero.");
-            }
-            if (value.Value > 100f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_BLADDER}' must be less than or equal to 100.");
-            }
-        }
-
-        public static void CheckFulfillNeedsBoredomUsingObject()
-        {
-            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_BOREDOM_USING_OBJECT);
-            if (value.Value < 0f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_BOREDOM_USING_OBJECT}' must be greater than or equal to zero.");
-            }
-            if (value.Value > 100f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_BOREDOM_USING_OBJECT}' must be less than or equal to 100.");
-            }
-        }
-
-        public static void CheckFulfillNeedsBoredomUsingPhone()
-        {
-            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_BOREDOM_USING_PHONE);
-            if (value.Value < 0f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_BOREDOM_USING_PHONE}' must be greater than or equal to zero.");
-            }
-            if (value.Value > 100f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_BOREDOM_USING_PHONE}' must be less than or equal to 100.");
-            }
-        }
-
-        public static void CheckFulfillNeedsBoredomYawning()
-        {
-            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_BOREDOM_YAWNING);
-            if (value.Value < 0f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_BOREDOM_YAWNING}' must be greater than or equal to zero.");
-            }
-            if (value.Value > 100f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_BOREDOM_YAWNING}' must be less than or equal to 100.");
-            }
-        }
-
-        public static void CheckFulfillNeedsHunger()
-        {
-            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_HUNGER);
-            if (value.Value < 0f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_HUNGER}' must be greater than or equal to zero.");
-            }
-            if (value.Value > 100f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_HUNGER}' must be less than or equal to 100.");
-            }
-        }
-
-        public static void CheckFulfillNeedsRestPlayGame()
-        {
-            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REST_PLAY_GAME);
-            if (value.Value < 0f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REST_PLAY_GAME}' must be greater than or equal to zero.");
-            }
-            if (value.Value > 100f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REST_PLAY_GAME}' must be less than or equal to 100.");
-            }
-        }
-
-        public static void CheckFulfillNeedsRestSit()
-        {
-            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REST_SIT);
-            if (value.Value < 0f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REST_SIT}' must be greater than or equal to zero.");
-            }
-            if (value.Value > 100f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REST_SIT}' must be less than or equal to 100.");
-            }
-        }
-
-        public static void CheckFulfillNeedsRestStudy()
-        {
-            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REST_STUDY);
-            if (value.Value < 0f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REST_STUDY}' must be greater than or equal to zero.");
-            }
-            if (value.Value > 100f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REST_STUDY}' must be less than or equal to 100.");
-            }
-        }
-
-        public static void CheckRestMinutes()
-        {
-            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_REST_MINUTES);
-            if (value.Value < 0f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_REST_MINUTES}' must be greater than zero or equal to zero.");
-            }
-        }
-
-        public static void CheckPatientVendingPaymentMinimum()
-        {
-            var value = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PATIENT_VENDING_PAYMENT_MINIMUM);
-            if (value.Value < 0)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PATIENT_VENDING_PAYMENT_MINIMUM}' must be greater than or equal to zero.");
-            }
-        }
-
-        public static void CheckPatientVendingPaymentMaximum()
-        {
-            var value = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PATIENT_VENDING_PAYMENT_MAXIMUM);
-            if (value.Value < Tweakable.Mod.PatientVendingPaymentMinimum())
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PATIENT_VENDING_PAYMENT_MAXIMUM}' must be greater than or equal to {Tweakable.Mod.PatientVendingPaymentMinimum().ToString(CultureInfo.InvariantCulture)}.");
-            }
-        }
-
-        public static void CheckEmployeeVendingPaymentMinimum()
-        {
-            var value = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_EMPLOYEE_VENDING_PAYMENT_MINIMUM);
-            if (value.Value < 0)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EMPLOYEE_VENDING_PAYMENT_MINIMUM}' must be greater than or equal to zero.");
-            }
-        }
-
-        public static void CheckEmployeeVendingPaymentMaximum()
-        {
-            var value = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_EMPLOYEE_VENDING_PAYMENT_MAXIMUM);
-            if (value.Value < Tweakable.Mod.EmployeeVendingPaymentMinimum())
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EMPLOYEE_VENDING_PAYMENT_MAXIMUM}' must be greater than or equal to {Tweakable.Mod.EmployeeVendingPaymentMinimum().ToString(CultureInfo.InvariantCulture)}.");
-            }
-        }
-
-        public static void CheckFreeTimeSkillPoints()
-        {
-            var value = Tweakable.EnsureExists<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_REPEAT_ACTION_FREE_TIME_SKILL_POINTS);
-            if (value.Value < 1)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_REPEAT_ACTION_FREE_TIME_SKILL_POINTS}' must be greater than zero.");
-            }
-        }
-
-        public static void CheckSkillTimeReductionMinimum()
-        {
-            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_SKILL_TIME_REDUCTION_MINIMUM);
-            if (value.Value < 0f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_SKILL_TIME_REDUCTION_MINIMUM}' must be greater than or equal to zero.");
-            }
-            if (value.Value > 100f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_SKILL_TIME_REDUCTION_MINIMUM}' must be less than or equal to 100.");
-            }
-        }
-
-        public static void CheckSkillTimeReductionMaximum()
-        {
-            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_SKILL_TIME_REDUCTION_MAXIMUM);
-            if (value.Value < 0f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_SKILL_TIME_REDUCTION_MAXIMUM}' must be greater than or equal to zero.");
-            }
-            if (value.Value > 100f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_SKILL_TIME_REDUCTION_MAXIMUM}' must be less than or equal to 100.");
-            }
-        }
-
-        public static void CheckEfficiencySatisfactionMinimum()
-        {
-            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_SATISFACTION_MINIMUM);
-            if (value.Value < 0f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_SATISFACTION_MINIMUM}' must be greater than or equal to zero.");
-            }
-            if (value.Value > 100f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_SATISFACTION_MINIMUM}' must be less than or equal to 100.");
-            }
-        }
-
-        public static void CheckEfficiencySatisfactionMaximum()
-        {
-            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_SATISFACTION_MAXIMUM);
-            if (value.Value < Tweakable.Mod.EfficiencySatisfactionMinimum())
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_SATISFACTION_MAXIMUM}' must be greater than or equal to {Tweakable.Mod.EfficiencySatisfactionMinimum().ToString(CultureInfo.InvariantCulture)}.");
-            }
-            if (value.Value > 100f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_SATISFACTION_MAXIMUM}' must be less than or equal to 100.");
-            }
-        }
-
-        public static void CheckEfficiencyGoodBossMinimum()
-        {
-            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_GOOD_BOSS_MINIMUM);
-            if (value.Value < 0f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_GOOD_BOSS_MINIMUM}' must be greater than or equal to zero.");
-            }
-            if (value.Value > 100f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_GOOD_BOSS_MINIMUM}' must be less than or equal to 100.");
-            }
-        }
-
-        public static void CheckEfficiencyGoodBossMaximum()
-        {
-            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_GOOD_BOSS_MAXIMUM);
-            if (value.Value < Tweakable.Mod.EfficiencyGoodBossMinimum())
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_GOOD_BOSS_MAXIMUM}' must be greater than or equal to {Tweakable.Mod.EfficiencyGoodBossMinimum().ToString(CultureInfo.InvariantCulture)}.");
-            }
-            if (value.Value > 100f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_GOOD_BOSS_MAXIMUM}' must be less than or equal to 100.");
-            }
-        }
-
-        public static void CheckEfficiencyShiftPreferenceMinimum()
-        {
-            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_SHIFT_PREFERENCE_MINIMUM);
-            if (value.Value < 0f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_SHIFT_PREFERENCE_MINIMUM}' must be greater than or equal to zero.");
-            }
-            if (value.Value > 100f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_SHIFT_PREFERENCE_MINIMUM}' must be less than or equal to 100.");
-            }
-        }
-
-        public static void CheckEfficiencyShiftPreferenceMaximum()
-        {
-            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_SHIFT_PREFERENCE_MAXIMUM);
-            if (value.Value < Tweakable.Mod.EfficiencyShiftPreferenceMinimum())
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_SHIFT_PREFERENCE_MAXIMUM}' must be greater than or equal to {Tweakable.Mod.EfficiencyShiftPreferenceMinimum().ToString(CultureInfo.InvariantCulture)}.");
-            }
-            if (value.Value > 100f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_SHIFT_PREFERENCE_MAXIMUM}' must be less than or equal to 100.");
-            }
-        }
-
-        public static void CheckEfficiencyMinimum()
-        {
-            var value = Tweakable.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_MINIMUM);
-            if (value.Value < 1f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_MINIMUM}' must be greater than or equal to 1.");
-            }
-            if (value.Value > 100f)
-            {
-                throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_MINIMUM}' must be less than or equal to 100.");
-            }
-        }
-
-        public static T EnsureExists<T>(string tweakable) where T : DatabaseEntry
-        {
-            var entry = Tweakable.GetTweakable<T>(tweakable);
-            if (entry == null)
-            {
-                throw new Exception($"The tweakable '{tweakable}' does not exist or is not of '{typeof(T).Name}' type or has incorrent value for '{typeof(T).Name}' type.");
-            }
-
-            return entry;
-        }
-
         public static class Mod
         {
+            public static int AllowedClinicDoctorsLevel()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_ALLOWED_CLINIC_DOCTORS_LEVEL).Value;
+            }
+
             public static int DoctorLevelPoints(int index)
             {
                 return Tweakable.GetTweakable<GameDBTweakableInt>(String.Format(CultureInfo.InvariantCulture, Tweakables.Mod.AGC_TWEAKABLE_DOCTOR_LEVEL_POINTS_FORMAT, index)).Value;
+            }
+
+            public static float EfficiencyMinimum()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_MINIMUM).Value;
+            }
+
+            public static float EfficiencyGoodBossMinimum()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_GOOD_BOSS_MINIMUM).Value;
+            }
+
+            public static float EfficiencyGoodBossMaximum()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_GOOD_BOSS_MAXIMUM).Value;
+            }
+
+            public static float EfficiencySatisfactionMinimum()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_SATISFACTION_MINIMUM).Value;
+            }
+
+            public static float EfficiencySatisfactionMaximum()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_SATISFACTION_MAXIMUM).Value;
+            }
+
+            public static float EfficiencyShiftPreferenceMinimum()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_SHIFT_PREFERENCE_MINIMUM).Value;
+            }
+
+            public static float EfficiencyShiftPreferenceMaximum()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_SHIFT_PREFERENCE_MAXIMUM).Value;
+            }
+
+            public static bool EnableExtraLevelingPercent()
+            {
+                return (Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_ENABLE_EXTRA_LEVELING_PERCENT).Value == 1);
+            }
+
+            public static float FulfillNeedsThreshold()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_THRESHOLD).Value;
+            }
+
+            public static float FulfillNeedsThresholdCritical()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_THRESHOLD_CRITICAL).Value;
+            }
+
+            public static float FulfillNeedsReductionMinimum()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REDUCTION_MINIMUM).Value;
+            }
+
+            public static float FulfillNeedsReductionMaximum()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REDUCTION_MAXIMUM).Value;
+            }
+
+            public static float NeedBladder()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_NEED_BLADDER).Value;
+            }
+
+            public static float NeedBoredomUsingObject()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_NEED_BOREDOM_USING_OBJECT).Value;
+            }
+
+            public static float NeedBoredomUsingPhone()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_NEED_BOREDOM_USING_PHONE).Value;
+            }
+
+            public static float NeedBoredomYawning()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_NEED_BOREDOM_YAWNING).Value;
+            }
+
+            public static float NeedHunger()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER).Value;
+            }
+
+            public static float NeedRestMinutes()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_NEED_REST_MINUTES).Value;
+            }
+
+            public static float NeedRestPlayGame()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_NEED_REST_PLAY_GAME).Value;
+            }
+
+            public static float NeedRestSit()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_NEED_REST_SIT).Value;
+            }
+
+            public static float NeedRestStudy()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_NEED_REST_STUDY).Value;
             }
 
             public static int NurseLevelPoints(int index)
@@ -535,9 +128,39 @@ namespace ModAdvancedGameChanges
                 return Tweakable.GetTweakable<GameDBTweakableInt>(String.Format(CultureInfo.InvariantCulture, Tweakables.Mod.AGC_TWEAKABLE_NURSE_LEVEL_POINTS_FORMAT, index)).Value;
             }
 
+            public static int NurseReceptionBaseTimeQuestion()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NURSE_RECEPTION_BASE_TIME_QUESTION).Value;
+            }
+
+            public static int NurseReceptionBaseTimeDecision()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NURSE_RECEPTION_BASE_TIME_DECISION).Value;
+            }
+
+            public static int NurseReceptionQuestionSkillPoints()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NURSE_RECEPTION_QUESTION_SKILL_POINTS).Value;
+            }
+
+            public static int NurseReceptionNextQuestionSkillPoints()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NURSE_RECEPTION_NEXT_QUESTION_SKILL_POINTS).Value;
+            }
+
             public static int LabSpecialistLevelPoints(int index)
             {
                 return Tweakable.GetTweakable<GameDBTweakableInt>(String.Format(CultureInfo.InvariantCulture, Tweakables.Mod.AGC_TWEAKABLE_LAB_SPECIALIST_LEVEL_POINTS_FORMAT, index)).Value;
+            }
+
+            public static int JanitorCleaningTimeBlood()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_JANITOR_CLEANING_TIME_BLOOD).Value;
+            }
+
+            public static int JanitorCleaningTimeDirt()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_JANITOR_CLEANING_TIME_DIRT).Value;
             }
 
             public static int JanitorLevelPoints(int index)
@@ -565,149 +188,29 @@ namespace ModAdvancedGameChanges
                 return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_SKILL_TIME_REDUCTION_MAXIMUM).Value;
             }
 
-            public static bool EnableExtraLevelingPercent()
+            public static int TrainingHourSkillPoints()
             {
-                return (Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_ENABLE_EXTRA_LEVELING_PERCENT).Value == 1);
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_TRAINING_HOUR_SKILL_POINTS).Value;
             }
 
-            public static int AllowedClinicDoctorsLevel()
+            public static int VendingPaymentEmployeeMinimum()
             {
-                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_ALLOWED_CLINIC_DOCTORS_LEVEL).Value;
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_VENDING_PAYMENT_EMPLOYEE_MINIMUM).Value;
             }
 
-            public static int TrainingHourPoints()
+            public static int VendingPaymentEmployeeMaximum()
             {
-                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_TRAINING_HOUR_POINTS).Value;
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_VENDING_PAYMENT_EMPLOYEE_MAXIMUM).Value;
             }
 
-            public static int CleaningTimeDirt()
+            public static int VendingPaymentPatientMinimum()
             {
-                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_CLEANING_TIME_DIRT).Value;
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_VENDING_PAYMENT_PATIENT_MINIMUM).Value;
             }
 
-            public static int CleaningTimeBlood()
+            public static int VendingPaymentPatientMaximum()
             {
-                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_CLEANING_TIME_BLOOD).Value;
-            }
-
-            public static float FulfillNeedsThreshold()
-            {
-                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_THRESHOLD).Value;
-            }
-
-            public static float FulfillNeedsCriticalThreshold()
-            {
-                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_CRITICAL_THRESHOLD).Value;
-            }
-
-            public static float FulfillNeedsReductionMinimum()
-            {
-                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REDUCTION_RANGE_MINIMUM).Value;
-            }
-
-            public static float FulfillNeedsReductionMaximum()
-            {
-                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REDUCTION_RANGE_MAXIMUM).Value;
-            }
-
-            public static float FulfillNeedsBladder()
-            {
-                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_BLADDER).Value;
-            }
-
-            public static float FulfillNeedsBoredomUsingObject()
-            {
-                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_BOREDOM_USING_OBJECT).Value;
-            }
-
-            public static float FulfillNeedsBoredomUsingPhone()
-            {
-                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_BOREDOM_USING_PHONE).Value;
-            }
-
-            public static float FulfillNeedsBoredomYawning()
-            {
-                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_BOREDOM_YAWNING).Value;
-            }
-
-            public static float FulfillNeedsHunger()
-            {
-                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_HUNGER).Value;
-            }
-
-            public static float FulfillNeedsRestPlayGame()
-            {
-                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REST_PLAY_GAME).Value;
-            }
-
-            public static float FulfillNeedsRestSit()
-            {
-                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REST_SIT).Value;
-            }
-
-            public static float FulfillNeedsRestStudy()
-            {
-                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REST_STUDY).Value;
-            }
-
-            public static float RestMinutes()
-            {
-                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_REST_MINUTES).Value;
-            }
-
-            public static int PatientVendingPaymentMinimum()
-            {
-                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PATIENT_VENDING_PAYMENT_MINIMUM).Value;
-            }
-
-            public static int PatientVendingPaymentMaximum()
-            {
-                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PATIENT_VENDING_PAYMENT_MAXIMUM).Value;
-            }
-
-            public static int EmployeeVendingPaymentMinimum()
-            {
-                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_EMPLOYEE_VENDING_PAYMENT_MINIMUM).Value;
-            }
-
-            public static int EmployeeVendingPaymentMaximum()
-            {
-                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_EMPLOYEE_VENDING_PAYMENT_MAXIMUM).Value;
-            }
-
-            public static float EfficiencySatisfactionMinimum()
-            {
-                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_SATISFACTION_MINIMUM).Value;
-            }
-
-            public static float EfficiencySatisfactionMaximum()
-            {
-                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_SATISFACTION_MAXIMUM).Value;
-            }
-
-            public static float EfficiencyGoodBossMinimum()
-            {
-                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_GOOD_BOSS_MINIMUM).Value;
-            }
-
-            public static float EfficiencyGoodBossMaximum()
-            {
-                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_GOOD_BOSS_MAXIMUM).Value;
-            }
-
-            public static float EfficiencyShiftPreferenceMinimum()
-            {
-                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_SHIFT_PREFERENCE_MINIMUM).Value;
-            }
-
-            public static float EfficiencyShiftPreferenceMaximum()
-            {
-                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_SHIFT_PREFERENCE_MAXIMUM).Value;
-            }
-
-            public static float EfficiencyMinimum()
-            {
-                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_MINIMUM).Value;
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_VENDING_PAYMENT_PATIENT_MAXIMUM).Value;
             }
         }
 
@@ -753,6 +256,19 @@ namespace ModAdvancedGameChanges
             public static int FreeTimeSkillPoints()
             {
                 return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_REPEAT_ACTION_FREE_TIME_SKILL_POINTS).Value;
+            }
+        }
+
+        public static T GetTweakable<T>(string tweakable) where T : DatabaseEntry
+        {
+            return Database.Instance.GetEntry<T>(tweakable);
+        }
+
+        public static void CheckConfiguration()
+        {
+            foreach (var tweakableValidation in TweakableValidation.Validations)
+            {
+                tweakableValidation.Validate();
             }
         }
     }

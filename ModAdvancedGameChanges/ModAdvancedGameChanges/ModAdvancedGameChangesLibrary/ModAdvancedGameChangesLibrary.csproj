@@ -37,6 +37,7 @@
     <Compile Include="CharacterPanelRolesPanelControllerPatch.cs" />
     <Compile Include="CharacterPanelSkillPanelControllerPatch.cs" />
     <Compile Include="Constants\Animations.cs" />
+    <Compile Include="Constants\Dialogues.cs" />
     <Compile Include="Constants\EmployeeRoles.cs" />
     <Compile Include="Constants\Examinations.cs" />
     <Compile Include="Constants\Icons.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="Lopital\NeedPatch.cs" />
     <Compile Include="Lopital\ProcedureComponentPatch.cs" />
     <Compile Include="Lopital\ProcedureScriptControlNurseFreeTimePatch.cs" />
+    <Compile Include="Lopital\ProcedureScriptExaminationReceptionFastPatch.cs" />
     <Compile Include="Lopital\ProcedureScriptNeedBladderPatch.cs" />
     <Compile Include="Lopital\ProcedureScriptNeedBoredomPatch.cs" />
     <Compile Include="Lopital\ProcedureScriptNeedHungerPatch.cs" />
@@ -81,6 +83,7 @@
     <Compile Include="Constants\Tags.cs" />
     <Compile Include="Tweakable.cs" />
     <Compile Include="Constants\Tweakables.cs" />
+    <Compile Include="TweakableValidation.cs" />
     <Compile Include="ViewSettingsPatch.cs" />
   </ItemGroup>
   <ItemGroup>

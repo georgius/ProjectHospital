@@ -418,6 +418,7 @@ namespace ModAdvancedGameChanges.Lopital
 
                 __instance.m_state.m_patientState = state;
                 __instance.m_state.m_timeInState = 0f;
+                __instance.m_state.m_continuousWaitingTime = 0f;
                 __instance.m_state.m_playerControlwaitingTime = 0f;
             }
 
@@ -830,6 +831,26 @@ namespace ModAdvancedGameChanges.Lopital
                     __instance.m_state.m_nurse.GetEntity().GetComponent<EmployeeComponent>().SetReserved(Examinations.Vanilla.Reception, __instance.m_entity);
                     __instance.SwitchState(PatientState.ExaminedAtReception);
                 }
+                else if (__instance.m_state.m_nurse.GetEntity().GetComponent<BehaviorNurse>().m_state.m_nurseState == NurseState.GoingToWorkplace)
+                {
+                    // nurse is going to workplace
+                    // just wait
+                }
+                else
+                {
+                    // nurse is doing something else
+                    // release nurse and return to queue
+
+                    if ((__instance.m_state.m_nurse != null) && (__instance.m_state.m_nurse.GetEntity() != null) && (__instance.m_state.m_nurse.GetEntity().GetComponent<BehaviorNurse>().CurrentPatient == __instance.m_entity))
+                    {
+                        // free nurse
+                        __instance.m_state.m_nurse.GetEntity().GetComponent<BehaviorNurse>().CurrentPatient = null;
+                    }
+
+                    __instance.m_state.m_nurse = null;
+
+                    __instance.SwitchState(PatientState.Idle);
+                }
             }
 
             return false;
@@ -922,7 +943,8 @@ namespace ModAdvancedGameChanges.Lopital
 
                         Room currentRoom = MapScriptInterface.Instance.GetRoomAt(__instance.GetComponent<WalkComponent>());
 
-                        if (currentRoom == null)
+                        if ((currentRoom == null)
+                            || (currentRoom.m_roomPersistentData.m_roomType != Database.Instance.GetEntry<GameDBRoomType>(RoomTypes.Vanilla.Reception)))
                         {
                             // we are spawned
                             // go to reception or waiting room
@@ -1446,7 +1468,7 @@ namespace ModAdvancedGameChanges.Lopital
             List<Need> needsSortedFromMostCritical = instance.GetComponent<MoodComponent>().GetNeedsSortedFromMostCritical();
             foreach (Need need in needsSortedFromMostCritical)
             {
-                if ((need.m_currentValue > UnityEngine.Random.Range(Tweakable.Mod.FulfillNeedsThreshold(), Needs.NeedMaximum)) || (need.m_currentValue > Tweakable.Mod.FulfillNeedsCriticalThreshold()))
+                if ((need.m_currentValue > UnityEngine.Random.Range(Tweakable.Mod.FulfillNeedsThreshold(), Needs.NeedMaximum)) || (need.m_currentValue > Tweakable.Mod.FulfillNeedsThresholdCritical()))
                 {
                     if (instance.GetComponent<ProcedureComponent>().GetProcedureAvailabilty(need.m_gameDBNeed.Entry.Procedure, instance.m_entity, instance.GetDepartment(), AccessRights.PATIENT, EquipmentListRules.ONLY_FREE_SAME_FLOOR_PREFER_DPT) == ProcedureSceneAvailability.AVAILABLE)
                     {

@@ -1344,7 +1344,7 @@ namespace ModAdvancedGameChanges .Lopital
 
                 Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name} training finished, skill {skill.m_gameDBSkill.Entry.DatabaseID}");
 
-                float points = Tweakable.Mod.TrainingHourPoints();
+                float points = Tweakable.Mod.TrainingHourSkillPoints();
                 points *= UnityEngine.Random.Range(0f, 3f);
 
                 Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, points {points.ToString(CultureInfo.InvariantCulture)}");

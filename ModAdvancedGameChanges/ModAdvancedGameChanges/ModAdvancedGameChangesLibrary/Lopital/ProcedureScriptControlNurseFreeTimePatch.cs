@@ -243,7 +243,7 @@ namespace ModAdvancedGameChanges.Lopital
             Entity mainCharacter = instance.m_stateData.m_procedureScene.MainCharacter;
             Department department = mainCharacter.GetComponent<EmployeeComponent>().m_state.m_department.GetEntity();
 
-            if (instance.m_stateData.m_timeInState < DayTime.Instance.IngameTimeHoursToRealTimeSeconds(Tweakable.Mod.RestMinutes() / 60f))
+            if (instance.m_stateData.m_timeInState < DayTime.Instance.IngameTimeHoursToRealTimeSeconds(Tweakable.Mod.NeedRestMinutes() / 60f))
             {
                 ProcedureScriptControlNurseFreeTimePatch.RestChooseRoomAndEquipment(instance);
             }
@@ -282,9 +282,9 @@ namespace ModAdvancedGameChanges.Lopital
         {
             Entity mainCharacter = instance.m_stateData.m_procedureScene.MainCharacter;
 
-            if (DayTime.Instance.IngameTimeHoursToRealTimeSeconds(Tweakable.Mod.RestMinutes() * UnityEngine.Random.Range(0.33f, 0.66f) / 60f) < instance.m_stateData.m_timeInState)
+            if (DayTime.Instance.IngameTimeHoursToRealTimeSeconds(Tweakable.Mod.NeedRestMinutes() * UnityEngine.Random.Range(0.33f, 0.66f) / 60f) < instance.m_stateData.m_timeInState)
             {
-                mainCharacter.GetComponent<Behavior>().ReceiveMessage(new Message(Messages.REST_REDUCED, Tweakable.Mod.FulfillNeedsRestPlayGame()));
+                mainCharacter.GetComponent<Behavior>().ReceiveMessage(new Message(Messages.REST_REDUCED, Tweakable.Mod.NeedRestPlayGame()));
                 instance.m_stateData.m_timeInState = 0f;
 
                 // free reserved object
@@ -358,7 +358,7 @@ namespace ModAdvancedGameChanges.Lopital
             Entity mainCharacter = instance.m_stateData.m_procedureScene.MainCharacter;
             Department department = mainCharacter.GetComponent<EmployeeComponent>().m_state.m_department.GetEntity();
 
-            if (instance.m_stateData.m_timeInState < DayTime.Instance.IngameTimeHoursToRealTimeSeconds(Tweakable.Mod.RestMinutes() / 60f))
+            if (instance.m_stateData.m_timeInState < DayTime.Instance.IngameTimeHoursToRealTimeSeconds(Tweakable.Mod.NeedRestMinutes() / 60f))
             {
                 ProcedureScriptControlNurseFreeTimePatch.RestChooseRoomAndEquipment(instance);
             }
@@ -397,9 +397,9 @@ namespace ModAdvancedGameChanges.Lopital
         {
             Entity mainCharacter = instance.m_stateData.m_procedureScene.MainCharacter;
 
-            if (DayTime.Instance.IngameTimeHoursToRealTimeSeconds(Tweakable.Mod.RestMinutes() / 60f) < instance.m_stateData.m_timeInState)
+            if (DayTime.Instance.IngameTimeHoursToRealTimeSeconds(Tweakable.Mod.NeedRestMinutes() / 60f) < instance.m_stateData.m_timeInState)
             {
-                mainCharacter.GetComponent<Behavior>().ReceiveMessage(new Message(Messages.REST_REDUCED, Tweakable.Mod.FulfillNeedsRestSit()));
+                mainCharacter.GetComponent<Behavior>().ReceiveMessage(new Message(Messages.REST_REDUCED, Tweakable.Mod.NeedRestSit()));
                 instance.m_stateData.m_timeInState = 0f;
 
                 // free reserved object
@@ -500,7 +500,7 @@ namespace ModAdvancedGameChanges.Lopital
             Entity mainCharacter = instance.m_stateData.m_procedureScene.MainCharacter;
             Department department = mainCharacter.GetComponent<EmployeeComponent>().m_state.m_department.GetEntity();
 
-            if (instance.m_stateData.m_timeInState < DayTime.Instance.IngameTimeHoursToRealTimeSeconds(Tweakable.Mod.RestMinutes() / 60f))
+            if (instance.m_stateData.m_timeInState < DayTime.Instance.IngameTimeHoursToRealTimeSeconds(Tweakable.Mod.NeedRestMinutes() / 60f))
             {
                 ProcedureScriptControlNurseFreeTimePatch.ScholarChooseRoomAndEquipment(instance);
             }
@@ -561,9 +561,9 @@ namespace ModAdvancedGameChanges.Lopital
         {
             Entity mainCharacter = instance.m_stateData.m_procedureScene.MainCharacter;
 
-            if (DayTime.Instance.IngameTimeHoursToRealTimeSeconds(Tweakable.Mod.RestMinutes() / 60f) < instance.m_stateData.m_timeInState)
+            if (DayTime.Instance.IngameTimeHoursToRealTimeSeconds(Tweakable.Mod.NeedRestMinutes() / 60f) < instance.m_stateData.m_timeInState)
             {
-                mainCharacter.GetComponent<Behavior>().ReceiveMessage(new Message(Messages.REST_REDUCED, Tweakable.Mod.FulfillNeedsRestStudy()));
+                mainCharacter.GetComponent<Behavior>().ReceiveMessage(new Message(Messages.REST_REDUCED, Tweakable.Mod.NeedRestStudy()));
                 instance.m_stateData.m_timeInState = 0f;
 
                 // free reserved object

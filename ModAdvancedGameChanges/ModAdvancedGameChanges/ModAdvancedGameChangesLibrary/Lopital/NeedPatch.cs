@@ -28,7 +28,7 @@ namespace ModAdvancedGameChanges.Lopital
             __instance.m_currentValue -= value;
             __instance.m_currentValue = Mathf.Max(Needs.NeedMinimum, Mathf.Min(Needs.NeedMaximum, __instance.m_currentValue));
 
-            if ((__instance.m_currentValue < Tweakable.Mod.FulfillNeedsCriticalThreshold()) && (__instance.m_gameDBNeed.Entry.SatisfactionModifierCritical != null))
+            if ((__instance.m_currentValue < Tweakable.Mod.FulfillNeedsThresholdCritical()) && (__instance.m_gameDBNeed.Entry.SatisfactionModifierCritical != null))
             {
                 Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{moodComponent.m_entity.Name}, need {__instance.m_gameDBNeed.Entry.DatabaseID}, removed {__instance.m_gameDBNeed.Entry.SatisfactionModifierCritical.Entry.DatabaseID}");
 

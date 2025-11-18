@@ -141,8 +141,8 @@ namespace ModAdvancedGameChanges.Lopital
                     EmployeeComponent employee = mainCharacter.GetComponent<EmployeeComponent>();
 
                     int payment = (patient != null)
-                        ? UnityEngine.Random.Range(Tweakable.Mod.PatientVendingPaymentMinimum(), Tweakable.Mod.PatientVendingPaymentMaximum())
-                        : UnityEngine.Random.Range(Tweakable.Mod.EmployeeVendingPaymentMinimum(), Tweakable.Mod.EmployeeVendingPaymentMaximum());
+                        ? UnityEngine.Random.Range(Tweakable.Mod.VendingPaymentPatientMinimum(), Tweakable.Mod.VendingPaymentPatientMaximum())
+                        : UnityEngine.Random.Range(Tweakable.Mod.VendingPaymentEmployeeMinimum(), Tweakable.Mod.VendingPaymentEmployeeMaximum());
 
                     if (payment > 0)
                     {
@@ -172,7 +172,7 @@ namespace ModAdvancedGameChanges.Lopital
                     mainCharacter.GetComponent<PerkComponent>().m_perkSet.RevealPerk(Perks.Vanilla.Spartan);
                 }
 
-                mainCharacter.GetComponent<Behavior>().ReceiveMessage(new Message(Messages.HUNGER_REDUCED, Tweakable.Mod.FulfillNeedsHunger()));
+                mainCharacter.GetComponent<Behavior>().ReceiveMessage(new Message(Messages.HUNGER_REDUCED, Tweakable.Mod.NeedHunger()));
 
                 instance.SwitchState(ProcedureScriptNeedHunger.STATE_IDLE);
             }

@@ -4,7 +4,9 @@
     {
         public static class Vanilla
         {
+            public const string Answer = "BUBBLE_ANSWER";
             public const string Bored = "BUBBLE_BORED";
+            public const string Exclamation = "BUBBLE_EXCLAMATION";
             public const string FreeTime = "BUBBLE_FREETIME";
             public const string Food = "BUBBLE_FOOD";
             public const string Game = "BUBBLE_GAME";

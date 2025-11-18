@@ -16,6 +16,7 @@
             public const string GoodBoss = "PERK_GOOD_BOSS";
             public const string NightOwl = "PERK_NIGHT_OWL";
             public const string EarlyBird = "PERK_EARLY_BIRD";
+            public const string PeoplePerson = "PERK_PEOPLE_PERSON";
         }
     }
 }
