@@ -4,6 +4,7 @@ using Lopital;
 using ModAdvancedGameChanges.Constants;
 using System;
 using System.Globalization;
+using UnityEngine;
 
 namespace ModAdvancedGameChanges .Lopital
 {
@@ -629,6 +630,44 @@ namespace ModAdvancedGameChanges .Lopital
             }
 
             return true;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(EmployeeComponent), "GetEfficiencyPercent")]
+        public static bool GetEfficiencyPercentPrefix(EmployeeComponent __instance, ref float __result)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            // normalize satisfaction
+            __result = Mathf.Max(0f, Mathf.Min(100f, (float)__instance.m_entity.GetComponent<MoodComponent>().GetTotalSatisfaction()));
+
+            __result = UnityEngine.Random.Range(Tweakable.Mod.EfficiencySatisfactionMinimum(), Tweakable.Mod.EfficiencySatisfactionMaximum()) / 100f * __result + 50f;
+
+            PerkComponent perkComponent = __instance.m_entity.GetComponent<PerkComponent>();
+            Entity chief = (__instance.m_state.m_supervisor == null) ? null : __instance.m_state.m_supervisor.GetEntity();
+
+            if ((chief != null) && chief.GetComponent<PerkComponent>().m_perkSet.HasPerk(Perks.Vanilla.GoodBoss))
+            {
+                __result += UnityEngine.Random.Range(Tweakable.Mod.EfficiencyGoodBossMinimum(), Tweakable.Mod.EfficiencyGoodBossMaximum());
+            }
+
+            if (perkComponent.m_perkSet.HasPerk(Perks.Vanilla.EarlyBird) || perkComponent.m_perkSet.HasPerk(Perks.Vanilla.NightOwl))
+            {
+                // if multiplier is +1 => add to efficiency
+                // if multiplier is -1 => subtract from efficiency
+                float multiplier = ((__instance.m_state.m_shift == Shift.DAY) && perkComponent.m_perkSet.HasPerk(Perks.Vanilla.EarlyBird)) ? 1 : -1;
+
+                __result += multiplier * UnityEngine.Random.Range(Tweakable.Mod.EfficiencyShiftPreferenceMinimum(), Tweakable.Mod.EfficiencyShiftPreferenceMaximum());
+            }
+
+            // sanitize output, do not go under minimum efficiency
+            __result = Mathf.Max(Tweakable.Mod.EfficiencyMinimum(), __result);
+
+            return false;
         }
 
         [HarmonyPrefix]
