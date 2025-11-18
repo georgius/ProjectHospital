@@ -578,8 +578,14 @@ namespace ModAdvancedGameChanges.Lopital
                     }
                     break;
                 case PatientState.ExaminedAtReception:
+                    {
+                        __instance.UpdateStateExaminedAtReceptionInternal();
+                    }
                     break;
                 case PatientState.FindQueueMachine:
+                    {
+                        __instance.Leave(false, false, false);
+                    }
                     break;
                 case PatientState.GoToQueueMachine:
                     break;
@@ -675,6 +681,40 @@ namespace ModAdvancedGameChanges.Lopital
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorPatient), "UpdateStateExaminedAtReception")]
+        public static bool UpdateStateExaminedAtReceptionPrefix(BehaviorPatient __instance)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            if (!__instance.GetComponent<ProcedureComponent>().IsBusy())
+            {
+                __instance.EnsureDepartmentInternal();
+
+                if ((__instance.m_state.m_nurse != null) && (__instance.m_state.m_nurse.GetEntity() != null) && (__instance.m_state.m_nurse.GetEntity().GetComponent<BehaviorNurse>().CurrentPatient == __instance.m_entity))
+                {
+                    // free nurse
+                    __instance.m_state.m_nurse.GetEntity().GetComponent<BehaviorNurse>().CurrentPatient = null;
+                }
+
+                __instance.m_state.m_nurse = null;
+                __instance.m_state.m_finishedAtReception = true;
+                
+                if (__instance.m_state.m_department.GetEntity().m_departmentPersistentData.m_allPatientsControlled)
+                {
+                    __instance.SetPlayerControl();
+                }
+
+                __instance.SwitchState(PatientState.Idle);
+            }
+
+            return false;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(BehaviorPatient), "UpdateStateFulfillingNeeds")]
         public static bool UpdateStateFulfillingNeedsPrefix(BehaviorPatient __instance)
         {
@@ -720,6 +760,31 @@ namespace ModAdvancedGameChanges.Lopital
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorPatient), "UpdateStateGoingToChair")]
+        public static bool UpdateStateGoingToChairPrefix(BehaviorPatient __instance)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            if (!__instance.GetComponent<WalkComponent>().IsBusy())
+            {
+                Room currentRoom = MapScriptInterface.Instance.GetRoomAt(__instance.GetComponent<WalkComponent>());
+
+                if (currentRoom.m_roomPersistentData.m_roomType == Database.Instance.GetEntry<GameDBRoomType>(RoomTypes.Vanilla.Reception))
+                {
+                    __instance.SwitchState(PatientState.Idle);
+                }
+
+                // ???
+            }
+
+            return false;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(BehaviorPatient), "UpdateStateGoingToReception")]
         public static bool UpdateStateGoingToReceptionPrefix(BehaviorPatient __instance)
         {
@@ -734,6 +799,37 @@ namespace ModAdvancedGameChanges.Lopital
                 __instance.GetComponent<WalkComponent>().Stop();
                 __instance.GetComponent<AnimModelComponent>().PlayAnimation(Animations.Vanilla.StandIdle, true);
                 __instance.SwitchState(PatientState.Idle);
+            }
+
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorPatient), "UpdateStateGoingToReceptionist")]
+        public static bool UpdateStateGoingToReceptionistPrefix(BehaviorPatient __instance)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            if (!__instance.GetComponent<WalkComponent>().IsBusy())
+            {
+                if ((__instance.m_state.m_nurse == null) || (__instance.m_state.m_nurse.GetEntity() == null))
+                {
+                    __instance.SwitchState(PatientState.Idle);
+                }
+                else if (__instance.m_state.m_nurse.GetEntity().GetComponent<BehaviorNurse>().m_state.m_nurseState == NurseState.Idle)
+                {
+                    // nurse is "idle"
+                    GameDBExamination examination = Database.Instance.GetEntry<GameDBExamination>(Examinations.Vanilla.Reception);
+
+                    __instance.GetComponent<ProcedureComponent>().StartExamination(
+                        examination, __instance.m_entity, null, __instance.m_state.m_nurse.GetEntity(), null, AccessRights.PATIENT_PROCEDURE, EquipmentListRules.ONLY_FREE);
+                    __instance.m_state.m_nurse.GetEntity().GetComponent<EmployeeComponent>().SetReserved(Examinations.Vanilla.Reception, __instance.m_entity);
+                    __instance.SwitchState(PatientState.ExaminedAtReception);
+                }
             }
 
             return false;
@@ -819,7 +915,6 @@ namespace ModAdvancedGameChanges.Lopital
             {
                 if (!__instance.GetComponent<WalkComponent>().IsBusy())
                 {
-
                     if (!__instance.m_state.m_finishedAtReception)
                     {
                         // patient is standing somewhere
@@ -927,6 +1022,8 @@ namespace ModAdvancedGameChanges.Lopital
                                             __instance.FreeWaitingRoom();
 
                                             __instance.m_state.m_nurse = receptionist;
+
+                                            // reserve nurse by patient
                                             receptionist.GetComponent<BehaviorNurse>().CurrentPatient = __instance.m_entity;
 
                                             __instance.SwitchState(PatientState.GoingToReceptionist);
@@ -1014,6 +1111,13 @@ namespace ModAdvancedGameChanges.Lopital
                                 }
                             }
                         }
+                    }
+                    else
+                    {
+                        // we are done on reception
+                        // send patient to search queue machine
+
+                        __instance.SwitchState(PatientState.FindQueueMachine);
                     }
                 }
 
@@ -1164,62 +1268,6 @@ namespace ModAdvancedGameChanges.Lopital
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(BehaviorPatient), "UpdateStateGoingToChair")]
-        public static bool UpdateStateGoingToChairPrefix(BehaviorPatient __instance)
-        {
-            if (!ViewSettingsPatch.m_enabled)
-            {
-                // Allow original method to run
-                return true;
-            }
-
-            if (!__instance.GetComponent<WalkComponent>().IsBusy())
-            {
-                Room currentRoom = MapScriptInterface.Instance.GetRoomAt(__instance.GetComponent<WalkComponent>());
-
-                if (currentRoom.m_roomPersistentData.m_roomType == Database.Instance.GetEntry<GameDBRoomType>(RoomTypes.Vanilla.Reception))
-                {
-                    __instance.SwitchState(PatientState.Idle);
-                }
-
-                // ???
-            }
-
-            return false;
-        }
-
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(BehaviorPatient), "UpdateStateGoingToReceptionist")]
-        public static bool UpdateStateGoingToReceptionistPrefix(BehaviorPatient __instance)
-        {
-            if (!ViewSettingsPatch.m_enabled)
-            {
-                // Allow original method to run
-                return true;
-            }
-
-            if (!__instance.GetComponent<WalkComponent>().IsBusy())
-            {
-                if ((__instance.m_state.m_nurse == null) || (__instance.m_state.m_nurse.GetEntity() == null))
-                {
-                    __instance.SwitchState(PatientState.Idle);
-                }
-                else if (__instance.m_state.m_nurse.GetEntity().GetComponent<BehaviorNurse>().m_state.m_nurseState == NurseState.Idle)
-                {
-                    // nurse is "idle"
-                    GameDBExamination examination = Database.Instance.GetEntry<GameDBExamination>(Examinations.Vanilla.Reception);
-
-                    __instance.GetComponent<ProcedureComponent>().StartExamination(
-                        examination, __instance.m_entity, null, __instance.m_state.m_nurse.GetEntity(), null, AccessRights.PATIENT_PROCEDURE, EquipmentListRules.ONLY_FREE);
-                    __instance.m_state.m_nurse.GetEntity().GetComponent<EmployeeComponent>().SetReserved(Examinations.Vanilla.Reception, __instance.m_entity);
-                    __instance.SwitchState(PatientState.ExaminedAtReception);
-                }
-            }
-
-            return false;
-        }
-
-        [HarmonyPrefix]
         [HarmonyPatch(typeof(BehaviorPatient), "UpdateStateWaitingStandingIdle")]
         public static bool UpdateStateWaitingStandingIdlePrefix(float deltaTime, BehaviorPatient __instance)
         {
@@ -1332,6 +1380,16 @@ namespace ModAdvancedGameChanges.Lopital
 
                 instance.Leave(false, false, false);
 
+                return true;
+            }
+
+            if ((instance.m_state.m_department == null) || (!instance.m_state.m_department.GetEntity().AcceptsOutpatients()))
+            {
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{instance.m_entity.Name}, department {instance.m_state.m_department.GetEntity()?.Name ?? "NULL"} no working, sending patient home");
+
+                NotificationManager.GetInstance().AddMessage(instance.m_entity, Notifications.Vanilla.NOTIF_DEPARTMENT_NOT_WORKING, string.Empty, string.Empty, string.Empty, 0, 0, 0, 0, null, null);
+
+                instance.Leave(false, false, false);
                 return true;
             }
 
@@ -1493,6 +1551,30 @@ namespace ModAdvancedGameChanges.Lopital
             return (bool)methodInfo.Invoke(instance, new object[] { tryAreasAround, onlyInFront });
         }
 
+        private static void UpdateStateExaminedAtReceptionInternal(this BehaviorPatient instance)
+        {
+            Type type = typeof(BehaviorPatient);
+            MethodInfo methodInfo = type.GetMethod("UpdateStateExaminedAtReception", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            methodInfo.Invoke(instance, null);
+        }
+
+        private static void UpdateStateFulfillingNeedsInternal(this BehaviorPatient instance)
+        {
+            Type type = typeof(BehaviorPatient);
+            MethodInfo methodInfo = type.GetMethod("UpdateStateFulfillingNeeds", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            methodInfo.Invoke(instance, null);
+        }
+
+        private static void UpdateStateGoingToChairInternal(this BehaviorPatient instance)
+        {
+            Type type = typeof(BehaviorPatient);
+            MethodInfo methodInfo = type.GetMethod("UpdateStateGoingToChair", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            methodInfo.Invoke(instance, null);
+        }
+
         private static void UpdateStateGoingToReceptionInternal(this BehaviorPatient instance)
         {
             Type type = typeof(BehaviorPatient);
@@ -1517,14 +1599,6 @@ namespace ModAdvancedGameChanges.Lopital
             methodInfo.Invoke(instance, null);
         }
 
-        private static void UpdateStateFulfillingNeedsInternal(this BehaviorPatient instance)
-        {
-            Type type = typeof(BehaviorPatient);
-            MethodInfo methodInfo = type.GetMethod("UpdateStateFulfillingNeeds", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            methodInfo.Invoke(instance, null);
-        }
-
         private static void UpdateStateIdleInternal(this BehaviorPatient instance)
         {
             Type type = typeof(BehaviorPatient);
@@ -1545,14 +1619,6 @@ namespace ModAdvancedGameChanges.Lopital
         {
             Type type = typeof(BehaviorPatient);
             MethodInfo methodInfo = type.GetMethod("UpdateStateLeft", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            methodInfo.Invoke(instance, null);
-        }
-
-        private static void UpdateStateGoingToChairInternal(this BehaviorPatient instance)
-        {
-            Type type = typeof(BehaviorPatient);
-            MethodInfo methodInfo = type.GetMethod("UpdateStateGoingToChair", BindingFlags.NonPublic | BindingFlags.Instance);
 
             methodInfo.Invoke(instance, null);
         }
