@@ -115,53 +115,53 @@ namespace ModAdvancedGameChanges.Lopital
             TileObject result = null;
 
             // try to find appropriate place in current room
-            Room currentRoom = MapScriptInterface.Instance.GetRoomAt(mainCharacter.GetComponent<WalkComponent>());
-            if (currentRoom != null)
-            {
-                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{mainCharacter?.Name ?? "NULL"}, searching in current room for '{tag}'");
+            //Room currentRoom = MapScriptInterface.Instance.GetRoomAt(mainCharacter.GetComponent<WalkComponent>());
+            //if (currentRoom != null)
+            //{
+            //    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{mainCharacter?.Name ?? "NULL"}, searching in current room for '{tag}'");
 
-                TileObject temp = MapScriptInterface.Instance.FindClosestFreeObjectWithTags(
-                    mainCharacter, mainCharacter,
-                    mainCharacter.GetComponent<WalkComponent>().GetCurrentTile(),
-                    currentRoom,
-                    new string[] { tag }, AccessRights.STAFF, false, null, false);
+            //    TileObject temp = MapScriptInterface.Instance.FindClosestFreeObjectWithTags(
+            //        mainCharacter, mainCharacter,
+            //        mainCharacter.GetComponent<WalkComponent>().GetCurrentTile(),
+            //        currentRoom,
+            //        new string[] { tag }, AccessRights.STAFF, false, null, false);
 
-                if (temp != null)
-                {
-                    Vector3i tempPosition = new Vector3i(temp.GetDefaultUseTile().m_x, temp.GetDefaultUseTile().m_y, temp.GetFloorIndex());
-                    Vector3i resultPosition = (result == null) ? tempPosition : new Vector3i(result.GetDefaultUseTile().m_x, result.GetDefaultUseTile().m_y, result.GetFloorIndex());
-                    Vector3i currentPosition = new Vector3i(mainCharacter.GetComponent<WalkComponent>().GetCurrentTile().m_x, mainCharacter.GetComponent<WalkComponent>().GetCurrentTile().m_y, mainCharacter.GetComponent<WalkComponent>().GetFloorIndex());
+            //    if (temp != null)
+            //    {
+            //        Vector3i tempPosition = new Vector3i(temp.GetDefaultUseTile().m_x, temp.GetDefaultUseTile().m_y, temp.GetFloorIndex());
+            //        Vector3i resultPosition = (result == null) ? tempPosition : new Vector3i(result.GetDefaultUseTile().m_x, result.GetDefaultUseTile().m_y, result.GetFloorIndex());
+            //        Vector3i currentPosition = new Vector3i(mainCharacter.GetComponent<WalkComponent>().GetCurrentTile().m_x, mainCharacter.GetComponent<WalkComponent>().GetCurrentTile().m_y, mainCharacter.GetComponent<WalkComponent>().GetFloorIndex());
 
-                    if ((currentPosition - tempPosition).LengthSquared() <= (currentPosition - resultPosition).LengthSquared())
-                    {
-                        result = temp;
-                    }
-                }
-            }
+            //        if ((currentPosition - tempPosition).LengthSquared() <= (currentPosition - resultPosition).LengthSquared())
+            //        {
+            //            result = temp;
+            //        }
+            //    }
+            //}
 
             // try to find appropriate place in home room
-            if (mainCharacter.GetComponent<EmployeeComponent>().m_state.m_homeRoom != null)
-            {
-                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{mainCharacter?.Name ?? "NULL"}, searching in home room for '{tag}'");
+            //if (mainCharacter.GetComponent<EmployeeComponent>().m_state.m_homeRoom != null)
+            //{
+            //    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{mainCharacter?.Name ?? "NULL"}, searching in home room for '{tag}'");
 
-                TileObject temp = MapScriptInterface.Instance.FindClosestFreeObjectWithTags(
-                    mainCharacter, mainCharacter,
-                    mainCharacter.GetComponent<WalkComponent>().GetCurrentTile(),
-                    mainCharacter.GetComponent<EmployeeComponent>().m_state.m_homeRoom.GetEntity(),
-                    new string[] { tag }, AccessRights.STAFF, false, null, false);
+            //    TileObject temp = MapScriptInterface.Instance.FindClosestFreeObjectWithTags(
+            //        mainCharacter, mainCharacter,
+            //        mainCharacter.GetComponent<WalkComponent>().GetCurrentTile(),
+            //        mainCharacter.GetComponent<EmployeeComponent>().m_state.m_homeRoom.GetEntity(),
+            //        new string[] { tag }, AccessRights.STAFF, false, null, false);
 
-                if (temp != null)
-                {
-                    Vector3i tempPosition = new Vector3i(temp.GetDefaultUseTile().m_x, temp.GetDefaultUseTile().m_y, temp.GetFloorIndex());
-                    Vector3i resultPosition = (result == null) ? tempPosition : new Vector3i(result.GetDefaultUseTile().m_x, result.GetDefaultUseTile().m_y, result.GetFloorIndex());
-                    Vector3i currentPosition = new Vector3i(mainCharacter.GetComponent<WalkComponent>().GetCurrentTile().m_x, mainCharacter.GetComponent<WalkComponent>().GetCurrentTile().m_y, mainCharacter.GetComponent<WalkComponent>().GetFloorIndex());
+            //    if (temp != null)
+            //    {
+            //        Vector3i tempPosition = new Vector3i(temp.GetDefaultUseTile().m_x, temp.GetDefaultUseTile().m_y, temp.GetFloorIndex());
+            //        Vector3i resultPosition = (result == null) ? tempPosition : new Vector3i(result.GetDefaultUseTile().m_x, result.GetDefaultUseTile().m_y, result.GetFloorIndex());
+            //        Vector3i currentPosition = new Vector3i(mainCharacter.GetComponent<WalkComponent>().GetCurrentTile().m_x, mainCharacter.GetComponent<WalkComponent>().GetCurrentTile().m_y, mainCharacter.GetComponent<WalkComponent>().GetFloorIndex());
 
-                    if ((currentPosition - tempPosition).LengthSquared() <= (currentPosition - resultPosition).LengthSquared())
-                    {
-                        result = temp;
-                    }
-                }
-            }
+            //        if ((currentPosition - tempPosition).LengthSquared() <= (currentPosition - resultPosition).LengthSquared())
+            //        {
+            //            result = temp;
+            //        }
+            //    }
+            //}
 
             // try to find appropriate place in department in common room
             {
