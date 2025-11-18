@@ -81,6 +81,38 @@
 		<Value>4800</Value>
 	</GameDBTweakableInt>
 	
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_SKILL_TIME_REDUCTION_MINIMUM">
+		<Value>30</Value>
+	</GameDBTweakableFloat>
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_SKILL_TIME_REDUCTION_MAXIMUM">
+		<Value>60</Value>
+	</GameDBTweakableFloat>
+	
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_EFFICIENCY_SATISFACTION_MINIMUM">
+		<Value>45</Value>
+	</GameDBTweakableFloat>
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_EFFICIENCY_SATISFACTION_MAXIMUM">
+		<Value>55</Value>
+	</GameDBTweakableFloat>
+	
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_EFFICIENCY_GOOD_BOSS_MINIMUM">
+		<Value>5</Value>
+	</GameDBTweakableFloat>
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_EFFICIENCY_GOOD_BOSS_MAXIMUM">
+		<Value>10</Value>
+	</GameDBTweakableFloat>
+	
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_EFFICIENCY_SHIFT_PREFERENCE_MINIMUM">
+		<Value>20</Value>
+	</GameDBTweakableFloat>
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_EFFICIENCY_SHIFT_PREFERENCE_MAXIMUM">
+		<Value>40</Value>
+	</GameDBTweakableFloat>
+	
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_EFFICIENCY_MINIMUM">
+		<Value>20</Value>
+	</GameDBTweakableFloat>
+	
 	<GameDBTweakableInt ID="AGC_TWEAKABLE_ENABLE_EXTRA_LEVELING_PERCENT">
 		<!--
 		Enables or disables applying extra leveling percent.

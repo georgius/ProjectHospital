@@ -13,6 +13,9 @@
             public const string Gamer = "PERK_GAMER";
             public const string Germaphobe = "PERK_GERMAPHOBE";
             public const string Spartan = "PERK_SPARTAN";
+            public const string GoodBoss = "PERK_GOOD_BOSS";
+            public const string NightOwl = "PERK_NIGHT_OWL";
+            public const string EarlyBird = "PERK_EARLY_BIRD";
         }
     }
 }
