@@ -1027,9 +1027,11 @@ namespace ModAdvancedGameChanges.Lopital
                                             receptionist.GetComponent<BehaviorNurse>().CurrentPatient = __instance.m_entity;
 
                                             __instance.SwitchState(PatientState.GoingToReceptionist);
+                                            return false;
                                         }
                                     }
-                                    else if (__instance.m_state.m_chair == null)
+
+                                    if (__instance.m_state.m_chair == null)
                                     {
                                         Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, no chair");
 
