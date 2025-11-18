@@ -17,7 +17,7 @@ namespace ModAdvancedGameChanges.Lopital
         [HarmonyPatch(typeof(BehaviorDoctor), nameof(BehaviorDoctor.AddToHospital))]
         public static bool AddToHospitalPrefix(BehaviorDoctor __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
@@ -67,7 +67,7 @@ namespace ModAdvancedGameChanges.Lopital
         [HarmonyPatch(typeof(BehaviorDoctor), nameof(BehaviorDoctor.GoToWorkPlace))]
         public static bool GoToWorkplacePrefix(BehaviorDoctor __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
@@ -133,7 +133,7 @@ namespace ModAdvancedGameChanges.Lopital
         [HarmonyPatch(typeof(BehaviorDoctor), nameof(BehaviorDoctor.IsHidden))]
         public static bool IsHiddenPrefix(BehaviorDoctor __instance, ref bool __result)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
@@ -184,7 +184,7 @@ namespace ModAdvancedGameChanges.Lopital
         [HarmonyPatch(typeof(BehaviorDoctor), "UpdateStateAtHome")]
         public static bool UpdateStateAtHomePrefix(BehaviorDoctor __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
@@ -226,7 +226,7 @@ namespace ModAdvancedGameChanges.Lopital
         [HarmonyPatch(typeof(BehaviorDoctor), "UpdateStateCommuting")]
         public static bool UpdateStateCommutingPrefix(BehaviorDoctor __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
@@ -265,7 +265,7 @@ namespace ModAdvancedGameChanges.Lopital
         [HarmonyPatch(typeof(BehaviorDoctor), "UpdateStateFillingFreeTime")]
         public static bool UpdateStateFillingFreeTimePrefix(float deltaTime, BehaviorDoctor __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
@@ -399,7 +399,7 @@ namespace ModAdvancedGameChanges.Lopital
         [HarmonyPatch(typeof(BehaviorDoctor), "UpdateStateGoingToWorkplace")]
         public static bool UpdateStateGoingToWorkplacePrefix(BehaviorDoctor __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
@@ -448,7 +448,7 @@ namespace ModAdvancedGameChanges.Lopital
         [HarmonyPatch(typeof(BehaviorDoctor), "UpdateStateIdle")]
         public static bool UpdateStateIdlePrefix(float deltaTime, BehaviorDoctor __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
@@ -471,7 +471,7 @@ namespace ModAdvancedGameChanges.Lopital
         [HarmonyPatch(typeof(BehaviorDoctor), nameof(BehaviorDoctor.UpdateTraining))]
         public static bool UpdateTrainingPrefix(BehaviorDoctor __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;

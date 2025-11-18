@@ -17,7 +17,7 @@ namespace ModAdvancedGameChanges .Lopital
         [HarmonyPatch(typeof(BehaviorJanitor), nameof(BehaviorJanitor.AddToHospital))]
         public static bool AddToHospitalPrefix(BehaviorJanitor __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
@@ -67,7 +67,7 @@ namespace ModAdvancedGameChanges .Lopital
         [HarmonyPatch(typeof(BehaviorJanitor), nameof(BehaviorJanitor.GoToWorkPlace))]
         public static bool GoToWorkPlacePrefix(BehaviorJanitor __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
@@ -135,7 +135,7 @@ namespace ModAdvancedGameChanges .Lopital
         [HarmonyPatch(typeof(BehaviorJanitor), "GoReturnCart")]
         public static bool GoReturnCartPrefix(BehaviorJanitor __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
@@ -190,7 +190,7 @@ namespace ModAdvancedGameChanges .Lopital
         [HarmonyPatch(typeof(BehaviorJanitor), "SelectNextAction")]
         public static bool SelectNextActionPrefix(BehaviorJanitor __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
@@ -281,7 +281,7 @@ namespace ModAdvancedGameChanges .Lopital
         [HarmonyPatch(typeof(BehaviorJanitor), "TryToSelectTileInARoom")]
         public static bool TryToSelectTileInARoomPrefix(BehaviorJanitor __instance, ref bool __result)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
@@ -338,7 +338,7 @@ namespace ModAdvancedGameChanges .Lopital
         [HarmonyPatch(typeof(BehaviorJanitor), "TryToSelectTileInCurrentRoom")]
         public static bool TryToSelectTileInCurrentRoomPrefix(BehaviorJanitor __instance, ref bool __result)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
@@ -420,7 +420,7 @@ namespace ModAdvancedGameChanges .Lopital
         [HarmonyPatch(typeof(BehaviorJanitor), "TryToSelectIndoorTile")]
         public static bool TryToSelectIndoorTilePrefix(int threshold, BehaviorJanitor __instance, ref bool __result)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
@@ -448,7 +448,7 @@ namespace ModAdvancedGameChanges .Lopital
         [HarmonyPatch(typeof(BehaviorJanitor), "UpdateCleaningTime")]
         public static bool UpdateCleaningTimePrefix(BehaviorJanitor __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
@@ -507,7 +507,7 @@ namespace ModAdvancedGameChanges .Lopital
         [HarmonyPatch(typeof(BehaviorJanitor), "UpdateStateAdminIdle")]
         public static bool UpdateStateAdminIdlePrefix(float deltaTime, BehaviorJanitor __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
@@ -563,7 +563,7 @@ namespace ModAdvancedGameChanges .Lopital
         [HarmonyPatch(typeof(BehaviorJanitor), "UpdateStateAtHome")]
         public static bool UpdateStateAtHomePrefix(BehaviorJanitor __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
@@ -608,7 +608,7 @@ namespace ModAdvancedGameChanges .Lopital
         [HarmonyPatch(typeof(BehaviorJanitor), "UpdateStateCleaning")]
         public static bool UpdateStateCleaningPrefix(float deltaTime, BehaviorJanitor __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
@@ -646,7 +646,7 @@ namespace ModAdvancedGameChanges .Lopital
         [HarmonyPatch(typeof(BehaviorJanitor), "UpdateStateGoingToWorkplace")]
         public static bool UpdateStateGoingToWorkplacePrefix(BehaviorJanitor __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
@@ -720,7 +720,7 @@ namespace ModAdvancedGameChanges .Lopital
         [HarmonyPatch(typeof(BehaviorJanitor), "UpdateStateFillingFreeTime")]
         public static bool UpdateStateFillingFreeTimePrefix(float deltaTime, BehaviorJanitor __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
@@ -857,7 +857,7 @@ namespace ModAdvancedGameChanges .Lopital
         [HarmonyPatch(typeof(BehaviorJanitor), nameof(BehaviorJanitor.UpdateTraining))]
         public static bool UpdateTrainingPrefix(BehaviorJanitor __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
@@ -932,7 +932,7 @@ namespace ModAdvancedGameChanges .Lopital
         [HarmonyPatch(typeof(BehaviorJanitor), "UpdateStateReturningCart")]
         public static bool UpdateStateReturningCartPrefix(BehaviorJanitor __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
@@ -978,7 +978,7 @@ namespace ModAdvancedGameChanges .Lopital
         [HarmonyPatch(typeof(BehaviorJanitor), "UpdateStateWalking")]
         public static bool UpdateStateWalkingPrefix(float deltaTime, BehaviorJanitor __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
@@ -1019,7 +1019,7 @@ namespace ModAdvancedGameChanges .Lopital
         [HarmonyPatch(typeof(BehaviorJanitor), "UpdateStateWalkingToCartToNextRoom")]
         public static bool UpdateStateWalkingToCartToNextRoomPrefix(BehaviorJanitor __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // Allow original method to run
                 return true;
