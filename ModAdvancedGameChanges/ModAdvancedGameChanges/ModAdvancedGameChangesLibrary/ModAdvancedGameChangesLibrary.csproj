@@ -38,6 +38,7 @@
     <Compile Include="CharacterPanelSkillPanelControllerPatch.cs" />
     <Compile Include="Constants\Animations.cs" />
     <Compile Include="Constants\EmployeeRoles.cs" />
+    <Compile Include="Constants\Examinations.cs" />
     <Compile Include="Constants\Icons.cs" />
     <Compile Include="Constants\Levels.cs" />
     <Compile Include="Constants\Needs.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="Lopital\ProcedureScriptNeedHungerPatch.cs" />
     <Compile Include="Lopital\ProcedureScriptPatch.cs" />
     <Compile Include="Lopital\ProcedureScriptStaffLunchPatch.cs" />
+    <Compile Include="Lopital\RoomPatch.cs" />
     <Compile Include="Lopital\SkillPatch.cs" />
     <Compile Include="Lopital\SkillSetPatch.cs" />
     <Compile Include="ModAdvancedGameChanges.cs" />
