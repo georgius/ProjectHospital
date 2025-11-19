@@ -22,9 +22,7 @@ namespace ModAdvancedGameChanges.Lopital
             Entity mainCharacter = __instance.m_stateData.m_procedureScene.MainCharacter;
             Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{mainCharacter?.Name ?? "NULL"}, activating script {__instance.m_stateData.m_scriptName}");
 
-            mainCharacter.GetComponent<WalkComponent>().SetDestination(__instance.GetEquipment(0).GetDefaultUsePosition(), __instance.GetEquipment(0).GetFloorIndex(), MovementType.WALKING);
-
-            __instance.SwitchState(ProcedureScriptNeedHungerPatch.STATE_GOING_TO_PLACE);
+            __instance.SwitchState(ProcedureScriptNeedBladderPatch.STATE_SEARCHING_ROOM);
 
             return false;
         }
@@ -42,6 +40,9 @@ namespace ModAdvancedGameChanges.Lopital
             __instance.m_stateData.m_timeInState += deltaTime;
             switch (__instance.m_stateData.m_state)
             {
+                case ProcedureScriptNeedHungerPatch.STATE_SEARCHING_ROOM:
+                    ProcedureScriptNeedHungerPatch.UpdateStateSearchingRoom(__instance);
+                    break;
                 case ProcedureScriptNeedHungerPatch.STATE_GOING_TO_PLACE:
                     ProcedureScriptNeedHungerPatch.UpdateStateGoingToPlace(__instance);
                     break;
@@ -56,6 +57,15 @@ namespace ModAdvancedGameChanges.Lopital
             }
 
             return false;
+        }
+
+        public static void UpdateStateSearchingRoom(ProcedureScriptNeedHunger instance)
+        {
+            Entity mainCharacter = instance.m_stateData.m_procedureScene.MainCharacter;
+
+            mainCharacter.GetComponent<WalkComponent>().SetDestination(instance.GetEquipment(0).GetDefaultUsePosition(), instance.GetEquipment(0).GetFloorIndex(), MovementType.WALKING);
+
+            instance.SwitchState(ProcedureScriptNeedHungerPatch.STATE_GOING_TO_PLACE);
         }
 
         public static void UpdateStateGoingToPlace(ProcedureScriptNeedHunger instance)
@@ -178,6 +188,7 @@ namespace ModAdvancedGameChanges.Lopital
             }
         }
 
+        public const string STATE_SEARCHING_ROOM = "STATE_SEARCHING_ROOM";
         public const string STATE_GOING_TO_PLACE = "STATE_GOING_TO_PLACE";
         public const string STATE_GOING_TO_OBJECT = "STATE_GOING_TO_OBJECT";
         public const string STATE_USING_OBJECT = "STATE_USING_OBJECT";
