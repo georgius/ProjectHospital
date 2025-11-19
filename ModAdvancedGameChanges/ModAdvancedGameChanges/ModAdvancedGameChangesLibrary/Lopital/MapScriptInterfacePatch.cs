@@ -101,10 +101,10 @@ namespace ModAdvancedGameChanges.Lopital
                         Room roomAt = floor.m_roomTiles[i, j];
 
                         bool validRoom = (roomAt == null);
-                        validRoom |= (roomAt.m_roomPersistentData.m_valid == RoomValidity.OK);
-                        validRoom |= (roomAt.m_roomPersistentData.m_valid == RoomValidity.MISSING_STAFF);
-                        validRoom |= (roomAt.m_roomPersistentData.m_valid == RoomValidity.DEPARTMENT_CLOSED);
-                        validRoom |= ((accessRights >= AccessRights.STAFF) && (roomAt.m_roomPersistentData.m_valid == RoomValidity.INACCESSIBLE_PATIENTS));
+                        validRoom |= (roomAt?.m_roomPersistentData.m_valid == RoomValidity.OK);
+                        validRoom |= (roomAt?.m_roomPersistentData.m_valid == RoomValidity.MISSING_STAFF);
+                        validRoom |= (roomAt?.m_roomPersistentData.m_valid == RoomValidity.DEPARTMENT_CLOSED);
+                        validRoom |= ((accessRights >= AccessRights.STAFF) && (roomAt?.m_roomPersistentData.m_valid == RoomValidity.INACCESSIBLE_PATIENTS));
 
                         if ((character.GetComponent<HospitalizationComponent>() != null) 
                             && character.GetComponent<HospitalizationComponent>().IsHospitalized() 
@@ -116,7 +116,7 @@ namespace ModAdvancedGameChanges.Lopital
 
                         bool evaluate = (roomTypes == null) || (allowedOutsideOfRoom && (roomAt == null));
 
-                        if ((!evaluate) && (roomTypes != null) && (roomAt != null))
+                        if ((!evaluate) && validRoom && (roomTypes != null) && (roomAt != null))
                         {
                             foreach (DatabaseEntryRef<GameDBRoomType> databaseEntryRef in roomTypes)
                             {
@@ -127,7 +127,7 @@ namespace ModAdvancedGameChanges.Lopital
                             }
                         }
 
-                        if (evaluate)
+                        if (evaluate && validRoom)
                         {
                             if ((tileObjects.m_centerObject != null) 
                                 && tileObjects.m_centerObject.HasAllTags(tags) 
@@ -135,7 +135,6 @@ namespace ModAdvancedGameChanges.Lopital
                                 && ((tileObjects.m_centerObject.Owner == null) || (tileObjects.m_centerObject.Owner == owner)) 
                                 && (!tileObjects.m_centerObject.IsBroken()) 
                                 && tileObjects.m_centerObject.IsValid() 
-                                && validRoom 
                                 && (allowObjectsWithAttachments || (tileObjects.m_attachmentObject == null)))
                             {
                                 if ((tileObjects.m_centerObject.m_state.m_compositeParent.GetEntity() != null) 
@@ -158,7 +157,6 @@ namespace ModAdvancedGameChanges.Lopital
                                 }
                             }
 
-
                             foreach (TileObject tileObject in tileObjects.GetAllNonCenterObjects())
                             {
                                 if ((tileObject != null) 
@@ -166,8 +164,7 @@ namespace ModAdvancedGameChanges.Lopital
                                     && ((tileObject.User == null) || (tileObject.User == character)) 
                                     && ((tileObject.Owner == null) || (tileObject.Owner == owner)) 
                                     && (!tileObject.IsBroken()) 
-                                    && tileObject.IsValid() 
-                                    && validRoom)
+                                    && tileObject.IsValid())
                                 {
                                     float tempDistance = GridMap.GetInstance().GetDistance(
                                         character.GetComponent<WalkComponent>().GetFloorIndex(), 
@@ -218,43 +215,20 @@ namespace ModAdvancedGameChanges.Lopital
                     {
                         Room roomAt = __instance.GetRoomAt(entity.m_state.m_position, entity.GetFloorIndex());
 
-                        if ((roomTags == null) || ((roomTags != null) && (roomAt != null) && roomAt.m_roomPersistentData.m_roomType.Entry.HasAnyTag(roomTags)))
+                        bool validRoom = (roomAt == null);
+                        validRoom |= (roomAt?.m_roomPersistentData.m_valid == RoomValidity.OK);
+                        validRoom |= (roomAt?.m_roomPersistentData.m_valid == RoomValidity.MISSING_STAFF);
+                        validRoom |= (roomAt?.m_roomPersistentData.m_valid == RoomValidity.DEPARTMENT_CLOSED);
+                        validRoom |= ((accessRights >= AccessRights.STAFF) && (roomAt?.m_roomPersistentData.m_valid == RoomValidity.INACCESSIBLE_PATIENTS));
+
+                        AccessRights roomAccessRights = roomAt?.m_roomPersistentData.m_roomType.Entry.AccessRights ?? accessRights;
+
+                        if (validRoom
+                            && (roomAccessRights <= accessRights)
+                            && ((roomTags == null) || ((roomTags != null) && (roomAt != null) && roomAt.m_roomPersistentData.m_roomType.Entry.HasAnyTag(roomTags))))
                         {
-                            switch (accessRights)
-                            {
-                                case AccessRights.PEDESTRIAN:
-                                case AccessRights.PATIENT:
-                                case AccessRights.PATIENT_PROCEDURE:
-                                case AccessRights.BIOHAZARD:
-                                    {
-                                        AccessRights roomAccessRights = (roomAt == null) ? accessRights : roomAt.m_roomPersistentData.m_roomType.Entry.AccessRights;
-                                        RoomValidity roomValidity = (roomAt == null) ? RoomValidity.OK : roomAt.m_roomPersistentData.m_valid;
-
-                                        if ((roomAccessRights <= accessRights)
-                                            && ((roomValidity == RoomValidity.OK) || (roomValidity == RoomValidity.MISSING_STAFF)))
-                                        {
-                                            __result = entity;
-                                            distance = tempDistance;
-                                        }
-                                    }
-                                    break;
-                                case AccessRights.STAFF:
-                                case AccessRights.STAFF_ONLY:
-                                    {
-                                        AccessRights roomAccessRights = (roomAt == null) ? accessRights : roomAt.m_roomPersistentData.m_roomType.Entry.AccessRights;
-                                        RoomValidity roomValidity = (roomAt == null) ? RoomValidity.OK : roomAt.m_roomPersistentData.m_valid;
-
-                                        if ((roomAccessRights <= accessRights)
-                                            && ((roomValidity == RoomValidity.OK) || (roomValidity == RoomValidity.MISSING_STAFF) || (roomValidity == RoomValidity.INACCESSIBLE_PATIENTS)))
-                                        {
-                                            __result = entity;
-                                            distance = tempDistance;
-                                        }
-                                    }
-                                    break;
-                                default:
-                                    break;
-                            }
+                            __result = entity;
+                            distance = tempDistance;
                         }
                     }
                 }
