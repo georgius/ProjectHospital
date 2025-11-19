@@ -7,6 +7,12 @@
             public const string Mop = "stand_mop";
 
             public const string StandIdle = "stand_idle";
+            public const string StandTakeFromFridge = "stand_take_from_fridge";
+
+            public const string SitAndEatIn = "sit_sit_and_eat_in";
+            public const string SitAndEatIdle = "sit_sit_and_eat_idle";
+            public const string SitAndEatOut = "sit_sit_and_eat_out";
+
             public const string SitIdle = "sit_idle";
             public const string SitIdleHoldPhone = "sit_idle_hold_phone";
             public const string SitReadIdle = "sit_read_idle";

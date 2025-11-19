@@ -12,17 +12,21 @@
 
         public static class Vanilla
         {
-            public const string Distraction = "distraction";
-            public const string Dryer = "dryer";
+            public const string Cafeteria = "cafeteria";
+            public const string Classroom = "classroom";
+            public const string CoffeeMachine = "coffee_machine";
             public const string CommonRoom = "common_room";
+            public const string Distraction = "distraction";
             public const string Dressing = "dressing";
+            public const string Dryer = "dryer";
+            public const string Eating = "eating";
             public const string Education = "education";
             public const string Inventory = "inventory";
+            public const string LunchRoom = "lunch_room";
+            public const string Refreshments = "ui_refreshments";
             public const string Rest = "rest";
-            public const string Classroom = "classroom";
             public const string Sitting = "sitting";
             public const string Television = "tv_common";
-            public const string Refreshments = "ui_refreshments";
             public const string Vending = "vending";
             public const string Washing = "washing";
 

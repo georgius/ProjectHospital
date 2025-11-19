@@ -12,6 +12,7 @@
             public const string Scholar = "PERK_SCHOLAR";
             public const string Gamer = "PERK_GAMER";
             public const string Germaphobe = "PERK_GERMAPHOBE";
+            public const string Hedonist = "PERK_HEDONIST";
             public const string Spartan = "PERK_SPARTAN";
             public const string GoodBoss = "PERK_GOOD_BOSS";
             public const string NightOwl = "PERK_NIGHT_OWL";
