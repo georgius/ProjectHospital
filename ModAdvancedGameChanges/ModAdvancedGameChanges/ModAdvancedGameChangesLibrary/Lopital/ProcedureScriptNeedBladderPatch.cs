@@ -95,7 +95,7 @@ namespace ModAdvancedGameChanges.Lopital
                     mainCharacter.GetComponent<WalkComponent>().GetFloorIndex(),
                     department,
                     procedure?.RequiredEquipment?.Select(eq => eq.Tag).ToArray() ?? new string[] { },
-                    (patient != null) ? AccessRights.PATIENT : AccessRights.STAFF,
+                    (patient != null) ? AccessRights.PATIENT : AccessRights.STAFF_ONLY,
                     procedure?.RequiredRoomTags ?? new string[] { });
 
                 if (result == null)
@@ -111,7 +111,7 @@ namespace ModAdvancedGameChanges.Lopital
                                 mainCharacter.GetComponent<WalkComponent>().GetFloorIndex(),
                                 dpt,
                                 procedure?.RequiredEquipment?.Select(eq => eq.Tag).ToArray() ?? new string[] { },
-                                (patient != null) ? AccessRights.PATIENT : AccessRights.STAFF,
+                                (patient != null) ? AccessRights.PATIENT : AccessRights.STAFF_ONLY,
                                 procedure?.RequiredRoomTags ?? new string[] { });
 
                             if (toilet != null)
@@ -137,7 +137,7 @@ namespace ModAdvancedGameChanges.Lopital
                 {
                     // do not reserve object (wc), just go to room
                     Room room = MapScriptInterface.Instance.GetRoomAt(result);
-                    Vector2i position = MapScriptInterface.Instance.GetRandomFreePosition(room, (patient != null) ? AccessRights.PATIENT : AccessRights.STAFF);
+                    Vector2i position = MapScriptInterface.Instance.GetRandomFreePosition(room, (patient != null) ? AccessRights.PATIENT : AccessRights.STAFF_ONLY);
 
                     instance.MoveCharacter(mainCharacter, position, room.GetFloorIndex());
                     instance.SpeakCharacter(mainCharacter, null, Speeches.Vanilla.WC, 4f);
@@ -189,7 +189,7 @@ namespace ModAdvancedGameChanges.Lopital
                             mainCharacter, mainCharacter, mainCharacter.GetComponent<WalkComponent>().GetCurrentTile(),
                             room, 
                             procedure?.RequiredEquipment?.Select(eq => eq.Tag).ToArray() ?? new string[] { }, 
-                            (patient != null) ? AccessRights.PATIENT : AccessRights.STAFF,
+                            (patient != null) ? AccessRights.PATIENT : AccessRights.STAFF_ONLY,
                             false, null, false);
 
                         if (instance.m_stateData.m_procedureScene.m_equipment[0] == null)
@@ -253,7 +253,7 @@ namespace ModAdvancedGameChanges.Lopital
                     mainCharacter, mainCharacter, mainCharacter.GetComponent<WalkComponent>().GetCurrentTile(),
                     room,
                     new string[] { Tags.Vanilla.Washing },
-                    (patient != null) ? AccessRights.PATIENT : AccessRights.STAFF,
+                    (patient != null) ? AccessRights.PATIENT : AccessRights.STAFF_ONLY,
                     false, null, false);
 
                 if (sink != null)
@@ -344,7 +344,7 @@ namespace ModAdvancedGameChanges.Lopital
                         mainCharacter, mainCharacter, mainCharacter.GetComponent<WalkComponent>().GetCurrentTile(),
                         room,
                         new string[] { Tags.Vanilla.Dryer },
-                        (patient != null) ? AccessRights.PATIENT : AccessRights.STAFF,
+                        (patient != null) ? AccessRights.PATIENT : AccessRights.STAFF_ONLY,
                         false, null, false);
 
                     if (dryer != null)
