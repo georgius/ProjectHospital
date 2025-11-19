@@ -74,13 +74,6 @@ namespace ModAdvancedGameChanges
 
                         __instance.m_allBoolFlags = boolFlags.ToArray();
                     }
-
-                    // fix schedules
-                    GameDBSchedule[] schedules = Database.Instance.GetEntries<GameDBSchedule>();
-                    foreach (var schedule in schedules)
-                    {
-                        ViewSettingsPatch.FixScheduleTimes(schedule);
-                    }
                 }
             }
             catch (Exception ex)
@@ -145,6 +138,8 @@ namespace ModAdvancedGameChanges
 
             if (ViewSettingsPatch.m_enabled)
             {
+                ViewSettingsPatch.FixSchedules();
+
                 if (ViewSettingsPatch.m_labEmployeeBiochemistry[__instance].m_value)
                 {
                     var departmentType = typeof(GameDBDepartment);
@@ -177,6 +172,16 @@ namespace ModAdvancedGameChanges
                         }
                     }
                 }
+            }
+        }
+
+        internal static void FixSchedules()
+        {
+            // fix schedules
+            GameDBSchedule[] schedules = Database.Instance.GetEntries<GameDBSchedule>();
+            foreach (var schedule in schedules)
+            {
+                ViewSettingsPatch.FixScheduleTimes(schedule);
             }
         }
 
