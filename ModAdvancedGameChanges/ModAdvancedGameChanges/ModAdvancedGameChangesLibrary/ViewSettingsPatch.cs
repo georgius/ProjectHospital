@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 using HarmonyLib;
 using ModAdvancedGameChanges.Constants;
@@ -139,6 +140,7 @@ namespace ModAdvancedGameChanges
             if (ViewSettingsPatch.m_enabled)
             {
                 ViewSettingsPatch.FixSchedules();
+                ViewSettingsPatch.FixVendingMachines();
 
                 if (ViewSettingsPatch.m_labEmployeeBiochemistry[__instance].m_value)
                 {
@@ -175,7 +177,7 @@ namespace ModAdvancedGameChanges
             }
         }
 
-        internal static void FixSchedules()
+        private static void FixSchedules()
         {
             // fix schedules
             GameDBSchedule[] schedules = Database.Instance.GetEntries<GameDBSchedule>();
@@ -185,7 +187,7 @@ namespace ModAdvancedGameChanges
             }
         }
 
-        internal static void FixScheduleTimes(GameDBSchedule schedule)
+        private static void FixScheduleTimes(GameDBSchedule schedule)
         {
             Debug.Log(System.Reflection.MethodBase.GetCurrentMethod(), $"Fixing schedule {schedule.DatabaseID}");
 
@@ -223,6 +225,35 @@ namespace ModAdvancedGameChanges
                 Debug.Log(System.Reflection.MethodBase.GetCurrentMethod(), $"Fixing schedule {schedule.DatabaseID} end time from {schedule.EndTime.ToString(CultureInfo.InvariantCulture)} to 24.");
 
                 endTimeSetMethod.Invoke(schedule, new object[] { 24f });
+            }
+        }
+
+        private static void FixVendingMachines()
+        {
+            // fix vending machines
+            // each vending machine must have tags: inventory, vending, ui_refreshments
+            // in other objects vending tag will be removed, because vending is used to signal to pay
+
+            var objectType = typeof(GameDBObject);
+
+            var tagsProperty = objectType.GetProperty(nameof(GameDBObject.Tags), BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            var tagsPropertySetMethod = tagsProperty.GetSetMethod(true);
+
+            GameDBObject[] objects = Database.Instance.GetEntries<GameDBObject>();
+            foreach (var item in objects)
+            {
+                if (item.HasTag(Tags.Vanilla.Vending))
+                {
+                    Debug.Log(System.Reflection.MethodBase.GetCurrentMethod(), $"Object {item.DatabaseID}, tags '{string.Join(", ", item.Tags)}'");
+
+                    if ((!item.HasTag(Tags.Vanilla.Inventory)) || (!item.HasTag(Tags.Vanilla.Refreshments)))
+                    {
+                        Debug.Log(System.Reflection.MethodBase.GetCurrentMethod(), $"Object {item.DatabaseID}, removing tag '{Tags.Vanilla.Vending}'");
+
+                        // item is not vending machine, remove vending tag
+                        tagsPropertySetMethod.Invoke(item, new object[] { item.Tags.Where(t => (t != Tags.Vanilla.Vending)).ToArray() });
+                    }
+                }
             }
         }
     }

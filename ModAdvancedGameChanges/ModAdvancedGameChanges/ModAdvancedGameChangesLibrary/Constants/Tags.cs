@@ -17,10 +17,12 @@
             public const string CommonRoom = "common_room";
             public const string Dressing = "dressing";
             public const string Education = "education";
+            public const string Inventory = "inventory";
             public const string Rest = "rest";
             public const string Classroom = "classroom";
             public const string Sitting = "sitting";
             public const string Television = "tv_common";
+            public const string Refreshments = "ui_refreshments";
             public const string Vending = "vending";
             public const string Washing = "washing";
 
