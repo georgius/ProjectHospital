@@ -1,6 +1,7 @@
 ﻿using GLib;
 using HarmonyLib;
 using Lopital;
+using System;
 using System.Collections.Generic;
 
 namespace ModAdvancedGameChanges.Lopital
@@ -57,6 +58,203 @@ namespace ModAdvancedGameChanges.Lopital
                             dirtLevel = floor.m_mapPersistentData.m_tiles[i, j].m_dirtLevel;
                             minDistance = taxiDistanceCost2;
                             __result = new Vector2i(i, j);
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(MapScriptInterface), nameof(MapScriptInterface.FindClosestFreeObjectWithTags))]
+        [HarmonyPatch(new Type[] { typeof(Entity), typeof(Entity), typeof(Vector2i), typeof(Room), typeof(string[]), typeof(AccessRights), typeof(bool), typeof(DatabaseEntryRef<GameDBRoomType>[]), typeof(bool) })]
+        public static bool FindClosestFreeObjectWithTagsPrefix(Entity character, Entity owner, Vector2i position, Room room, string[] tags, AccessRights accessRights, bool allowObjectsWithAttachments, DatabaseEntryRef<GameDBRoomType>[] roomTypes, bool allowedOutsideOfRoom, MapScriptInterface __instance, ref TileObject __result)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            float distance = float.MaxValue;
+            __result = null;
+
+            if (room == null)
+            {
+                Debug.Log(System.Reflection.MethodBase.GetCurrentMethod(), $"Looking for object in NULL room!");
+                return false;
+            }
+
+            Floor floor = Hospital.Instance.m_floors[room.GetFloorIndex()];
+
+            for (int i = room.m_roomPersistentData.m_positionBottom.m_x; i <= room.m_roomPersistentData.m_positionTop.m_x; i++)
+            {
+                for (int j = room.m_roomPersistentData.m_positionBottom.m_y; j <= room.m_roomPersistentData.m_positionTop.m_y; j++)
+                {
+                    if (room.IsPositionInRoom(new Vector2i(i, j)) 
+                        && ((floor.m_mapPersistentData.m_mapLogisticsLayer.m_accessRights[i, j] <= accessRights) 
+                            || ((floor.m_mapPersistentData.m_mapLogisticsLayer.m_accessRights[i, j] == AccessRights.BIOHAZARD) && (accessRights == AccessRights.PATIENT_PROCEDURE))
+                            || ((accessRights == AccessRights.PATIENT) && (floor.m_accessibilityPatients[i, j] != 2))))
+                    {
+                        TileObjects tileObjects = floor.m_tileObjects[i, j];
+                        Room roomAt = floor.m_roomTiles[i, j];
+
+                        bool validRoom = (roomAt == null);
+                        validRoom |= (roomAt.m_roomPersistentData.m_valid == RoomValidity.OK);
+                        validRoom |= (roomAt.m_roomPersistentData.m_valid == RoomValidity.MISSING_STAFF);
+                        validRoom |= (roomAt.m_roomPersistentData.m_valid == RoomValidity.DEPARTMENT_CLOSED);
+                        validRoom |= ((accessRights >= AccessRights.STAFF) && (roomAt.m_roomPersistentData.m_valid == RoomValidity.INACCESSIBLE_PATIENTS));
+
+                        if ((character.GetComponent<HospitalizationComponent>() != null) 
+                            && character.GetComponent<HospitalizationComponent>().IsHospitalized() 
+                            && (roomAt != null)
+                            && roomAt.m_roomPersistentData.m_roomType.Entry.AcceptsOutpatients)
+                        {
+                            validRoom = false;
+                        }
+
+                        bool evaluate = (roomTypes == null) || (allowedOutsideOfRoom && (roomAt == null));
+
+                        if ((!evaluate) && (roomTypes != null) && (roomAt != null))
+                        {
+                            foreach (DatabaseEntryRef<GameDBRoomType> databaseEntryRef in roomTypes)
+                            {
+                                if (databaseEntryRef.Entry == roomAt.m_roomPersistentData.m_roomType.Entry)
+                                {
+                                    evaluate = true;
+                                }
+                            }
+                        }
+
+                        if (evaluate)
+                        {
+                            if ((tileObjects.m_centerObject != null) 
+                                && tileObjects.m_centerObject.HasAllTags(tags) 
+                                && ((tileObjects.m_centerObject.User == null) || (tileObjects.m_centerObject.User == character)) 
+                                && ((tileObjects.m_centerObject.Owner == null) || (tileObjects.m_centerObject.Owner == owner)) 
+                                && (!tileObjects.m_centerObject.IsBroken()) 
+                                && tileObjects.m_centerObject.IsValid() 
+                                && validRoom 
+                                && (allowObjectsWithAttachments || (tileObjects.m_attachmentObject == null)))
+                            {
+                                if ((tileObjects.m_centerObject.m_state.m_compositeParent.GetEntity() != null) 
+                                    && tileObjects.m_centerObject.m_state.m_compositeParent.GetEntity().HasUnusablePart())
+                                {
+                                    continue;
+                                }
+
+                                float tempDistance = GridMap.GetInstance().GetDistance(
+                                    character.GetComponent<WalkComponent>().GetFloorIndex(), 
+                                    character.GetComponent<WalkComponent>().GetCurrentTile(), 
+                                    room.GetFloorIndex(), 
+                                    new Vector2i(i, j), 
+                                    accessRights);
+
+                                if ((tempDistance >= 0f) && (tempDistance < distance))
+                                {
+                                    __result = tileObjects.m_centerObject;
+                                    distance = tempDistance;
+                                }
+                            }
+
+
+                            foreach (TileObject tileObject in tileObjects.GetAllNonCenterObjects())
+                            {
+                                if ((tileObject != null) 
+                                    && tileObject.HasAllTags(tags) 
+                                    && ((tileObject.User == null) || (tileObject.User == character)) 
+                                    && ((tileObject.Owner == null) || (tileObject.Owner == owner)) 
+                                    && (!tileObject.IsBroken()) 
+                                    && tileObject.IsValid() 
+                                    && validRoom)
+                                {
+                                    float tempDistance = GridMap.GetInstance().GetDistance(
+                                        character.GetComponent<WalkComponent>().GetFloorIndex(), 
+                                        character.GetComponent<WalkComponent>().GetCurrentTile(), 
+                                        room.GetFloorIndex(), 
+                                        new Vector2i(i, j), 
+                                        accessRights);
+
+                                    if ((tempDistance >= 0f) && (tempDistance < distance))
+                                    {
+                                        __result = tileObject;
+                                        distance = tempDistance;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(MapScriptInterface), nameof(MapScriptInterface.FindClosestFreeObjectWithTagsAndRoomTags))]
+        public static bool FindClosestFreeObjectWithTagsAndRoomTagsPrefix(Vector2i position, int floorIndex, Department department, string[] tags, AccessRights accessRights, string[] roomTags, MapScriptInterface __instance, ref TileObject __result)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            int distance = int.MaxValue;
+            __result = null;
+
+            foreach (EntityIDPointer<TileObject> entityIDPointer in department.m_departmentPersistentData.m_objects)
+            {
+                TileObject entity = entityIDPointer.GetEntity();
+                Floor floor = Hospital.Instance.m_floors[entity.GetFloorIndex()];
+
+                if (floor.m_mapPersistentData.m_mapLogisticsLayer.m_accessRights[entity.m_state.m_position.m_x, entity.m_state.m_position.m_y] <= accessRights)
+                {
+                    int tempFloorDistance = Math.Abs(floorIndex - entity.GetFloorIndex()) * 100;
+                    int tempDistance = (entity.m_state.m_position.m_x - position.m_x) * (entity.m_state.m_position.m_x - position.m_x) + (entity.m_state.m_position.m_y - position.m_y) * (entity.m_state.m_position.m_y - position.m_y) + tempFloorDistance * tempFloorDistance;
+
+                    if (entity.HasAllTags(tags) && (entity.User == null) && (entity.Owner == null) && (!entity.IsBroken()) && (tempDistance < distance) && entity.IsValid())
+                    {
+                        Room roomAt = __instance.GetRoomAt(entity.m_state.m_position, entity.GetFloorIndex());
+
+                        if ((roomTags == null) || ((roomTags != null) && (roomAt != null) && roomAt.m_roomPersistentData.m_roomType.Entry.HasAnyTag(roomTags)))
+                        {
+                            switch (accessRights)
+                            {
+                                case AccessRights.PEDESTRIAN:
+                                case AccessRights.PATIENT:
+                                case AccessRights.PATIENT_PROCEDURE:
+                                case AccessRights.BIOHAZARD:
+                                    {
+                                        AccessRights roomAccessRights = (roomAt == null) ? accessRights : roomAt.m_roomPersistentData.m_roomType.Entry.AccessRights;
+                                        RoomValidity roomValidity = (roomAt == null) ? RoomValidity.OK : roomAt.m_roomPersistentData.m_valid;
+
+                                        if ((roomAccessRights <= accessRights)
+                                            && ((roomValidity == RoomValidity.OK) || (roomValidity == RoomValidity.MISSING_STAFF)))
+                                        {
+                                            __result = entity;
+                                            distance = tempDistance;
+                                        }
+                                    }
+                                    break;
+                                case AccessRights.STAFF:
+                                case AccessRights.STAFF_ONLY:
+                                    {
+                                        AccessRights roomAccessRights = (roomAt == null) ? accessRights : roomAt.m_roomPersistentData.m_roomType.Entry.AccessRights;
+                                        RoomValidity roomValidity = (roomAt == null) ? RoomValidity.OK : roomAt.m_roomPersistentData.m_valid;
+
+                                        if ((roomAccessRights <= accessRights)
+                                            && ((roomValidity == RoomValidity.OK) || (roomValidity == RoomValidity.MISSING_STAFF) || (roomValidity == RoomValidity.INACCESSIBLE_PATIENTS)))
+                                        {
+                                            __result = entity;
+                                            distance = tempDistance;
+                                        }
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
                     }
                 }
