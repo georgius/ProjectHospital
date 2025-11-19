@@ -11,7 +11,7 @@ namespace ModAdvancedGameChanges.Lopital
     {
         [HarmonyPrefix]
         [HarmonyPatch(typeof(ProcedureScriptNeedHunger), nameof(ProcedureScriptNeedHunger.Activate))]
-        public static bool ActivatePreifx(ProcedureScriptNeedHunger __instance)
+        public static bool ActivatePrefix(ProcedureScriptNeedHunger __instance)
         {
             if (!ViewSettingsPatch.m_enabled)
             {
