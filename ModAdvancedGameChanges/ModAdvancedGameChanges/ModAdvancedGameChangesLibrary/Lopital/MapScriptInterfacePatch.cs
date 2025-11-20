@@ -306,7 +306,7 @@ namespace ModAdvancedGameChanges.Lopital
                 if (position != Vector2i.ZERO_VECTOR)
                 {
                     Vector3i roomPosition = new Vector3i(position.m_x, position.m_y, departmentRoom.GetFloorIndex());
-                    int distance = (roomPosition - instancePosition).LengthSquared();
+                    int distance = (roomPosition - instancePosition).LengthSquaredWithPenalty();
 
                     if (distance < minDistance)
                     {
@@ -342,7 +342,7 @@ namespace ModAdvancedGameChanges.Lopital
                     if (position != Vector2i.ZERO_VECTOR)
                     {
                         Vector3i roomPosition = new Vector3i(position.m_x, position.m_y, departmentRoom.GetFloorIndex());
-                        int distance = (roomPosition - instancePosition).LengthSquared();
+                        int distance = (roomPosition - instancePosition).LengthSquaredWithPenalty();
 
                         if (distance < minDistance)
                         {

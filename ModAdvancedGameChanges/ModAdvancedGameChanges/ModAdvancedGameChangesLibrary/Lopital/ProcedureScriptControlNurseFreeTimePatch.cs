@@ -177,7 +177,7 @@ namespace ModAdvancedGameChanges.Lopital
                     Vector3i resultPosition = (result == null) ? tempPosition : new Vector3i(result.GetDefaultUseTile().m_x, result.GetDefaultUseTile().m_y, result.GetFloorIndex());
                     Vector3i currentPosition = new Vector3i(mainCharacter.GetComponent<WalkComponent>().GetCurrentTile().m_x, mainCharacter.GetComponent<WalkComponent>().GetCurrentTile().m_y, mainCharacter.GetComponent<WalkComponent>().GetFloorIndex());
 
-                    if ((currentPosition - tempPosition).LengthSquared() <= (currentPosition - resultPosition).LengthSquared())
+                    if ((currentPosition - tempPosition).LengthSquaredWithPenalty() <= (currentPosition - resultPosition).LengthSquaredWithPenalty())
                     {
                         result = temp;
                     }
@@ -199,7 +199,7 @@ namespace ModAdvancedGameChanges.Lopital
                     Vector3i resultPosition = (result == null) ? tempPosition : new Vector3i(result.GetDefaultUseTile().m_x, result.GetDefaultUseTile().m_y, result.GetFloorIndex());
                     Vector3i currentPosition = new Vector3i(mainCharacter.GetComponent<WalkComponent>().GetCurrentTile().m_x, mainCharacter.GetComponent<WalkComponent>().GetCurrentTile().m_y, mainCharacter.GetComponent<WalkComponent>().GetFloorIndex());
 
-                    if ((currentPosition - tempPosition).LengthSquared() <= (currentPosition - resultPosition).LengthSquared())
+                    if ((currentPosition - tempPosition).LengthSquaredWithPenalty() <= (currentPosition - resultPosition).LengthSquaredWithPenalty())
                     {
                         result = temp;
                     }

@@ -120,7 +120,7 @@ namespace ModAdvancedGameChanges.Lopital
                                 Vector3i resultPosition = (result == null) ? toiletPosition : new Vector3i(result.GetDefaultUseTile().m_x, result.GetDefaultUseTile().m_y, result.GetFloorIndex());
                                 Vector3i currentPosition = new Vector3i(mainCharacter.GetComponent<WalkComponent>().GetCurrentTile().m_x, mainCharacter.GetComponent<WalkComponent>().GetCurrentTile().m_y, mainCharacter.GetComponent<WalkComponent>().GetFloorIndex());
 
-                                if ((currentPosition - toiletPosition).LengthSquared() <= (currentPosition - resultPosition).LengthSquared())
+                                if ((currentPosition - toiletPosition).LengthSquaredWithPenalty() <= (currentPosition - resultPosition).LengthSquaredWithPenalty())
                                 {
                                     result = toilet;
                                 }

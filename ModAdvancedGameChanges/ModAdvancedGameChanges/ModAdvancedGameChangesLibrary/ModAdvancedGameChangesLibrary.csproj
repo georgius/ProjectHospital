@@ -84,6 +84,7 @@
     <Compile Include="Tweakable.cs" />
     <Compile Include="Constants\Tweakables.cs" />
     <Compile Include="TweakableValidation.cs" />
+    <Compile Include="Vector3iExtensions.cs" />
     <Compile Include="ViewSettingsPatch.cs" />
   </ItemGroup>
   <ItemGroup>
