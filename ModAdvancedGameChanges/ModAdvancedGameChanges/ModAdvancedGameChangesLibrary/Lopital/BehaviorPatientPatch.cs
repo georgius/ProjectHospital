@@ -311,9 +311,6 @@ namespace ModAdvancedGameChanges.Lopital
                 }
             }
 
-            // statistics !!!
-            //__instance.m_state.m_department.GetEntity().m_departmentPersistentData.m_todaysStatistics.m_tr
-
             __instance.FreeWaitingRoom();
 
             if (__instance.m_state.m_department != null)
@@ -321,10 +318,65 @@ namespace ModAdvancedGameChanges.Lopital
                 __instance.m_state.m_department.GetEntity().RemovePatient(__instance.m_entity);
             }
 
+            if (__instance.m_state.m_sentHome)
+            {
+                __instance.m_entity.GetComponent<SpeechComponent>().SetBubble(Speeches.Vanilla.Home, 10f);
+
+                if (__instance.HasBeenTreated())
+                {
+                    if (!__instance.m_state.m_treatedCounted)
+                    {
+                        __instance.CountTreatedPatient();
+                    }
+                }
+                else if (!__instance.m_state.m_untreated)
+                {
+                    __instance.m_state.m_department.GetEntity().m_departmentPersistentData.m_todaysStatistics.m_untreatedPatients++;
+                    __instance.m_state.m_department.GetEntity().m_departmentPersistentData.m_todaysStatistics.m_clinicUntreated++;
+
+                    if (__instance.m_state.m_doctor.GetEntity() != null)
+                    {
+                        BehaviorDoctor doctor = __instance.m_state.m_doctor.GetEntity().GetComponent<BehaviorDoctor>();
+
+                        doctor.m_state.m_todaysStatistics.m_untreated++;
+                        doctor.m_state.m_allTimeStatisics.m_untreated++;
+                    }
+                    __instance.m_state.m_untreated = true;
+                }
+            }
+            else if (!leaveAfterHours)
+            {
+                // very strange original code
+                int num = System.Math.Min(4, __instance.m_entity.GetComponent<MoodComponent>().GetTotalSatisfaction() / 20);
+                __instance.m_entity.GetComponent<SpeechComponent>().SetBubble(20 - num, 10f);
+            }
+            else
+            {
+                __instance.m_entity.GetComponent<SpeechComponent>().SetBubble(Speeches.Vanilla.Unhappy, 10f);
+            }
+            
+            __instance.GetComponent<WalkComponent>().SetDestination(MapScriptInterface.Instance.GetRandomSpawnPosition(), 0, MovementType.WALKING);
+
+            if (__instance.HasBeenTreated() && pay && (!leaveAfterHours))
+            {
+                if (__instance.ShouldPatientPay())
+                {
+                    __instance.m_state.m_department.GetEntity().Pay(__instance.GetInsurancePayment(true), PaymentCategory.INSURANCE_CLINIC, __instance.m_entity);
+                    __instance.GetComponent<SoundSourceComponent>().PlaySoundEvent(Sounds.Vanilla.PatientPays, SoundEventCategory.SFX, 1f, 0f, true, false);
+
+                    if (SettingsManager.Instance.m_gameSettings.m_showPaymentsInGame.m_value)
+                    {
+                        NotificationManager.GetInstance().AddFloatingIngameNotification(__instance.m_entity, "$" + __instance.GetInsurancePayment(false), new Color(0.5f, 1f, 0.5f));
+                    }
+                }
+                PlayerStatistics.Instance.IncrementStatistic(Statistics.Vanilla.Treated, 1);
+            }
+
+            InsuranceManager.Instance.UpdateInsuranceCompanyRequirementsAndObjectives(InsuranceCheckMode.IMMEDIATE);
+
             __instance.m_state.m_bookmarked = false;
             BookmarkedCharacterManager.Instance.RemoveCharacter(__instance.m_entity);
-
-            __instance.GetComponent<WalkComponent>().SetDestination(MapScriptInterface.Instance.GetRandomSpawnPosition(), 0, MovementType.WALKING);
+            
             __instance.SwitchState(PatientState.Leaving);
 
             return false;

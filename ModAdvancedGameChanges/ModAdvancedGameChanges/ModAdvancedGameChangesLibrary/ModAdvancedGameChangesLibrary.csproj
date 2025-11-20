@@ -46,7 +46,9 @@
     <Compile Include="Constants\Notifications.cs" />
     <Compile Include="Constants\RoomTypes.cs" />
     <Compile Include="Constants\SatisfationModifiers.cs" />
+    <Compile Include="Constants\Sounds.cs" />
     <Compile Include="Constants\Speeches.cs" />
+    <Compile Include="Constants\Statistics.cs" />
     <Compile Include="Debug.cs" />
     <Compile Include="Constants\Departments.cs" />
     <Compile Include="Constants\Localizations.cs" />

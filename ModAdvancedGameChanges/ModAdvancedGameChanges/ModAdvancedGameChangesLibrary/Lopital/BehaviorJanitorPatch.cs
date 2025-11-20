@@ -218,7 +218,7 @@ namespace ModAdvancedGameChanges .Lopital
 
                     Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, cleaning time {__instance.m_state.m_cleaningTime.ToString(CultureInfo.InvariantCulture)}");
 
-                    PlayerStatistics.Instance.IncrementStatistic("STAT_TILES_CLEAN", 1);
+                    PlayerStatistics.Instance.IncrementStatistic(Statistics.Vanilla.TilesClean, 1);
                     MapScriptInterface.Instance.CleanTile(__instance.GetComponent<WalkComponent>().GetCurrentTile(), __instance.GetComponent<WalkComponent>().GetFloorIndex());
                 }
                 else if (__instance.m_state.m_cleaningTime <= 0f)
