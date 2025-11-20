@@ -188,6 +188,15 @@
 	<GameDBTweakableFloat ID="AGC_TWEAKABLE_NEED_HUNGER">
 		<Value>70</Value>
 	</GameDBTweakableFloat>
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_NEED_HUNGER_LUNCH">
+		<Value>150</Value>
+	</GameDBTweakableFloat>
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_NEED_HUNGER_LUNCH_EATING_TIME_MINUTES">
+		<Value>20</Value>
+	</GameDBTweakableFloat>
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_NEED_HUNGER_LUNCH_COFFEE_TIME_MINUTES">
+		<Value>10</Value>
+	</GameDBTweakableFloat>
 	
 	<GameDBTweakableFloat ID="AGC_TWEAKABLE_NEED_REST_MINUTES">
 		<Value>20</Value>

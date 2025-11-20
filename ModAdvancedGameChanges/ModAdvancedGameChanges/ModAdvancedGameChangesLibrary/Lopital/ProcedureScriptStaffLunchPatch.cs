@@ -21,6 +21,14 @@ namespace ModAdvancedGameChanges.Lopital
             Entity mainCharacter = __instance.m_stateData.m_procedureScene.MainCharacter;
             Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{mainCharacter?.Name ?? "NULL"}, activating script {__instance.m_stateData.m_scriptName}");
 
+            __instance.SetParam(ProcedureScriptStaffLunchPatch.PARAM_EATING_TIME, DayTime.Instance.IngameTimeHoursToRealTimeSeconds(Tweakable.Mod.NeedHungerLunchEatingTimeMinutes() / 60f));
+            __instance.SetParam(ProcedureScriptStaffLunchPatch.PARAM_COFFEE_TIME, DayTime.Instance.IngameTimeHoursToRealTimeSeconds(Tweakable.Mod.NeedHungerLunchCoffeeTimeMinutes() / 60f));
+
+            if (mainCharacter.GetComponent<PerkComponent>().m_perkSet.HasPerk(Perks.Vanilla.Hedonist))
+            {
+                __instance.SetParam(ProcedureScriptStaffLunchPatch.PARAM_EATING_TIME, __instance.GetParam(ProcedureScriptStaffLunchPatch.PARAM_EATING_TIME) * 2);
+            }
+
             __instance.SwitchState(ProcedureScriptStaffLunchPatch.STATE_SEARCHING_ROOM);
 
             return false;
@@ -197,14 +205,14 @@ namespace ModAdvancedGameChanges.Lopital
         {
             Entity mainCharacter = instance.m_stateData.m_procedureScene.MainCharacter;
 
-            if (instance.m_stateData.m_timeInState > 5f)
+            if (instance.m_stateData.m_timeInState > instance.GetParam(ProcedureScriptStaffLunchPatch.PARAM_EATING_TIME))
             {
                 if (mainCharacter.GetComponent<PerkComponent>().m_perkSet.HasHiddenPerk(Perks.Vanilla.Hedonist))
                 {
                     mainCharacter.GetComponent<PerkComponent>().RevealPerk(Perks.Vanilla.Hedonist, mainCharacter.GetComponent<Behavior>().IsBookmarked());
                 }
 
-                mainCharacter.GetComponent<Behavior>().ReceiveMessage(new Message(Messages.HUNGER_REDUCED, 100f));
+                mainCharacter.GetComponent<Behavior>().ReceiveMessage(new Message(Messages.HUNGER_REDUCED, Tweakable.Mod.NeedHungerLunch()));
                 mainCharacter.GetComponent<MoodComponent>().AddSatisfactionModifier(SatisfationModifiers.Vanilla.HadLunch);
                 mainCharacter.GetComponent<AnimModelComponent>().QueueAnimation(Animations.Vanilla.SitAndEatOut, false, true);
 
@@ -378,14 +386,24 @@ namespace ModAdvancedGameChanges.Lopital
         {
             Entity mainCharacter = instance.m_stateData.m_procedureScene.MainCharacter;
 
-            if (mainCharacter.GetComponent<AnimModelComponent>().IsIdle())
+            if (instance.m_stateData.m_timeInState > instance.GetParam(ProcedureScriptStaffLunchPatch.PARAM_COFFEE_TIME))
             {
-                mainCharacter.GetComponent<Behavior>().ReceiveMessage(new Message(Messages.REST_REDUCED, 100f));
-                mainCharacter.GetComponent<MoodComponent>().AddSatisfactionModifier(SatisfationModifiers.Vanilla.HadCoffee);
+                if (mainCharacter.GetComponent<AnimModelComponent>().IsIdle())
+                {
+                    mainCharacter.GetComponent<Behavior>().ReceiveMessage(new Message(Messages.REST_REDUCED, Tweakable.Mod.NeedRestPlayGame()));
+                    mainCharacter.GetComponent<MoodComponent>().AddSatisfactionModifier(SatisfationModifiers.Vanilla.HadCoffee);
 
-                mainCharacter.GetComponent<WalkComponent>().StandUp();
-                
-                instance.SwitchState(ProcedureScriptStaffLunchPatch.STATE_COMMON_ROOM_COFFEE_FINISHED);
+                    mainCharacter.GetComponent<WalkComponent>().StandUp();
+
+                    instance.SwitchState(ProcedureScriptStaffLunchPatch.STATE_COMMON_ROOM_COFFEE_FINISHED);
+                }
+            }
+            else
+            {
+                if (mainCharacter.GetComponent<AnimModelComponent>().IsIdle())
+                {
+                    mainCharacter.GetComponent<AnimModelComponent>().QueueAnimation(Animations.Vanilla.SitIdleHoldPhone, false, true);
+                }
             }
         }
 
@@ -421,5 +439,10 @@ namespace ModAdvancedGameChanges.Lopital
         public const string STATE_COMMON_ROOM_COFFEE_FINISHED = "STATE_COMMON_ROOM_COFFEE_FINISHED";
 
         // cafeteria lunch
+
+        // parameters
+
+        public const int PARAM_EATING_TIME = 0;
+        public const int PARAM_COFFEE_TIME = 1;
     }
 }

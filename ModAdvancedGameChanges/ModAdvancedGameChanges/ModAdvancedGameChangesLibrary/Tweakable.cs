@@ -103,6 +103,21 @@ namespace ModAdvancedGameChanges
                 return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER).Value;
             }
 
+            public static float NeedHungerLunch()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH).Value;
+            }
+
+            public static float NeedHungerLunchEatingTimeMinutes()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_EATING_TIME_MINUTES).Value;
+            }
+
+            public static float NeedHungerLunchCoffeeTimeMinutes()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_COFFEE_TIME_MINUTES).Value;
+            }
+
             public static float NeedRestMinutes()
             {
                 return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_NEED_REST_MINUTES).Value;

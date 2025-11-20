@@ -192,10 +192,6 @@ namespace ModAdvancedGameChanges
                 {
                     throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_BLADDER}' must be greater than or equal to zero.");
                 }
-                if (value.Value > 100f)
-                {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_BLADDER}' must be less than or equal to 100.");
-                }
             }),
 
             new TweakableValidation(() =>
@@ -205,10 +201,6 @@ namespace ModAdvancedGameChanges
                 {
                     throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_BOREDOM_USING_OBJECT}' must be greater than or equal to zero.");
                 }
-                if (value.Value > 100f)
-                {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_BOREDOM_USING_OBJECT}' must be less than or equal to 100.");
-                }
             }),
             new TweakableValidation(() =>
             {
@@ -217,10 +209,6 @@ namespace ModAdvancedGameChanges
                 {
                     throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_BOREDOM_USING_PHONE}' must be greater than or equal to zero.");
                 }
-                if (value.Value > 100f)
-                {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_BOREDOM_USING_PHONE}' must be less than or equal to 100.");
-                }
             }),
             new TweakableValidation(() =>
             {
@@ -228,10 +216,6 @@ namespace ModAdvancedGameChanges
                 if (value.Value < 0f)
                 {
                     throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_BOREDOM_YAWNING}' must be greater than or equal to zero.");
-                }
-                if (value.Value > 100f)
-                {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_BOREDOM_YAWNING}' must be less than or equal to 100.");
                 }
             }),
 
@@ -242,9 +226,29 @@ namespace ModAdvancedGameChanges
                 {
                     throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER}' must be greater than or equal to zero.");
                 }
-                if (value.Value > 100f)
+            }),
+            new TweakableValidation(() =>
+            {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH);
+                if (value.Value < 0f)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER}' must be less than or equal to 100.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH}' must be greater than or equal to zero.");
+                }
+            }),
+            new TweakableValidation(() =>
+            {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_EATING_TIME_MINUTES);
+                if (value.Value < 0f)
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_EATING_TIME_MINUTES}' must be greater than or equal to zero.");
+                }
+            }),
+            new TweakableValidation(() =>
+            {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_COFFEE_TIME_MINUTES);
+                if (value.Value < 0f)
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_COFFEE_TIME_MINUTES}' must be greater than or equal to zero.");
                 }
             }),
 
@@ -263,10 +267,6 @@ namespace ModAdvancedGameChanges
                 {
                     throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_REST_PLAY_GAME}' must be greater than or equal to zero.");
                 }
-                if (value.Value > 100f)
-                {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_REST_PLAY_GAME}' must be less than or equal to 100.");
-                }
             }),
             new TweakableValidation(() =>
             {
@@ -275,10 +275,6 @@ namespace ModAdvancedGameChanges
                 {
                     throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_REST_SIT}' must be greater than or equal to zero.");
                 }
-                if (value.Value > 100f)
-                {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_REST_SIT}' must be less than or equal to 100.");
-                }
             }),
             new TweakableValidation(() =>
             {
@@ -286,10 +282,6 @@ namespace ModAdvancedGameChanges
                 if (value.Value < 0f)
                 {
                     throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_REST_STUDY}' must be greater than or equal to zero.");
-                }
-                if (value.Value > 100f)
-                {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_REST_STUDY}' must be less than or equal to 100.");
                 }
             }),
 
