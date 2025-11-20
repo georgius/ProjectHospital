@@ -301,18 +301,18 @@ namespace ModAdvancedGameChanges
 
             new TweakableValidation(() =>
             {
-                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NURSE_RECEPTION_BASE_TIME_QUESTION);
+                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NURSE_RECEPTION_QUESTION_MINUTES);
                 if (value.Value < 1)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NURSE_RECEPTION_BASE_TIME_QUESTION}' must be greater than zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NURSE_RECEPTION_QUESTION_MINUTES}' must be greater than zero.");
                 }
             }),
             new TweakableValidation(() =>
             {
-                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NURSE_RECEPTION_BASE_TIME_DECISION);
+                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NURSE_RECEPTION_DECISION_MINUTES);
                 if (value.Value < 1)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NURSE_RECEPTION_BASE_TIME_DECISION}' must be greater than zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NURSE_RECEPTION_DECISION_MINUTES}' must be greater than zero.");
                 }
             }),
             new TweakableValidation(() =>

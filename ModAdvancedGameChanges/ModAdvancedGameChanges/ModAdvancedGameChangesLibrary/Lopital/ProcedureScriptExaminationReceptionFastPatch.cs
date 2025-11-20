@@ -82,7 +82,7 @@ namespace ModAdvancedGameChanges.Lopital
 
             float actionTime = instance.GetActionTime(
                 nurse,
-                (int)DayTime.Instance.IngameTimeHoursToRealTimeSeconds(((float)Tweakable.Mod.NurseReceptionBaseTimeQuestion()) / 60f),
+                (int)DayTime.Instance.IngameTimeHoursToRealTimeSeconds(((float)Tweakable.Mod.NurseReceptionQuestionMinutes()) / 60f),
                 nurse.GetComponent<EmployeeComponent>().GetSkillLevel(Skills.Vanilla.SKILL_NURSE_SPEC_RECEPTIONIST));
 
             Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"nurse {nurse?.Name ?? "NULL"}, question time {actionTime.ToString(CultureInfo.InvariantCulture)}");
@@ -121,7 +121,7 @@ namespace ModAdvancedGameChanges.Lopital
 
                     float actionTime = instance.GetActionTime(
                         nurse,
-                        (int)DayTime.Instance.IngameTimeHoursToRealTimeSeconds(((float)Tweakable.Mod.NurseReceptionBaseTimeQuestion()) / 60f),
+                        (int)DayTime.Instance.IngameTimeHoursToRealTimeSeconds(((float)Tweakable.Mod.NurseReceptionQuestionMinutes()) / 60f),
                         nurse.GetComponent<EmployeeComponent>().GetSkillLevel(Skills.Vanilla.SKILL_NURSE_SPEC_RECEPTIONIST));
 
                     Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"nurse {nurse?.Name ?? "NULL"}, question time {actionTime.ToString(CultureInfo.InvariantCulture)}");
@@ -209,7 +209,7 @@ namespace ModAdvancedGameChanges.Lopital
 
                 float actionTime = instance.GetActionTime(
                     nurse, 
-                    (int)DayTime.Instance.IngameTimeHoursToRealTimeSeconds(((float)Tweakable.Mod.NurseReceptionBaseTimeDecision()) / 60f),
+                    (int)DayTime.Instance.IngameTimeHoursToRealTimeSeconds(((float)Tweakable.Mod.NurseReceptionDecisionMinutes()) / 60f),
                     nurse.GetComponent<EmployeeComponent>().GetSkillLevel(Skills.Vanilla.SKILL_NURSE_QUALIF_PATIENT_CARE));
 
                 Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"nurse {nurse?.Name ?? "NULL"}, decide time {actionTime.ToString(CultureInfo.InvariantCulture)}");

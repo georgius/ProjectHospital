@@ -128,14 +128,14 @@ namespace ModAdvancedGameChanges
                 return Tweakable.GetTweakable<GameDBTweakableInt>(String.Format(CultureInfo.InvariantCulture, Tweakables.Mod.AGC_TWEAKABLE_NURSE_LEVEL_POINTS_FORMAT, index)).Value;
             }
 
-            public static int NurseReceptionBaseTimeQuestion()
+            public static int NurseReceptionQuestionMinutes()
             {
-                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NURSE_RECEPTION_BASE_TIME_QUESTION).Value;
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NURSE_RECEPTION_QUESTION_MINUTES).Value;
             }
 
-            public static int NurseReceptionBaseTimeDecision()
+            public static int NurseReceptionDecisionMinutes()
             {
-                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NURSE_RECEPTION_BASE_TIME_DECISION).Value;
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NURSE_RECEPTION_DECISION_MINUTES).Value;
             }
 
             public static int NurseReceptionQuestionSkillPoints()
