@@ -616,56 +616,44 @@ namespace ModAdvancedGameChanges.Lopital
                     }
                     break;
                 case PatientState.Idle:
-                    {
-                        __instance.UpdateStateIdleInternal();
-                    }
+                    __instance.UpdateStateIdleInternal();
                     break;
                 case PatientState.GoingToReception:
-                    {
-                        __instance.UpdateStateGoingToReceptionInternal();
-                    }
+                    __instance.UpdateStateGoingToReceptionInternal();
                     break;
                 case PatientState.GoingToReceptionist:
-                    {
-                        __instance.UpdateStateGoingToReceptionistInternal();
-                    }
+                    __instance.UpdateStateGoingToReceptionistInternal();
                     break;
                 case PatientState.ExaminedAtReception:
-                    {
-                        __instance.UpdateStateExaminedAtReceptionInternal();
-                    }
+                    __instance.UpdateStateExaminedAtReceptionInternal();
                     break;
                 case PatientState.FindQueueMachine:
-                    {
-                        __instance.Leave(false, false, false);
-                    }
+                    __instance.UpdateStateFindQueueMachine();
                     break;
                 case PatientState.GoToQueueMachine:
+                    __instance.UpdateStateGoingToQueueMachineInternal();
                     break;
                 case PatientState.UseQueueMachine:
+                    __instance.UpdateStateUsingQueueMachineInternal();
                     break;
                 case PatientState.Wandering:
                     break;
                 case PatientState.GoingToWaitingRoom:
-                    {
-                        __instance.UpdateStateGoingToWaitingRoomInternal();
-                    }
+                    __instance.UpdateStateGoingToWaitingRoomInternal();
                     break;
                 case PatientState.WaitingGoingToChair:
-                    {
-                        __instance.UpdateStateGoingToChairInternal();
-                    }
+                    __instance.UpdateStateGoingToChairInternal();
                     break;
                 case PatientState.WaitingSitting:
+                    __instance.UpdateStateWaitingSittingInternal(deltaTime);
                     break;
                 case PatientState.WaitingStandingIdle:
+                    __instance.UpdateStateWaitingStandingIdleInternal(deltaTime);
                     break;
                 case PatientState.WaitingBeingCalled:
                     break;
                 case PatientState.FulfillingNeeds:
-                    {
-                        __instance.UpdateStateFulfillingNeedsInternal();
-                    }
+                    __instance.UpdateStateFulfillingNeedsInternal();
                     break;
                 case PatientState.GoingToDoctor:
                     break;
@@ -692,9 +680,7 @@ namespace ModAdvancedGameChanges.Lopital
                 case PatientState.BuyingMedicine:
                     break;
                 case PatientState.Leaving:
-                    {
-                        __instance.UpdateStateLeavingInternal();
-                    }
+                    __instance.UpdateStateLeavingInternal();
                     break;
                 case PatientState.Left:
                     {
@@ -719,9 +705,7 @@ namespace ModAdvancedGameChanges.Lopital
                 case PatientState.Dead:
                     break;
                 default:
-                    {
-                        activePatient = false;
-                    }
+                    activePatient = false;
                     break;
             }
 
@@ -762,6 +746,53 @@ namespace ModAdvancedGameChanges.Lopital
                 }
 
                 __instance.SwitchState(PatientState.Idle);
+            }
+
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorPatient), nameof(BehaviorPatient.UpdateStateFindQueueMachine))]
+        public static bool UpdateStateFindQueueMachinePrefix(BehaviorPatient __instance)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            if (!BehaviorPatientPatch.HandleDiedSentHome(__instance))
+            {
+                if (MapScriptInterfacePatch.IsInDestinationRoom(__instance.m_entity))
+                {
+                    Room currentRoom = MapScriptInterface.Instance.GetRoomAt(__instance.GetComponent<WalkComponent>().GetDestinationTile(), __instance.GetComponent<WalkComponent>().GetFloorIndex());
+                    TileObject queueMachine = MapScriptInterface.Instance.FindClosestFreeObjectWithTag(
+                        __instance.m_entity, null, __instance.GetComponent<GridComponent>().GetGridPosition(),
+                        currentRoom, Tags.Vanilla.Queue, AccessRights.PATIENT, false, null, false);
+
+                    if (queueMachine != null)
+                    {
+                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, found free queue machine");
+
+                        __instance.m_entity.GetComponent<WalkComponent>().SetDestination(queueMachine.GetDefaultUsePosition(), queueMachine.GetFloorIndex(), MovementType.WALKING);
+                        __instance.m_entity.GetComponent<UseComponent>().ReserveObject(queueMachine);
+
+                        __instance.SwitchState(PatientState.GoToQueueMachine);
+
+                        return false;
+                    }
+                }
+
+                if (!__instance.GetComponent<WalkComponent>().IsBusy())
+                {
+                    // no free queue machine
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, no free queue machine, going to waiting room");
+
+                    __instance.m_state.m_usedQueueMachine = true;
+                    __instance.SwitchState(PatientState.GoingToWaitingRoom);
+
+                    return false;
+                }
             }
 
             return false;
@@ -918,53 +949,26 @@ namespace ModAdvancedGameChanges.Lopital
                 return true;
             }
 
-            //if (__instance.GetComponent<WalkComponent>().IsBusy())
-            //{
-            //    Room room = MapScriptInterface.Instance.GetRoomAt(__instance.GetComponent<WalkComponent>().GetDestinationTile(), __instance.GetComponent<WalkComponent>().GetFloorIndex());
-                
-            //    if ((room == null) || ((room.m_roomPersistentData.m_valid & RoomValidity.INACCESSIBLE_PATIENTS) != 0))
-            //    {
-            //        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, destination waiting room not accessible");
+            if (!BehaviorPatientPatch.HandleDiedSentHome(__instance))
+            {
+                if (MapScriptInterfacePatch.IsInDestinationRoom(__instance.m_entity))
+                {
+                    if (__instance.m_state.m_usedQueueMachine)
+                    {
+                        Room currentRoom = MapScriptInterface.Instance.GetRoomAt(__instance.GetComponent<WalkComponent>());
 
-            //        __instance.FreeWaitingRoom();
-            //        __instance.SwitchState(PatientState.Idle);
+                        __instance.m_state.m_waitingRoom = currentRoom;
+                        __instance.m_state.m_waitingRoom.GetEntity().EnqueueCharacter(__instance.m_entity, true);
+                        __instance.CheckRoomSatisfactionBonusesInternal();
 
-            //        return false;
-            //    }
-            //}
-
-            //if (!__instance.GetComponent<WalkComponent>().IsBusy())
-            //{
-            //    if (!BehaviorPatientPatch.HandleDiedSentHomeFulfillNeeds(__instance))
-            //    {
-            //        if (__instance.m_state.m_waitingRoom == null)
-            //        {
-            //            __instance.m_state.m_waitingRoom = MapScriptInterface.Instance.GetRoomAt(__instance.GetComponent<WalkComponent>());
-            //            __instance.m_state.m_waitingRoom.GetEntity().EnqueueCharacter(__instance.m_entity, true);
-            //        }
-                    
-            //        __instance.CheckRoomSatisfactionBonusesInternal();
-
-            //        if ((__instance.m_state.m_waitingRoom != null) && (__instance.m_state.m_reservedWaitingRoomTile == null))
-            //        {
-            //            // reserve some tile to stand and move
-            //            Vector2i position = MapScriptInterface.Instance.GetRandomFreePosition(__instance.m_state.m_waitingRoom.GetEntity(), AccessRights.PATIENT);
-
-            //            if (position != Vector2i.ZERO_VECTOR)
-            //            {
-            //                __instance.m_state.m_reservedWaitingRoomTile = position;
-            //                __instance.GetComponent<WalkComponent>().SetDestination(position, __instance.GetComponent<WalkComponent>().GetFloorIndex(), MovementType.WALKING);
-            //                MapScriptInterface.Instance.ReserveTile(position, __instance.m_entity, __instance.GetComponent<WalkComponent>().GetFloorIndex());
-            //            }
-            //        }
-
-            //        if ((__instance.m_state.m_waitingRoom != null) && (__instance.m_state.m_reservedWaitingRoomTile != null))
-            //        {
-            //            // finally on standing place
-            //            __instance.SwitchState(PatientState.WaitingStandingIdle);
-            //        }
-            //    }
-            //}
+                        __instance.SwitchState(PatientState.WaitingStandingIdle);
+                    }
+                    else
+                    {
+                        __instance.SwitchState(PatientState.FindQueueMachine);
+                    }
+                }
+            }
 
             return false;
         }
@@ -1115,11 +1119,11 @@ namespace ModAdvancedGameChanges.Lopital
 
                                         if (__instance.TryToSitInternal(chairObject, false))
                                         {
-                                            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, found place to sit");
+                                            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, found place to sit (reception)");
 
                                             if (__instance.m_state.m_reservedWaitingRoomTile != Vector2i.ZERO_VECTOR)
                                             {
-                                                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, freeing reserved stand tile");
+                                                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, freeing reserved reception tile");
 
                                                 MapScriptInterface.Instance.FreeTile(__instance.m_state.m_reservedWaitingRoomTile, __instance.GetComponent<WalkComponent>().GetFloorIndex());
                                                 __instance.m_state.m_reservedWaitingRoomTile = Vector2i.ZERO_VECTOR;
@@ -1191,9 +1195,29 @@ namespace ModAdvancedGameChanges.Lopital
                     else
                     {
                         // we are done on reception
-                        // send patient to search queue machine
+                        // send patient to waiting room
 
-                        __instance.SwitchState(PatientState.FindQueueMachine);
+                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, done on reception, search for waiting room");
+
+                        Room room = MapScriptInterface.Instance.FindValidRoomWithType(Database.Instance.GetEntry<GameDBRoomType>(RoomTypes.Vanilla.WaitingRoom), __instance.GetDepartment());
+
+                        if (room != null)
+                        {
+                            Vector2i position = MapScriptInterface.Instance.GetRandomFreePosition(room, __instance.GetAccessRights());
+
+                            if (position != Vector2i.ZERO_VECTOR)
+                            {
+                                __instance.GetComponent<WalkComponent>().SetDestination(position, room.GetFloorIndex(), MovementType.WALKING);
+
+                                __instance.SwitchState(PatientState.GoingToWaitingRoom);
+                            }
+                        }
+                        else
+                        {
+                            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, no waiting room");
+
+                            __instance.Leave(false, false, false);
+                        }
                     }
                 }
 
@@ -1344,6 +1368,22 @@ namespace ModAdvancedGameChanges.Lopital
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorPatient), "UpdateStateWaitingSitting")]
+        public static bool UpdateStateWaitingSittingPrefix(float deltaTime, BehaviorPatient __instance)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            __instance.m_state.m_waitingTime += deltaTime;
+            __instance.m_state.m_continuousWaitingTime += deltaTime;
+
+            return false;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(BehaviorPatient), "UpdateStateWaitingStandingIdle")]
         public static bool UpdateStateWaitingStandingIdlePrefix(float deltaTime, BehaviorPatient __instance)
         {
@@ -1358,27 +1398,54 @@ namespace ModAdvancedGameChanges.Lopital
 
             if (!BehaviorPatientPatch.HandleDiedSentHome(__instance))
             {
-                if ((__instance.m_state.m_collapseProcedure != null) && __instance.CanCollapse() && __instance.TryToCollapse())
+                // try to find something to sit
+                Room currentRoom = MapScriptInterface.Instance.GetRoomAt(__instance.GetComponent<WalkComponent>().GetDestinationTile(), __instance.GetComponent<WalkComponent>().GetFloorIndex());
+                TileObject chair = MapScriptInterface.Instance.FindClosestFreeObjectWithTag(
+                    __instance.m_entity, null, __instance.GetComponent<GridComponent>().GetGridPosition(),
+                    currentRoom, Tags.Vanilla.Sitting, AccessRights.PATIENT, false, null, false);
+
+                if (chair != null)
                 {
-                    return false;
-                }
+                    __instance.m_entity.GetComponent<WalkComponent>().GoSit(chair, MovementType.WALKING);
+                    __instance.m_entity.GetComponent<UseComponent>().ReserveObject(chair);
+                    __instance.m_state.m_chair = chair;
 
-                if ((__instance.m_state.m_collapseSymptom != null) && __instance.SetupCollapseProcedure(true))
-                {
-                    return false;
-                }
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, found place to sit (waiting room)");
 
-                if (!BehaviorPatientPatch.HandleDiedSentHomeFulfillNeeds(__instance))
-                {
-                    // do nothing at current momment
-
-                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, nothing to do");
-
-                    if (__instance.GetComponent<AnimModelComponent>().IsIdle())
+                    if (__instance.m_state.m_reservedWaitingRoomTile != Vector2i.ZERO_VECTOR)
                     {
-                        __instance.GetComponent<AnimModelComponent>().PlayAnimation(Animations.Vanilla.StandIdle, false);
+                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, freeing reserved waiting room tile");
+
+                        MapScriptInterface.Instance.FreeTile(__instance.m_state.m_reservedWaitingRoomTile, __instance.GetComponent<WalkComponent>().GetFloorIndex());
+                        __instance.m_state.m_reservedWaitingRoomTile = Vector2i.ZERO_VECTOR;
                     }
+
+                    __instance.SwitchState(PatientState.WaitingGoingToChair);
+
+                    return false;
                 }
+
+                //if ((__instance.m_state.m_collapseProcedure != null) && __instance.CanCollapse() && __instance.TryToCollapse())
+                //{
+                //    return false;
+                //}
+
+                //if ((__instance.m_state.m_collapseSymptom != null) && __instance.SetupCollapseProcedure(true))
+                //{
+                //    return false;
+                //}
+
+                //if (!BehaviorPatientPatch.HandleDiedSentHomeFulfillNeeds(__instance))
+                //{
+                //    // do nothing at current momment
+
+                //    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, nothing to do");
+
+                //    if (__instance.GetComponent<AnimModelComponent>().IsIdle())
+                //    {
+                //        __instance.GetComponent<AnimModelComponent>().PlayAnimation(Animations.Vanilla.StandIdle, false);
+                //    }
+                //}
             }
 
             return false;
@@ -1651,6 +1718,14 @@ namespace ModAdvancedGameChanges.Lopital
             methodInfo.Invoke(instance, null);
         }
 
+        private static void UpdateStateGoingToQueueMachineInternal(this BehaviorPatient instance)
+        {
+            Type type = typeof(BehaviorPatient);
+            MethodInfo methodInfo = type.GetMethod("UpdateStateGoingToQueueMachine", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            methodInfo.Invoke(instance, null);
+        }
+
         private static void UpdateStateGoingToReceptionInternal(this BehaviorPatient instance)
         {
             Type type = typeof(BehaviorPatient);
@@ -1699,10 +1774,34 @@ namespace ModAdvancedGameChanges.Lopital
             methodInfo.Invoke(instance, null);
         }
 
+        private static void UpdateStateWaitingSittingInternal(this BehaviorPatient instance, float deltaTime)
+        {
+            Type type = typeof(BehaviorPatient);
+            MethodInfo methodInfo = type.GetMethod("UpdateStateWaitingSitting", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            methodInfo.Invoke(instance, new object[] { deltaTime });
+        }
+
+        private static void UpdateStateWaitingStandingIdleInternal(this BehaviorPatient instance, float deltaTime)
+        {
+            Type type = typeof(BehaviorPatient);
+            MethodInfo methodInfo = type.GetMethod("UpdateStateWaitingStandingIdle", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            methodInfo.Invoke(instance, new object[] { deltaTime });
+        }
+
         private static void UpdateStateSpawnedInternal(this BehaviorPatient instance)
         {
             Type type = typeof(BehaviorPatient);
             MethodInfo methodInfo = type.GetMethod("UpdateStateSpawned", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            methodInfo.Invoke(instance, null);
+        }
+
+        private static void UpdateStateUsingQueueMachineInternal(this BehaviorPatient instance)
+        {
+            Type type = typeof(BehaviorPatient);
+            MethodInfo methodInfo = type.GetMethod("UpdateStateUsingQueueMachine", BindingFlags.NonPublic | BindingFlags.Instance);
 
             methodInfo.Invoke(instance, null);
         }

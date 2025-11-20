@@ -28,6 +28,7 @@
             public const string Juice = "ui_juice";
             public const string LunchRoom = "lunch_room";
             public const string MealCounter = "ui_meal_counter";
+            public const string Queue = "queue";
             public const string Refreshments = "ui_refreshments";
             public const string Rest = "rest";
             public const string Sitting = "sitting";
