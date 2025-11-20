@@ -17,6 +17,10 @@
             public const string SitIdleHoldPhone = "sit_idle_hold_phone";
             public const string SitReadIdle = "sit_read_idle";
 
+            public const string SitRelaxPcIn = "sit_relax_pc_in";
+            public const string SitRelaxPcIdle = "sit_relax_pc_idle";
+            public const string SitRelaxPcOut = "sit_relax_pc_out";
+
             public const string WalkHoldPhone = "walk_hold_phone";
         }
     }
