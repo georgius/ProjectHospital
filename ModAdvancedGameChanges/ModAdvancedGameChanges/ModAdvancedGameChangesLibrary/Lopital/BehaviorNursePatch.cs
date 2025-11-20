@@ -228,22 +228,26 @@ namespace ModAdvancedGameChanges.Lopital
                 __instance.SwitchState(NurseState.OverridenByProcedureScript);
                 return false;
             }
-            else if (message.m_messageID == Messages.CANCEL_OVERRIDE_BY_PROCEDURE_SCRIPT)
+
+            if (message.m_messageID == Messages.CANCEL_OVERRIDE_BY_PROCEDURE_SCRIPT)
             {
                 __instance.SwitchState(NurseState.Idle);
                 return false;
             }
-            else if (message.m_messageID == Messages.OVERRIDE_BY_GOING_TO_STRETCHER)
+
+            if (message.m_messageID == Messages.OVERRIDE_BY_GOING_TO_STRETCHER)
             {
                 __instance.SwitchState(NurseState.OverridenGoingToStretcher);
                 return false;
             }
-            else if (message.m_messageID == Messages.OVERRIDE_BY_MOVING_STRETCHER)
+
+            if (message.m_messageID == Messages.OVERRIDE_BY_MOVING_STRETCHER)
             {
                 __instance.SwitchState(NurseState.OverridenMovingStretcher);
                 return false;
             }
-            else if (message.m_messageID == Messages.CANCEL_OVERRIDE_BY_MOVING_STRETCHER)
+            
+            if (message.m_messageID == Messages.CANCEL_OVERRIDE_BY_MOVING_STRETCHER)
             {
                 __instance.SwitchState(NurseState.Idle);
                 return false;

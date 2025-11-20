@@ -159,6 +159,12 @@ namespace ModAdvancedGameChanges.Lopital
 
                 __instance.m_state.m_labSpecialistState = state;
                 __instance.m_state.m_timeInState = 0f;
+
+                if (__instance.m_state.m_isBrowsing && __instance.IsAtWorkplace(__instance.GetComponent<EmployeeComponent>()))
+                {
+                    __instance.GetComponent<AnimModelComponent>().QueueAnimation(Animations.Vanilla.SitRelaxPcOut, false, true);
+                }
+                __instance.CancelBrowsing();
             }
 
             return false;
@@ -175,6 +181,18 @@ namespace ModAdvancedGameChanges.Lopital
             }
 
             Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name} Message received: {message.m_messageID}");
+
+            if (message.m_messageID == Messages.OVERRIDE_BY_PROCEDURE_SCRIPT)
+            {
+                __instance.SwitchState(LabSpecialistState.OverridenByProcedureScript);
+                return false;
+            }
+
+            if (message.m_messageID == Messages.CANCEL_OVERRIDE_BY_PROCEDURE_SCRIPT)
+            {
+                __instance.SwitchState(LabSpecialistState.Idle);
+                return false;
+            }
 
             return BehaviorPatch.ReceiveMessage(message, __instance, false);
         }
@@ -465,6 +483,15 @@ namespace ModAdvancedGameChanges.Lopital
             if (!BehaviorLabSpecialistPatch.HandleGoHomeFulfillNeedsTraining(__instance))
             {
                 // lab specialist has nothing to do
+                EmployeeComponent employeeComponent = __instance.GetComponent<EmployeeComponent>();
+
+                if ((__instance.m_state.m_timeInState > DayTime.Instance.IngameTimeHoursToRealTimeSeconds(5f / 60f)) && (!__instance.m_state.m_isBrowsing) && (employeeComponent.GetWorkChair() != null) && __instance.IsAtWorkplace(employeeComponent))
+                {
+                    __instance.GetComponent<AnimModelComponent>().QueueAnimation(Animations.Vanilla.SitRelaxPcIn, false, true);
+                    __instance.GetComponent<AnimModelComponent>().QueueAnimation(Animations.Vanilla.SitRelaxPcIdle, true, false);
+                    employeeComponent.m_state.m_workDesk.GetEntity().GetComponent<AnimatedObjectComponent>().ForceFrame(UnityEngine.Random.Range(2, 5));
+                    __instance.m_state.m_isBrowsing = true;
+                }
             }
 
             return false;
