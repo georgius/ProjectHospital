@@ -251,6 +251,70 @@ namespace ModAdvancedGameChanges
                     throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_COFFEE_TIME_MINUTES}' must be greater than or equal to zero.");
                 }
             }),
+            new TweakableValidation(() =>
+            {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_MEAL_MINIMUM);
+                if (value.Value < 0)
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_MEAL_MINIMUM}' must be greater than or equal to zero.");
+                }
+            }),
+            new TweakableValidation(() =>
+            {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_MEAL_MAXIMUM);
+                if (value.Value < Tweakable.Mod.NeedHungerLunchPaymentMealMinimum())
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_MEAL_MAXIMUM}' must be greater than or equal to {Tweakable.Mod.NeedHungerLunchPaymentMealMinimum().ToString(CultureInfo.InvariantCulture)}.");
+                }
+            }),            
+            new TweakableValidation(() =>
+            {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_SNACK_MINIMUM);
+                if (value.Value < 0)
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_SNACK_MINIMUM}' must be greater than or equal to zero.");
+                }
+            }),
+            new TweakableValidation(() =>
+            {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_SNACK_MAXIMUM);
+                if (value.Value < Tweakable.Mod.NeedHungerLunchPaymentSnackMinimum())
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_SNACK_MAXIMUM}' must be greater than or equal to {Tweakable.Mod.NeedHungerLunchPaymentSnackMinimum().ToString(CultureInfo.InvariantCulture)}.");
+                }
+            }),
+            new TweakableValidation(() =>
+            {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_JUICE_MINIMUM);
+                if (value.Value < 0)
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_JUICE_MINIMUM}' must be greater than or equal to zero.");
+                }
+            }),
+            new TweakableValidation(() =>
+            {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_JUICE_MAXIMUM);
+                if (value.Value < Tweakable.Mod.NeedHungerLunchPaymentJuiceMinimum())
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_JUICE_MAXIMUM}' must be greater than or equal to {Tweakable.Mod.NeedHungerLunchPaymentJuiceMinimum().ToString(CultureInfo.InvariantCulture)}.");
+                }
+            }),
+            new TweakableValidation(() =>
+            {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_COFFEE_MINIMUM);
+                if (value.Value < 0)
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_COFFEE_MINIMUM}' must be greater than or equal to zero.");
+                }
+            }),
+            new TweakableValidation(() =>
+            {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_COFFEE_MAXIMUM);
+                if (value.Value < Tweakable.Mod.NeedHungerLunchPaymentCoffeeMinimum())
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_COFFEE_MAXIMUM}' must be greater than or equal to {Tweakable.Mod.NeedHungerLunchPaymentCoffeeMinimum().ToString(CultureInfo.InvariantCulture)}.");
+                }
+            }),
 
             new TweakableValidation(() =>
             {

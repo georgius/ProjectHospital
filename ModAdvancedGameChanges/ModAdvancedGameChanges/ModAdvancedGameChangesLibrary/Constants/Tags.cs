@@ -13,16 +13,21 @@
         public static class Vanilla
         {
             public const string Cafeteria = "cafeteria";
+            public const string CafeteriaBoard = "ui_cafeteria_board";
             public const string Classroom = "classroom";
             public const string CoffeeMachine = "coffee_machine";
             public const string CommonRoom = "common_room";
+            public const string DonutSnack = "ui_donut_snack";
             public const string Distraction = "distraction";
             public const string Dressing = "dressing";
             public const string Dryer = "dryer";
             public const string Eating = "eating";
             public const string Education = "education";
+            public const string FruitSnack = "ui_fruit_snack";
             public const string Inventory = "inventory";
+            public const string Juice = "ui_juice";
             public const string LunchRoom = "lunch_room";
+            public const string MealCounter = "ui_meal_counter";
             public const string Refreshments = "ui_refreshments";
             public const string Rest = "rest";
             public const string Sitting = "sitting";

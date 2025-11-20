@@ -118,6 +118,39 @@ namespace ModAdvancedGameChanges
                 return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_COFFEE_TIME_MINUTES).Value;
             }
 
+            public static int NeedHungerLunchPaymentMealMinimum()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_MEAL_MINIMUM).Value;
+            }
+            public static int NeedHungerLunchPaymentMealMaximum()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_MEAL_MAXIMUM).Value;
+            }
+            public static int NeedHungerLunchPaymentSnackMinimum()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_SNACK_MINIMUM).Value;
+            }
+            public static int NeedHungerLunchPaymentSnackMaximum()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_SNACK_MAXIMUM).Value;
+            }
+            public static int NeedHungerLunchPaymentJuiceMinimum()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_JUICE_MINIMUM).Value;
+            }
+            public static int NeedHungerLunchPaymentJuiceMaximum()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_JUICE_MAXIMUM).Value;
+            }
+            public static int NeedHungerLunchPaymentCoffeeMinimum()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_COFFEE_MINIMUM).Value;
+            }
+            public static int NeedHungerLunchPaymentCoffeeMaximum()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_COFFEE_MAXIMUM).Value;
+            }
+
             public static float NeedRestMinutes()
             {
                 return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_NEED_REST_MINUTES).Value;
