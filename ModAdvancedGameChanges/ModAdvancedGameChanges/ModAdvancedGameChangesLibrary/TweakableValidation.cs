@@ -535,7 +535,6 @@ namespace ModAdvancedGameChanges
                     throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_PATIENT_LEAVE_TIME_HOURS}' must be greater than zero.");
                 }
             }),
-
             new TweakableValidation(() =>
             {
                 var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Vanilla.TWEAKABLE_PATIENT_LEAVE_WARNING_HOURS);
@@ -544,6 +543,14 @@ namespace ModAdvancedGameChanges
                     throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_PATIENT_LEAVE_WARNING_HOURS}' must be greater than zero.");
                 }
             }),
+            new TweakableValidation(() =>
+            {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Vanilla.TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS);
+                if (value.Value <= 0f)
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS}' must be greater than zero.");
+                }
+            }),            
 
             new TweakableValidation(() =>
             {

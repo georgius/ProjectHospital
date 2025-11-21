@@ -342,7 +342,6 @@ namespace ModAdvancedGameChanges.Lopital
 
                 __instance.m_state.m_patientState = state;
                 __instance.m_state.m_timeInState = 0f;
-                __instance.m_state.m_continuousWaitingTime = 0f;
                 __instance.m_state.m_playerControlwaitingTime = 0f;
             }
 
@@ -802,6 +801,8 @@ namespace ModAdvancedGameChanges.Lopital
                             }
                             else
                             {
+                                BehaviorPatientPatch.UpdateWaitingTime(__instance, __instance.m_state.m_timeInState);
+
                                 // go to waiting room
                                 __instance.GoToWaitingRoom();
                             }
@@ -1314,8 +1315,7 @@ namespace ModAdvancedGameChanges.Lopital
                 return true;
             }
 
-            __instance.m_state.m_waitingTime += deltaTime;
-            __instance.m_state.m_continuousWaitingTime += deltaTime;
+            BehaviorPatientPatch.UpdateWaitingTime(__instance, deltaTime);
 
             if (!BehaviorPatientPatch.HandleDiedSentHomeFulfillNeeds(__instance))
             {
@@ -1347,6 +1347,9 @@ namespace ModAdvancedGameChanges.Lopital
                             __instance.GetComponent<AnimModelComponent>().PlayAnimation(Animations.Vanilla.StandIdle, true);
                         }
                     }
+
+                    
+
                 }
 
                 
@@ -1730,6 +1733,19 @@ namespace ModAdvancedGameChanges.Lopital
             MethodInfo methodInfo = type.GetMethod("UpdateStateUsingQueueMachine", BindingFlags.NonPublic | BindingFlags.Instance);
 
             methodInfo.Invoke(instance, null);
+        }
+
+        private static void UpdateWaitingTime(BehaviorPatient instance, float deltaTime)
+        {
+            instance.m_state.m_waitingTime += deltaTime;
+
+            float maxWaitingTime = DayTime.Instance.IngameTimeHoursToRealTimeSeconds(Tweakable.Vanilla.PatientMaxWaitTimeHours());
+            if ((instance.m_state.m_continuousWaitingTime < maxWaitingTime) && ((instance.m_state.m_continuousWaitingTime + deltaTime) >= maxWaitingTime))
+            {
+                NotificationManager.GetInstance().AddMessage(instance.m_entity, Notifications.Vanilla.NOTIF_PATIENT_LONG_WAIT, string.Empty, string.Empty, string.Empty, 0, 0, 0, 0, null, null);
+            }
+
+            instance.m_state.m_continuousWaitingTime += deltaTime;
         }
     }
 }

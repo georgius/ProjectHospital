@@ -15,6 +15,7 @@
             public const string NOTIF_NO_WAITING_ROOM = "NOTIF_NO_WAITING_ROOM";
 
             public const string NOTIF_PATIENT_LONG_VISIT = "NOTIF_PATIENT_LONG_VISIT";
+            public const string NOTIF_PATIENT_LONG_WAIT = "NOTIF_PATIENT_LONG_WAIT";
 
             public const string NOTIF_TRAINING_FULL = "NOTIF_TRAINING_FULL";
             public const string NOTIF_TRAINING_FINISHED = "NOTIF_TRAINING_FINISHED";

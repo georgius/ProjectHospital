@@ -301,6 +301,11 @@ namespace ModAdvancedGameChanges
                 return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Vanilla.TWEAKABLE_PATIENT_LEAVE_WARNING_HOURS).Value;
             }
 
+            public static float PatientMaxWaitTimeHours()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Vanilla.TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS).Value;
+            }
+
             public static int FreeTimeSkillPoints()
             {
                 return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_REPEAT_ACTION_FREE_TIME_SKILL_POINTS).Value;
