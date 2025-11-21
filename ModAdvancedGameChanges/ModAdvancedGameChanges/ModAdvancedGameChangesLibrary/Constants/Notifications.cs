@@ -14,6 +14,8 @@
 
             public const string NOTIF_NO_WAITING_ROOM = "NOTIF_NO_WAITING_ROOM";
 
+            public const string NOTIF_PATIENT_LEFT_AFTER_LONG_VISIT = "NOTIF_PATIENT_LEFT_AFTER_LONG_VISIT";
+            public const string NOTIF_PATIENT_LEFT_AFTER_LONG_WAIT = "NOTIF_PATIENT_LEFT_AFTER_LONG_WAIT";
             public const string NOTIF_PATIENT_LONG_VISIT = "NOTIF_PATIENT_LONG_VISIT";
             public const string NOTIF_PATIENT_LONG_WAIT = "NOTIF_PATIENT_LONG_WAIT";
 

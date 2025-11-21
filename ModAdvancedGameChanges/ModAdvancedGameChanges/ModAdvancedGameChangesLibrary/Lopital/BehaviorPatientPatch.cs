@@ -1348,7 +1348,21 @@ namespace ModAdvancedGameChanges.Lopital
                         }
                     }
 
-                    
+                    if (__instance.m_state.m_continuousWaitingTime > DayTime.Instance.IngameTimeHoursToRealTimeSeconds(Tweakable.Vanilla.PatientMaxWaitTimeHours()))
+                    {
+                        NotificationManager.GetInstance().AddMessage(__instance.m_entity, Notifications.Vanilla.NOTIF_PATIENT_LEFT_AFTER_LONG_WAIT, string.Empty, string.Empty, string.Empty, 0, 0, 0, 0, null, null);
+
+                        __instance.Leave(false, false, false);
+                        return false;
+                    }
+
+                    if (__instance.m_state.m_fVisitDuration > DayTime.Instance.IngameTimeHoursToRealTimeSeconds(Tweakable.Vanilla.PatientLeaveTimeHours()))
+                    {
+                        NotificationManager.GetInstance().AddMessage(__instance.m_entity, Notifications.Vanilla.NOTIF_PATIENT_LEFT_AFTER_LONG_VISIT, string.Empty, string.Empty, string.Empty, 0, 0, 0, 0, null, null);
+
+                        __instance.Leave(false, false, false);
+                        return false;
+                    }
 
                 }
 
@@ -1739,7 +1753,7 @@ namespace ModAdvancedGameChanges.Lopital
         {
             instance.m_state.m_waitingTime += deltaTime;
 
-            float maxWaitingTime = DayTime.Instance.IngameTimeHoursToRealTimeSeconds(Tweakable.Vanilla.PatientMaxWaitTimeHours());
+            float maxWaitingTime = DayTime.Instance.IngameTimeHoursToRealTimeSeconds(Tweakable.Vanilla.PatientMaxWaitTimeHours() - 1f);
             if ((instance.m_state.m_continuousWaitingTime < maxWaitingTime) && ((instance.m_state.m_continuousWaitingTime + deltaTime) >= maxWaitingTime))
             {
                 NotificationManager.GetInstance().AddMessage(instance.m_entity, Notifications.Vanilla.NOTIF_PATIENT_LONG_WAIT, string.Empty, string.Empty, string.Empty, 0, 0, 0, 0, null, null);
