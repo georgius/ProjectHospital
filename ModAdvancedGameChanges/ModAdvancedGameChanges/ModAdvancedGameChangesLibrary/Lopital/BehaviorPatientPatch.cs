@@ -407,7 +407,6 @@ namespace ModAdvancedGameChanges.Lopital
             }
 
             __result = (chairObject == null) ? false : __instance.GetComponent<WalkComponent>().IsSittingOn(chairObject);
-            //__result |= (__instance.m_state.m_chair == null) ? false : __instance.GetComponent<WalkComponent>().IsSittingOn(__instance.m_state.m_chair.GetEntity());
             __result |= __instance.GetComponent<WalkComponent>().IsSitting();
 
             if (!__result)
@@ -421,7 +420,6 @@ namespace ModAdvancedGameChanges.Lopital
                     Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, found place to sit");
 
                     __instance.GetComponent<WalkComponent>().GoSit(chairObject, MovementType.WALKING);
-                    //__instance.m_state.m_chair = chairObject;
 
                     if (__instance.m_state.m_reservedWaitingRoomTile != Vector2i.ZERO_VECTOR)
                     {
@@ -1092,11 +1090,6 @@ namespace ModAdvancedGameChanges.Lopital
                                         __instance.m_state.m_waitingRoom.GetEntity().EnqueueCharacter(__instance.m_entity, true);
                                     }
 
-                                    //if (__instance.GetComponent<WalkComponent>().IsSitting())
-                                    //{
-                                    //    __instance.m_state.m_chair = __instance.GetComponent<WalkComponent>().m_state.m_objectSittingOn;
-                                    //}
-
                                     if (__instance.m_state.m_waitingRoom.GetEntity().IsCharactersTurn(__instance.m_entity))
                                     {
                                         Entity receptionist = receptionists
@@ -1423,6 +1416,7 @@ namespace ModAdvancedGameChanges.Lopital
                         if (doctor != null)
                         {
                             Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, found free doctor {doctor.Name}");
+
                             // doctor is free
                             // patient is on turn
                             // assign doctor and start
