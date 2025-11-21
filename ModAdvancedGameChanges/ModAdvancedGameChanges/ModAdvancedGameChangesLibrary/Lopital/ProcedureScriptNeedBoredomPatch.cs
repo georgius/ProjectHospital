@@ -76,41 +76,41 @@ namespace ModAdvancedGameChanges.Lopital
             }
             else
             {
-            //	// find distraction object
-            //             TileObject tileObject = MapScriptInterface.Instance.FindClosestFreeObjectWithTag(
-            //                 mainCharacter, null, mainCharacter.GetComponent<WalkComponent>().GetCurrentTile(),
-            //                 MapScriptInterface.Instance.GetRoomAt(mainCharacter.GetComponent<WalkComponent>()),
-            //                 Tags.Vanilla.Distraction, AccessRights.PATIENT, false, null, false);
-
-            //             if (tileObject != null)
-            //             {
-            //                 __instance.m_stateData.m_procedureScene.m_equipment[0] = tileObject;
-            //                 mainCharacter.GetComponent<UseComponent>().ReserveObject(__instance.GetEquipment(0));
-
-            //                 mainCharacter.GetComponent<WalkComponent>().SetDestination(__instance.GetEquipment(0).GetDefaultUsePosition(), __instance.GetEquipment(0).GetFloorIndex(), MovementType.WALKING);
-            //                 __instance.SwitchState(ProcedureScriptNeedBoredomPatch.STATE_GOING_TO_OBJECT);
-
-            //		return false;
-            //             }
-
-            	// find sitting object
-            	var tileObject = MapScriptInterface.Instance.FindClosestFreeObjectWithTag(
-            		mainCharacter, null, mainCharacter.GetComponent<WalkComponent>().GetCurrentTile(),
-            		MapScriptInterface.Instance.GetRoomAt(mainCharacter.GetComponent<WalkComponent>()),
-            		Tags.Vanilla.Sitting, AccessRights.PATIENT, false, null, false);
+                // find distraction object
+                TileObject tileObject = MapScriptInterface.Instance.FindClosestFreeObjectWithTag(
+                    mainCharacter, null, mainCharacter.GetComponent<WalkComponent>().GetCurrentTile(),
+                    MapScriptInterface.Instance.GetRoomAt(mainCharacter.GetComponent<WalkComponent>()),
+                    Tags.Vanilla.Distraction, AccessRights.PATIENT, false, null, false);
 
 				if (tileObject != null)
 				{
 					instance.m_stateData.m_procedureScene.m_equipment[0] = tileObject;
 					mainCharacter.GetComponent<UseComponent>().ReserveObject(instance.GetEquipment(0));
 
-					mainCharacter.GetComponent<WalkComponent>().GoSit(instance.GetEquipment(0), MovementType.WALKING);
-					instance.SwitchState(ProcedureScriptNeedBoredomPatch.STATE_GOING_TO_SIT);
+					mainCharacter.GetComponent<WalkComponent>().SetDestination(instance.GetEquipment(0).GetDefaultUsePosition(), instance.GetEquipment(0).GetFloorIndex(), MovementType.WALKING);
+					instance.SwitchState(ProcedureScriptNeedBoredomPatch.STATE_GOING_TO_OBJECT);
 				}
 				else
 				{
-					// nothing to do
-					instance.SwitchState(ProcedureScriptNeedBoredomPatch.STATE_YAWNING);
+					// find sitting object
+					tileObject = MapScriptInterface.Instance.FindClosestFreeObjectWithTag(
+						mainCharacter, null, mainCharacter.GetComponent<WalkComponent>().GetCurrentTile(),
+						MapScriptInterface.Instance.GetRoomAt(mainCharacter.GetComponent<WalkComponent>()),
+						Tags.Vanilla.Sitting, AccessRights.PATIENT, false, null, false);
+
+					if (tileObject != null)
+					{
+						instance.m_stateData.m_procedureScene.m_equipment[0] = tileObject;
+						mainCharacter.GetComponent<UseComponent>().ReserveObject(instance.GetEquipment(0));
+
+						mainCharacter.GetComponent<WalkComponent>().GoSit(instance.GetEquipment(0), MovementType.WALKING);
+						instance.SwitchState(ProcedureScriptNeedBoredomPatch.STATE_GOING_TO_SIT);
+					}
+					else
+					{
+						// nothing to do
+						instance.SwitchState(ProcedureScriptNeedBoredomPatch.STATE_YAWNING);
+					}
 				}
             }
         }
