@@ -88,6 +88,54 @@ namespace ModAdvancedGameChanges.Lopital
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorPatient), "GetCalled")]
+        public static bool GetCalledPrefix(Entity doctorEntity, BehaviorPatient __instance)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            Department doctorsDepartment = doctorEntity.GetComponent<EmployeeComponent>().m_state.m_department.GetEntity();
+
+            __instance.m_state.m_continuousWaitingTime = 0f;
+            int queueMachineCount = __instance.m_state.m_waitingRoom.GetEntity().GetObjectCountWithTag(Tags.Vanilla.Queue, __instance.GetComponent<WalkComponent>().Floor, true);
+            int queueMonitorCount = __instance.m_state.m_waitingRoom.GetEntity().GetObjectCountWithTag(Tags.Vanilla.QueueMonitor, __instance.GetComponent<WalkComponent>().Floor, true);
+
+            //if ((queueMachineCount > 0) && (queueMonitorCount > 0))
+            //{
+
+            //}
+            //else
+            {
+                GameDBProcedure procedure = Database.Instance.GetEntry<GameDBProcedure>(Procedures.Vanilla.CallPatientWithoutQueueMonitor);
+                ProcedureSceneAvailability procedureAvailabilty = __instance.GetComponent<ProcedureComponent>().GetProcedureAvailabilty(
+                    procedure, __instance.m_entity, doctorEntity, AccessRights.PATIENT_PROCEDURE, 
+                    doctorEntity.GetComponent<EmployeeComponent>().m_state.m_homeRoom.GetEntity(), EquipmentListRules.ONLY_FREE);
+
+                if (procedureAvailabilty == ProcedureSceneAvailability.AVAILABLE)
+                {
+                    BehaviorDoctor component = doctorEntity.GetComponent<BehaviorDoctor>();
+                    component.CurrentPatient = __instance.m_entity;
+
+                    __instance.GetComponent<ProcedureComponent>().StartProcedure(procedure, __instance.m_entity, doctorEntity, null, null, AccessRights.PATIENT_PROCEDURE, EquipmentListRules.ONLY_FREE);
+
+                    __instance.FreeWaitingRoom();
+
+                    __instance.SwitchState(PatientState.WaitingBeingCalled);
+                }
+                else if (procedureAvailabilty == ProcedureSceneAvailability.STAFF_UNAVAILABLE)
+                {
+                    __instance.FreeWaitingRoom();
+                    __instance.Leave(false, false, false);
+                }
+            }
+
+            return false;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(BehaviorPatient), nameof(BehaviorPatient.GoToWaitingRoom))]
         public static bool GoToWaitingRoomPrefix(BehaviorPatient __instance)
         {
@@ -611,6 +659,7 @@ namespace ModAdvancedGameChanges.Lopital
                     __instance.UpdateStateWaitingStandingIdleInternal(deltaTime);
                     break;
                 case PatientState.WaitingBeingCalled:
+                    __instance.UpdateStateBeingCalledInternal();
                     break;
                 case PatientState.FulfillingNeeds:
                     __instance.UpdateStateFulfillingNeedsInternal();
@@ -1364,31 +1413,25 @@ namespace ModAdvancedGameChanges.Lopital
                         return false;
                     }
 
+                    if (__instance.m_state.m_waitingRoom.GetEntity().IsCharactersTurn(__instance.m_entity))
+                    {
+                        Entity doctor = MapScriptInterface.Instance.FindClosestFreeDoctorWithQualification(
+                            null, __instance.m_state.m_department.GetEntity(), __instance.m_state.m_waitingRoom.GetEntity(),
+                            __instance.GetComponent<WalkComponent>().GetCurrentTile(), __instance.GetComponent<WalkComponent>().GetFloorIndex(),
+                            null, __instance.m_entity, Database.Instance.GetEntry<GameDBEmployeeRole>(EmployeeRoles.Vanilla.Diagnostics));
+
+                        if (doctor != null)
+                        {
+                            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, found free doctor {doctor.Name}");
+                            // doctor is free
+                            // patient is on turn
+                            // assign doctor and start
+
+                            __instance.SetDoctor(doctor);
+                            __instance.GetCalledInternal(doctor);
+                        }
+                    }
                 }
-
-                
-
-                //if ((__instance.m_state.m_collapseProcedure != null) && __instance.CanCollapse() && __instance.TryToCollapse())
-                //{
-                //    return false;
-                //}
-
-                //if ((__instance.m_state.m_collapseSymptom != null) && __instance.SetupCollapseProcedure(true))
-                //{
-                //    return false;
-                //}
-
-                //if (!BehaviorPatientPatch.HandleDiedSentHomeFulfillNeeds(__instance))
-                //{
-                //    // do nothing at current momment
-
-                //    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, nothing to do");
-
-                //    if (__instance.GetComponent<AnimModelComponent>().IsIdle())
-                //    {
-                //        __instance.GetComponent<AnimModelComponent>().PlayAnimation(Animations.Vanilla.StandIdle, false);
-                //    }
-                //}
             }
 
             return false;
@@ -1597,6 +1640,14 @@ namespace ModAdvancedGameChanges.Lopital
             return (bool)methodInfo.Invoke(instance, null);
         }
 
+        private static void GetCalledInternal(this BehaviorPatient instance, Entity doctorEntity)
+        {
+            Type type = typeof(BehaviorPatient);
+            MethodInfo methodInfo = type.GetMethod("GetCalled", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            methodInfo.Invoke(instance, new object[] { doctorEntity });
+        }
+
         private static void GoToEmergencyInternal(this BehaviorPatient instance)
         {
             Type type = typeof(BehaviorPatient);
@@ -1635,6 +1686,14 @@ namespace ModAdvancedGameChanges.Lopital
             MethodInfo methodInfo = type.GetMethod("TryToStand", BindingFlags.NonPublic | BindingFlags.Instance);
 
             return (bool)methodInfo.Invoke(instance, new object[] { tryAreasAround, onlyInFront });
+        }
+
+        private static void UpdateStateBeingCalledInternal(this BehaviorPatient instance)
+        {
+            Type type = typeof(BehaviorPatient);
+            MethodInfo methodInfo = type.GetMethod("UpdateStateBeingCalled", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            methodInfo.Invoke(instance, null);
         }
 
         private static void UpdateStateExaminedAtReceptionInternal(this BehaviorPatient instance)

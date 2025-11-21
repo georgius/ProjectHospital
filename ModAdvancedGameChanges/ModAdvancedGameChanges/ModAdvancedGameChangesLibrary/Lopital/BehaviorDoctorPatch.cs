@@ -130,6 +130,70 @@ namespace ModAdvancedGameChanges.Lopital
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorDoctor), nameof(BehaviorDoctor.IsFree))]
+        [HarmonyPatch(new Type[] { })]
+        public static bool IsFreePrefix1(BehaviorDoctor __instance, ref bool __result)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            if (__instance.CurrentPatient != null)
+            {
+                __result = false;
+                return false;
+            }
+
+            switch (__instance.m_state.m_doctorState)
+            {
+                case DoctorState.Idle:
+                case DoctorState.FilingReports:
+                    __result = true;
+                    break;
+
+                case DoctorState.FinishedProcedure:
+                case DoctorState.GoingToWorkPlace:
+                case DoctorState.FulfilingNeeds:
+                case DoctorState.FillingFreeTime:
+                case DoctorState.OverridenByProcedureScript:
+                case DoctorState.OverridenReservedForProcedure:
+                case DoctorState.DoctorsRounds:
+                case DoctorState.GoingHome:
+                case DoctorState.AtHome:
+                case DoctorState.Commuting:
+                case DoctorState.FiredAtHome:
+                case DoctorState.Training:
+                default:
+                    __result = false;
+                    break;
+            }
+
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorDoctor), nameof(BehaviorDoctor.IsFree))]
+        [HarmonyPatch(new Type[] { typeof(Entity) })]
+        public static bool IsFreePrefix2(Entity patient, BehaviorDoctor __instance, ref bool __result)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            if (__instance.CurrentPatient == patient)
+            {
+                __result = true;
+                return false;
+            }
+
+            return BehaviorDoctorPatch.IsFreePrefix1(__instance, ref __result);
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(BehaviorDoctor), nameof(BehaviorDoctor.IsHidden))]
         public static bool IsHiddenPrefix(BehaviorDoctor __instance, ref bool __result)
         {
