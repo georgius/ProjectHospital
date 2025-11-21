@@ -1082,6 +1082,8 @@ namespace ModAdvancedGameChanges.Lopital
 
                                     if (!__instance.TryToSitInternal(null, false))
                                     {
+                                        __instance.GetComponent<MoodComponent>().AddSatisfactionModifier(SatisfationModifiers.Vanilla.CouldNotSit);
+
                                         Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, no chair");
 
                                         if (!__instance.TryToStandInternal(false, false))
@@ -1321,6 +1323,8 @@ namespace ModAdvancedGameChanges.Lopital
                 {
                     if (!__instance.TryToSitInternal(null, false))
                     {
+                        __instance.GetComponent<MoodComponent>().AddSatisfactionModifier(SatisfationModifiers.Vanilla.CouldNotSit);
+
                         Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, no chair");
 
                         if (!__instance.TryToStandInternal(false, false))
