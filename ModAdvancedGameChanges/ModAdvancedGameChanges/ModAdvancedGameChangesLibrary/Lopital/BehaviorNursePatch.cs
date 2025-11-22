@@ -64,6 +64,25 @@ namespace ModAdvancedGameChanges.Lopital
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorNurse), nameof(BehaviorNurse.GetReserved))]
+        public static bool GetReservedPrefix(BehaviorNurse __instance, ref bool __result)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            __result = false;
+            __result |= __instance.CurrentPatient != null;
+            __result |= __instance.GetComponent<EmployeeComponent>().m_state.m_reservedByPatient != null;
+            __result |= !String.IsNullOrEmpty(__instance.GetComponent<EmployeeComponent>().m_state.m_reservedForProcedureLocID);
+            __result |= (__instance.m_state.m_nurseState == NurseState.OverridenReservedForProcedure);
+
+            return false;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(BehaviorNurse), nameof(BehaviorNurse.GoToWorkplace))]
         public static bool GoToWorkplacePrefix(BehaviorNurse __instance)
         {
@@ -663,6 +682,11 @@ namespace ModAdvancedGameChanges.Lopital
 
         private static bool IsNeededHandleGoHome(BehaviorNurse instance)
         {
+            if (instance.GetReserved())
+            {
+                return false;
+            }
+
             EmployeeComponent employeeComponent = instance.GetComponent<EmployeeComponent>();
 
             GameDBSchedule shift = (employeeComponent.m_state.m_shift == Shift.DAY) ?
@@ -675,6 +699,11 @@ namespace ModAdvancedGameChanges.Lopital
 
         private static bool IsNeededHandleFullfillNeeds(BehaviorNurse instance)
         {
+            if (instance.GetReserved())
+            {
+                return false;
+            }
+
             if (instance.GetComponent<ProcedureComponent>().m_state.m_currentProcedureScript != null)
             {
                 Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{instance.m_entity.Name}, planned procedure {instance.GetComponent<ProcedureComponent>().m_state.m_currentProcedureScript.GetEntity().m_stateData.m_scriptName}");
@@ -735,12 +764,23 @@ namespace ModAdvancedGameChanges.Lopital
 
         private static bool IsNeededHandleTraining(BehaviorNurse instance)
         {
+            if (instance.GetReserved())
+            {
+                return false;
+            }
+
             return instance.GetComponent<EmployeeComponent>().ShouldGoToTraining();
         }
 
         public static bool HandleGoHomeFulfillNeeds(BehaviorNurse instance)
         {
             EmployeeComponent employeeComponent = instance.GetComponent<EmployeeComponent>();
+
+            if (instance.GetReserved())
+            {
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{instance.m_entity.Name}, reserved");
+                return true;
+            }
 
             // check if nurse needs to go home
             if (BehaviorNursePatch.GoHome(instance))

@@ -64,6 +64,25 @@ namespace ModAdvancedGameChanges.Lopital
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorDoctor), nameof(BehaviorDoctor.GetReserved))]
+        public static bool GetReservedPrefix(BehaviorDoctor __instance, ref bool __result)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            __result = false;
+            __result |= __instance.CurrentPatient != null;
+            __result |= __instance.GetComponent<EmployeeComponent>().m_state.m_reservedByPatient != null;
+            __result |= !String.IsNullOrEmpty(__instance.GetComponent<EmployeeComponent>().m_state.m_reservedForProcedureLocID);
+            __result |= (__instance.m_state.m_doctorState == DoctorState.OverridenReservedForProcedure);
+
+            return false;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(BehaviorDoctor), nameof(BehaviorDoctor.GoToWorkPlace))]
         public static bool GoToWorkplacePrefix(BehaviorDoctor __instance)
         {
@@ -671,6 +690,11 @@ namespace ModAdvancedGameChanges.Lopital
 
         private static bool IsNeededHandleGoHome(BehaviorDoctor instance)
         {
+            if (instance.GetReserved())
+            {
+                return false;
+            }
+
             EmployeeComponent employeeComponent = instance.GetComponent<EmployeeComponent>();
 
             GameDBSchedule shift = (employeeComponent.m_state.m_shift == Shift.DAY) ?
@@ -678,11 +702,16 @@ namespace ModAdvancedGameChanges.Lopital
                 Database.Instance.GetEntry<GameDBSchedule>(Schedules.Vanilla.SCHEDULE_OPENING_HOURS_STAFF_NIGHT);
 
             return (employeeComponent.IsFired() || instance.GetDepartment().IsClosed()
-                || ((DayTime.Instance.GetShift() != employeeComponent.m_state.m_shift) && (Mathf.Abs(DayTime.Instance.GetDayTimeHours() - shift.StartTime) > 1)));
+                    || ((DayTime.Instance.GetShift() != employeeComponent.m_state.m_shift) && (Mathf.Abs(DayTime.Instance.GetDayTimeHours() - shift.StartTime) > 1)));
         }
 
         private static bool IsNeededHandleFullfillNeeds(BehaviorDoctor instance)
         {
+            if (instance.GetReserved())
+            {
+                return false;
+            }
+
             if (instance.GetComponent<ProcedureComponent>().m_state.m_currentProcedureScript != null)
             {
                 Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{instance.m_entity.Name}, planned procedure {instance.GetComponent<ProcedureComponent>().m_state.m_currentProcedureScript.GetEntity().m_stateData.m_scriptName}");
@@ -743,12 +772,23 @@ namespace ModAdvancedGameChanges.Lopital
 
         private static bool IsNeededHandleTraining(BehaviorDoctor instance)
         {
+            if (instance.GetReserved())
+            {
+                return false;
+            }
+
             return instance.GetComponent<EmployeeComponent>().ShouldGoToTraining();
         }
 
         public static bool HandleGoHomeFulfillNeeds(BehaviorDoctor instance)
         {
             EmployeeComponent employeeComponent = instance.GetComponent<EmployeeComponent>();
+
+            if (instance.GetReserved())
+            {
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{instance.m_entity.Name}, reserved");
+                return true;
+            }
 
             // check if doctor needs to go home
             if (BehaviorDoctorPatch.GoHome(instance))
