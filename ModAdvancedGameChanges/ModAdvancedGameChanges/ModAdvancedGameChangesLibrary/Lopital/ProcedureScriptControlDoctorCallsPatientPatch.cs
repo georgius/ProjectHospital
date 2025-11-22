@@ -2,6 +2,7 @@
 using HarmonyLib;
 using Lopital;
 using ModAdvancedGameChanges.Constants;
+using System.Linq;
 
 namespace ModAdvancedGameChanges.Lopital
 {
@@ -25,7 +26,7 @@ namespace ModAdvancedGameChanges.Lopital
             Entity patient = __instance.m_stateData.m_procedureScene.m_patient.GetEntity();
 
             __instance.SendMessage(doctor, new Message(Messages.OVERRIDE_BY_PROCEDURE_SCRIPT));
-            __instance.m_stateData.m_procedureScene.Doctor.GetEntity().GetComponent<SpeechComponent>().SetBubble(Speeches.Vanilla.Answer, -1f);
+            doctor.GetComponent<SpeechComponent>().SetBubble(Speeches.Vanilla.Answer, -1f);
 
             doctor.GetComponent<WalkComponent>().SetDestination(patient.GetComponent<GridComponent>().GetGridPosition(), patient.GetComponent<WalkComponent>().GetFloorIndex(), MovementType.WALKING);
 
