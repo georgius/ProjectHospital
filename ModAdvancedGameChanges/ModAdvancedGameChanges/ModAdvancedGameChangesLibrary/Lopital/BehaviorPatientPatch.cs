@@ -136,6 +136,42 @@ namespace ModAdvancedGameChanges.Lopital
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorPatient), "GoToOffice")]
+        public static bool GoToOffice(BehaviorPatient __instance)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            __instance.FreeWaitingRoom();
+
+            Entity entity = __instance.m_state.m_doctor.GetEntity();
+            EntityIDPointer<Room> homeRoom = entity.GetComponent<EmployeeComponent>().m_state.m_homeRoom;
+            Vector2i currentTile = entity.GetComponent<WalkComponent>().GetCurrentTile();
+            TileObject tileObject = null;
+
+            if (homeRoom != null)
+            {
+                tileObject = MapScriptInterface.Instance.FindClosestFreeObjectWithTag(__instance.m_entity, null, currentTile, homeRoom.GetEntity(), Tags.Vanilla.Sitting, AccessRights.PATIENT, false, null, false);
+            }
+
+            if (tileObject != null)
+            {
+                __instance.GetComponent<WalkComponent>().GoSit(tileObject, MovementType.WALKING);
+            }
+            else
+            {
+                __instance.GetComponent<WalkComponent>().SetDestination(entity.GetComponent<Behavior>().GetInteractionPosition(), entity.GetComponent<WalkComponent>().GetFloorIndex(), MovementType.WALKING);
+            }
+
+            __instance.SwitchState(PatientState.GoingToDoctor);
+
+            return false;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(BehaviorPatient), nameof(BehaviorPatient.GoToWaitingRoom))]
         public static bool GoToWaitingRoomPrefix(BehaviorPatient __instance)
         {
@@ -232,6 +268,7 @@ namespace ModAdvancedGameChanges.Lopital
             }
 
             __instance.FreeWaitingRoom();
+            __instance.UnreserveEmployees(true, true, true);
 
             if (__instance.m_state.m_department != null)
             {
@@ -291,6 +328,10 @@ namespace ModAdvancedGameChanges.Lopital
                 }
                 PlayerStatistics.Instance.IncrementStatistic(Statistics.Vanilla.Treated, 1);
             }
+
+            __instance.m_state.m_doctor = null;
+            __instance.m_state.m_nurse = null;
+            __instance.m_state.m_labSpecialist = null;
 
             InsuranceManager.Instance.UpdateInsuranceCompanyRequirementsAndObjectives(InsuranceCheckMode.IMMEDIATE);
 
@@ -737,12 +778,7 @@ namespace ModAdvancedGameChanges.Lopital
             if (!__instance.GetComponent<ProcedureComponent>().IsBusy())
             {
                 __instance.EnsureDepartmentInternal();
-
-                if ((__instance.m_state.m_nurse != null) && (__instance.m_state.m_nurse.GetEntity() != null) && (__instance.m_state.m_nurse.GetEntity().GetComponent<BehaviorNurse>().CurrentPatient == __instance.m_entity))
-                {
-                    // free nurse
-                    __instance.m_state.m_nurse.GetEntity().GetComponent<BehaviorNurse>().CurrentPatient = null;
-                }
+                __instance.UnreserveEmployees(false, true, false);
 
                 __instance.m_state.m_nurse = null;
                 __instance.m_state.m_finishedAtReception = true;
@@ -942,12 +978,7 @@ namespace ModAdvancedGameChanges.Lopital
                     // nurse is doing something else
                     // release nurse and return to queue
 
-                    if ((__instance.m_state.m_nurse != null) && (__instance.m_state.m_nurse.GetEntity() != null) && (__instance.m_state.m_nurse.GetEntity().GetComponent<BehaviorNurse>().CurrentPatient == __instance.m_entity))
-                    {
-                        // free nurse
-                        __instance.m_state.m_nurse.GetEntity().GetComponent<BehaviorNurse>().CurrentPatient = null;
-                    }
-
+                    __instance.UnreserveEmployees(false, true, false);
                     __instance.m_state.m_nurse = null;
 
                     __instance.SwitchState(PatientState.Idle);
@@ -1584,6 +1615,63 @@ namespace ModAdvancedGameChanges.Lopital
             }
 
             return false;
+        }
+
+        public static void UnreserveEmployees(this BehaviorPatient instance, bool doctor, bool nurse, bool labSpecialist)
+        {
+            if (doctor)
+            {
+                if (instance.m_state.m_doctor.GetEntity()?.GetComponent<BehaviorDoctor>().CurrentPatient == instance.m_entity)
+                {
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{instance.m_entity.Name}, unreserved doctor {instance.m_state.m_doctor.GetEntity().Name}");
+
+                    // unreserve doctor
+                    instance.m_state.m_doctor.GetEntity().GetComponent<BehaviorDoctor>().CurrentPatient = null;
+                }
+                if (instance.m_state.m_doctor.GetEntity()?.GetComponent<EmployeeComponent>().m_state.m_reservedByPatient == instance.m_entity)
+                {
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{instance.m_entity.Name}, unreserved doctor {instance.m_state.m_doctor.GetEntity().Name}");
+
+                    // unreserve doctor
+                    instance.m_state.m_doctor.GetEntity().GetComponent<EmployeeComponent>().m_state.m_reservedByPatient = null;
+                }
+            }
+
+            if (nurse)
+            {
+                if (instance.m_state.m_nurse.GetEntity()?.GetComponent<BehaviorNurse>().CurrentPatient == instance.m_entity)
+                {
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{instance.m_entity.Name}, unreserved nurse {instance.m_state.m_nurse.GetEntity().Name}");
+
+                    // unreserve nurse
+                    instance.m_state.m_nurse.GetEntity().GetComponent<BehaviorNurse>().CurrentPatient = null;
+                }
+                if (instance.m_state.m_nurse.GetEntity()?.GetComponent<EmployeeComponent>().m_state.m_reservedByPatient == instance.m_entity)
+                {
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{instance.m_entity.Name}, unreserved nurse {instance.m_state.m_nurse.GetEntity().Name}");
+
+                    // unreserve nurse
+                    instance.m_state.m_nurse.GetEntity().GetComponent<EmployeeComponent>().m_state.m_reservedByPatient = null;
+                }
+            }
+
+            if (labSpecialist)
+            {
+                if (instance.m_state.m_labSpecialist.GetEntity()?.GetComponent<BehaviorLabSpecialist>().CurrentPatient == instance.m_entity)
+                {
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{instance.m_entity.Name}, unreserved lab specialist {instance.m_state.m_labSpecialist.GetEntity().Name}");
+
+                    // unreserve lab specialist
+                    instance.m_state.m_labSpecialist.GetEntity().GetComponent<BehaviorLabSpecialist>().CurrentPatient = null;
+                }
+                if (instance.m_state.m_labSpecialist.GetEntity()?.GetComponent<EmployeeComponent>().m_state.m_reservedByPatient == instance.m_entity)
+                {
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{instance.m_entity.Name}, unreserved lab specialist {instance.m_state.m_labSpecialist.GetEntity().Name}");
+
+                    // unreserve lab specialist
+                    instance.m_state.m_labSpecialist.GetEntity().GetComponent<EmployeeComponent>().m_state.m_reservedByPatient = null;
+                }
+            }
         }
 
         private static bool GetOddFrame(this BehaviorPatient instance)
