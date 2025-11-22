@@ -141,12 +141,10 @@ namespace ModAdvancedGameChanges.Lopital
 
             // nurse is possibly free when:
             // - is idle
-            // - going to workplace
 
             switch (__instance.m_state.m_nurseState)
             {
                 case NurseState.Idle:
-                case NurseState.GoingToWorkplace:
                     {
                         __result = true;
 
