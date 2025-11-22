@@ -140,36 +140,30 @@ namespace ModAdvancedGameChanges.Lopital
                 return true;
             }
 
-            if (__instance.CurrentPatient != null)
-            {
-                __result = false;
-                return false;
-            }
-
             switch (__instance.m_state.m_doctorState)
             {
                 case DoctorState.Idle:
                 case DoctorState.FilingReports:
-                    __result = true;
-                    break;
+                    {
+                        __result = true;
 
-                case DoctorState.FinishedProcedure:
-                case DoctorState.GoingToWorkPlace:
-                case DoctorState.FulfilingNeeds:
-                case DoctorState.FillingFreeTime:
-                case DoctorState.OverridenByProcedureScript:
-                case DoctorState.OverridenReservedForProcedure:
-                case DoctorState.DoctorsRounds:
-                case DoctorState.GoingHome:
-                case DoctorState.AtHome:
-                case DoctorState.Commuting:
-                case DoctorState.FiredAtHome:
-                case DoctorState.Training:
+                        // check if doctor have patient
+                        __result &= (__instance.CurrentPatient == null);
+
+                        // check if doctor is reserved by patient
+                        __result &= (__instance.GetComponent<EmployeeComponent>().m_state.m_reservedByPatient == null);
+
+                        // check if doctor is reserved by procedure
+                        __result &= String.IsNullOrEmpty(__instance.GetComponent<EmployeeComponent>().m_state.m_reservedForProcedureLocID);
+
+                        return false;
+                    }
                 default:
-                    __result = false;
                     break;
             }
 
+            // default case
+            __result = false;
             return false;
         }
 
@@ -184,9 +178,16 @@ namespace ModAdvancedGameChanges.Lopital
                 return true;
             }
 
-            if (__instance.CurrentPatient == patient)
+            __result = false;
+
+            // check if doctor have patient as current patient
+            __result |= (__instance.CurrentPatient == patient);
+
+            // check if doctor is reserved by patient
+            __result |= (__instance.GetComponent<EmployeeComponent>().m_state.m_reservedByPatient == patient);
+
+            if (__result)
             {
-                __result = true;
                 return false;
             }
 
