@@ -724,7 +724,6 @@ namespace ModAdvancedGameChanges.Lopital
 
             if (instance.GetReserved())
             {
-                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{instance.m_entity.Name}, reserved");
                 return true;
             }
 
