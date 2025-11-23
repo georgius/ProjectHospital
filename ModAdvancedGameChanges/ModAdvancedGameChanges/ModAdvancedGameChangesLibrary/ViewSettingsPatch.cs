@@ -16,6 +16,7 @@ namespace ModAdvancedGameChanges
         public static bool m_enabledTrainingDepartment = true;
 
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_debug = new Dictionary<ViewSettings, GenericFlag<bool>>();
+        public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_enableModChanges = new Dictionary<ViewSettings, GenericFlag<bool>>();
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_enableNonLinearSkillLeveling = new Dictionary<ViewSettings, GenericFlag<bool>>();
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_forceEmployeeLowestHireLevel = new Dictionary<ViewSettings, GenericFlag<bool>>();
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_labEmployeeBiochemistry = new Dictionary<ViewSettings, GenericFlag<bool>>();
@@ -44,6 +45,7 @@ namespace ModAdvancedGameChanges
                         Debug.Log(System.Reflection.MethodBase.GetCurrentMethod(), "Adding settings");
 
                         ViewSettingsPatch.m_debug.Add(__instance, new GenericFlag<bool>("AGC_OPTION_DEBUG", false));
+                        ViewSettingsPatch.m_enableModChanges.Add(__instance, new GenericFlag<bool>("AGC_OPTION_ENABLE_MOD_CHANGES", true));
                         ViewSettingsPatch.m_enableNonLinearSkillLeveling.Add(__instance, new GenericFlag<bool>("AGC_OPTION_ENABLE_NON_LINEAR_SKILL_LEVELING", true));
                         ViewSettingsPatch.m_forceEmployeeLowestHireLevel.Add(__instance, new GenericFlag<bool>("AGC_OPTION_FORCE_EMPLOYEE_LOWEST_HIRE_LEVEL", true));
                         ViewSettingsPatch.m_labEmployeeBiochemistry.Add(__instance, new GenericFlag<bool>("AGC_OPTION_LAB_EMPLOYEE_BIOCHEMISTRY", true));
@@ -60,6 +62,7 @@ namespace ModAdvancedGameChanges
                         var boolFlags = new List<GenericFlag<bool>>(__instance.m_allBoolFlags);
 
                         boolFlags.Add(ViewSettingsPatch.m_debug[__instance]);
+                        boolFlags.Add(ViewSettingsPatch.m_enableModChanges[__instance]);
                         boolFlags.Add(ViewSettingsPatch.m_enableNonLinearSkillLeveling[__instance]);
                         boolFlags.Add(ViewSettingsPatch.m_forceEmployeeLowestHireLevel[__instance]);
                         boolFlags.Add(ViewSettingsPatch.m_labEmployeeBiochemistry[__instance]);
@@ -94,7 +97,11 @@ namespace ModAdvancedGameChanges
         {
             Debug.Log(System.Reflection.MethodBase.GetCurrentMethod(), $"DLC Hospital services present: {Tweakable.Vanilla.DlcHospitalServicesEnabled()}");
 
-            bool enableTrainingDepartment = Tweakable.Vanilla.DlcHospitalServicesEnabled();
+            // enable / disable mod changes
+            ViewSettingsPatch.m_enabled &= ViewSettingsPatch.m_enableModChanges.ContainsKey(__instance);
+            ViewSettingsPatch.m_enabled &= (ViewSettingsPatch.m_enabled && ViewSettingsPatch.m_enableModChanges[__instance].m_value);
+
+            bool enableTrainingDepartment = ViewSettingsPatch.m_enabled && Tweakable.Vanilla.DlcHospitalServicesEnabled();
             enableTrainingDepartment &= ViewSettingsPatch.m_trainingDepartment.ContainsKey(__instance);
             enableTrainingDepartment &= (enableTrainingDepartment && ViewSettingsPatch.m_trainingDepartment[__instance].m_value);
 

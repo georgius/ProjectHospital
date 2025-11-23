@@ -18,6 +18,11 @@
 			</GameDBLocalizedString>
 			
 			<GameDBLocalizedString>
+				<LocID>AGC_OPTION_ENABLE_MOD_CHANGES</LocID>
+				<Text>[AGC] Enable mod changes (requires restart)</Text>
+			</GameDBLocalizedString>
+			
+			<GameDBLocalizedString>
 				<LocID>AGC_OPTION_ENABLE_NON_LINEAR_SKILL_LEVELING</LocID>
 				<Text>[AGC] Non-linear skill leveling</Text>
 			</GameDBLocalizedString>
