@@ -103,11 +103,33 @@ namespace ModAdvancedGameChanges.Lopital
             int queueMachineCount = __instance.m_state.m_waitingRoom.GetEntity().GetObjectCountWithTag(Tags.Vanilla.Queue, __instance.GetComponent<WalkComponent>().Floor, true);
             int queueMonitorCount = __instance.m_state.m_waitingRoom.GetEntity().GetObjectCountWithTag(Tags.Vanilla.QueueMonitor, __instance.GetComponent<WalkComponent>().Floor, true);
 
-            //if ((queueMachineCount > 0) && (queueMonitorCount > 0))
-            //{
+            if ((queueMachineCount > 0) && (queueMonitorCount > 0))
+            {
+                GameDBProcedure procedure = Database.Instance.GetEntry<GameDBProcedure>(Procedures.Vanilla.CallPatientWithQueueMonitor);
+                ProcedureSceneAvailability procedureAvailabilty = __instance.GetComponent<ProcedureComponent>().GetProcedureAvailabilty(
+                    procedure, __instance.m_entity, doctorEntity, AccessRights.PATIENT_PROCEDURE,
+                    doctorEntity.GetComponent<EmployeeComponent>().m_state.m_homeRoom.GetEntity(), EquipmentListRules.ONLY_FREE);
 
-            //}
-            //else
+                if (procedureAvailabilty == ProcedureSceneAvailability.AVAILABLE)
+                {
+                    BehaviorDoctor component = doctorEntity.GetComponent<BehaviorDoctor>();
+                    component.CurrentPatient = __instance.m_entity;
+
+                    __instance.GetComponent<ProcedureComponent>().StartProcedure(procedure, __instance.m_entity, doctorEntity, null, null, AccessRights.PATIENT_PROCEDURE, EquipmentListRules.ONLY_FREE);
+
+                    // set doctor, because doctor is not set in start procedure
+                    __instance.GetComponent<ProcedureComponent>().m_state.m_currentProcedureScript.GetEntity().m_stateData.m_procedureScene.Doctor = doctorEntity;
+                    __instance.m_state.m_doctor.GetEntity().GetComponent<EmployeeComponent>().SetReserved(Procedures.Vanilla.CallPatientWithQueueMonitor, __instance.m_entity);
+
+                    __instance.SwitchState(PatientState.WaitingBeingCalled);
+                }
+                else if (procedureAvailabilty == ProcedureSceneAvailability.STAFF_UNAVAILABLE)
+                {
+                    __instance.FreeWaitingRoom();
+                    __instance.Leave(false, false, false);
+                }
+            }
+            else
             {
                 GameDBProcedure procedure = Database.Instance.GetEntry<GameDBProcedure>(Procedures.Vanilla.CallPatientWithoutQueueMonitor);
                 ProcedureSceneAvailability procedureAvailabilty = __instance.GetComponent<ProcedureComponent>().GetProcedureAvailabilty(
@@ -120,8 +142,7 @@ namespace ModAdvancedGameChanges.Lopital
                     component.CurrentPatient = __instance.m_entity;
 
                     __instance.GetComponent<ProcedureComponent>().StartProcedure(procedure, __instance.m_entity, doctorEntity, null, null, AccessRights.PATIENT_PROCEDURE, EquipmentListRules.ONLY_FREE);
-
-                    __instance.FreeWaitingRoom();
+                    __instance.m_state.m_doctor.GetEntity().GetComponent<EmployeeComponent>().SetReserved(Procedures.Vanilla.CallPatientWithoutQueueMonitor, __instance.m_entity);
 
                     __instance.SwitchState(PatientState.WaitingBeingCalled);
                 }
@@ -147,9 +168,9 @@ namespace ModAdvancedGameChanges.Lopital
 
             __instance.FreeWaitingRoom();
 
-            Entity entity = __instance.m_state.m_doctor.GetEntity();
-            EntityIDPointer<Room> homeRoom = entity.GetComponent<EmployeeComponent>().m_state.m_homeRoom;
-            Vector2i currentTile = entity.GetComponent<WalkComponent>().GetCurrentTile();
+            Entity doctor = __instance.m_state.m_doctor.GetEntity();
+            EntityIDPointer<Room> homeRoom = doctor.GetComponent<EmployeeComponent>().m_state.m_homeRoom;
+            Vector2i currentTile = doctor.GetComponent<WalkComponent>().GetCurrentTile();
             TileObject tileObject = null;
 
             if (homeRoom != null)
@@ -163,9 +184,10 @@ namespace ModAdvancedGameChanges.Lopital
             }
             else
             {
-                __instance.GetComponent<WalkComponent>().SetDestination(entity.GetComponent<Behavior>().GetInteractionPosition(), entity.GetComponent<WalkComponent>().GetFloorIndex(), MovementType.WALKING);
+                __instance.GetComponent<WalkComponent>().SetDestination(doctor.GetComponent<Behavior>().GetInteractionPosition(), doctor.GetComponent<WalkComponent>().GetFloorIndex(), MovementType.WALKING);
             }
 
+            __instance.FreeWaitingRoom();
             __instance.SwitchState(PatientState.GoingToDoctor);
 
             return false;
@@ -963,8 +985,7 @@ namespace ModAdvancedGameChanges.Lopital
                     // nurse is "idle"
                     GameDBExamination examination = Database.Instance.GetEntry<GameDBExamination>(Examinations.Vanilla.Reception);
 
-                    __instance.GetComponent<ProcedureComponent>().StartExamination(
-                        examination, __instance.m_entity, null, __instance.m_state.m_nurse.GetEntity(), null, AccessRights.PATIENT_PROCEDURE, EquipmentListRules.ONLY_FREE);
+                    __instance.GetComponent<ProcedureComponent>().StartExamination(examination, __instance.m_entity, null, __instance.m_state.m_nurse.GetEntity(), null, AccessRights.PATIENT_PROCEDURE, EquipmentListRules.ONLY_FREE);
                     __instance.m_state.m_nurse.GetEntity().GetComponent<EmployeeComponent>().SetReserved(Examinations.Vanilla.Reception, __instance.m_entity);
                     __instance.SwitchState(PatientState.ExaminedAtReception);
                 }
