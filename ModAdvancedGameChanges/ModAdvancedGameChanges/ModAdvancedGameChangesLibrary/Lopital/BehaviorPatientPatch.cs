@@ -176,7 +176,7 @@ namespace ModAdvancedGameChanges.Lopital
 
             if (homeRoom != null)
             {
-                tileObject = MapScriptInterface.Instance.FindClosestFreeObjectWithTag(__instance.m_entity, null, currentTile, homeRoom.GetEntity(), Tags.Vanilla.Sitting, AccessRights.PATIENT, false, null, false);
+                tileObject = MapScriptInterface.Instance.FindClosestFreeObjectWithTag(__instance.m_entity, null, currentTile, homeRoom.GetEntity(), Tags.Vanilla.Sitting, AccessRights.PATIENT_PROCEDURE, false, null, false);
             }
 
             if (tileObject != null)

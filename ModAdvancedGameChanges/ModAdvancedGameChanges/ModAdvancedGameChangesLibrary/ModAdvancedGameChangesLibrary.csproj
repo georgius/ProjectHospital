@@ -62,6 +62,8 @@
     <Compile Include="Lopital\BehaviorPatch.cs" />
     <Compile Include="Lopital\BehaviorPatientPatch.cs" />
     <Compile Include="Lopital\EmployeeComponentPatch.cs" />
+    <Compile Include="Lopital\FloorPatch.cs" />
+    <Compile Include="Lopital\GridMapPatch.cs" />
     <Compile Include="Lopital\HiringManagerPatch.cs" />
     <Compile Include="Lopital\HospitalPatch.cs" />
     <Compile Include="Lopital\InsuranceCompanyPatch.cs" />
@@ -87,7 +89,6 @@
     <Compile Include="Constants\Schedules.cs" />
     <Compile Include="Constants\Skills.cs" />
     <Compile Include="Constants\Tags.cs" />
-    <Compile Include="RemoveObjectPatch.cs" />
     <Compile Include="Tweakable.cs" />
     <Compile Include="Constants\Tweakables.cs" />
     <Compile Include="TweakableValidation.cs" />
