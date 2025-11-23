@@ -131,6 +131,19 @@
 				<LocID>JANITOR_STATE_Walking</LocID>                       
 				<Text>Commuting</Text>  
 			</GameDBLocalizedString>
+			
+			<!-- scripts -->
+			<GameDBLocalizedString>
+				<!-- calling patient with queue machines and monitors -->
+				<LocID>CONTROL_PROCEDURE_CALL_PATIENT</LocID>                  
+				<Text>Calling patient</Text>
+			</GameDBLocalizedString>
+			
+			<GameDBLocalizedString>      
+				<!-- calling patient without queue machines and monitors -->
+				<LocID>CONTROL_PROCEDURE_CALL_PATIENT_DOCTOR</LocID>                  
+				<Text>Calling patient</Text>
+			</GameDBLocalizedString>
            
 		</LocalizedStrings>
 	</GameDBStringTable>
