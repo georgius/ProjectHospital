@@ -510,6 +510,12 @@ namespace ModAdvancedGameChanges.Lopital
                 employeeComponent.CheckMoodModifiers(__instance.IsBookmarked());
                 __instance.CancelBrowsing();
 
+                if (!__instance.GetComponent<WalkComponent>().IsOnBiohazard())
+                {
+                    __instance.GetComponent<AnimModelComponent>().RevertToDefaultClothes(false);
+                }
+                __instance.SwitchState(NurseState.Idle);
+
                 if (!BehaviorNursePatch.HandleGoHomeFulfillNeedsTraining(__instance))
                 {
                     if ((homeRoomType != null) && homeRoomType.HasTag(Tags.Mod.NurseTrainingWorkspace))
@@ -523,14 +529,6 @@ namespace ModAdvancedGameChanges.Lopital
 
                         Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, nothing to do, filling free time");
                         __instance.SwitchState(NurseState.FillingFreeTime);
-                    }
-                    else
-                    {
-                        if (!__instance.GetComponent<WalkComponent>().IsOnBiohazard())
-                        {
-                            __instance.GetComponent<AnimModelComponent>().RevertToDefaultClothes(false);
-                        }
-                        __instance.SwitchState(NurseState.Idle);
                     }
                 }
             }
