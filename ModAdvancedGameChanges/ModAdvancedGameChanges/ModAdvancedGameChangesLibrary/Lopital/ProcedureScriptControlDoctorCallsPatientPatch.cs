@@ -123,6 +123,7 @@ namespace ModAdvancedGameChanges.Lopital
 
             if (!doctor.GetComponent<WalkComponent>().IsBusy())
             {
+                doctor.GetComponent<SpeechComponent>().HideBubble();
                 instance.SwitchState(ProcedureScriptControlDoctorCallsPatient.STATE_IDLE);
             }
         }
