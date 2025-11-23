@@ -729,6 +729,7 @@ namespace ModAdvancedGameChanges.Lopital
                     __instance.UpdateStateFulfillingNeeds();
                     break;
                 case PatientState.GoingToDoctor:
+                    __instance.UpdateStateGoingToDoctor(deltaTime);
                     break;
                 case PatientState.BeingExamined:
                     break;
@@ -932,16 +933,19 @@ namespace ModAdvancedGameChanges.Lopital
                 return true;
             }
 
-            if (!__instance.GetComponent<WalkComponent>().IsBusy())
+            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, this method should not be called!");
+
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorPatient), "UpdateStateGoingToDoctor")]
+        public static bool UpdateStateGoingToDoctorPrefix(BehaviorPatient __instance, float deltaTime)
+        {
+            if (!ViewSettingsPatch.m_enabled)
             {
-                Room currentRoom = MapScriptInterface.Instance.GetRoomAt(__instance.GetComponent<WalkComponent>());
-
-                if (currentRoom.m_roomPersistentData.m_roomType == Database.Instance.GetEntry<GameDBRoomType>(RoomTypes.Vanilla.Reception))
-                {
-                    __instance.SwitchState(PatientState.Idle);
-                }
-
-                // ???
+                // Allow original method to run
+                return true;
             }
 
             return false;
@@ -1777,6 +1781,11 @@ namespace ModAdvancedGameChanges.Lopital
         public static void UpdateStateGoingToChair(this BehaviorPatient instance)
         {
             MethodAccessHelper.CallMethod(instance, "UpdateStateGoingToChair");
+        }
+
+        public static void UpdateStateGoingToDoctor(this BehaviorPatient instance, float deltaTime)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateGoingToDoctor", deltaTime);
         }
 
         public static void UpdateStateGoingToQueueMachine(this BehaviorPatient instance)
