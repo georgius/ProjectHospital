@@ -2,8 +2,7 @@
 using HarmonyLib;
 using Lopital;
 using ModAdvancedGameChanges.Constants;
-using System;
-using System.Reflection;
+using ModAdvancedGameChanges.Helpers;
 
 namespace ModAdvancedGameChanges
 {
@@ -21,7 +20,10 @@ namespace ModAdvancedGameChanges
             }
 
             Department department = Hospital.Instance.m_departments[index];
-            Entity entity = (__instance.GetCharacter() != null) ? __instance.GetCharacter().GetEntity() : null;
+
+            var characterHelper = new PrivateFieldAccessHelper<CharacterPanelController, EntityIDPointer<Entity>>("m_character", __instance);
+
+            Entity entity = (characterHelper.Field != null) ? characterHelper.Field.GetEntity() : null;
             EmployeeComponent employeeComponent = entity?.GetComponent<EmployeeComponent>();
             BehaviorDoctor doctor = entity?.GetComponent<BehaviorDoctor>();
             BehaviorNurse nurse = entity?.GetComponent<BehaviorNurse>();
@@ -64,14 +66,14 @@ namespace ModAdvancedGameChanges
                 {
                     // employee is doing something, we can't swith department
 
-                    UISoundManager.sm_instance.PlaySoundEvent("SFX_UI_FORBIDDEN", 1f);
+                    UISoundManager.sm_instance.PlaySoundEvent(Sounds.Vanilla.Forbidden, 1f);
 
                     __result = false;
                     return false;
                 }
                 else
                 {
-                    UISoundManager.sm_instance.PlaySoundEvent("SFX_UI_BEEP", 1f);
+                    UISoundManager.sm_instance.PlaySoundEvent(Sounds.Vanilla.Beep, 1f);
                     employeeComponent.SwitchDepartment(department);
                     employeeComponent.m_state.m_homeRoom = null;
 
@@ -81,18 +83,6 @@ namespace ModAdvancedGameChanges
             }
 
             return true;
-        }
-
-        private static EntityIDPointer<Entity> GetCharacter(this CharacterPanelController instance)
-        {
-            // Get the Type of the class
-            Type type = typeof(CharacterPanelController);
-
-            // Get the private field using BindingFlags
-            FieldInfo m_characterFieldInfo = type.GetField("m_character", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            // get objects
-            return (EntityIDPointer<Entity>)m_characterFieldInfo.GetValue(instance);
         }
     }
 }

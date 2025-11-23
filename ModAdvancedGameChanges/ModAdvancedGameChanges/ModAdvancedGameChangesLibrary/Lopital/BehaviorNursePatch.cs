@@ -2,10 +2,10 @@
 using HarmonyLib;
 using Lopital;
 using ModAdvancedGameChanges.Constants;
+using ModAdvancedGameChanges.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Reflection;
 using UnityEngine;
 
 namespace ModAdvancedGameChanges.Lopital
@@ -110,12 +110,12 @@ namespace ModAdvancedGameChanges.Lopital
                     __instance.SwitchState(NurseState.GoingToWorkplace);
                 }
             }
-            else if (BehaviorNursePatch.GetWorkDeskInternal(__instance) != null)
+            else if (__instance.GetWorkDesk() != null)
             {
-                Vector2f defaultUsePosition = BehaviorNursePatch.GetWorkDeskInternal(__instance).GetDefaultUsePosition();
+                Vector2f defaultUsePosition = __instance.GetWorkDesk().GetDefaultUsePosition();
                 if (defaultUsePosition.subtract(walkComponent.m_state.m_currentPosition).length() > 0.25f)
                 {
-                    walkComponent.SetDestination(defaultUsePosition, BehaviorNursePatch.GetWorkDeskInternal(__instance).GetFloorIndex(), MovementType.WALKING);
+                    walkComponent.SetDestination(defaultUsePosition, __instance.GetWorkDesk().GetFloorIndex(), MovementType.WALKING);
 
                     Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, going to work desk");
 
@@ -815,7 +815,7 @@ namespace ModAdvancedGameChanges.Lopital
                         || (oppositeShiftEmployee.GetComponent<BehaviorNurse>().m_state.m_nurseState == NurseState.FiredAtHome)));
 
                 canGoToWorkplace &= ((employeeComponent.GetWorkChair() != null)
-                    || (BehaviorNursePatch.GetWorkDeskInternal(instance) != null)
+                    || (instance.GetWorkDesk() != null)
                     || ((employeeComponent.m_state.m_workPlacePosition != Vector2i.ZERO_VECTOR) && (employeeComponent.m_state.m_workPlacePosition != walkComponent.GetCurrentTile())));
 
                 Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{instance.m_entity.Name}, opposite shift employee: {oppositeShiftEmployee?.Name ?? "NULL"}, state: {oppositeShiftEmployee?.GetComponent<BehaviorNurse>().m_state.m_nurseState.ToString() ?? "NULL"}");
@@ -888,12 +888,14 @@ namespace ModAdvancedGameChanges.Lopital
             return true;
         }
 
-        private static TileObject GetWorkDeskInternal(BehaviorNurse instance)
-        {
-            Type type = typeof(BehaviorNurse);
-            MethodInfo methodInfo = type.GetMethod("GetWorkDesk", BindingFlags.NonPublic | BindingFlags.Instance);
+        
+    }
 
-            return (TileObject)methodInfo.Invoke(instance, null);
+    public static class BehaviorNurseExtensions
+    {
+        public static TileObject GetWorkDesk(this BehaviorNurse instance)
+        {
+            return MethodAccessHelper.CallMethod<TileObject>(instance, "GetWorkDesk");
         }
     }
 }

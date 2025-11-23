@@ -22,6 +22,7 @@
             public const string Dressing = "dressing";
             public const string Dryer = "dryer";
             public const string Eating = "eating";
+            public const string Elevator = "elevator";
             public const string Education = "education";
             public const string FruitSnack = "ui_fruit_snack";
             public const string Inventory = "inventory";

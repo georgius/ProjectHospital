@@ -2,6 +2,7 @@
 using HarmonyLib;
 using Lopital;
 using ModAdvancedGameChanges.Constants;
+using ModAdvancedGameChanges.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -203,11 +204,11 @@ namespace ModAdvancedGameChanges.Lopital
                 return true;
             }
 
-            if (!__instance.EnsureWaitingRoomInternal())
+            if (!__instance.EnsureWaitingRoom())
             {
                 Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, no waiting room, leaving");
 
-                __instance.ReportMissingWaitingRoomInternal();
+                __instance.ReportMissingWaitingRoom();
                 __instance.Leave(true, false, false);
 
                 return false;
@@ -648,7 +649,9 @@ namespace ModAdvancedGameChanges.Lopital
                     break;
             }
 
-            __instance.SetOddFrame(!__instance.GetOddFrame());
+            var oddFrameHelper = new PrivateFieldAccessHelper<BehaviorPatient, bool>("m_oddFrame", __instance);
+
+            oddFrameHelper.Field = !oddFrameHelper.Field;
 
             //if ((__instance.m_state.m_patientState == PatientState.WaitingSittingInPharmacy) 
             //    || (__instance.m_state.m_patientState == PatientState.WaitingStandingInPharmacy) 
@@ -657,7 +660,7 @@ namespace ModAdvancedGameChanges.Lopital
             //    Hospital.Instance.m_currentHospitalStatus.m_patientsWaitingForPharmacy++;
             //}
 
-            if ((!__instance.GetOddFrame()) && SettingsManager.Instance.m_gameSettings.m_scatteredUpdate)
+            if ((!oddFrameHelper.Field) && SettingsManager.Instance.m_gameSettings.m_scatteredUpdate)
             {
                 return false;
             }
@@ -674,7 +677,7 @@ namespace ModAdvancedGameChanges.Lopital
             {
                 case PatientState.Spawned:
                     {
-                        __instance.UpdateStateSpawnedInternal();
+                        __instance.UpdateStateSpawned();
                         activePatient = false;
                     }
                     break;
@@ -685,45 +688,45 @@ namespace ModAdvancedGameChanges.Lopital
                     }
                     break;
                 case PatientState.Idle:
-                    __instance.UpdateStateIdleInternal();
+                    __instance.UpdateStateIdle();
                     break;
                 case PatientState.GoingToReception:
-                    __instance.UpdateStateGoingToReceptionInternal();
+                    __instance.UpdateStateGoingToReception();
                     break;
                 case PatientState.GoingToReceptionist:
-                    __instance.UpdateStateGoingToReceptionistInternal();
+                    __instance.UpdateStateGoingToReceptionist();
                     break;
                 case PatientState.ExaminedAtReception:
-                    __instance.UpdateStateExaminedAtReceptionInternal();
+                    __instance.UpdateStateExaminedAtReception();
                     break;
                 case PatientState.FindQueueMachine:
                     __instance.UpdateStateFindQueueMachine();
                     break;
                 case PatientState.GoToQueueMachine:
-                    __instance.UpdateStateGoingToQueueMachineInternal();
+                    __instance.UpdateStateGoingToQueueMachine();
                     break;
                 case PatientState.UseQueueMachine:
-                    __instance.UpdateStateUsingQueueMachineInternal();
+                    __instance.UpdateStateUsingQueueMachine();
                     break;
                 case PatientState.Wandering:
                     break;
                 case PatientState.GoingToWaitingRoom:
-                    __instance.UpdateStateGoingToWaitingRoomInternal();
+                    __instance.UpdateStateGoingToWaitingRoom();
                     break;
                 case PatientState.WaitingGoingToChair:
-                    __instance.UpdateStateGoingToChairInternal();
+                    __instance.UpdateStateGoingToChair();
                     break;
                 case PatientState.WaitingSitting:
-                    __instance.UpdateStateWaitingStandingIdleInternal(deltaTime);
+                    __instance.UpdateStateWaitingStandingIdle(deltaTime);
                     break;
                 case PatientState.WaitingStandingIdle:
-                    __instance.UpdateStateWaitingStandingIdleInternal(deltaTime);
+                    __instance.UpdateStateWaitingStandingIdle(deltaTime);
                     break;
                 case PatientState.WaitingBeingCalled:
-                    __instance.UpdateStateBeingCalledInternal();
+                    __instance.UpdateStateBeingCalled();
                     break;
                 case PatientState.FulfillingNeeds:
-                    __instance.UpdateStateFulfillingNeedsInternal();
+                    __instance.UpdateStateFulfillingNeeds();
                     break;
                 case PatientState.GoingToDoctor:
                     break;
@@ -750,11 +753,11 @@ namespace ModAdvancedGameChanges.Lopital
                 case PatientState.BuyingMedicine:
                     break;
                 case PatientState.Leaving:
-                    __instance.UpdateStateLeavingInternal();
+                    __instance.UpdateStateLeaving();
                     break;
                 case PatientState.Left:
                     {
-                        __instance.UpdateStateLeftInternal();
+                        __instance.UpdateStateLeft();
                         activePatient = false;
                     }
                     break;
@@ -799,7 +802,7 @@ namespace ModAdvancedGameChanges.Lopital
 
             if (!__instance.GetComponent<ProcedureComponent>().IsBusy())
             {
-                __instance.EnsureDepartmentInternal();
+                __instance.EnsureDepartment();
                 __instance.UnreserveEmployees(false, true, false);
 
                 __instance.m_state.m_nurse = null;
@@ -1029,7 +1032,7 @@ namespace ModAdvancedGameChanges.Lopital
 
                         __instance.m_state.m_waitingRoom = currentRoom;
                         __instance.m_state.m_waitingRoom.GetEntity().EnqueueCharacter(__instance.m_entity, true);
-                        __instance.CheckRoomSatisfactionBonusesInternal();
+                        __instance.CheckRoomSatisfactionBonuses();
 
                         __instance.SwitchState(PatientState.WaitingStandingIdle);
                     }
@@ -1175,13 +1178,13 @@ namespace ModAdvancedGameChanges.Lopital
                                         }
                                     }
 
-                                    if (!__instance.TryToSitInternal(null, false))
+                                    if (!__instance.TryToSit(null, false))
                                     {
                                         __instance.GetComponent<MoodComponent>().AddSatisfactionModifier(SatisfationModifiers.Vanilla.CouldNotSit);
 
                                         Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, no chair");
 
-                                        if (!__instance.TryToStandInternal(false, false))
+                                        if (!__instance.TryToStand(false, false))
                                         {
                                             Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, no place to stand, search for waiting room");
 
@@ -1415,13 +1418,13 @@ namespace ModAdvancedGameChanges.Lopital
             {
                 if (!__instance.GetComponent<WalkComponent>().IsBusy())
                 {
-                    if (!__instance.TryToSitInternal(null, false))
+                    if (!__instance.TryToSit(null, false))
                     {
                         __instance.GetComponent<MoodComponent>().AddSatisfactionModifier(SatisfationModifiers.Vanilla.CouldNotSit);
 
                         Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, no chair");
 
-                        if (!__instance.TryToStandInternal(false, false))
+                        if (!__instance.TryToStand(false, false))
                         {
                             Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, no place to stand");
 
@@ -1474,7 +1477,7 @@ namespace ModAdvancedGameChanges.Lopital
                             // assign doctor and start
 
                             __instance.SetDoctor(doctor);
-                            __instance.GetCalledInternal(doctor);
+                            __instance.GetCalled(doctor);
                         }
                     }
                 }
@@ -1506,7 +1509,7 @@ namespace ModAdvancedGameChanges.Lopital
 
             if ((!DayTime.Instance.IsOpenForPatients()) || (instance.GetDepartment() == null) || instance.GetDepartment().IsClosed())
             {
-                instance.LeaveAfterClosingHoursInternal();
+                instance.LeaveAfterClosingHours();
 
                 return true;
             }
@@ -1517,7 +1520,7 @@ namespace ModAdvancedGameChanges.Lopital
 
                 instance.m_state.m_department = null;
 
-                if (!instance.EnsureDepartmentInternal())
+                if (!instance.EnsureDepartment())
                 {
                     Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{instance.m_entity.Name}, no working emergency, sending patient home");
 
@@ -1537,7 +1540,7 @@ namespace ModAdvancedGameChanges.Lopital
                 instance.m_state.m_department.GetEntity().RemovePatient(instance.m_entity);
                 instance.m_state.m_department = null;
 
-                if (!instance.EnsureDepartmentInternal())
+                if (!instance.EnsureDepartment())
                 {
                     Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{instance.m_entity.Name}, no working emergency, sending patient home");
 
@@ -1549,7 +1552,7 @@ namespace ModAdvancedGameChanges.Lopital
 
             if ((instance.m_state.m_department != null)
                 && (instance.m_state.m_department.GetEntity().GetDepartmentType() == Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.Emergency))
-                && (!instance.EnsureDepartmentInternal()))
+                && (!instance.EnsureDepartment()))
             {
                 Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{instance.m_entity.Name}, no working emergency, sending patient home");
 
@@ -1695,222 +1698,6 @@ namespace ModAdvancedGameChanges.Lopital
             }
         }
 
-        private static bool GetOddFrame(this BehaviorPatient instance)
-        {
-            // Get the Type of the class
-            Type type = typeof(BehaviorPatient);
-
-            // Get the private field using BindingFlags
-            FieldInfo m_oddFrameFieldInfo = type.GetField("m_oddFrame", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            // get objects
-            return (bool)m_oddFrameFieldInfo.GetValue(instance);
-        }
-
-        private static void SetOddFrame(this BehaviorPatient instance, bool value)
-        {
-            // Get the Type of the class
-            Type type = typeof(BehaviorPatient);
-
-            // Get the private field using BindingFlags
-            FieldInfo m_oddFrameFieldInfo = type.GetField("m_oddFrame", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            // set objects
-            m_oddFrameFieldInfo.SetValue(instance, value);
-        }
-
-        private static void CheckRoomSatisfactionBonusesInternal(this BehaviorPatient instance)
-        {
-            Type type = typeof(BehaviorPatient);
-            MethodInfo methodInfo = type.GetMethod("CheckRoomSatisfactionBonuses", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            methodInfo.Invoke(instance, null);
-        }
-
-        private static bool EnsureDepartmentInternal(this BehaviorPatient instance)
-        {
-            Type type = typeof(BehaviorPatient);
-            MethodInfo methodInfo = type.GetMethod("EnsureDepartment", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            return (bool)methodInfo.Invoke(instance, null);
-        }
-
-        private static bool EnsureWaitingRoomInternal(this BehaviorPatient instance)
-        {
-            Type type = typeof(BehaviorPatient);
-            MethodInfo methodInfo = type.GetMethod("EnsureWaitingRoom", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            return (bool)methodInfo.Invoke(instance, null);
-        }
-
-        private static void GetCalledInternal(this BehaviorPatient instance, Entity doctorEntity)
-        {
-            Type type = typeof(BehaviorPatient);
-            MethodInfo methodInfo = type.GetMethod("GetCalled", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            methodInfo.Invoke(instance, new object[] { doctorEntity });
-        }
-
-        private static void GoToEmergencyInternal(this BehaviorPatient instance)
-        {
-            Type type = typeof(BehaviorPatient);
-            MethodInfo methodInfo = type.GetMethod("GoToEmergency", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            methodInfo.Invoke(instance, null);
-        }
-
-        private static void LeaveAfterClosingHoursInternal(this BehaviorPatient instance)
-        {
-            Type type = typeof(BehaviorPatient);
-            MethodInfo methodInfo = type.GetMethod("LeaveAfterClosingHours", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            methodInfo.Invoke(instance, null);
-        }
-
-        private static void ReportMissingWaitingRoomInternal(this BehaviorPatient instance)
-        {
-            Type type = typeof(BehaviorPatient);
-            MethodInfo methodInfo = type.GetMethod("ReportMissingWaitingRoom", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            methodInfo.Invoke(instance, null);
-        }
-
-        private static bool TryToSitInternal(this BehaviorPatient instance, TileObject chairObject, bool pharmacyChair)
-        {
-            Type type = typeof(BehaviorPatient);
-            MethodInfo methodInfo = type.GetMethod("TryToSit", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            return (bool)methodInfo.Invoke(instance, new object[] { chairObject, pharmacyChair });
-        }
-
-        private static bool TryToStandInternal(this BehaviorPatient instance, bool tryAreasAround, bool onlyInFront)
-        {
-            Type type = typeof(BehaviorPatient);
-            MethodInfo methodInfo = type.GetMethod("TryToStand", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            return (bool)methodInfo.Invoke(instance, new object[] { tryAreasAround, onlyInFront });
-        }
-
-        private static void UpdateStateBeingCalledInternal(this BehaviorPatient instance)
-        {
-            Type type = typeof(BehaviorPatient);
-            MethodInfo methodInfo = type.GetMethod("UpdateStateBeingCalled", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            methodInfo.Invoke(instance, null);
-        }
-
-        private static void UpdateStateExaminedAtReceptionInternal(this BehaviorPatient instance)
-        {
-            Type type = typeof(BehaviorPatient);
-            MethodInfo methodInfo = type.GetMethod("UpdateStateExaminedAtReception", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            methodInfo.Invoke(instance, null);
-        }
-
-        private static void UpdateStateFulfillingNeedsInternal(this BehaviorPatient instance)
-        {
-            Type type = typeof(BehaviorPatient);
-            MethodInfo methodInfo = type.GetMethod("UpdateStateFulfillingNeeds", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            methodInfo.Invoke(instance, null);
-        }
-
-        private static void UpdateStateGoingToChairInternal(this BehaviorPatient instance)
-        {
-            Type type = typeof(BehaviorPatient);
-            MethodInfo methodInfo = type.GetMethod("UpdateStateGoingToChair", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            methodInfo.Invoke(instance, null);
-        }
-
-        private static void UpdateStateGoingToQueueMachineInternal(this BehaviorPatient instance)
-        {
-            Type type = typeof(BehaviorPatient);
-            MethodInfo methodInfo = type.GetMethod("UpdateStateGoingToQueueMachine", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            methodInfo.Invoke(instance, null);
-        }
-
-        private static void UpdateStateGoingToReceptionInternal(this BehaviorPatient instance)
-        {
-            Type type = typeof(BehaviorPatient);
-            MethodInfo methodInfo = type.GetMethod("UpdateStateGoingToReception", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            methodInfo.Invoke(instance, null);
-        }
-
-        private static void UpdateStateGoingToReceptionistInternal(this BehaviorPatient instance)
-        {
-            Type type = typeof(BehaviorPatient);
-            MethodInfo methodInfo = type.GetMethod("UpdateStateGoingToReceptionist", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            methodInfo.Invoke(instance, null);
-        }
-
-        private static void UpdateStateGoingToWaitingRoomInternal(this BehaviorPatient instance)
-        {
-            Type type = typeof(BehaviorPatient);
-            MethodInfo methodInfo = type.GetMethod("UpdateStateGoingToWaitingRoom", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            methodInfo.Invoke(instance, null);
-        }
-
-        private static void UpdateStateIdleInternal(this BehaviorPatient instance)
-        {
-            Type type = typeof(BehaviorPatient);
-            MethodInfo methodInfo = type.GetMethod("UpdateStateIdle", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            methodInfo.Invoke(instance, null);
-        }
-
-        private static void UpdateStateLeavingInternal(this BehaviorPatient instance)
-        {
-            Type type = typeof(BehaviorPatient);
-            MethodInfo methodInfo = type.GetMethod("UpdateStateLeaving", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            methodInfo.Invoke(instance, null);
-        }
-
-        private static void UpdateStateLeftInternal(this BehaviorPatient instance)
-        {
-            Type type = typeof(BehaviorPatient);
-            MethodInfo methodInfo = type.GetMethod("UpdateStateLeft", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            methodInfo.Invoke(instance, null);
-        }
-
-        private static void UpdateStateWaitingSittingInternal(this BehaviorPatient instance, float deltaTime)
-        {
-            Type type = typeof(BehaviorPatient);
-            MethodInfo methodInfo = type.GetMethod("UpdateStateWaitingSitting", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            methodInfo.Invoke(instance, new object[] { deltaTime });
-        }
-
-        private static void UpdateStateWaitingStandingIdleInternal(this BehaviorPatient instance, float deltaTime)
-        {
-            Type type = typeof(BehaviorPatient);
-            MethodInfo methodInfo = type.GetMethod("UpdateStateWaitingStandingIdle", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            methodInfo.Invoke(instance, new object[] { deltaTime });
-        }
-
-        private static void UpdateStateSpawnedInternal(this BehaviorPatient instance)
-        {
-            Type type = typeof(BehaviorPatient);
-            MethodInfo methodInfo = type.GetMethod("UpdateStateSpawned", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            methodInfo.Invoke(instance, null);
-        }
-
-        private static void UpdateStateUsingQueueMachineInternal(this BehaviorPatient instance)
-        {
-            Type type = typeof(BehaviorPatient);
-            MethodInfo methodInfo = type.GetMethod("UpdateStateUsingQueueMachine", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            methodInfo.Invoke(instance, null);
-        }
-
         private static void UpdateWaitingTime(BehaviorPatient instance, float deltaTime)
         {
             instance.m_state.m_waitingTime += deltaTime;
@@ -1922,6 +1709,129 @@ namespace ModAdvancedGameChanges.Lopital
             }
 
             instance.m_state.m_continuousWaitingTime += deltaTime;
+        }
+    }
+
+    public static class BehaviorPatientExtensions
+    {
+        public static void CheckRoomSatisfactionBonuses(this BehaviorPatient instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "CheckRoomSatisfactionBonuses");
+        }
+
+        public static bool EnsureDepartment(this BehaviorPatient instance)
+        {
+            return MethodAccessHelper.CallMethod<bool>(instance, "EnsureDepartment");
+        }
+
+        public static bool EnsureWaitingRoom(this BehaviorPatient instance)
+        {
+            return MethodAccessHelper.CallMethod<bool>(instance, "EnsureWaitingRoom");
+        }
+
+        public static void GetCalled(this BehaviorPatient instance, Entity doctorEntity)
+        {
+            MethodAccessHelper.CallMethod(instance, "GetCalled", doctorEntity);
+        }
+
+        public static void GoToEmergency(this BehaviorPatient instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "GoToEmergency");
+        }
+
+        public static void LeaveAfterClosingHours(this BehaviorPatient instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "LeaveAfterClosingHours");
+        }
+
+        public static void ReportMissingWaitingRoom(this BehaviorPatient instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "ReportMissingWaitingRoom");
+        }
+
+        public static bool TryToSit(this BehaviorPatient instance, TileObject chairObject, bool pharmacyChair)
+        {
+            return MethodAccessHelper.CallMethod<bool>(instance, "TryToSit", chairObject, pharmacyChair);
+        }
+
+        public static bool TryToStand(this BehaviorPatient instance, bool tryAreasAround, bool onlyInFront)
+        {
+            return MethodAccessHelper.CallMethod<bool>(instance, "TryToStand", tryAreasAround, onlyInFront);
+        }
+
+        public static void UpdateStateBeingCalled(this BehaviorPatient instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateBeingCalled");
+        }
+
+        public static void UpdateStateExaminedAtReception(this BehaviorPatient instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateExaminedAtReception");
+        }
+
+        public static void UpdateStateFulfillingNeeds(this BehaviorPatient instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateFulfillingNeeds");
+        }
+
+        public static void UpdateStateGoingToChair(this BehaviorPatient instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateGoingToChair");
+        }
+
+        public static void UpdateStateGoingToQueueMachine(this BehaviorPatient instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateGoingToQueueMachine");
+        }
+
+        public static void UpdateStateGoingToReception(this BehaviorPatient instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateGoingToReception");
+        }
+
+        public static void UpdateStateGoingToReceptionist(this BehaviorPatient instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateGoingToReceptionist");
+        }
+
+        public static void UpdateStateGoingToWaitingRoom(this BehaviorPatient instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateGoingToWaitingRoom");
+        }
+
+        public static void UpdateStateIdle(this BehaviorPatient instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateIdle");
+        }
+
+        public static void UpdateStateLeaving(this BehaviorPatient instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateLeaving");
+        }
+
+        public static void UpdateStateLeft(this BehaviorPatient instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateLeft");
+        }
+
+        public static void UpdateStateWaitingSitting(this BehaviorPatient instance, float deltaTime)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateWaitingSitting", deltaTime);
+        }
+
+        public static void UpdateStateWaitingStandingIdle(this BehaviorPatient instance, float deltaTime)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateWaitingStandingIdle", deltaTime);
+        }
+
+        public static void UpdateStateSpawned(this BehaviorPatient instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateSpawned");
+        }
+
+        public static void UpdateStateUsingQueueMachine(this BehaviorPatient instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateUsingQueueMachine");
         }
     }
 }

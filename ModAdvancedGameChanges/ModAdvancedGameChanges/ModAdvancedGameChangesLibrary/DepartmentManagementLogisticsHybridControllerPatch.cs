@@ -1,10 +1,9 @@
 ﻿using HarmonyLib;
 using Lopital;
-using System;
-using System.Reflection;
 using UnityEngine;
 using System.Linq;
 using ModAdvancedGameChanges.Constants;
+using ModAdvancedGameChanges.Helpers;
 
 namespace ModAdvancedGameChanges
 {
@@ -26,39 +25,29 @@ namespace ModAdvancedGameChanges
                 GameDBDepartment trainingDepartment = Database.Instance.GetEntry<GameDBDepartment>(Constants.Departments.Mod.TrainingDepartment);
                 if ((trainingDepartment != null) && (department.m_departmentPersistentData.m_departmentType.Entry == trainingDepartment))
                 {
-                    // Get the Type of the class
-                    Type type = __instance.GetType();
+                    var m_staffClinicSegmentDoctorsHelper = new PrivateFieldAccessHelper<DepartmentManagementLogisticsHybridController, GameObject>("m_staffClinicSegmentDoctors", __instance);
+                    var m_staffClinicSegmentReceptionistHelper = new PrivateFieldAccessHelper<DepartmentManagementLogisticsHybridController, GameObject>("m_staffClinicSegmentReceptionist", __instance);
+                    var m_staffClinicSegmentLabHelper = new PrivateFieldAccessHelper<DepartmentManagementLogisticsHybridController, GameObject>("m_staffClinicSegmentLab", __instance);
+                    var m_staffClinicSegmentJanitorHelper = new PrivateFieldAccessHelper<DepartmentManagementLogisticsHybridController, GameObject>("m_staffClinicSegmentJanitor", __instance);
 
-                    // Get the private field using BindingFlags
-                    FieldInfo m_staffClinicSegmentDoctorsFieldInfo = type.GetField("m_staffClinicSegmentDoctors", BindingFlags.NonPublic | BindingFlags.Instance);
-                    FieldInfo m_staffClinicSegmentReceptionistFieldInfo = type.GetField("m_staffClinicSegmentReceptionist", BindingFlags.NonPublic | BindingFlags.Instance);
-                    FieldInfo m_staffClinicSegmentLabFieldInfo = type.GetField("m_staffClinicSegmentLab", BindingFlags.NonPublic | BindingFlags.Instance);
-                    FieldInfo m_staffClinicSegmentJanitorFieldInfo = type.GetField("m_staffClinicSegmentJanitor", BindingFlags.NonPublic | BindingFlags.Instance);
+                    m_staffClinicSegmentDoctorsHelper.Field.SetActive(true);
+                    m_staffClinicSegmentReceptionistHelper.Field.SetActive(true);
+                    m_staffClinicSegmentLabHelper.Field.SetActive(true);
+                    m_staffClinicSegmentJanitorHelper.Field.SetActive(true);
 
-                    // get objects
-                    GameObject m_staffClinicSegmentDoctors = (GameObject)m_staffClinicSegmentDoctorsFieldInfo.GetValue(__instance);
-                    GameObject m_staffClinicSegmentReceptionist = (GameObject)m_staffClinicSegmentReceptionistFieldInfo.GetValue(__instance);
-                    GameObject m_staffClinicSegmentLab = (GameObject)m_staffClinicSegmentLabFieldInfo.GetValue(__instance);
-                    GameObject m_staffClinicSegmentJanitor = (GameObject)m_staffClinicSegmentJanitorFieldInfo.GetValue(__instance);
+                    m_staffClinicSegmentDoctorsHelper.Field.GetComponent<RectTransform>().anchoredPosition = new Vector3(40f, -15f, 0f);
+                    m_staffClinicSegmentReceptionistHelper.Field.GetComponent<RectTransform>().anchoredPosition = new Vector3(40f, -40f, 0f);
+                    m_staffClinicSegmentLabHelper.Field.GetComponent<RectTransform>().anchoredPosition = new Vector3(40f, -65f, 0f);
+                    m_staffClinicSegmentJanitorHelper.Field.GetComponent<RectTransform>().anchoredPosition = new Vector3(40f, -90f, 0f);
 
-                    m_staffClinicSegmentDoctors.SetActive(true);
-                    m_staffClinicSegmentReceptionist.SetActive(true);
-                    m_staffClinicSegmentLab.SetActive(true);
-                    m_staffClinicSegmentJanitor.SetActive(true);
-
-                    m_staffClinicSegmentDoctors.GetComponent<RectTransform>().anchoredPosition = new Vector3(40f, -15f, 0f);
-                    m_staffClinicSegmentReceptionist.GetComponent<RectTransform>().anchoredPosition = new Vector3(40f, -40f, 0f);
-                    m_staffClinicSegmentLab.GetComponent<RectTransform>().anchoredPosition = new Vector3(40f, -65f, 0f);
-                    m_staffClinicSegmentJanitor.GetComponent<RectTransform>().anchoredPosition = new Vector3(40f, -90f, 0f);
-
-                    m_staffClinicSegmentDoctors
+                    m_staffClinicSegmentDoctorsHelper.Field
                         .GetComponent<SegmentItemIconTextTextIconController>()
                         .UpdateData(
                             StringTable.GetInstance().GetLocalizedText(Constants.Localizations.Vanilla.DOCTORS, new string[0]),
                             department.m_departmentPersistentData.m_doctors.Where(n => n.GetEntity().GetComponent<EmployeeComponent>().m_state.m_shift == Shift.DAY).Count().ToString(),
                             IconManager.ICON_DOCTOR_MANAGEMENT,
                             UISettings.Instance.EXAMINATION_COLOR_SUCCESSFUL);
-                    if (m_staffClinicSegmentDoctors.GetComponentInChildren<HoverTooltipDelay>().ShouldShowToolTip())
+                    if (m_staffClinicSegmentDoctorsHelper.Field.GetComponentInChildren<HoverTooltipDelay>().ShouldShowToolTip())
                     {
                         TooltipManager.Instance
                             .GetTooltipComponent<TooltipHeadingIconSmallTextController>()
@@ -69,14 +58,14 @@ namespace ModAdvancedGameChanges
                                 TextAnchor.UpperLeft);
                     }
 
-                    m_staffClinicSegmentReceptionist
+                    m_staffClinicSegmentReceptionistHelper.Field
                         .GetComponent<SegmentItemIconTextTextIconController>()
                         .UpdateData(
                             StringTable.GetInstance().GetLocalizedText(Constants.Localizations.Vanilla.NURSES, new string[0]),
                             department.m_departmentPersistentData.m_nurses.Where(n => n.GetEntity().GetComponent<EmployeeComponent>().m_state.m_shift == Shift.DAY).Count().ToString(),
                             IconManager.ICON_NURSE_MANAGEMENT,
                             UISettings.Instance.EXAMINATION_COLOR_SUCCESSFUL);
-                    if (m_staffClinicSegmentReceptionist.GetComponentInChildren<HoverTooltipDelay>().ShouldShowToolTip())
+                    if (m_staffClinicSegmentReceptionistHelper.Field.GetComponentInChildren<HoverTooltipDelay>().ShouldShowToolTip())
                     {
                         TooltipManager.Instance
                             .GetTooltipComponent<TooltipHeadingIconSmallTextController>()
@@ -87,14 +76,14 @@ namespace ModAdvancedGameChanges
                                 TextAnchor.UpperLeft);
                     }
 
-                    m_staffClinicSegmentLab
+                    m_staffClinicSegmentLabHelper.Field
                         .GetComponent<SegmentItemIconTextTextIconController>()
                         .UpdateData(
                             StringTable.GetInstance().GetLocalizedText(Constants.Localizations.Vanilla.LAB_TECHNOLOGISTS, new string[0]),
                             department.m_departmentPersistentData.m_labSpecialists.Where(n => n.GetEntity().GetComponent<EmployeeComponent>().m_state.m_shift == Shift.DAY).Count().ToString(),
                             IconManager.ICON_TECHNOLOGIST_MANAGEMENT,
                             UISettings.Instance.EXAMINATION_COLOR_SUCCESSFUL);
-                    if (m_staffClinicSegmentLab.GetComponentInChildren<HoverTooltipDelay>().ShouldShowToolTip())
+                    if (m_staffClinicSegmentLabHelper.Field.GetComponentInChildren<HoverTooltipDelay>().ShouldShowToolTip())
                     {
                         TooltipManager.Instance
                             .GetTooltipComponent<TooltipHeadingIconSmallTextController>()
@@ -105,14 +94,14 @@ namespace ModAdvancedGameChanges
                                 TextAnchor.UpperLeft);
                     }
 
-                    m_staffClinicSegmentJanitor
+                    m_staffClinicSegmentJanitorHelper.Field
                         .GetComponent<SegmentItemIconTextTextIconController>()
                         .UpdateData(
                             StringTable.GetInstance().GetLocalizedText(Constants.Localizations.Vanilla.JANITORS, new string[0]),
                             department.m_departmentPersistentData.m_civilianEmployees.Where(n => n.GetEntity().GetComponent<EmployeeComponent>().m_state.m_shift == Shift.DAY).Count().ToString(),
                             IconManager.ICON_JANITOR_MANAGEMENT,
                             UISettings.Instance.EXAMINATION_COLOR_SUCCESSFUL);
-                    if (m_staffClinicSegmentJanitor.GetComponentInChildren<HoverTooltipDelay>().ShouldShowToolTip())
+                    if (m_staffClinicSegmentJanitorHelper.Field.GetComponentInChildren<HoverTooltipDelay>().ShouldShowToolTip())
                     {
                         TooltipManager.Instance
                             .GetTooltipComponent<TooltipHeadingIconSmallTextController>()
@@ -132,39 +121,29 @@ namespace ModAdvancedGameChanges
                 GameDBDepartment mediacalLaboratoriesDepartment = Database.Instance.GetEntry<GameDBDepartment>(Constants.Departments.Vanilla.MedicalLaboratories);
                 if ((mediacalLaboratoriesDepartment != null) && (department.m_departmentPersistentData.m_departmentType.Entry == mediacalLaboratoriesDepartment))
                 {
-                    // Get the Type of the class
-                    Type type = __instance.GetType();
+                    var m_staffClinicSegmentDoctorsHelper = new PrivateFieldAccessHelper<DepartmentManagementLogisticsHybridController, GameObject>("m_staffClinicSegmentDoctors", __instance);
+                    var m_staffClinicSegmentReceptionistHelper = new PrivateFieldAccessHelper<DepartmentManagementLogisticsHybridController, GameObject>("m_staffClinicSegmentReceptionist", __instance);
+                    var m_staffClinicSegmentLabHelper = new PrivateFieldAccessHelper<DepartmentManagementLogisticsHybridController, GameObject>("m_staffClinicSegmentLab", __instance);
+                    var m_staffClinicSegmentJanitorHelper = new PrivateFieldAccessHelper<DepartmentManagementLogisticsHybridController, GameObject>("m_staffClinicSegmentJanitor", __instance);
 
-                    // Get the private field using BindingFlags
-                    FieldInfo m_staffClinicSegmentDoctorsFieldInfo = type.GetField("m_staffClinicSegmentDoctors", BindingFlags.NonPublic | BindingFlags.Instance);
-                    FieldInfo m_staffClinicSegmentReceptionistFieldInfo = type.GetField("m_staffClinicSegmentReceptionist", BindingFlags.NonPublic | BindingFlags.Instance);
-                    FieldInfo m_staffClinicSegmentLabFieldInfo = type.GetField("m_staffClinicSegmentLab", BindingFlags.NonPublic | BindingFlags.Instance);
-                    FieldInfo m_staffClinicSegmentJanitorFieldInfo = type.GetField("m_staffClinicSegmentJanitor", BindingFlags.NonPublic | BindingFlags.Instance);
+                    m_staffClinicSegmentDoctorsHelper.Field.SetActive(false);
+                    m_staffClinicSegmentReceptionistHelper.Field.SetActive(false);
+                    m_staffClinicSegmentLabHelper.Field.SetActive(true);
+                    m_staffClinicSegmentJanitorHelper.Field.SetActive(true);
 
-                    // get objects
-                    GameObject m_staffClinicSegmentDoctors = (GameObject)m_staffClinicSegmentDoctorsFieldInfo.GetValue(__instance);
-                    GameObject m_staffClinicSegmentReceptionist = (GameObject)m_staffClinicSegmentReceptionistFieldInfo.GetValue(__instance);
-                    GameObject m_staffClinicSegmentLab = (GameObject)m_staffClinicSegmentLabFieldInfo.GetValue(__instance);
-                    GameObject m_staffClinicSegmentJanitor = (GameObject)m_staffClinicSegmentJanitorFieldInfo.GetValue(__instance);
+                    //m_staffClinicSegmentDoctorsHelper.Field.GetComponent<RectTransform>().anchoredPosition = new Vector3(40f, -15f, 0f);
+                    //m_staffClinicSegmentReceptionistHelper.Field.GetComponent<RectTransform>().anchoredPosition = new Vector3(40f, -40f, 0f);
+                    m_staffClinicSegmentLabHelper.Field.GetComponent<RectTransform>().anchoredPosition = new Vector3(40f, -15f, 0f);
+                    m_staffClinicSegmentJanitorHelper.Field.GetComponent<RectTransform>().anchoredPosition = new Vector3(40f, -40f, 0f);
 
-                    m_staffClinicSegmentDoctors.SetActive(false);
-                    m_staffClinicSegmentReceptionist.SetActive(false);
-                    m_staffClinicSegmentLab.SetActive(true);
-                    m_staffClinicSegmentJanitor.SetActive(true);
-
-                    //m_staffClinicSegmentDoctors.GetComponent<RectTransform>().anchoredPosition = new Vector3(40f, -15f, 0f);
-                    //m_staffClinicSegmentReceptionist.GetComponent<RectTransform>().anchoredPosition = new Vector3(40f, -40f, 0f);
-                    m_staffClinicSegmentLab.GetComponent<RectTransform>().anchoredPosition = new Vector3(40f, -15f, 0f);
-                    m_staffClinicSegmentJanitor.GetComponent<RectTransform>().anchoredPosition = new Vector3(40f, -40f, 0f);
-
-                    m_staffClinicSegmentLab
+                    m_staffClinicSegmentLabHelper.Field
                         .GetComponent<SegmentItemIconTextTextIconController>()
                         .UpdateData(
                             StringTable.GetInstance().GetLocalizedText(Constants.Localizations.Vanilla.LAB_BIOCHEMISTRY, new string[0]),
                             department.m_departmentPersistentData.m_labSpecialists.Where(n => n.GetEntity().GetComponent<EmployeeComponent>().m_state.m_shift == Shift.DAY).Count().ToString(),
                             Icons.ICON_BIOCHEMISTRY_MANAGEMENT,
                             UISettings.Instance.EXAMINATION_COLOR_SUCCESSFUL);
-                    if (m_staffClinicSegmentLab.GetComponentInChildren<HoverTooltipDelay>().ShouldShowToolTip())
+                    if (m_staffClinicSegmentLabHelper.Field.GetComponentInChildren<HoverTooltipDelay>().ShouldShowToolTip())
                     {
                         TooltipManager.Instance
                             .GetTooltipComponent<TooltipHeadingIconSmallTextController>()
@@ -175,14 +154,14 @@ namespace ModAdvancedGameChanges
                                 TextAnchor.UpperLeft);
                     }
 
-                    m_staffClinicSegmentJanitor
+                    m_staffClinicSegmentJanitorHelper.Field
                         .GetComponent<SegmentItemIconTextTextIconController>()
                         .UpdateData(
                             StringTable.GetInstance().GetLocalizedText(Constants.Localizations.Vanilla.JANITORS, new string[0]),
                             department.m_departmentPersistentData.m_civilianEmployees.Where(n => n.GetEntity().GetComponent<EmployeeComponent>().m_state.m_shift == Shift.DAY).Count().ToString(),
                             IconManager.ICON_JANITOR_MANAGEMENT,
                             UISettings.Instance.EXAMINATION_COLOR_SUCCESSFUL);
-                    if (m_staffClinicSegmentJanitor.GetComponentInChildren<HoverTooltipDelay>().ShouldShowToolTip())
+                    if (m_staffClinicSegmentJanitorHelper.Field.GetComponentInChildren<HoverTooltipDelay>().ShouldShowToolTip())
                     {
                         TooltipManager.Instance
                             .GetTooltipComponent<TooltipHeadingIconSmallTextController>()
@@ -215,39 +194,29 @@ namespace ModAdvancedGameChanges
                 GameDBDepartment trainingDepartment = Database.Instance.GetEntry<GameDBDepartment>(Constants.Departments.Mod.TrainingDepartment);
                 if ((trainingDepartment != null) && (department.m_departmentPersistentData.m_departmentType.Entry == trainingDepartment))
                 {
-                    // Get the Type of the class
-                    Type type = __instance.GetType();
+                    var m_staffClinicSegmentDoctorsNightHelper = new PrivateFieldAccessHelper<DepartmentManagementLogisticsHybridController, GameObject>("m_staffClinicSegmentDoctorsNight", __instance);
+                    var m_staffClinicSegmentReceptionistNightHelper = new PrivateFieldAccessHelper<DepartmentManagementLogisticsHybridController, GameObject>("m_staffClinicSegmentReceptionistNight", __instance);
+                    var m_staffClinicSegmentLabNightHelper = new PrivateFieldAccessHelper<DepartmentManagementLogisticsHybridController, GameObject>("m_staffClinicSegmentLabNight", __instance);
+                    var m_staffClinicSegmentJanitorNightHelper = new PrivateFieldAccessHelper<DepartmentManagementLogisticsHybridController, GameObject>("m_staffClinicSegmentJanitorNight", __instance);
 
-                    // Get the private field using BindingFlags
-                    FieldInfo m_staffClinicSegmentDoctorsNightFieldInfo = type.GetField("m_staffClinicSegmentDoctorsNight", BindingFlags.NonPublic | BindingFlags.Instance);
-                    FieldInfo m_staffClinicSegmentReceptionistNightFieldInfo = type.GetField("m_staffClinicSegmentReceptionistNight", BindingFlags.NonPublic | BindingFlags.Instance);
-                    FieldInfo m_staffClinicSegmentLabNightFieldInfo = type.GetField("m_staffClinicSegmentLabNight", BindingFlags.NonPublic | BindingFlags.Instance);
-                    FieldInfo m_staffClinicSegmentJanitorNightFieldInfo = type.GetField("m_staffClinicSegmentJanitorNight", BindingFlags.NonPublic | BindingFlags.Instance);
+                    m_staffClinicSegmentDoctorsNightHelper.Field.SetActive(true);
+                    m_staffClinicSegmentReceptionistNightHelper.Field.SetActive(true);
+                    m_staffClinicSegmentLabNightHelper.Field.SetActive(true);
+                    m_staffClinicSegmentJanitorNightHelper.Field.SetActive(true);
 
-                    // get objects
-                    GameObject m_staffClinicSegmentDoctorsNight = (GameObject)m_staffClinicSegmentDoctorsNightFieldInfo.GetValue(__instance);
-                    GameObject m_staffClinicSegmentReceptionistNight = (GameObject)m_staffClinicSegmentReceptionistNightFieldInfo.GetValue(__instance);
-                    GameObject m_staffClinicSegmentLabNight = (GameObject)m_staffClinicSegmentLabNightFieldInfo.GetValue(__instance);
-                    GameObject m_staffClinicSegmentJanitorNight = (GameObject)m_staffClinicSegmentJanitorNightFieldInfo.GetValue(__instance);
+                    m_staffClinicSegmentDoctorsNightHelper.Field.GetComponent<RectTransform>().anchoredPosition = new Vector3(40f, -15f, 0f);
+                    m_staffClinicSegmentReceptionistNightHelper.Field.GetComponent<RectTransform>().anchoredPosition = new Vector3(40f, -40f, 0f);
+                    m_staffClinicSegmentLabNightHelper.Field.GetComponent<RectTransform>().anchoredPosition = new Vector3(40f, -65f, 0f);
+                    m_staffClinicSegmentJanitorNightHelper.Field.GetComponent<RectTransform>().anchoredPosition = new Vector3(40f, -90f, 0f);
 
-                    m_staffClinicSegmentDoctorsNight.SetActive(true);
-                    m_staffClinicSegmentReceptionistNight.SetActive(true);
-                    m_staffClinicSegmentLabNight.SetActive(true);
-                    m_staffClinicSegmentJanitorNight.SetActive(true);
-
-                    m_staffClinicSegmentDoctorsNight.GetComponent<RectTransform>().anchoredPosition = new Vector3(40f, -15f, 0f);
-                    m_staffClinicSegmentReceptionistNight.GetComponent<RectTransform>().anchoredPosition = new Vector3(40f, -40f, 0f);
-                    m_staffClinicSegmentLabNight.GetComponent<RectTransform>().anchoredPosition = new Vector3(40f, -65f, 0f);
-                    m_staffClinicSegmentJanitorNight.GetComponent<RectTransform>().anchoredPosition = new Vector3(40f, -90f, 0f);
-
-                    m_staffClinicSegmentDoctorsNight
+                    m_staffClinicSegmentDoctorsNightHelper.Field
                         .GetComponent<SegmentItemIconTextTextIconController>()
                         .UpdateData(
                             StringTable.GetInstance().GetLocalizedText(Constants.Localizations.Vanilla.DOCTORS, new string[0]),
                             department.m_departmentPersistentData.m_doctors.Where(n => n.GetEntity().GetComponent<EmployeeComponent>().m_state.m_shift == Shift.NIGHT).Count().ToString(),
                             IconManager.ICON_DOCTOR_MANAGEMENT,
                             UISettings.Instance.EXAMINATION_COLOR_SUCCESSFUL);
-                    if (m_staffClinicSegmentDoctorsNight.GetComponentInChildren<HoverTooltipDelay>().ShouldShowToolTip())
+                    if (m_staffClinicSegmentDoctorsNightHelper.Field.GetComponentInChildren<HoverTooltipDelay>().ShouldShowToolTip())
                     {
                         TooltipManager.Instance
                             .GetTooltipComponent<TooltipHeadingIconSmallTextController>()
@@ -258,14 +227,14 @@ namespace ModAdvancedGameChanges
                                 TextAnchor.UpperLeft);
                     }
 
-                    m_staffClinicSegmentReceptionistNight
+                    m_staffClinicSegmentReceptionistNightHelper.Field
                         .GetComponent<SegmentItemIconTextTextIconController>()
                         .UpdateData(
                             StringTable.GetInstance().GetLocalizedText(Constants.Localizations.Vanilla.NURSES, new string[0]),
                             department.m_departmentPersistentData.m_nurses.Where(n => n.GetEntity().GetComponent<EmployeeComponent>().m_state.m_shift == Shift.NIGHT).Count().ToString(),
                             IconManager.ICON_NURSE_MANAGEMENT,
                             UISettings.Instance.EXAMINATION_COLOR_SUCCESSFUL);
-                    if (m_staffClinicSegmentReceptionistNight.GetComponentInChildren<HoverTooltipDelay>().ShouldShowToolTip())
+                    if (m_staffClinicSegmentReceptionistNightHelper.Field.GetComponentInChildren<HoverTooltipDelay>().ShouldShowToolTip())
                     {
                         TooltipManager.Instance
                             .GetTooltipComponent<TooltipHeadingIconSmallTextController>()
@@ -276,14 +245,14 @@ namespace ModAdvancedGameChanges
                                 TextAnchor.UpperLeft);
                     }
 
-                    m_staffClinicSegmentLabNight
+                    m_staffClinicSegmentLabNightHelper.Field
                         .GetComponent<SegmentItemIconTextTextIconController>()
                         .UpdateData(
                             StringTable.GetInstance().GetLocalizedText(Constants.Localizations.Vanilla.LAB_TECHNOLOGISTS, new string[0]),
                             department.m_departmentPersistentData.m_labSpecialists.Where(n => n.GetEntity().GetComponent<EmployeeComponent>().m_state.m_shift == Shift.NIGHT).Count().ToString(),
                             IconManager.ICON_TECHNOLOGIST_MANAGEMENT,
                             UISettings.Instance.EXAMINATION_COLOR_SUCCESSFUL);
-                    if (m_staffClinicSegmentLabNight.GetComponentInChildren<HoverTooltipDelay>().ShouldShowToolTip())
+                    if (m_staffClinicSegmentLabNightHelper.Field.GetComponentInChildren<HoverTooltipDelay>().ShouldShowToolTip())
                     {
                         TooltipManager.Instance
                             .GetTooltipComponent<TooltipHeadingIconSmallTextController>()
@@ -294,14 +263,14 @@ namespace ModAdvancedGameChanges
                                 TextAnchor.UpperLeft);
                     }
 
-                    m_staffClinicSegmentJanitorNight
+                    m_staffClinicSegmentJanitorNightHelper.Field
                         .GetComponent<SegmentItemIconTextTextIconController>()
                         .UpdateData(
                             StringTable.GetInstance().GetLocalizedText(Constants.Localizations.Vanilla.JANITORS, new string[0]),
                             department.m_departmentPersistentData.m_civilianEmployees.Where(n => n.GetEntity().GetComponent<EmployeeComponent>().m_state.m_shift == Shift.NIGHT).Count().ToString(),
                             IconManager.ICON_JANITOR_MANAGEMENT,
                             UISettings.Instance.EXAMINATION_COLOR_SUCCESSFUL);
-                    if (m_staffClinicSegmentJanitorNight.GetComponentInChildren<HoverTooltipDelay>().ShouldShowToolTip())
+                    if (m_staffClinicSegmentJanitorNightHelper.Field.GetComponentInChildren<HoverTooltipDelay>().ShouldShowToolTip())
                     {
                         TooltipManager.Instance
                             .GetTooltipComponent<TooltipHeadingIconSmallTextController>()
@@ -321,39 +290,29 @@ namespace ModAdvancedGameChanges
                 GameDBDepartment mediacalLaboratoriesDepartment = Database.Instance.GetEntry<GameDBDepartment>(Constants.Departments.Vanilla.MedicalLaboratories);
                 if ((mediacalLaboratoriesDepartment != null) && (department.m_departmentPersistentData.m_departmentType.Entry == mediacalLaboratoriesDepartment))
                 {
-                    // Get the Type of the class
-                    Type type = __instance.GetType();
+                    var m_staffClinicSegmentDoctorsNightHelper = new PrivateFieldAccessHelper<DepartmentManagementLogisticsHybridController, GameObject>("m_staffClinicSegmentDoctorsNight", __instance);
+                    var m_staffClinicSegmentReceptionistNightHelper = new PrivateFieldAccessHelper<DepartmentManagementLogisticsHybridController, GameObject>("m_staffClinicSegmentReceptionistNight", __instance);
+                    var m_staffClinicSegmentLabNightHelper = new PrivateFieldAccessHelper<DepartmentManagementLogisticsHybridController, GameObject>("m_staffClinicSegmentLabNight", __instance);
+                    var m_staffClinicSegmentJanitorNightHelper = new PrivateFieldAccessHelper<DepartmentManagementLogisticsHybridController, GameObject>("m_staffClinicSegmentJanitorNight", __instance);
 
-                    // Get the private field using BindingFlags
-                    FieldInfo m_staffClinicSegmentDoctorsNightFieldInfo = type.GetField("m_staffClinicSegmentDoctorsNight", BindingFlags.NonPublic | BindingFlags.Instance);
-                    FieldInfo m_staffClinicSegmentReceptionistNightFieldInfo = type.GetField("m_staffClinicSegmentReceptionistNight", BindingFlags.NonPublic | BindingFlags.Instance);
-                    FieldInfo m_staffClinicSegmentLabNightFieldInfo = type.GetField("m_staffClinicSegmentLabNight", BindingFlags.NonPublic | BindingFlags.Instance);
-                    FieldInfo m_staffClinicSegmentJanitorNightFieldInfo = type.GetField("m_staffClinicSegmentJanitorNight", BindingFlags.NonPublic | BindingFlags.Instance);
+                    m_staffClinicSegmentDoctorsNightHelper.Field.SetActive(false);
+                    m_staffClinicSegmentReceptionistNightHelper.Field.SetActive(false);
+                    m_staffClinicSegmentLabNightHelper.Field.SetActive(true);
+                    m_staffClinicSegmentJanitorNightHelper.Field.SetActive(true);
 
-                    // get objects
-                    GameObject m_staffClinicSegmentDoctorsNight = (GameObject)m_staffClinicSegmentDoctorsNightFieldInfo.GetValue(__instance);
-                    GameObject m_staffClinicSegmentReceptionistNight = (GameObject)m_staffClinicSegmentReceptionistNightFieldInfo.GetValue(__instance);
-                    GameObject m_staffClinicSegmentLabNight = (GameObject)m_staffClinicSegmentLabNightFieldInfo.GetValue(__instance);
-                    GameObject m_staffClinicSegmentJanitorNight = (GameObject)m_staffClinicSegmentJanitorNightFieldInfo.GetValue(__instance);
+                    //m_staffClinicSegmentDoctorsNightHelper.Field.GetComponent<RectTransform>().anchoredPosition = new Vector3(40f, -15f, 0f);
+                    //m_staffClinicSegmentReceptionistNightHelper.Field.GetComponent<RectTransform>().anchoredPosition = new Vector3(40f, -40f, 0f);
+                    m_staffClinicSegmentLabNightHelper.Field.GetComponent<RectTransform>().anchoredPosition = new Vector3(40f, -15f, 0f);
+                    m_staffClinicSegmentJanitorNightHelper.Field.GetComponent<RectTransform>().anchoredPosition = new Vector3(40f, -40f, 0f);
 
-                    m_staffClinicSegmentDoctorsNight.SetActive(false);
-                    m_staffClinicSegmentReceptionistNight.SetActive(false);
-                    m_staffClinicSegmentLabNight.SetActive(true);
-                    m_staffClinicSegmentJanitorNight.SetActive(true);
-
-                    //m_staffClinicSegmentDoctorsNight.GetComponent<RectTransform>().anchoredPosition = new Vector3(40f, -15f, 0f);
-                    //m_staffClinicSegmentReceptionistNight.GetComponent<RectTransform>().anchoredPosition = new Vector3(40f, -40f, 0f);
-                    m_staffClinicSegmentLabNight.GetComponent<RectTransform>().anchoredPosition = new Vector3(40f, -15f, 0f);
-                    m_staffClinicSegmentJanitorNight.GetComponent<RectTransform>().anchoredPosition = new Vector3(40f, -40f, 0f);
-
-                    m_staffClinicSegmentLabNight
+                    m_staffClinicSegmentLabNightHelper.Field
                         .GetComponent<SegmentItemIconTextTextIconController>()
                         .UpdateData(
                             StringTable.GetInstance().GetLocalizedText(Constants.Localizations.Vanilla.LAB_BIOCHEMISTRY, new string[0]),
                             department.m_departmentPersistentData.m_labSpecialists.Where(n => n.GetEntity().GetComponent<EmployeeComponent>().m_state.m_shift == Shift.NIGHT).Count().ToString(),
                             Icons.ICON_BIOCHEMISTRY_MANAGEMENT,
                             UISettings.Instance.EXAMINATION_COLOR_SUCCESSFUL);
-                    if (m_staffClinicSegmentLabNight.GetComponentInChildren<HoverTooltipDelay>().ShouldShowToolTip())
+                    if (m_staffClinicSegmentLabNightHelper.Field.GetComponentInChildren<HoverTooltipDelay>().ShouldShowToolTip())
                     {
                         TooltipManager.Instance
                             .GetTooltipComponent<TooltipHeadingIconSmallTextController>()
@@ -364,14 +323,14 @@ namespace ModAdvancedGameChanges
                                 TextAnchor.UpperLeft);
                     }
 
-                    m_staffClinicSegmentJanitorNight
+                    m_staffClinicSegmentJanitorNightHelper.Field
                         .GetComponent<SegmentItemIconTextTextIconController>()
                         .UpdateData(
                             StringTable.GetInstance().GetLocalizedText(Constants.Localizations.Vanilla.JANITORS, new string[0]),
                             department.m_departmentPersistentData.m_civilianEmployees.Where(n => n.GetEntity().GetComponent<EmployeeComponent>().m_state.m_shift == Shift.NIGHT).Count().ToString(),
                             IconManager.ICON_JANITOR_MANAGEMENT,
                             UISettings.Instance.EXAMINATION_COLOR_SUCCESSFUL);
-                    if (m_staffClinicSegmentJanitorNight.GetComponentInChildren<HoverTooltipDelay>().ShouldShowToolTip())
+                    if (m_staffClinicSegmentJanitorNightHelper.Field.GetComponentInChildren<HoverTooltipDelay>().ShouldShowToolTip())
                     {
                         TooltipManager.Instance
                             .GetTooltipComponent<TooltipHeadingIconSmallTextController>()

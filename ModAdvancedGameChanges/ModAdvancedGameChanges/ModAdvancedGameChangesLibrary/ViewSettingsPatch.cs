@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using HarmonyLib;
 using ModAdvancedGameChanges.Constants;
+using ModAdvancedGameChanges.Helpers;
 
 namespace ModAdvancedGameChanges 
 {
@@ -111,16 +112,9 @@ namespace ModAdvancedGameChanges
 
                 Debug.Log(System.Reflection.MethodBase.GetCurrentMethod(), $"Disabling training department");
 
-                // Get the Type of the class
-                Type type = typeof(Database);
+                var tablesHelper = new PrivateFieldAccessHelper<Database, IDictionary>("tables", Database.Instance);
 
-                // Get the private field using BindingFlags
-                FieldInfo fieldInfo = type.GetField("tables", BindingFlags.NonPublic | BindingFlags.Instance);
-
-                // cast to IDictionary since we can’t use the internal generic type
-                var tables = (IDictionary)fieldInfo.GetValue(Database.Instance);
-
-                foreach (DictionaryEntry tableEntry in tables)
+                foreach (DictionaryEntry tableEntry in tablesHelper.Field)
                 {
                     if (tableEntry.Key == typeof(GameDBDepartment))
                     {

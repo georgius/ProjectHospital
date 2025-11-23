@@ -2,7 +2,6 @@
 using HarmonyLib;
 using Lopital;
 using ModAdvancedGameChanges.Constants;
-using System.Linq;
 
 namespace ModAdvancedGameChanges.Lopital
 {

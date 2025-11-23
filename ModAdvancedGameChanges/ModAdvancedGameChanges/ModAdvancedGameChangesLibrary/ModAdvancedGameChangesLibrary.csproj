@@ -52,6 +52,8 @@
     <Compile Include="Debug.cs" />
     <Compile Include="Constants\Departments.cs" />
     <Compile Include="Constants\Localizations.cs" />
+    <Compile Include="Helpers\MethodAccessHelper.cs" />
+    <Compile Include="Helpers\PrivateFieldAccessHelper.cs" />
     <Compile Include="Lopital\BehaviorDoctorPatch.cs" />
     <Compile Include="Lopital\BehaviorJanitorPatch.cs" />
     <Compile Include="DepartmentManagementLogisticsHybridControllerPatch.cs" />
@@ -85,6 +87,7 @@
     <Compile Include="Constants\Schedules.cs" />
     <Compile Include="Constants\Skills.cs" />
     <Compile Include="Constants\Tags.cs" />
+    <Compile Include="RemoveObjectPatch.cs" />
     <Compile Include="Tweakable.cs" />
     <Compile Include="Constants\Tweakables.cs" />
     <Compile Include="TweakableValidation.cs" />

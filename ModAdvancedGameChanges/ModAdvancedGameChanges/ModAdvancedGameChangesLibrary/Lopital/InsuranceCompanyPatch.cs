@@ -2,8 +2,7 @@
 using HarmonyLib;
 using Lopital;
 using ModAdvancedGameChanges.Constants;
-using System;
-using System.Reflection;
+using ModAdvancedGameChanges.Helpers;
 
 namespace ModAdvancedGameChanges.Lopital
 {
@@ -34,7 +33,7 @@ namespace ModAdvancedGameChanges.Lopital
                 }
 
                 Department emergencyDepartment = MapScriptInterface.Instance.GetDepartmentOfType(Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.Emergency));
-                entity.GetComponent<BehaviorPatient>().m_state.m_fVisitTime = __instance.GetVisitTimeInternal((float)index, (float)patientCounter, smoothDistribution, emergencyDepartment);
+                entity.GetComponent<BehaviorPatient>().m_state.m_fVisitTime = __instance.GetVisitTime((float)index, (float)patientCounter, smoothDistribution, emergencyDepartment);
                 entity.GetComponent<BehaviorPatient>().m_state.m_fromReferral = false;
                 entity.GetComponent<BehaviorPatient>().m_state.m_patientState = PatientState.Spawned;
                 entity.GetComponent<CharacterPersonalInfoComponent>().m_personalInfo.m_insuranceCompany = __instance.m_gameDBInsuranceCompany.Entry;
@@ -46,13 +45,13 @@ namespace ModAdvancedGameChanges.Lopital
 
             return true;
         }
+    }
 
-        private static float GetVisitTimeInternal(this InsuranceCompany instance, float patientIndex, float totalPatients, bool smoothDistribution, Department department)
+    public static class InsuranceCompanyExtensions
+    {
+        public static float GetVisitTime(this InsuranceCompany instance, float patientIndex, float totalPatients, bool smoothDistribution, Department department)
         {
-            Type type = typeof(InsuranceCompany);
-            MethodInfo methodInfo = type.GetMethod("GetVisitTime", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            return (float)methodInfo.Invoke(instance, new object[] { patientIndex, totalPatients, smoothDistribution, department });
+            return MethodAccessHelper.CallMethod<float>(instance, "GetVisitTime", patientIndex, totalPatients, smoothDistribution, department);
         }
     }
 }
