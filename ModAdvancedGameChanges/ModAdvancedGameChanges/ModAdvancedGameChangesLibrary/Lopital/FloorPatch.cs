@@ -3,9 +3,7 @@ using HarmonyLib;
 using Lopital;
 using ModAdvancedGameChanges.Constants;
 using ModAdvancedGameChanges.Helpers;
-using System;
 using System.Collections.Generic;
-using System.Reflection;
 
 namespace ModAdvancedGameChanges
 {
@@ -16,6 +14,12 @@ namespace ModAdvancedGameChanges
         [HarmonyPatch(typeof(Floor), nameof(Floor.UpdateStaticNavigationData))]
         public static bool UpdateStaticNavigationData(Floor __instance)
         {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // Allow original method to run
+                return true;
+            }
+
             List<TileObject> elevators = __instance.m_elevators;
             __instance.m_elevators = MapScriptInterface.Instance.FindAllCenterObjectsWithTag(__instance.m_floorIndex, Tags.Vanilla.Elevator);
 
