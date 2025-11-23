@@ -948,6 +948,43 @@ namespace ModAdvancedGameChanges.Lopital
                 return true;
             }
 
+            if (!__instance.GetComponent<WalkComponent>().IsBusy())
+            {
+                __instance.CheckRoomSatisfactionBonuses();
+
+                if (__instance.m_state.m_waitingForPlayer && __instance.GetControlMode() == PatientControlMode.PlayerControl)
+                {
+                    __instance.m_state.m_playerControlwaitingTime += deltaTime;
+                    __instance.CheckPlayerControlTimes(__instance.m_state.m_playerControlwaitingTime);
+                }
+
+                if (!BehaviorPatientPatch.HandleDiedSentHome(__instance))
+                {
+                    if (!__instance.CheckDoctorValid(false))
+                    {
+                        __instance.UnreserveEmployees(true, false, false);
+                        __instance.GoToWaitingRoom();
+
+                        return false;
+                    }
+
+                    BehaviorDoctor component = __instance.m_state.m_doctor.GetEntity().GetComponent<BehaviorDoctor>();
+                    if (!__instance.GetComponent<WalkComponent>().IsSitting())
+                    {
+                        __instance.GetComponent<AnimModelComponent>().SetDirection(component.GetInteractionOrientation(__instance.m_entity));
+                    }
+
+                    if (__instance.GetControlMode() == PatientControlMode.AI)
+                    {
+                        __instance.UpdateWaitingTimeModifiers();
+
+                        
+
+                        //this.SelectNextProcedure();
+                    }
+                }
+            }
+
             return false;
         }
 
@@ -1467,21 +1504,39 @@ namespace ModAdvancedGameChanges.Lopital
 
                     if (__instance.m_state.m_waitingRoom.GetEntity().IsCharactersTurn(__instance.m_entity))
                     {
-                        Entity doctor = MapScriptInterface.Instance.FindClosestFreeDoctorWithQualification(
-                            null, __instance.m_state.m_department.GetEntity(), __instance.m_state.m_waitingRoom.GetEntity(),
-                            __instance.GetComponent<WalkComponent>().GetCurrentTile(), __instance.GetComponent<WalkComponent>().GetFloorIndex(),
-                            null, __instance.m_entity, Database.Instance.GetEntry<GameDBEmployeeRole>(EmployeeRoles.Vanilla.Diagnostics));
-
-                        if (doctor != null)
+                        // check if assigned doctor is free
+                        if (__instance.m_state.m_doctor != null)
                         {
-                            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, found free doctor {doctor.Name}");
+                            if (__instance.m_state.m_doctor.GetEntity().GetComponent<BehaviorDoctor>().IsFree(__instance.m_entity))
+                            {
+                                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, assigned doctor {__instance.m_state.m_doctor.GetEntity().Name} is free");
 
-                            // doctor is free
-                            // patient is on turn
-                            // assign doctor and start
+                                // doctor is free
+                                // patient is on turn
 
-                            __instance.SetDoctor(doctor);
-                            __instance.GetCalled(doctor);
+                                __instance.GetCalled(__instance.m_state.m_doctor.GetEntity());
+                            }
+                        }
+                        else
+                        {
+                            // try to choose random free doctor
+
+                            Entity doctor = MapScriptInterface.Instance.FindClosestFreeDoctorWithQualification(
+                                null, __instance.m_state.m_department.GetEntity(), __instance.m_state.m_waitingRoom.GetEntity(),
+                                __instance.GetComponent<WalkComponent>().GetCurrentTile(), __instance.GetComponent<WalkComponent>().GetFloorIndex(),
+                                null, __instance.m_entity, Database.Instance.GetEntry<GameDBEmployeeRole>(EmployeeRoles.Vanilla.Diagnostics));
+
+                            if (doctor != null)
+                            {
+                                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, found free doctor {doctor.Name}");
+
+                                // doctor is free
+                                // patient is on turn
+                                // assign doctor and start
+
+                                __instance.SetDoctor(doctor);
+                                __instance.GetCalled(doctor);
+                            }
                         }
                     }
                 }
@@ -1718,6 +1773,11 @@ namespace ModAdvancedGameChanges.Lopital
 
     public static class BehaviorPatientExtensions
     {
+        public static bool CheckDoctorValid(this BehaviorPatient instance, bool leavingHospitalizationPatient)
+        {
+            return MethodAccessHelper.CallMethod<bool>(instance, "CheckDoctorValid", leavingHospitalizationPatient);
+        }
+
         public static void CheckRoomSatisfactionBonuses(this BehaviorPatient instance)
         {
             MethodAccessHelper.CallMethod(instance, "CheckRoomSatisfactionBonuses");
@@ -1841,6 +1901,11 @@ namespace ModAdvancedGameChanges.Lopital
         public static void UpdateStateUsingQueueMachine(this BehaviorPatient instance)
         {
             MethodAccessHelper.CallMethod(instance, "UpdateStateUsingQueueMachine");
+        }
+
+        public static void UpdateWaitingTimeModifiers(this BehaviorPatient instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateWaitingTimeModifiers");
         }
     }
 }
