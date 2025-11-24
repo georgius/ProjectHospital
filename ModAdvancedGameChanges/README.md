@@ -2,7 +2,7 @@
 This repository contains mod files for [Advanced game changes]() mod from [Project Hospital](https://store.steampowered.com/app/868360/Project_Hospital/) game.
 
 - Data - contains mod static data (assets, database files)
-- ModAdvancedGameChanges - contains Visual Studio 2019 solution with sources and dependencies
+- ModAdvancedGameChanges - contains Visual Studio 2026 solution with sources and dependencies
 
 ### Changes in mod
 - completely changed flows of doctors, nurses, lab specialists, janitors, patients and visitors
@@ -16,4 +16,4 @@ This repository contains mod files for [Advanced game changes]() mod from [Proje
 - introduced option *[AGC] Same length for staff shifts (requires restart)* which forces to recalculate shifts lengths to be equal (12 hours each shift)
 
 ### Development
-The **Advanced game changes** mod is developed in Visual Studio 2019 Community, the project needs *.NET Framework 3.5* to be installed. The .NET Framework 3.5 can be added in *Control Pannel* / *Programs and Features* / *Turn Windows features on or off*. When installing Visual Studio 2019 Community, add *NET Framework 3.5 development tools* component.
+The **Advanced game changes** mod is developed in Visual Studio 2026 Community, the project needs *.NET Framework 3.5* to be installed. The .NET Framework 3.5 can be added in *Control Pannel* / *Programs and Features* / *Turn Windows features on or off*. When installing Visual Studio 2019 Community, add *NET Framework 3.5 development tools* component.
