@@ -1,7 +1,7 @@
-﻿using System;
-using System.Reflection;
-using HarmonyLib;
+﻿using HarmonyLib;
 using ModAdvancedGameChanges;
+using System;
+using System.Reflection;
 
 // Note: .NET framework version needs to be set to 3.5
 [assembly: AssemblyTitle("ModAdvancedGameChanges ")] // ENTER MOD TITLE

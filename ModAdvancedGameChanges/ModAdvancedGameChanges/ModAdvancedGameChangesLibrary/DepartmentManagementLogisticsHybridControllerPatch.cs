@@ -1,9 +1,9 @@
 ﻿using HarmonyLib;
 using Lopital;
-using UnityEngine;
-using System.Linq;
 using ModAdvancedGameChanges.Constants;
 using ModAdvancedGameChanges.Helpers;
+using System.Linq;
+using UnityEngine;
 
 namespace ModAdvancedGameChanges
 {
