@@ -731,6 +731,10 @@ namespace ModAdvancedGameChanges.Lopital
                     __instance.UpdateStateGoingToDoctor(deltaTime);
                     break;
                 case PatientState.BeingExamined:
+                    {
+                        __instance.m_state.m_playerControlwaitingTime += deltaTime;
+                        __instance.UpdateStateBeingExamined();
+                    }
                     break;
                 case PatientState.GoingToTreatment:
                     break;
@@ -785,6 +789,58 @@ namespace ModAdvancedGameChanges.Lopital
             if (activePatient)
             {
                 Hospital.Instance.m_currentHospitalStatus.m_hadAnyActiveCharactersThisFrame = true;
+            }
+
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorPatient), "UpdateStateBeingExamined")]
+        public static bool UpdateStateBeingExamined(BehaviorPatient __instance)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            if ((!__instance.GetComponent<ProcedureComponent>().IsBusy())
+                && (!__instance.GetComponent<WalkComponent>().IsBusy()))
+            {
+                if (!BehaviorPatientPatch.HandleDiedSentHome(__instance))
+                {
+                    if (__instance.GetControlMode() == PatientControlMode.AI)
+                    {
+
+                    }
+                    else if (!__instance.m_state.m_waitingForPlayer)
+                    {
+                        if (__instance.GetComponent<ProcedureComponent>().m_state.m_lastProcedureID != null)
+                        {
+                            if (__instance.m_state.m_medicalCondition.m_diagnosedMedicalCondition == null)
+                            {
+                                NotificationManager.GetInstance().AddMessage(
+                                    __instance.m_entity, Notifications.Vanilla.NOTIF_WAITING_FOR_PLAYER_DIAGNOSIS, 
+                                    StringTable.GetInstance().GetLocalizedText(__instance.GetComponent<ProcedureComponent>().m_state.m_lastProcedureID, new string[0]), 
+                                    string.Empty, string.Empty, 0, 0, 0, 0, null, null);
+                            }
+                            else
+                            {
+                                NotificationManager.GetInstance().AddMessage(
+                                    __instance.m_entity, Notifications.Vanilla.NOTIF_WAITING_FOR_PLAYER_TREATMENT, 
+                                    StringTable.GetInstance().GetLocalizedText(__instance.GetComponent<ProcedureComponent>().m_state.m_lastProcedureID, new string[0]), 
+                                    string.Empty, string.Empty, 0, 0, 0, 0, null, null);
+                            }
+                        }
+
+                        __instance.m_entity.GetComponent<SpeechComponent>().SetBubble(Speeches.Vanilla.Waiting, -1f);
+                        __instance.m_state.m_waitingForPlayer = true;
+                    }
+                    else if (__instance.m_state.m_waitingForPlayer && __instance.GetControlMode() == PatientControlMode.PlayerControl)
+                    {
+                        __instance.CheckPlayerControlTimes(__instance.m_state.m_playerControlwaitingTime);
+                    }
+                }
             }
 
             return false;
@@ -951,12 +1007,6 @@ namespace ModAdvancedGameChanges.Lopital
             {
                 __instance.CheckRoomSatisfactionBonuses();
 
-                if (__instance.m_state.m_waitingForPlayer && __instance.GetControlMode() == PatientControlMode.PlayerControl)
-                {
-                    __instance.m_state.m_playerControlwaitingTime += deltaTime;
-                    __instance.CheckPlayerControlTimes(__instance.m_state.m_playerControlwaitingTime);
-                }
-
                 if (!BehaviorPatientPatch.HandleDiedSentHome(__instance))
                 {
                     if (!__instance.CheckDoctorValid(false))
@@ -973,14 +1023,9 @@ namespace ModAdvancedGameChanges.Lopital
                         __instance.GetComponent<AnimModelComponent>().SetDirection(component.GetInteractionOrientation(__instance.m_entity));
                     }
 
-                    if (__instance.GetControlMode() == PatientControlMode.AI)
-                    {
-                        __instance.UpdateWaitingTimeModifiers();
-
-                        
-
-                        //this.SelectNextProcedure();
-                    }
+                    __instance.UpdateWaitingTimeModifiers();
+                    __instance.SwitchState(PatientState.BeingExamined);
+                    __instance.m_state.m_waitingForPlayer = false;
                 }
             }
 
@@ -1825,6 +1870,11 @@ namespace ModAdvancedGameChanges.Lopital
         public static void UpdateStateBeingCalled(this BehaviorPatient instance)
         {
             MethodAccessHelper.CallMethod(instance, "UpdateStateBeingCalled");
+        }
+
+        public static void UpdateStateBeingExamined(this BehaviorPatient instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateBeingExamined");
         }
 
         public static void UpdateStateExaminedAtReception(this BehaviorPatient instance)

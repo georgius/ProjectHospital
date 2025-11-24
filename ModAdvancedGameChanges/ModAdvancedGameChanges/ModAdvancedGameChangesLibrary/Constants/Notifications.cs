@@ -21,7 +21,10 @@
 
             public const string NOTIF_TRAINING_FULL = "NOTIF_TRAINING_FULL";
             public const string NOTIF_TRAINING_FINISHED = "NOTIF_TRAINING_FINISHED";
-            
+
+            public const string NOTIF_WAITING_FOR_PLAYER_DIAGNOSIS = "NOTIF_WAITING_FOR_PLAYER_DIAGNOSIS";
+            public const string NOTIF_WAITING_FOR_PLAYER_TREATMENT = "NOTIF_WAITING_FOR_PLAYER_TREATMENT";
+
             public const string NOTIF_WRONG_DIAGNOSIS_RETURNS = "NOTIF_WRONG_DIAGNOSIS_RETURNS";
         }
     }
