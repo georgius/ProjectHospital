@@ -351,10 +351,6 @@ namespace ModAdvancedGameChanges.Lopital
                 PlayerStatistics.Instance.IncrementStatistic(Statistics.Vanilla.Treated, 1);
             }
 
-            __instance.m_state.m_doctor = null;
-            __instance.m_state.m_nurse = null;
-            __instance.m_state.m_labSpecialist = null;
-
             InsuranceManager.Instance.UpdateInsuranceCompanyRequirementsAndObjectives(InsuranceCheckMode.IMMEDIATE);
 
             __instance.m_state.m_bookmarked = false;
@@ -461,53 +457,6 @@ namespace ModAdvancedGameChanges.Lopital
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(BehaviorPatient), nameof(BehaviorPatient.TryToStartScheduledExamination))]
-        public static bool TryToStartScheduledExaminationPrefix(BehaviorPatient __instance)
-        {
-            if (!ViewSettingsPatch.m_enabled)
-            {
-                // Allow original method to run
-                return true;
-            }
-
-            ProcedureComponent procedureComponent = __instance.GetComponent<ProcedureComponent>();
-            GameDBExamination examination = procedureComponent?.m_state.m_procedureQueue.m_plannedExaminationStates.FirstOrDefault()?.m_examination.Entry;
-
-            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, try to start scheduled examination {examination?.DatabaseID.ToString() ?? "NULL"}");
-
-            if (examination != null)
-            {
-                ProcedureSceneAvailability procedureAvailabilty = procedureComponent.GetProcedureAvailabilty(
-                    examination.Procedure, __instance.m_entity, __instance.m_state.m_doctor.GetEntity(), null, null, AccessRights.PATIENT_PROCEDURE, null, EquipmentListRules.ONLY_FREE);
-
-                if (procedureAvailabilty == ProcedureSceneAvailability.AVAILABLE)
-                {
-                    __instance.m_entity.GetComponent<SpeechComponent>().HideBubble();
-
-                    procedureComponent.StartExamination(examination, __instance.m_entity, __instance.m_state.m_doctor.GetEntity(), null, null, AccessRights.PATIENT_PROCEDURE, EquipmentListRules.ONLY_FREE);
-
-                    __instance.m_state.m_doctor.GetEntity().GetComponent<EmployeeComponent>().SetReserved(examination.DatabaseID.ToString(), __instance.m_entity);
-                    __instance.m_state.m_doctor.GetEntity().GetComponent<BehaviorDoctor>().CurrentPatient = __instance.m_entity;
-
-                    if (!__instance.GetComponent<WalkComponent>().IsSitting())
-                    {
-                        __instance.GetComponent<AnimModelComponent>().PlayAnimation(Animations.Vanilla.StandIdle, true);
-                    }
-
-                    procedureComponent.m_state.m_procedureQueue.m_plannedExaminationStates.RemoveAt(0);
-
-                    __instance.m_state.m_waitingForPlayer = false;
-                }
-                else if ((procedureAvailabilty & ProcedureSceneAvailability.DOCTOR_CAN_NOT_PRESCRIBE) > (ProcedureSceneAvailability)0)
-                {
-                    procedureComponent.m_state.m_procedureQueue.m_plannedExaminationStates.RemoveAt(0);
-                }
-            }
-
-            return false;
-        }
-
-        [HarmonyPrefix]
         [HarmonyPatch(typeof(BehaviorPatient), "TryToSit")]
         public static bool TryToSitPrefix(TileObject chairObject, bool pharmacyChair, BehaviorPatient __instance, ref bool __result)
         {
@@ -589,6 +538,94 @@ namespace ModAdvancedGameChanges.Lopital
                         }
                     }
                 }
+            }
+
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorPatient), nameof(BehaviorPatient.TryToStartScheduledExamination))]
+        public static bool TryToStartScheduledExaminationPrefix(BehaviorPatient __instance)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            ProcedureComponent procedureComponent = __instance.GetComponent<ProcedureComponent>();
+            GameDBExamination examination = procedureComponent?.m_state.m_procedureQueue.m_plannedExaminationStates.FirstOrDefault()?.m_examination.Entry;
+
+            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, try to start scheduled examination {examination?.DatabaseID.ToString() ?? "NULL"}");
+
+            if (examination != null)
+            {
+                ProcedureSceneAvailability procedureAvailabilty = procedureComponent.GetProcedureAvailabilty(
+                    examination.Procedure, __instance.m_entity, __instance.m_state.m_doctor.GetEntity(), null, null, AccessRights.PATIENT_PROCEDURE, null, EquipmentListRules.ONLY_FREE);
+
+                if (procedureAvailabilty == ProcedureSceneAvailability.AVAILABLE)
+                {
+                    __instance.m_entity.GetComponent<SpeechComponent>().HideBubble();
+
+                    procedureComponent.StartExamination(examination, __instance.m_entity, __instance.m_state.m_doctor.GetEntity(), null, null, AccessRights.PATIENT_PROCEDURE, EquipmentListRules.ONLY_FREE);
+
+                    __instance.m_state.m_doctor.GetEntity().GetComponent<EmployeeComponent>().SetReserved(examination.DatabaseID.ToString(), __instance.m_entity);
+                    __instance.m_state.m_doctor.GetEntity().GetComponent<BehaviorDoctor>().CurrentPatient = __instance.m_entity;
+
+                    if (!__instance.GetComponent<WalkComponent>().IsSitting())
+                    {
+                        __instance.GetComponent<AnimModelComponent>().PlayAnimation(Animations.Vanilla.StandIdle, true);
+                    }
+
+                    procedureComponent.m_state.m_procedureQueue.m_plannedExaminationStates.RemoveAt(0);
+
+                    __instance.m_state.m_waitingForPlayer = false;
+                }
+                else if ((procedureAvailabilty & ProcedureSceneAvailability.DOCTOR_CAN_NOT_PRESCRIBE) > (ProcedureSceneAvailability)0)
+                {
+                    procedureComponent.m_state.m_procedureQueue.m_plannedExaminationStates.RemoveAt(0);
+                }
+            }
+
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorPatient), nameof(BehaviorPatient.TryToScheduleExamination))]
+        public static bool TryToScheduleExamination(bool automaticallyChangeDepartment, BehaviorPatient __instance, ref bool __result)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, try to schedule examination, change department {automaticallyChangeDepartment}");
+
+            __result = false;
+
+            Entity doctor = __instance.m_state.m_doctor.GetEntity();
+            ProcedureComponent procedureComponent = __instance.GetComponent<ProcedureComponent>();
+            GameDBExamination examination = procedureComponent.SelectExaminationForMedicalCondition(__instance.m_state.m_medicalCondition, __instance.m_state.m_department.GetEntity(), null, true);
+
+            if (examination != null)
+            {
+                if (examination.Procedure.RequiredDoctorQualifications != null)
+                {
+                    Room examinationRoom = __instance.GetExaminationRoom(examination);
+                    ProcedureSceneAvailability procedureAvailabilty = procedureComponent.GetProcedureAvailabilty(
+                        examination.Procedure, __instance.m_entity, doctor, null, null, AccessRights.PATIENT_PROCEDURE, examinationRoom, EquipmentListRules.ANY);
+
+                    if (ProcedureScene.IsProcedureAvailable(procedureAvailabilty))
+                    {
+                        procedureComponent.PlanExamination(examination);
+
+                        __result = true;
+                        return false;
+                    }
+                }
+                
+                // not implemented yet
             }
 
             return false;
@@ -855,16 +892,28 @@ namespace ModAdvancedGameChanges.Lopital
             ProcedureComponent procedureComponent = __instance.GetComponent<ProcedureComponent>();
             WalkComponent walkComponent = __instance.GetComponent<WalkComponent>();
 
-            if ((!procedureComponent.IsBusy())
-                && (!walkComponent.IsBusy()))
+            if ((!procedureComponent.IsBusy()) && (!walkComponent.IsBusy()))
             {
                 if (!BehaviorPatientPatch.HandleDiedSentHome(__instance))
                 {
                     if (__instance.GetControlMode() == PatientControlMode.AI)
                     {
+                        // treatments ???
+
                         if (procedureComponent.m_state.m_procedureQueue.m_plannedExaminationStates.Count > 0)
                         {
                             __instance.TryToStartScheduledExamination();
+                        }
+                        else if (__instance.m_state.m_medicalCondition.m_diagnosedMedicalCondition != null)
+                        {
+                            // patient is diagnosed
+                        }
+                        else
+                        {
+                            // no planned treatments, no planned examinations, no diagnose
+                            // try to schedule some examination
+
+                            __instance.TryToScheduleExamination();
                         }
                     }
                     else if (!__instance.m_state.m_waitingForPlayer)
@@ -1901,6 +1950,11 @@ namespace ModAdvancedGameChanges.Lopital
         public static void GoToEmergency(this BehaviorPatient instance)
         {
             MethodAccessHelper.CallMethod(instance, "GoToEmergency");
+        }
+
+        public static Room GetExaminationRoom(this BehaviorPatient instance, GameDBExamination examination)
+        {
+            return MethodAccessHelper.CallMethod<Room>(instance, "GetExaminationRoom", examination);
         }
 
         public static void LeaveAfterClosingHours(this BehaviorPatient instance)
