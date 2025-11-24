@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using UnityEngine;
+using static UnityEngine.Random;
 
 namespace ModAdvancedGameChanges.Lopital
 {
@@ -460,6 +461,53 @@ namespace ModAdvancedGameChanges.Lopital
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorPatient), nameof(BehaviorPatient.TryToStartScheduledExamination))]
+        public static bool TryToStartScheduledExaminationPrefix(BehaviorPatient __instance)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            ProcedureComponent procedureComponent = __instance.GetComponent<ProcedureComponent>();
+            GameDBExamination examination = procedureComponent?.m_state.m_procedureQueue.m_plannedExaminationStates.FirstOrDefault()?.m_examination.Entry;
+
+            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, try to start scheduled examination {examination?.DatabaseID.ToString() ?? "NULL"}");
+
+            if (examination != null)
+            {
+                ProcedureSceneAvailability procedureAvailabilty = procedureComponent.GetProcedureAvailabilty(
+                    examination.Procedure, __instance.m_entity, __instance.m_state.m_doctor.GetEntity(), null, null, AccessRights.PATIENT_PROCEDURE, null, EquipmentListRules.ONLY_FREE);
+
+                if (procedureAvailabilty == ProcedureSceneAvailability.AVAILABLE)
+                {
+                    __instance.m_entity.GetComponent<SpeechComponent>().HideBubble();
+
+                    procedureComponent.StartExamination(examination, __instance.m_entity, __instance.m_state.m_doctor.GetEntity(), null, null, AccessRights.PATIENT_PROCEDURE, EquipmentListRules.ONLY_FREE);
+
+                    __instance.m_state.m_doctor.GetEntity().GetComponent<EmployeeComponent>().SetReserved(examination.DatabaseID.ToString(), __instance.m_entity);
+                    __instance.m_state.m_doctor.GetEntity().GetComponent<BehaviorDoctor>().CurrentPatient = __instance.m_entity;
+
+                    if (!__instance.GetComponent<WalkComponent>().IsSitting())
+                    {
+                        __instance.GetComponent<AnimModelComponent>().PlayAnimation(Animations.Vanilla.StandIdle, true);
+                    }
+
+                    procedureComponent.m_state.m_procedureQueue.m_plannedExaminationStates.RemoveAt(0);
+
+                    __instance.m_state.m_waitingForPlayer = false;
+                }
+                else if ((procedureAvailabilty & ProcedureSceneAvailability.DOCTOR_CAN_NOT_PRESCRIBE) > (ProcedureSceneAvailability)0)
+                {
+                    procedureComponent.m_state.m_procedureQueue.m_plannedExaminationStates.RemoveAt(0);
+                }
+            }
+
+            return false;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(BehaviorPatient), "TryToSit")]
         public static bool TryToSitPrefix(TileObject chairObject, bool pharmacyChair, BehaviorPatient __instance, ref bool __result)
         {
@@ -804,14 +852,20 @@ namespace ModAdvancedGameChanges.Lopital
                 return true;
             }
 
-            if ((!__instance.GetComponent<ProcedureComponent>().IsBusy())
-                && (!__instance.GetComponent<WalkComponent>().IsBusy()))
+            ProcedureComponent procedureComponent = __instance.GetComponent<ProcedureComponent>();
+            WalkComponent walkComponent = __instance.GetComponent<WalkComponent>();
+
+            if ((!procedureComponent.IsBusy())
+                && (!walkComponent.IsBusy()))
             {
                 if (!BehaviorPatientPatch.HandleDiedSentHome(__instance))
                 {
                     if (__instance.GetControlMode() == PatientControlMode.AI)
                     {
-
+                        if (procedureComponent.m_state.m_procedureQueue.m_plannedExaminationStates.Count > 0)
+                        {
+                            __instance.TryToStartScheduledExamination();
+                        }
                     }
                     else if (!__instance.m_state.m_waitingForPlayer)
                     {
