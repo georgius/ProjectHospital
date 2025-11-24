@@ -290,7 +290,6 @@ namespace ModAdvancedGameChanges.Lopital
             }
 
             __instance.FreeWaitingRoom();
-            __instance.UnreserveEmployees(true, true, true);
 
             if (__instance.m_state.m_department != null)
             {
@@ -359,7 +358,8 @@ namespace ModAdvancedGameChanges.Lopital
 
             __instance.m_state.m_bookmarked = false;
             BookmarkedCharacterManager.Instance.RemoveCharacter(__instance.m_entity);
-            
+
+            __instance.UnreserveEmployees(true, true, true, true, true, true);
             __instance.SwitchState(PatientState.Leaving);
 
             return false;
@@ -859,7 +859,7 @@ namespace ModAdvancedGameChanges.Lopital
             if (!__instance.GetComponent<ProcedureComponent>().IsBusy())
             {
                 __instance.EnsureDepartment();
-                __instance.UnreserveEmployees(false, true, false);
+                __instance.UnreserveEmployees(false, true, false, false, true, false);
 
                 __instance.m_state.m_nurse = null;
                 __instance.m_state.m_finishedAtReception = true;
@@ -1011,7 +1011,7 @@ namespace ModAdvancedGameChanges.Lopital
                 {
                     if (!__instance.CheckDoctorValid(false))
                     {
-                        __instance.UnreserveEmployees(true, false, false);
+                        __instance.UnreserveEmployees(true, false, false, true, false, false);
                         __instance.GoToWaitingRoom();
 
                         return false;
@@ -1087,9 +1087,7 @@ namespace ModAdvancedGameChanges.Lopital
                     // nurse is doing something else
                     // release nurse and return to queue
 
-                    __instance.UnreserveEmployees(false, true, false);
-                    __instance.m_state.m_nurse = null;
-
+                    __instance.UnreserveEmployees(false, true, false, false, true, false);
                     __instance.SwitchState(PatientState.Idle);
                 }
             }
@@ -1744,7 +1742,7 @@ namespace ModAdvancedGameChanges.Lopital
             return false;
         }
 
-        public static void UnreserveEmployees(this BehaviorPatient instance, bool doctor, bool nurse, bool labSpecialist)
+        public static void UnreserveEmployees(this BehaviorPatient instance, bool doctor, bool nurse, bool labSpecialist, bool clearDoctor, bool clearNurse, bool clearLabSpecialist)
         {
             if (doctor)
             {
@@ -1799,6 +1797,10 @@ namespace ModAdvancedGameChanges.Lopital
                     instance.m_state.m_labSpecialist.GetEntity().GetComponent<EmployeeComponent>().m_state.m_reservedByPatient = null;
                 }
             }
+
+            instance.m_state.m_doctor = (clearDoctor) ? null : instance.m_state.m_doctor;
+            instance.m_state.m_nurse = (clearNurse) ? null : instance.m_state.m_nurse;
+            instance.m_state.m_labSpecialist = (clearLabSpecialist) ? null : instance.m_state.m_labSpecialist;
         }
 
         private static void UpdateWaitingTime(BehaviorPatient instance, float deltaTime)
