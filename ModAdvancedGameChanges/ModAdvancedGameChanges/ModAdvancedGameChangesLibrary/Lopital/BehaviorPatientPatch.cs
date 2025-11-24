@@ -47,8 +47,27 @@ namespace ModAdvancedGameChanges.Lopital
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorPatient), nameof(BehaviorPatient.Diagnose))]
+        public static bool Diagnose(int thresholdOfCertainty, bool planCriticalTreatmentsAndPreemptiveExaminations, BehaviorPatient __instance, ref DiagnosisResult __result)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            Entity doctor = __instance.m_state.m_doctor.GetEntity();
+            BehaviorDoctor behaviorDoctor = doctor.GetComponent<BehaviorDoctor>();
+            ProcedureQueue procedureQueue = __instance.GetComponent<ProcedureComponent>().m_state.m_procedureQueue;
+
+            !!!
+
+            return false;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(BehaviorPatient), "EnsureWaitingRoom")]
-        private static bool EnsureWaitingRoomPrefix(BehaviorPatient __instance, ref bool __result)
+        public static bool EnsureWaitingRoomPrefix(BehaviorPatient __instance, ref bool __result)
         {
             if (!ViewSettingsPatch.m_enabled)
             {
@@ -84,6 +103,33 @@ namespace ModAdvancedGameChanges.Lopital
                 __result = true;
                 return false;
             }
+
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorPatient), nameof(BehaviorPatient.FreeWaitingRoom))]
+        public static bool FreeWaitingRoomPrefix(BehaviorPatient __instance)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            if (__instance.m_state.m_waitingRoom != null)
+            {
+                __instance.m_state.m_waitingRoom.GetEntity().DequeueCharacter(__instance.m_entity);
+                __instance.m_state.m_waitingRoom = null;
+            }
+
+            if (__instance.m_state.m_reservedWaitingRoomTile != Vector2i.ZERO_VECTOR)
+            {
+                MapScriptInterface.Instance.FreeTile(__instance.m_state.m_reservedWaitingRoomTile, __instance.GetComponent<WalkComponent>().GetFloorIndex());
+                __instance.m_state.m_reservedWaitingRoomTile = Vector2i.ZERO_VECTOR;
+            }
+
+            __instance.m_state.m_chair = null;
 
             return false;
         }
@@ -236,33 +282,6 @@ namespace ModAdvancedGameChanges.Lopital
                     __instance.FreeWaitingRoom();
                 }
             }
-
-            return false;
-        }
-
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(BehaviorPatient), nameof(BehaviorPatient.FreeWaitingRoom))]
-        public static bool FreeWaitingRoomPrefix(BehaviorPatient __instance)
-        {
-            if (!ViewSettingsPatch.m_enabled)
-            {
-                // Allow original method to run
-                return true;
-            }
-
-            if (__instance.m_state.m_waitingRoom != null)
-            {
-                __instance.m_state.m_waitingRoom.GetEntity().DequeueCharacter(__instance.m_entity);
-                __instance.m_state.m_waitingRoom = null;
-            }
-
-            if (__instance.m_state.m_reservedWaitingRoomTile != Vector2i.ZERO_VECTOR)
-            {
-                MapScriptInterface.Instance.FreeTile(__instance.m_state.m_reservedWaitingRoomTile, __instance.GetComponent<WalkComponent>().GetFloorIndex());
-                __instance.m_state.m_reservedWaitingRoomTile = Vector2i.ZERO_VECTOR;
-            }
-
-            __instance.m_state.m_chair = null;
 
             return false;
         }
@@ -898,15 +917,46 @@ namespace ModAdvancedGameChanges.Lopital
                 {
                     if (__instance.GetControlMode() == PatientControlMode.AI)
                     {
-                        // treatments ???
+                        // check if we have diagnose or patient can be diagnosed
+                        if ((__instance.m_state.m_medicalCondition.m_diagnosedMedicalCondition == null) 
+                            && __instance.Diagnose(__instance.m_state.m_department.GetEntity().m_departmentPersistentData.m_thresholdOfCertainty, true) == DiagnosisResult.COMPLICATED)
+                        {
+                            return false;
+                        }
 
-                        if (procedureComponent.m_state.m_procedureQueue.m_plannedExaminationStates.Count > 0)
+                        if (procedureComponent.m_state.m_procedureQueue.m_plannedTreatmentStates.Count > 0)
+                        {
+                            __instance.TryToStartScheduledTreatment(EquipmentListRules.ONLY_FREE, 0);
+                        }
+                        else if (procedureComponent.m_state.m_procedureQueue.m_plannedExaminationStates.Count > 0)
                         {
                             __instance.TryToStartScheduledExamination();
                         }
                         else if (__instance.m_state.m_medicalCondition.m_diagnosedMedicalCondition != null)
                         {
                             // patient is diagnosed
+
+                            if (procedureComponent.m_state.m_procedureQueue.m_plannedTreatmentStates.Count == 0)
+                            {
+                                if (__instance.HasBeenCorrectlyTreated())
+                                {
+                                    if (!__instance.m_state.m_treatedCounted)
+                                    {
+                                        __instance.CountTreatedPatient();
+                                    }
+
+                                    InsuranceManager.Instance.UpdateInsuranceCompanyRequirementsAndObjectives(InsuranceCheckMode.IMMEDIATE);
+                                    __instance.Leave(true, false, false);
+                                }
+                                else
+                                {
+                                    __instance.TryToScheduleTreatments(false);
+                                }
+                            }
+                            else
+                            {
+                                __instance.TryToStartScheduledTreatment(EquipmentListRules.ONLY_FREE, 0);
+                            }
                         }
                         else
                         {
