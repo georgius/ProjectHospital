@@ -48,7 +48,7 @@ namespace ModAdvancedGameChanges.Lopital
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(BehaviorPatient), nameof(BehaviorPatient.Diagnose))]
-        public static bool Diagnose(int thresholdOfCertainty, bool planCriticalTreatmentsAndPreemptiveExaminations, BehaviorPatient __instance, ref DiagnosisResult __result)
+        public static bool DiagnosePrefix(int thresholdOfCertainty, bool planCriticalTreatmentsAndPreemptiveExaminations, BehaviorPatient __instance, ref DiagnosisResult __result)
         {
             if (!ViewSettingsPatch.m_enabled)
             {
@@ -60,7 +60,7 @@ namespace ModAdvancedGameChanges.Lopital
             BehaviorDoctor behaviorDoctor = doctor.GetComponent<BehaviorDoctor>();
             ProcedureQueue procedureQueue = __instance.GetComponent<ProcedureComponent>().m_state.m_procedureQueue;
 
-            !!!
+            //!!!
 
             return false;
         }
@@ -98,7 +98,6 @@ namespace ModAdvancedGameChanges.Lopital
             if (room != null)
             {
                 __instance.m_state.m_waitingRoom = room;
-                //room.EnqueueCharacter(__instance.m_entity, true);
 
                 __result = true;
                 return false;
@@ -205,7 +204,7 @@ namespace ModAdvancedGameChanges.Lopital
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(BehaviorPatient), "GoToOffice")]
-        public static bool GoToOffice(BehaviorPatient __instance)
+        public static bool GoToOfficePrefix(BehaviorPatient __instance)
         {
             if (!ViewSettingsPatch.m_enabled)
             {
@@ -611,7 +610,7 @@ namespace ModAdvancedGameChanges.Lopital
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(BehaviorPatient), nameof(BehaviorPatient.TryToScheduleExamination))]
-        public static bool TryToScheduleExamination(bool automaticallyChangeDepartment, BehaviorPatient __instance, ref bool __result)
+        public static bool TryToScheduleExaminationPrefix(bool automaticallyChangeDepartment, BehaviorPatient __instance, ref bool __result)
         {
             if (!ViewSettingsPatch.m_enabled)
             {
