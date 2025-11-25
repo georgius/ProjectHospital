@@ -56,16 +56,27 @@ namespace ModAdvancedGameChanges.Lopital
                 return true;
             }
 
+            __result = DiagnosisResult.NONE;
+
             Entity doctor = __instance.m_state.m_doctor.GetEntity();
             BehaviorDoctor behaviorDoctor = doctor.GetComponent<BehaviorDoctor>();
-            ProcedureQueue procedureQueue = __instance.GetComponent<ProcedureComponent>().m_state.m_procedureQueue;
 
-            //doctor.GetComponent<EmployeeComponent>().GetSkillLevel(Skills.Vanilla.SKILL_DOC_QUALIF_DIAGNOSIS);
-            //!!!
+            ProcedureComponent procedureComponent = __instance.GetComponent<ProcedureComponent>();
+            ProcedureQueue procedureQueue = procedureComponent.m_state.m_procedureQueue;
+            int minimumExaminations = 3 + (int)doctor.GetComponent<EmployeeComponent>().GetSkillLevel(Skills.Vanilla.SKILL_DOC_QUALIF_DIAGNOSIS);
 
-            NotificationManager.GetInstance().AddMessage(__instance.m_entity, Notifications.Vanilla.NOTIF_COMPLICATED_DIAGNOSIS, string.Empty, string.Empty, string.Empty, 0, 0, 0, 0, null, null);
-            __instance.SwitchState(PatientState.BlockedByComplicatedDiagnosis);
-            __result = DiagnosisResult.COMPLICATED;
+            if ((__instance.m_state.m_medicalCondition.GetNumberOfHiddenSymptoms() > 0)
+                && (procedureQueue.m_finishedExaminations.Count >= minimumExaminations)
+                && (__instance.m_state.m_medicalCondition.m_possibleDiagnoses.Count > 1)
+                && (behaviorDoctor.m_state.m_nextDiagnosticApproach == DiagnosticApproach.AMBIGUOUS)
+                && (__instance.m_state.m_medicalCondition.m_diagnosedMedicalCondition == null)
+                && (procedureQueue.m_labProcedures.Count == 0)
+                && (procedureComponent.GetAvailableExaminationCount() > 1)
+                && (procedureQueue.m_plannedExaminationStates.Count == 0))
+            {
+                __result = DiagnosisResult.COMPLICATED;
+                return false;
+            }
 
             return false;
         }
@@ -931,6 +942,9 @@ namespace ModAdvancedGameChanges.Lopital
                         else if ((__instance.m_state.m_medicalCondition.m_diagnosedMedicalCondition == null)
                             && __instance.Diagnose(__instance.m_state.m_department.GetEntity().m_departmentPersistentData.m_thresholdOfCertainty, true) == DiagnosisResult.COMPLICATED)
                         {
+                            NotificationManager.GetInstance().AddMessage(__instance.m_entity, Notifications.Vanilla.NOTIF_COMPLICATED_DIAGNOSIS, string.Empty, string.Empty, string.Empty, 0, 0, 0, 0, null, null);
+                            __instance.SwitchState(PatientState.BlockedByComplicatedDiagnosis);
+
                             return false;
                         }
                         else if (__instance.m_state.m_medicalCondition.m_diagnosedMedicalCondition != null)
