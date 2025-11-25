@@ -34,9 +34,17 @@ namespace ModAdvancedGameChanges.Lopital
                 return false;
             }
 
+            var possibleExaminations = medicalCondition.m_possibleDiagnoses
+                .Where(pd => pd.m_diagnosis.Entry.DepartmentRef.Entry == department.GetDepartmentType())
+                .SelectMany(pd => pd.m_diagnosis.Entry.Examinations.Select(ex => ex.Entry));
+
+            possibleExaminations = possibleExaminations.Any() ? possibleExaminations : __instance.m_examinationAvailability.m_keys;
+
             List<GameDBExamination> examinations = byPriority ? __instance.m_examinationAvailability.m_keys.OrderByDescending(e => e.Procedure.Priority).ToList() : __instance.m_examinationAvailability.m_keys;
 
             __result = examinations
+                // filter only possible examinations
+                .Where(e => possibleExaminations.Contains(e))
                 // check alternative examinations
                 // like USG and FAST
                 .Where(e => ((e.AlternativeExaminationRef == null)
