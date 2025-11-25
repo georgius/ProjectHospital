@@ -690,8 +690,6 @@ namespace ModAdvancedGameChanges.Lopital
 
             __instance.m_state.m_timeInState += deltaTime;
 
-            //Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, state {__instance.m_state.m_patientState}, visit time {__instance.m_state.m_fVisitTime.ToString(CultureInfo.InvariantCulture)}");
-
             // check patient waiting time
             switch (__instance.m_state.m_patientState)
             {
