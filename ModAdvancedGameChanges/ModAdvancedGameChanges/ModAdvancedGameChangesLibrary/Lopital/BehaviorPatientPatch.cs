@@ -60,7 +60,12 @@ namespace ModAdvancedGameChanges.Lopital
             BehaviorDoctor behaviorDoctor = doctor.GetComponent<BehaviorDoctor>();
             ProcedureQueue procedureQueue = __instance.GetComponent<ProcedureComponent>().m_state.m_procedureQueue;
 
+            //doctor.GetComponent<EmployeeComponent>().GetSkillLevel(Skills.Vanilla.SKILL_DOC_QUALIF_DIAGNOSIS);
             //!!!
+
+            NotificationManager.GetInstance().AddMessage(__instance.m_entity, Notifications.Vanilla.NOTIF_COMPLICATED_DIAGNOSIS, string.Empty, string.Empty, string.Empty, 0, 0, 0, 0, null, null);
+            __instance.SwitchState(PatientState.BlockedByComplicatedDiagnosis);
+            __result = DiagnosisResult.COMPLICATED;
 
             return false;
         }
@@ -844,6 +849,7 @@ namespace ModAdvancedGameChanges.Lopital
                 case PatientState.BlockedByAmbiguousResults:
                     break;
                 case PatientState.BlockedByComplicatedDiagnosis:
+                    __instance.UpdateStateBlockedByComplicatedDiagnosis();
                     break;
                 case PatientState.BlockedByNoTreatment:
                     break;
@@ -914,13 +920,6 @@ namespace ModAdvancedGameChanges.Lopital
                 {
                     if (__instance.GetControlMode() == PatientControlMode.AI)
                     {
-                        // check if we have diagnose or patient can be diagnosed
-                        if ((__instance.m_state.m_medicalCondition.m_diagnosedMedicalCondition == null) 
-                            && __instance.Diagnose(__instance.m_state.m_department.GetEntity().m_departmentPersistentData.m_thresholdOfCertainty, true) == DiagnosisResult.COMPLICATED)
-                        {
-                            return false;
-                        }
-
                         if (procedureComponent.m_state.m_procedureQueue.m_plannedTreatmentStates.Count > 0)
                         {
                             __instance.TryToStartScheduledTreatment(EquipmentListRules.ONLY_FREE, 0);
@@ -928,6 +927,11 @@ namespace ModAdvancedGameChanges.Lopital
                         else if (procedureComponent.m_state.m_procedureQueue.m_plannedExaminationStates.Count > 0)
                         {
                             __instance.TryToStartScheduledExamination();
+                        }
+                        else if ((__instance.m_state.m_medicalCondition.m_diagnosedMedicalCondition == null)
+                            && __instance.Diagnose(__instance.m_state.m_department.GetEntity().m_departmentPersistentData.m_thresholdOfCertainty, true) == DiagnosisResult.COMPLICATED)
+                        {
+                            return false;
                         }
                         else if (__instance.m_state.m_medicalCondition.m_diagnosedMedicalCondition != null)
                         {
@@ -989,6 +993,37 @@ namespace ModAdvancedGameChanges.Lopital
                     else if (__instance.m_state.m_waitingForPlayer && __instance.GetControlMode() == PatientControlMode.PlayerControl)
                     {
                         __instance.CheckPlayerControlTimes(__instance.m_state.m_playerControlwaitingTime);
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorPatient), "UpdateStateBlockedByComplicatedDiagnosis")]
+        public static bool UpdateStateBlockedByComplicatedDiagnosisPrefix(BehaviorPatient __instance)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            ProcedureComponent procedureComponent = __instance.GetComponent<ProcedureComponent>();
+            WalkComponent walkComponent = __instance.GetComponent<WalkComponent>();
+
+            if ((!procedureComponent.IsBusy()) && (!walkComponent.IsBusy()))
+            {
+                if (!BehaviorPatientPatch.HandleDiedSentHome(__instance))
+                {
+                    if (__instance.GetComponent<ProcedureComponent>().m_state.m_procedureQueue.m_plannedExaminationStates.Count > 0)
+                    {
+                        __instance.SwitchState(PatientState.BeingExamined);
+                    }
+                    else if (__instance.m_state.m_medicalCondition.m_diagnosedMedicalCondition != null)
+                    {
+                        __instance.SwitchState(PatientState.BeingExamined);
                     }
                 }
             }
@@ -2032,6 +2067,11 @@ namespace ModAdvancedGameChanges.Lopital
         public static void UpdateStateBeingExamined(this BehaviorPatient instance)
         {
             MethodAccessHelper.CallMethod(instance, "UpdateStateBeingExamined");
+        }
+
+        public static void UpdateStateBlockedByComplicatedDiagnosis(this BehaviorPatient instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateBlockedByComplicatedDiagnosis");
         }
 
         public static void UpdateStateExaminedAtReception(this BehaviorPatient instance)
