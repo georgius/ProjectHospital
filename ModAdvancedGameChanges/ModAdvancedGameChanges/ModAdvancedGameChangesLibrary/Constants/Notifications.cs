@@ -4,6 +4,7 @@
     {
         public static class Vanilla
         {
+            public const string NOTIF_AMBIGUOUS_DIAGNOSIS = "NOTIF_AMBIGUOUS_DIAGNOSIS";
             public const string NOTIF_COMPLICATED_DIAGNOSIS = "NOTIF_COMPLICATED_DIAGNOSIS";
 
             public const string NOTIF_CHARACTER_LEVELED_UP = "NOTIF_CHARACTER_LEVELED_UP";

@@ -227,6 +227,44 @@ namespace ModAdvancedGameChanges.Lopital
             return false;
         }
 
+        //[HarmonyPrefix]
+        //[HarmonyPatch(typeof(BehaviorDoctor), nameof(BehaviorDoctor.SelectNextDiagnosticApproach))]
+        //public static bool SelectNextDiagnosticApproachPrefix(float certainty, BehaviorDoctor __instance)
+        //{
+        //    if (!ViewSettingsPatch.m_enabled)
+        //    {
+        //        // Allow original method to run
+        //        return true;
+        //    }
+
+        //    // certainty:
+        //    // 0 = low
+        //    // 50 = medium
+        //    // 100 = high
+
+        //    // the diagnostic approach will be based only on skills and perks of doctor
+
+        //    // the threshold have to be between 0f and 100f
+        //    float threshold = (__instance.GetComponent<EmployeeComponent>().GetSkillLevel(Skills.Vanilla.SKILL_DOC_QUALIF_DIAGNOSIS) - Skills.SkillLevelMinimum) * 25f;
+
+        //    // if doctor has perk Perks.Vanilla.DiagnosticGenius, add random value between 12f and 25f
+        //    threshold += __instance.GetComponent<PerkComponent>().m_perkSet.HasPerk(Perks.Vanilla.DiagnosticGenius) ? UnityEngine.Random.Range(12f, 25f) : 0f;
+
+        //    // normalize threshold to interval 0f and 100f
+        //    threshold = Mathf.Max(0f, Mathf.Min(100f, threshold));
+
+        //    // Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, found free queue machine");
+
+        //    if (UnityEngine.Random.Range(0f, 100f) < threshold)
+        //    {
+        //        __instance.m_state.m_nextDiagnosticApproach = DiagnosticApproach.WAIT_TO_BE_CERTAIN;
+        //    }
+
+            
+
+        //    return false;
+        //}
+
         [HarmonyPrefix]
         [HarmonyPatch(typeof(BehaviorDoctor), nameof(BehaviorDoctor.SwitchState))]
         public static bool SwitchStatePrefix(DoctorState state, BehaviorDoctor __instance)
