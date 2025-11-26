@@ -276,6 +276,26 @@ namespace ModAdvancedGameChanges
                 return ((dlcHospitalServices != null) && (dlcHospitalServices.Value == 1));
             }
 
+            public static int CorrectDiagnosePerkSkillPoints()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_CORRECT_DIAGNOSE_PERK_SKILL_POINTS).Value;
+            }
+
+            public static int CorrectDiagnoseSkillPoints()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_CORRECT_DIAGNOSE_SKILL_POINTS).Value;
+            }
+
+            public static int IncorrectDiagnosePerkSkillPoints()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_INCORRECT_DIAGNOSE_PERK_SKILL_POINTS).Value;
+            }
+
+            public static int IncorrectDiagnoseSkillPoints()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_INCORRECT_DIAGNOSE_SKILL_POINTS).Value;
+            }
+
             public static int MainSkillPoints()
             {
                 return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_MAIN_SKILL_POINTS).Value;

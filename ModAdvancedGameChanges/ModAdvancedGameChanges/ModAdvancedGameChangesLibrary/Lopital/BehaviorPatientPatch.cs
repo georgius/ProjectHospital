@@ -61,6 +61,10 @@ namespace ModAdvancedGameChanges.Lopital
             Entity doctor = __instance.m_state.m_doctor.GetEntity();
             BehaviorDoctor behaviorDoctor = doctor.GetComponent<BehaviorDoctor>();
 
+            // select next diagnostic approach
+            // it should be DiagnosticApproach.RANDOM or DiagnosticApproach.WAIT_TO_BE_CERTAIN
+            behaviorDoctor.SelectNextDiagnosticApproach((float)thresholdOfCertainty);
+            
             ProcedureComponent procedureComponent = __instance.GetComponent<ProcedureComponent>();
             ProcedureQueue procedureQueue = procedureComponent.m_state.m_procedureQueue;
             int minimumExaminations = 3 + (int)doctor.GetComponent<EmployeeComponent>().GetSkillLevel(Skills.Vanilla.SKILL_DOC_QUALIF_DIAGNOSIS);
@@ -68,7 +72,7 @@ namespace ModAdvancedGameChanges.Lopital
             if ((__instance.m_state.m_medicalCondition.GetNumberOfHiddenSymptoms() > 0)
                 && (procedureQueue.m_finishedExaminations.Count >= minimumExaminations)
                 && (__instance.m_state.m_medicalCondition.m_possibleDiagnoses.Count > 1)
-                && (behaviorDoctor.m_state.m_nextDiagnosticApproach == DiagnosticApproach.AMBIGUOUS)
+                && (behaviorDoctor.m_state.m_nextDiagnosticApproach == DiagnosticApproach.RANDOM)
                 && (__instance.m_state.m_medicalCondition.m_diagnosedMedicalCondition == null)
                 && (procedureQueue.m_labProcedures.Count == 0)
                 && (procedureComponent.GetAvailableExaminationCount() > 1)
@@ -78,6 +82,69 @@ namespace ModAdvancedGameChanges.Lopital
                 return false;
             }
 
+            // not complicated diagnosis or doctor is very skilled
+
+            if (__instance.m_state.m_medicalCondition.IsClear() 
+                && (__instance.m_state.m_medicalCondition.m_diagnosedMedicalCondition == null) 
+                && (__instance.m_state.m_medicalCondition.Diagnose(behaviorDoctor.m_state.m_nextDiagnosticApproach, (float)thresholdOfCertainty, __instance.m_entity, false) == DiagnosisResult.DIAGNOSED))
+            {
+                // yup, diagnosed
+
+                if (!__instance.HasBeenIncorrectlyDiagnosed())
+                {
+                    behaviorDoctor.m_state.m_todaysStatistics.m_correctlyDiagnosed = behaviorDoctor.m_state.m_todaysStatistics.m_correctlyDiagnosed + 1;
+                }
+                else
+                {
+                    behaviorDoctor.m_state.m_todaysStatistics.m_misdiagnosed = behaviorDoctor.m_state.m_todaysStatistics.m_misdiagnosed + 1;
+                }
+
+                int points;
+                if (doctor.GetComponent<PerkComponent>().m_perkSet.HasPerk(Perks.Vanilla.PracticalDiagnoses))
+                {
+                    if (doctor.GetComponent<PerkComponent>().m_perkSet.HasHiddenPerk(Perks.Vanilla.PracticalDiagnoses))
+                    {
+                        if (doctor.GetComponent<BehaviorDoctor>().m_state.m_bookmarked)
+                        {
+                            doctor.GetComponent<PerkComponent>().RevealPerk(Perks.Vanilla.PracticalDiagnoses, true);
+                        }
+                        else
+                        {
+                            doctor.GetComponent<PerkComponent>().m_perkSet.RevealPerk(Perks.Vanilla.PracticalDiagnoses);
+                        }
+                    }
+
+                    points = (!__instance.m_state.m_medicalCondition.m_correctlyDiagnosed) 
+                        ? Tweakable.Vanilla.IncorrectDiagnosePerkSkillPoints() 
+                        : Tweakable.Vanilla.CorrectDiagnosePerkSkillPoints();
+                }
+                else
+                {
+                    points = (!__instance.m_state.m_medicalCondition.m_correctlyDiagnosed) 
+                        ? Tweakable.Vanilla.IncorrectDiagnoseSkillPoints() 
+                        : Tweakable.Vanilla.CorrectDiagnoseSkillPoints();
+                }
+
+                doctor.GetComponent<EmployeeComponent>().AddSkillPoints(Skills.Vanilla.SKILL_DOC_QUALIF_DIAGNOSIS, points, false);
+
+                if (__instance.m_state.m_bookmarked)
+                {
+                    NotificationManager.GetInstance().AddMessage(
+                        __instance.m_entity, Notifications.Vanilla.NOTIF_FAVORITE_PATIENT_DIAGNOSED, 
+                        StringTable.GetInstance().GetLocalizedText(__instance.m_state.m_medicalCondition.m_diagnosedMedicalCondition.Entry.DatabaseID.ToString(), new string[0]), 
+                        string.Empty, string.Empty, 0, 0, 0, 0, null, null);
+                }
+
+                Room currentRoom = MapScriptInterface.Instance.GetRoomAt(__instance.GetComponent<WalkComponent>());
+                if (planCriticalTreatmentsAndPreemptiveExaminations)
+                {
+                    procedureComponent.PlanAllTreatments(__instance.m_state.m_medicalCondition, true, true);
+                    procedureComponent.PlanPreemptiveExaminationsForMedicalCondition(__instance.m_state.m_medicalCondition, __instance.m_state.m_department.GetEntity(), currentRoom, false);
+                }
+
+                __result = DiagnosisResult.DIAGNOSED;
+            }
+                
             return false;
         }
 

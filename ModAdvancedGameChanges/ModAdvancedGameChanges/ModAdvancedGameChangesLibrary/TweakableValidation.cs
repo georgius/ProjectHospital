@@ -503,8 +503,51 @@ namespace ModAdvancedGameChanges
                     throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_VENDING_PAYMENT_PATIENT_MAXIMUM}' must be greater than or equal to {Tweakable.Mod.VendingPaymentPatientMinimum().ToString(CultureInfo.InvariantCulture)}.");
                 }
             }),
-            
+
             // vanilla checks
+
+            new TweakableValidation(() =>
+            {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_MAIN_SKILL_POINTS);
+                if (value.Value < 1)
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_MAIN_SKILL_POINTS}' must be greater than zero.");
+                }
+            }),
+
+            new TweakableValidation(() =>
+            {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_CORRECT_DIAGNOSE_PERK_SKILL_POINTS);
+                if (value.Value < 0)
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_CORRECT_DIAGNOSE_PERK_SKILL_POINTS}' must be greater than or equal to zero.");
+                }
+            }),
+            new TweakableValidation(() =>
+            {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_CORRECT_DIAGNOSE_SKILL_POINTS);
+                if (value.Value < 0)
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_CORRECT_DIAGNOSE_SKILL_POINTS}' must be greater than or equal to zero.");
+                }
+            }),
+            new TweakableValidation(() =>
+            {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_INCORRECT_DIAGNOSE_PERK_SKILL_POINTS);
+                if (value.Value < 0)
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_INCORRECT_DIAGNOSE_PERK_SKILL_POINTS}' must be greater than or equal to zero.");
+                }
+            }),
+            new TweakableValidation(() =>
+            {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_INCORRECT_DIAGNOSE_SKILL_POINTS);
+                if (value.Value < 0)
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_INCORRECT_DIAGNOSE_SKILL_POINTS}' must be greater than or equal to zero.");
+                }
+            }),
+
             new TweakableValidation(() =>
             {
                 var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_JANITOR_MANAGER_CLEANING_BONUS_PERCENT);
@@ -549,15 +592,6 @@ namespace ModAdvancedGameChanges
                 if (value.Value <= 0f)
                 {
                     throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS}' must be greater than zero.");
-                }
-            }),            
-
-            new TweakableValidation(() =>
-            {
-                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_MAIN_SKILL_POINTS);
-                if (value.Value < 1)
-                {
-                    throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_MAIN_SKILL_POINTS}' must be greater than zero.");
                 }
             }),
 
