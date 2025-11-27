@@ -16,6 +16,7 @@
             public const string NOTIF_EMPLOYEE_GOT_DRUNK = "NOTIF_EMPLOYEE_GOT_DRUNK";
 
             public const string NOTIF_FAVORITE_PATIENT_DIAGNOSED = "NOTIF_FAVORITE_PATIENT_DIAGNOSED";
+            public const string NOTIF_FAVORITE_PATIENT_TREATED = "NOTIF_FAVORITE_PATIENT_TREATED";
 
             public const string NOTIF_NO_WAITING_ROOM = "NOTIF_NO_WAITING_ROOM";
 

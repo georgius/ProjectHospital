@@ -92,10 +92,14 @@ namespace ModAdvancedGameChanges.Lopital
 
                 if (!__instance.HasBeenIncorrectlyDiagnosed())
                 {
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, diagnosed with {__instance.m_state.m_medicalCondition.m_diagnosedMedicalCondition.Entry.DatabaseID} correctly");
+
                     behaviorDoctor.m_state.m_todaysStatistics.m_correctlyDiagnosed++;
                 }
                 else
                 {
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, diagnosed with {__instance.m_state.m_medicalCondition.m_diagnosedMedicalCondition.Entry.DatabaseID} incorrectly");
+
                     behaviorDoctor.m_state.m_todaysStatistics.m_misdiagnosed++;
                 }
 
@@ -140,6 +144,13 @@ namespace ModAdvancedGameChanges.Lopital
                 {
                     procedureComponent.PlanAllTreatments(__instance.m_state.m_medicalCondition, true, true);
                     procedureComponent.PlanPreemptiveExaminationsForMedicalCondition(__instance.m_state.m_medicalCondition, __instance.m_state.m_department.GetEntity(), currentRoom, false);
+
+                    var plannedTreatments = procedureComponent.m_state.m_procedureQueue?.m_plannedTreatmentStates?.Select(pts => pts.m_treatment.Entry?.DatabaseID.ToString() ?? string.Empty).ToArray() ?? new string[] { };
+                    var plannedExaminations = procedureComponent.m_state.m_procedureQueue?.m_plannedExaminationStates?.Select(pes => pes.m_examination.Entry?.DatabaseID.ToString() ?? string.Empty).ToArray() ?? new string[] { };
+
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, "
+                        + $"planned treatments '{string.Join(", ", plannedTreatments)}', "
+                        + $"planned examinations '{string.Join(", ", plannedExaminations)}'");
                 }
 
                 __result = DiagnosisResult.DIAGNOSED;
@@ -255,8 +266,7 @@ namespace ModAdvancedGameChanges.Lopital
                 else if (procedureAvailabilty == ProcedureSceneAvailability.STAFF_UNAVAILABLE)
                 {
                     __instance.FreeWaitingRoom();
-
-                    __instance.m_state.m_sentHome = true;
+                    __instance.SendHome();
                     __instance.Leave(false, false, false);
                 }
             }
@@ -280,8 +290,7 @@ namespace ModAdvancedGameChanges.Lopital
                 else if (procedureAvailabilty == ProcedureSceneAvailability.STAFF_UNAVAILABLE)
                 {
                     __instance.FreeWaitingRoom();
-
-                    __instance.m_state.m_sentHome = true;
+                    __instance.SendHome();
                     __instance.Leave(false, false, false);
                 }
             }
@@ -341,8 +350,7 @@ namespace ModAdvancedGameChanges.Lopital
                 Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, no waiting room, leaving");
 
                 __instance.ReportMissingWaitingRoom();
-
-                __instance.m_state.m_sentHome = true;
+                __instance.SendHome();
                 __instance.Leave(true, false, false);
 
                 return false;
@@ -406,29 +414,7 @@ namespace ModAdvancedGameChanges.Lopital
 
             if (__instance.m_state.m_sentHome)
             {
-                __instance.m_entity.GetComponent<SpeechComponent>().SetBubble(Speeches.Vanilla.Home, 10f);
-
-                if (__instance.HasBeenTreated())
-                {
-                    if (!__instance.m_state.m_treatedCounted)
-                    {
-                        __instance.CountTreatedPatient();
-                    }
-                }
-                else if (!__instance.m_state.m_untreated)
-                {
-                    __instance.m_state.m_department.GetEntity().m_departmentPersistentData.m_todaysStatistics.m_untreatedPatients++;
-                    __instance.m_state.m_department.GetEntity().m_departmentPersistentData.m_todaysStatistics.m_clinicUntreated++;
-
-                    if (__instance.m_state.m_doctor.GetEntity() != null)
-                    {
-                        BehaviorDoctor doctor = __instance.m_state.m_doctor.GetEntity().GetComponent<BehaviorDoctor>();
-
-                        doctor.m_state.m_todaysStatistics.m_untreated++;
-                        doctor.m_state.m_allTimeStatisics.m_untreated++;
-                    }
-                    __instance.m_state.m_untreated = true;
-                }
+                __instance.SendHome();
             }
             else if (!leaveAfterHours)
             {
@@ -537,6 +523,45 @@ namespace ModAdvancedGameChanges.Lopital
 
             string department = StringTable.GetInstance().GetLocalizedText(__instance.m_state.m_department.GetEntity().m_departmentPersistentData.m_departmentType.Entry);
             NotificationManager.GetInstance().AddMessage(__instance.m_entity, Notifications.Vanilla.NOTIF_NO_WAITING_ROOM, department, string.Empty, string.Empty, 0, 0, 0, 0, null, null);
+
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorPatient), nameof(BehaviorPatient.SendHome))]
+        public static bool SendHomePrefix(BehaviorPatient __instance)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            __instance.m_entity.GetComponent<SpeechComponent>().SetBubble(Speeches.Vanilla.Home, 5f);
+            __instance.m_state.m_sentHome = true;
+            __instance.GetComponent<ProcedureComponent>().ClearPlannedProcedures();
+
+            if (__instance.HasBeenTreated())
+            {
+                if (!__instance.m_state.m_treatedCounted)
+                {
+                    __instance.CountTreatedPatient();
+                }
+            }
+            else if (!__instance.m_state.m_untreated)
+            {
+                __instance.m_state.m_department.GetEntity().m_departmentPersistentData.m_todaysStatistics.m_untreatedPatients++;
+                __instance.m_state.m_department.GetEntity().m_departmentPersistentData.m_todaysStatistics.m_clinicUntreated++;
+
+                if (__instance.m_state.m_doctor.GetEntity() != null)
+                {
+                    BehaviorDoctor doctor = __instance.m_state.m_doctor.GetEntity().GetComponent<BehaviorDoctor>();
+
+                    doctor.m_state.m_todaysStatistics.m_untreated++;
+                    doctor.m_state.m_allTimeStatisics.m_untreated++;
+                }
+                __instance.m_state.m_untreated = true;
+            }
 
             return false;
         }
@@ -944,6 +969,7 @@ namespace ModAdvancedGameChanges.Lopital
                 case PatientState.GoingToTreatment:
                     break;
                 case PatientState.BeingTreated:
+                    __instance.UpdateStateBeingTreated();
                     break;
                 case PatientState.BlockedByAmbiguousResults:
                     __instance.UpdateStateBlockedByAmbiguousResults();
@@ -1044,11 +1070,7 @@ namespace ModAdvancedGameChanges.Lopital
                             {
                                 if (__instance.HasBeenCorrectlyTreated())
                                 {
-                                    if (!__instance.m_state.m_treatedCounted)
-                                    {
-                                        __instance.CountTreatedPatient();
-                                    }
-
+                                    __instance.SendHome();
                                     InsuranceManager.Instance.UpdateInsuranceCompanyRequirementsAndObjectives(InsuranceCheckMode.IMMEDIATE);
                                     __instance.Leave(true, false, false);
                                 }
@@ -1104,6 +1126,80 @@ namespace ModAdvancedGameChanges.Lopital
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorPatient), "UpdateStateBeingTreated")]
+        public static bool UpdateStateBeingTreatedPrefix(BehaviorPatient __instance)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            ProcedureComponent procedureComponent = __instance.GetComponent<ProcedureComponent>();
+            WalkComponent walkComponent = __instance.GetComponent<WalkComponent>();
+
+            if ((!procedureComponent.IsBusy()) && (!walkComponent.IsBusy()))
+            {
+                if (procedureComponent.m_state.m_procedureQueue.m_plannedTreatmentStates.Count == 0)
+                {
+                    if (__instance.GetControlMode() == PatientControlMode.AI)
+                    {
+                        if (!BehaviorPatientPatch.HandleDiedSentHome(__instance))
+                        {
+                            if (__instance.HasBeenTreated() 
+                                && ((procedureComponent.m_state.m_procedureQueue.m_plannedExaminationStates.Count == 0) 
+                                    || (!__instance.m_state.m_medicalCondition.HasCriticalHiddenSymptom())))
+                            {
+                                __instance.SendHome();
+
+                                if (__instance.m_state.m_bookmarked)
+                                {
+                                    NotificationManager.GetInstance().AddMessage(__instance.m_entity, Notifications.Vanilla.NOTIF_FAVORITE_PATIENT_TREATED, string.Empty, string.Empty, string.Empty, 0, 0, 0, 0, null, null);
+                                }
+
+                                InsuranceManager.Instance.UpdateInsuranceCompanyRequirementsAndObjectives(InsuranceCheckMode.IMMEDIATE);
+                                __instance.Leave(true, false, false);
+                            }
+                            else
+                            {
+                                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, something wrong with patient, cannot treat?");
+
+                                __instance.m_entity.GetComponent<SpeechComponent>().HideBubble();
+                                __instance.m_state.m_waitingForPlayer = false;
+
+                                __instance.SendHome();
+                                __instance.Leave(false, false, false);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // ???
+                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, player mode, not implemented");
+                    }
+                }
+                else
+                {
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, planned treatments {string.Join(", ", procedureComponent.m_state.m_procedureQueue.m_plannedTreatmentStates.Select(pts => pts.m_treatment.Entry.DatabaseID.ToString()).ToArray())}");
+
+                    for (int i = 0; i < procedureComponent.m_state.m_procedureQueue.m_plannedTreatmentStates.Count; i++)
+                    {
+                        var plannedTreatment = procedureComponent.m_state.m_procedureQueue.m_plannedTreatmentStates[i];
+
+                        if (__instance.TryToStartScheduledTreatment(EquipmentListRules.ONLY_FREE, i))
+                        {
+                            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, selected treatment {plannedTreatment.m_treatment.Entry.DatabaseID}");
+
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(BehaviorPatient), "UpdateStateBlockedByAmbiguousResults")]
         public static bool UpdateStateBlockedByAmbiguousResultsPrefix(BehaviorPatient __instance)
         {
@@ -1129,7 +1225,7 @@ namespace ModAdvancedGameChanges.Lopital
                     }
                     else if (__instance.m_state.m_timeInState > DayTime.Instance.IngameTimeHoursToRealTimeSeconds(0.5f))
                     {
-                        __instance.m_state.m_sentHome = true;
+                        __instance.SendHome();
                         __instance.Leave(false, false, false);
                     }
                 }
@@ -1171,7 +1267,7 @@ namespace ModAdvancedGameChanges.Lopital
                         }
                         else
                         {
-                            __instance.m_state.m_sentHome = true;
+                            __instance.SendHome();
                             __instance.Leave(false, false, false);
                         }
                     }
@@ -1532,7 +1628,7 @@ namespace ModAdvancedGameChanges.Lopital
                                 {
                                     Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, no waiting room");
 
-                                    __instance.m_state.m_sentHome = true;
+                                    __instance.SendHome();
                                     __instance.Leave(false, false, false);
                                 }
                             }
@@ -1629,7 +1725,7 @@ namespace ModAdvancedGameChanges.Lopital
                                             {
                                                 Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, no waiting room");
 
-                                                __instance.m_state.m_sentHome = true;
+                                                __instance.SendHome();
                                                 __instance.Leave(false, false, false);
                                             }
                                         }
@@ -1656,7 +1752,7 @@ namespace ModAdvancedGameChanges.Lopital
                                     {
                                         Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, no waiting room");
 
-                                        __instance.m_state.m_sentHome = true;
+                                        __instance.SendHome();
                                         __instance.Leave(false, false, false);
                                     }
                                 }
@@ -1687,7 +1783,7 @@ namespace ModAdvancedGameChanges.Lopital
                         {
                             Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, no waiting room");
 
-                            __instance.m_state.m_sentHome = true;
+                            __instance.SendHome();
                             __instance.Leave(false, false, false);
                         }
                     }
@@ -1820,7 +1916,7 @@ namespace ModAdvancedGameChanges.Lopital
 
             Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, this method should not be called!");
 
-            __instance.m_state.m_sentHome = true;
+            __instance.SendHome();
             __instance.Leave(false, false, false);
 
             return false;
@@ -1852,7 +1948,7 @@ namespace ModAdvancedGameChanges.Lopital
                         {
                             Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, no place to stand");
 
-                            __instance.m_state.m_sentHome = true;
+                            __instance.SendHome();
                             __instance.Leave(false, false, false);
                             return false;
                         }
@@ -1883,7 +1979,7 @@ namespace ModAdvancedGameChanges.Lopital
                     {
                         NotificationManager.GetInstance().AddMessage(__instance.m_entity, Notifications.Vanilla.NOTIF_PATIENT_LEFT_AFTER_LONG_VISIT, string.Empty, string.Empty, string.Empty, 0, 0, 0, 0, null, null);
 
-                        __instance.m_state.m_sentHome = true;
+                        __instance.SendHome();
                         __instance.Leave(false, false, false);
                         return false;
                     }
@@ -2226,6 +2322,11 @@ namespace ModAdvancedGameChanges.Lopital
         public static void UpdateStateBeingExamined(this BehaviorPatient instance)
         {
             MethodAccessHelper.CallMethod(instance, "UpdateStateBeingExamined");
+        }
+
+        public static void UpdateStateBeingTreated(this BehaviorPatient instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateBeingTreated");
         }
 
         public static void UpdateStateBlockedByAmbiguousResults(this BehaviorPatient instance)
