@@ -88,7 +88,7 @@ namespace ModAdvancedGameChanges.Lopital
                 && (__instance.m_state.m_medicalCondition.m_diagnosedMedicalCondition == null) 
                 && (__instance.m_state.m_medicalCondition.Diagnose(behaviorDoctor.m_state.m_nextDiagnosticApproach, (float)thresholdOfCertainty, __instance.m_entity, false) == DiagnosisResult.DIAGNOSED))
             {
-                // yup, diagnosed
+                // diagnosed
 
                 if (!__instance.HasBeenIncorrectlyDiagnosed())
                 {
