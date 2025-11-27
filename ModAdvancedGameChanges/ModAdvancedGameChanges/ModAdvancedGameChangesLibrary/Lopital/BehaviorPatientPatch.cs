@@ -92,11 +92,11 @@ namespace ModAdvancedGameChanges.Lopital
 
                 if (!__instance.HasBeenIncorrectlyDiagnosed())
                 {
-                    behaviorDoctor.m_state.m_todaysStatistics.m_correctlyDiagnosed = behaviorDoctor.m_state.m_todaysStatistics.m_correctlyDiagnosed + 1;
+                    behaviorDoctor.m_state.m_todaysStatistics.m_correctlyDiagnosed++;
                 }
                 else
                 {
-                    behaviorDoctor.m_state.m_todaysStatistics.m_misdiagnosed = behaviorDoctor.m_state.m_todaysStatistics.m_misdiagnosed + 1;
+                    behaviorDoctor.m_state.m_todaysStatistics.m_misdiagnosed++;
                 }
 
                 int points;
