@@ -1163,6 +1163,18 @@ namespace ModAdvancedGameChanges.Lopital
                     {
                         __instance.SwitchState(PatientState.BeingExamined);
                     }
+                    else if (__instance.m_state.m_timeInState > DayTime.Instance.IngameTimeHoursToRealTimeSeconds(0.5f))
+                    {
+                        if (__instance.TryToScheduleExamination(false))
+                        {
+                            __instance.SwitchState(PatientState.BeingExamined);
+                        }
+                        else
+                        {
+                            __instance.m_state.m_sentHome = true;
+                            __instance.Leave(false, false, false);
+                        }
+                    }
                 }
             }
 
