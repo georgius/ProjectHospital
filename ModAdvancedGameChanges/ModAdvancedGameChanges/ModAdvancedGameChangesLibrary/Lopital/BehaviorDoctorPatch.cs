@@ -159,12 +159,19 @@ namespace ModAdvancedGameChanges.Lopital
                 return true;
             }
 
+            ProcedureComponent procedureComponent = __instance.GetComponent<ProcedureComponent>();
+            WalkComponent walkComponent = __instance.GetComponent<WalkComponent>();
+
+            __result = !procedureComponent.IsBusy();
+            __result |= !walkComponent.IsBusy();
+
             switch (__instance.m_state.m_doctorState)
             {
                 case DoctorState.Idle:
                 case DoctorState.FilingReports:
                     {
-                        __result = true;
+                        // check if doctor is sitting
+                        __result &= walkComponent.IsSitting();
 
                         // check if doctor have patient
                         __result &= (__instance.CurrentPatient == null);
@@ -178,11 +185,11 @@ namespace ModAdvancedGameChanges.Lopital
                         return false;
                     }
                 default:
+                    // default case
+                    __result = false;
                     break;
             }
-
-            // default case
-            __result = false;
+            
             return false;
         }
 
@@ -592,17 +599,39 @@ namespace ModAdvancedGameChanges.Lopital
                 return false;
             }
 
-            if (!BehaviorDoctorPatch.HandleGoHomeFulfillNeedsTraining(__instance))
-            {
-                // doctor has nothing to do
-                EmployeeComponent employeeComponent = __instance.GetComponent<EmployeeComponent>();
+            ProcedureComponent procedureComponent = __instance.GetComponent<ProcedureComponent>();
+            WalkComponent walkComponent = __instance.GetComponent<WalkComponent>();
 
-                if ((__instance.m_state.m_timeInState > DayTime.Instance.IngameTimeHoursToRealTimeSeconds(5f / 60f)) && (!__instance.m_state.m_isBrowsing) && (employeeComponent.GetWorkChair() != null) && __instance.IsAtWorkplace(employeeComponent))
+            if ((!procedureComponent.IsBusy()) && (!walkComponent.IsBusy()))
+            {
+                if (!BehaviorDoctorPatch.HandleGoHomeFulfillNeedsTraining(__instance))
                 {
-                    __instance.GetComponent<AnimModelComponent>().QueueAnimation(Animations.Vanilla.SitRelaxPcIn, false, true);
-                    __instance.GetComponent<AnimModelComponent>().QueueAnimation(Animations.Vanilla.SitRelaxPcIdle, true, false);
-                    employeeComponent.m_state.m_workDesk.GetEntity().GetComponent<AnimatedObjectComponent>().ForceFrame(UnityEngine.Random.Range(2, 5));
-                    __instance.m_state.m_isBrowsing = true;
+                    // doctor has nothing to do
+                    EmployeeComponent employeeComponent = __instance.GetComponent<EmployeeComponent>();
+
+                    if ((employeeComponent.m_state.m_homeRoom != null)
+                        && (employeeComponent.m_state.m_homeRoom.GetEntity() != null))
+                    {
+                        if (__instance.IsAtWorkplace(employeeComponent))
+                        {
+                            // doctor at workplace (sitting)
+
+                            if ((__instance.m_state.m_timeInState > DayTime.Instance.IngameTimeHoursToRealTimeSeconds(5f / 60f))
+                                && (!__instance.m_state.m_isBrowsing)
+                                && (employeeComponent.GetWorkChair() != null))
+                            {
+                                __instance.GetComponent<AnimModelComponent>().QueueAnimation(Animations.Vanilla.SitRelaxPcIn, false, true);
+                                __instance.GetComponent<AnimModelComponent>().QueueAnimation(Animations.Vanilla.SitRelaxPcIdle, true, false);
+                                employeeComponent.m_state.m_workDesk.GetEntity().GetComponent<AnimatedObjectComponent>().ForceFrame(UnityEngine.Random.Range(2, 5));
+                                __instance.m_state.m_isBrowsing = true;
+                            }
+                        }
+                        else
+                        {
+                            // doctor somewhere in home room, but not at workplace
+                            __instance.GoToWorkPlace();
+                        }
+                    }
                 }
             }
 
