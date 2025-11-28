@@ -394,15 +394,12 @@ namespace ModAdvancedGameChanges.Lopital
 
             foreach (EntityIDPointer<Entity> entityIDPointer in __instance.m_state.m_pastDoctors)
             {
-                if (entityIDPointer.GetEntity() != null)
-                {
-                    entityIDPointer.GetEntity().GetComponent<BehaviorDoctor>().AddPatientScore(
-                        Math.Min(100, __instance.GetComponent<MoodComponent>().GetTotalSatisfaction()), 
-                        Math.Min(100, __instance.GetComponent<MoodComponent>().GetTotalDiscomfort()), 
-                        __instance.m_state.m_collapseCount, 
-                        (__instance.m_state.m_medicalCondition.m_wrongDiagnoses != null) ? __instance.m_state.m_medicalCondition.m_wrongDiagnoses.Count : 0, 
-                        false);
-                }
+                entityIDPointer.GetEntity()?.GetComponent<BehaviorDoctor>().AddPatientScore(
+                    Math.Min(100, __instance.GetComponent<MoodComponent>().GetTotalSatisfaction()), 
+                    Math.Min(100, __instance.GetComponent<MoodComponent>().GetTotalDiscomfort()), 
+                    __instance.m_state.m_collapseCount, 
+                    (__instance.m_state.m_medicalCondition.m_wrongDiagnoses != null) ? __instance.m_state.m_medicalCondition.m_wrongDiagnoses.Count : 0, 
+                    false);
             }
 
             __instance.FreeWaitingRoom();
@@ -455,46 +452,22 @@ namespace ModAdvancedGameChanges.Lopital
             return false;
         }
 
-        //[HarmonyPrefix]
-        //[HarmonyPatch(typeof(BehaviorPatient), "LeaveAfterClosingHours")]
-        //public static bool LeaveAfterClosingHoursPrefix(BehaviorPatient __instance)
-        //{
-        //    if (!ViewSettingsPatch.m_enabled)
-        //    {
-        //        // Allow original method to run
-        //        return true;
-        //    }
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorPatient), "LeaveAfterClosingHours")]
+        public static bool LeaveAfterClosingHoursPrefix(BehaviorPatient __instance)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // Allow original method to run
+                return true;
+            }
 
-        //    __instance.m_state.m_chair = null;
-        //    if ((__instance.m_state.m_waitingRoom != null) && (__instance.m_state.m_waitingRoom.GetEntity() != null))
-        //    {
-        //        __instance.m_state.m_waitingRoom.GetEntity().DequeueCharacter(__instance.m_entity);
-        //    }
+            __instance.FreeWaitingRoom();
+            __instance.SendHome();
+            __instance.Leave(false, true, false);
 
-        //    __instance.GetComponent<MoodComponent>().AddSatisfactionModifier(Moods.Vanilla.Untreated);
-
-        //    __instance.Leave(false, true, false);
-
-        //    if (!this.m_state.m_sentHome)
-        //    {
-        //        if (this.m_state.m_department.GetEntity() != null)
-        //        {
-        //            this.m_state.m_department.GetEntity().m_departmentPersistentData.m_todaysStatistics.m_untreatedPatients++;
-        //            this.m_state.m_department.GetEntity().m_departmentPersistentData.m_todaysStatistics.m_clinicUntreated++;
-        //        }
-        //        if (this.m_state.m_doctor.GetEntity() != null)
-        //        {
-        //            BehaviorDoctor component = this.m_state.m_doctor.GetEntity().GetComponent<BehaviorDoctor>();
-        //            BehaviorDoctorPrototypeData state = component.m_state;
-        //            state.m_todaysStatistics.m_untreated = state.m_todaysStatistics.m_untreated + 1;
-        //            BehaviorDoctorPrototypeData state2 = component.m_state;
-        //            state2.m_allTimeStatisics.m_untreated = state2.m_allTimeStatisics.m_untreated + 1;
-        //        }
-        //    }
-        //    this.m_state.m_untreated = true;
-
-        //    return false;
-        //}
+            return false;
+        }
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(BehaviorPatient), nameof(BehaviorPatient.ReceiveMessage))]
