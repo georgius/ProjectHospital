@@ -749,7 +749,7 @@ namespace ModAdvancedGameChanges.Lopital
                     NotificationManager.GetInstance().AddMessage(__instance.m_entity, Notifications.Vanilla.NOTIF_AMBIGUOUS_DIAGNOSIS, string.Empty, string.Empty, string.Empty, 0, 0, 0, 0, null, null);
 
                     __instance.GoToWaitingRoom();
-                    __instance.UnreserveEmployees(true, false, false, false, false, false);
+                    __instance.UnreserveEmployees(true, false, false, true, false, false);
 
                     __instance.SwitchState(PatientState.BlockedByAmbiguousResults);
                 }
