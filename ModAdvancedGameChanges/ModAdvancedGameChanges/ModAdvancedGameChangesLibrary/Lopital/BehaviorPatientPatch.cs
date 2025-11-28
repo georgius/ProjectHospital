@@ -1723,6 +1723,9 @@ namespace ModAdvancedGameChanges.Lopital
 
                                         if (position != Vector2i.ZERO_VECTOR)
                                         {
+                                            __instance.GetComponent<BehaviorPatient>().ScheduleExamination(Database.Instance.GetEntry<GameDBExamination>(Examinations.Vanilla.Interview));
+                                            __instance.GetComponent<BehaviorPatient>().m_state.m_finishedAtReception = true;
+
                                             __instance.GetComponent<WalkComponent>().SetDestination(position, room.GetFloorIndex(), MovementType.WALKING);
 
                                             __instance.SwitchState(PatientState.GoingToWaitingRoom);
