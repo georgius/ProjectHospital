@@ -239,6 +239,13 @@ namespace ModAdvancedGameChanges.Lopital
 
             Department doctorsDepartment = doctorEntity.GetComponent<EmployeeComponent>().m_state.m_department.GetEntity();
 
+            if (doctorsDepartment.m_departmentPersistentData.m_waitingTimesDoctors.Count > 10)
+            {
+                doctorsDepartment.m_departmentPersistentData.m_waitingTimesDoctors.RemoveAt(0);
+            }
+            doctorsDepartment.m_departmentPersistentData.m_waitingTimesDoctors.Add(__instance.m_state.m_continuousWaitingTime);
+            __instance.m_state.m_continuousWaitingTime = 0f;
+
             __instance.m_state.m_continuousWaitingTime = 0f;
             int queueMachineCount = __instance.m_state.m_waitingRoom.GetEntity().GetObjectCountWithTag(Tags.Vanilla.Queue, __instance.GetComponent<WalkComponent>().Floor, true);
             int queueMonitorCount = __instance.m_state.m_waitingRoom.GetEntity().GetObjectCountWithTag(Tags.Vanilla.QueueMonitor, __instance.GetComponent<WalkComponent>().Floor, true);
