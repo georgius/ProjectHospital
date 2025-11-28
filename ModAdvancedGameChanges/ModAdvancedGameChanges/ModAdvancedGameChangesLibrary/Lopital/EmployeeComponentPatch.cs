@@ -151,7 +151,7 @@ namespace ModAdvancedGameChanges .Lopital
 
                                 NotificationManager.GetInstance().AddMessage(
                                     __instance.m_entity, Notifications.Vanilla.NOTIF_CHARACTER_LEVELED_UP_FIRST_SPECIALIZATION,
-                                    StringTable.GetInstance().GetLocalizedText(EmployeeComponent.sm_levelLocalizationIDsLabSpecialist[__instance.m_state.m_level], new string[0]),
+                                    StringTable.GetInstance().GetLocalizedText(EmployeeComponent.sm_levelLocalizationIDsNurse[__instance.m_state.m_level], new string[0]),
                                     string.Empty, string.Empty, 0, 0, 0, 0, null, null);
 
                                 levelUp = true;
@@ -327,7 +327,7 @@ namespace ModAdvancedGameChanges .Lopital
 
                                 NotificationManager.GetInstance().AddMessage(
                                     __instance.m_entity, Notifications.Vanilla.NOTIF_CHARACTER_LEVELED_UP_FIRST_SPECIALIZATION,
-                                    StringTable.GetInstance().GetLocalizedText(EmployeeComponent.sm_levelLocalizationIDsLabSpecialist[__instance.m_state.m_level], new string[0]),
+                                    StringTable.GetInstance().GetLocalizedText(EmployeeComponent.sm_levelLocalizationIDsJanitor[__instance.m_state.m_level], new string[0]),
                                     string.Empty, string.Empty, 0, 0, 0, 0, null, null);
 
                                 levelUp = true;
