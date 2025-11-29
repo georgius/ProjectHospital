@@ -371,7 +371,7 @@ namespace ModAdvancedGameChanges.Lopital
             if ((room != null) && (room == __instance.m_state.m_waitingRoom.GetEntity()))
             {
                 // nothing to do, we are in waiting room
-                __instance.SwitchState(PatientState.WaitingStandingIdle);
+                __instance.SwitchState(PatientState.GoingToWaitingRoom);
             }
             else
             {
