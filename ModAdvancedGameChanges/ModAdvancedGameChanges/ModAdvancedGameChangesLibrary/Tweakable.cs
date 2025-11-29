@@ -275,6 +275,16 @@ namespace ModAdvancedGameChanges
             {
                 return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_LOW_PRIORITY_MULTIPLIER).Value;
             }
+
+            public static float AmbiguousLeaveMinutes()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_AMBIGUOUS_LEAVE_MINUTES).Value;
+            }
+
+            public static float ComplicatedDecisionMinutes()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_COMPLICATED_DECISION_MINUTES).Value;
+            }
         }
 
         public static class Vanilla

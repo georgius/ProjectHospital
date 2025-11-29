@@ -1203,7 +1203,7 @@ namespace ModAdvancedGameChanges.Lopital
                         // we are in waiting room, but we are not waiting
                         __instance.SwitchState(PatientState.GoingToWaitingRoom);
                     }
-                    else if (__instance.m_state.m_timeInState > DayTime.Instance.IngameTimeHoursToRealTimeSeconds(0.5f))
+                    else if (__instance.m_state.m_timeInState > DayTime.Instance.IngameTimeHoursToRealTimeSeconds(Tweakable.Mod.AmbiguousLeaveMinutes() / 60f))
                     {
                         __instance.SendHome();
                         __instance.Leave(false, false, false);
@@ -1239,16 +1239,19 @@ namespace ModAdvancedGameChanges.Lopital
                     {
                         __instance.SwitchState(PatientState.BeingExamined);
                     }
-                    else if (__instance.m_state.m_timeInState > DayTime.Instance.IngameTimeHoursToRealTimeSeconds(0.5f))
+                    else if (__instance.GetControlMode() == PatientControlMode.AI)
                     {
-                        if (__instance.TryToScheduleExamination(false))
+                        if (__instance.m_state.m_timeInState > DayTime.Instance.IngameTimeHoursToRealTimeSeconds(Tweakable.Mod.ComplicatedDecisionMinutes() / 60f))
                         {
-                            __instance.SwitchState(PatientState.BeingExamined);
-                        }
-                        else
-                        {
-                            __instance.SendHome();
-                            __instance.Leave(false, false, false);
+                            if (__instance.TryToScheduleExamination(false))
+                            {
+                                __instance.SwitchState(PatientState.BeingExamined);
+                            }
+                            else
+                            {
+                                __instance.SendHome();
+                                __instance.Leave(false, false, false);
+                            }
                         }
                     }
                 }

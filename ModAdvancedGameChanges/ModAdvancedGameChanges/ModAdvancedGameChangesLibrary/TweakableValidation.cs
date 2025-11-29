@@ -529,6 +529,23 @@ namespace ModAdvancedGameChanges
                 }
             }),
 
+            new TweakableValidation(() =>
+            {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_AMBIGUOUS_LEAVE_MINUTES);
+                if (value.Value < 0f)
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_AMBIGUOUS_LEAVE_MINUTES}' must be greater than or equal to zero.");
+                }
+            }),
+            new TweakableValidation(() =>
+            {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_COMPLICATED_DECISION_MINUTES);
+                if (value.Value < 0f)
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_COMPLICATED_DECISION_MINUTES}' must be greater than or equal to zero.");
+                }
+            }),
+
             // vanilla checks
 
             new TweakableValidation(() =>
