@@ -608,28 +608,31 @@ namespace ModAdvancedGameChanges .Lopital
                 return true;
             }
 
-            if (__instance.m_state.m_department.GetEntity().GetDepartmentType() == Database.Instance.GetEntry<GameDBDepartment>(Departments.Mod.TrainingDepartment))
+            if (janitorCheck && Tweakable.Vanilla.DlcHospitalServicesEnabled())
             {
-                // employee is in training department
-
-                if (janitorCheck && Tweakable.Vanilla.DlcHospitalServicesEnabled())
-                {
-                    Hospital.Instance.UpdateJanitorBosses();
-                    return false;
-                }
-
-                Department departmentOfType = MapScriptInterface.Instance.GetDepartmentOfType(Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.Emergency));
-
-                if (departmentOfType.m_departmentPersistentData.m_chiefDoctor != null)
-                {
-                    __instance.m_state.m_supervisor = departmentOfType.m_departmentPersistentData.m_chiefDoctor;
-                    __instance.CheckBossModifiers();
-                }
-
+                Hospital.Instance.UpdateJanitorBosses();
                 return false;
             }
 
-            return true;
+            Department emergencyDepartment = MapScriptInterface.Instance.GetDepartmentOfType(Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.Emergency));
+
+            if ((emergencyDepartment.m_departmentPersistentData.m_chiefDoctor != null))
+            {
+                if (
+                    (__instance.m_state.m_department.GetEntity().GetDepartmentType() == Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.Radiology))
+                    || (__instance.m_state.m_department.GetEntity().GetDepartmentType() == Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.MedicalLaboratories))
+                    || (Tweakable.Vanilla.DlcHospitalServicesEnabled() && (__instance.m_state.m_department.GetEntity().GetDepartmentType() == Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.AdministrativeDepartment)))
+                    || (ViewSettingsPatch.m_enabledTrainingDepartment && (__instance.m_state.m_department.GetEntity().GetDepartmentType() == Database.Instance.GetEntry<GameDBDepartment>(Departments.Mod.TrainingDepartment)))
+                    )
+                {
+                    __instance.m_state.m_supervisor = emergencyDepartment.m_departmentPersistentData.m_chiefDoctor;
+                    __instance.CheckBossModifiers();
+                }
+            }
+
+            __instance.m_state.m_supervisor = __instance.m_state.m_department.GetEntity().m_departmentPersistentData.m_chiefDoctor;
+
+            return false;
         }
 
         [HarmonyPrefix]
