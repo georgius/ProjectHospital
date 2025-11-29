@@ -260,6 +260,21 @@ namespace ModAdvancedGameChanges
             {
                 return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_VENDING_PAYMENT_PATIENT_MAXIMUM).Value;
             }
+
+            public static float PatientMaxWaitTimeHoursHighPriorityMultiplier()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_HIGH_PRIORITY_MULTIPLIER).Value;
+            }
+
+            public static float PatientMaxWaitTimeHoursMediumPriorityMultiplier()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_MEDIUM_PRIORITY_MULTIPLIER).Value;
+            }
+
+            public static float PatientMaxWaitTimeHoursLowPriorityMultiplier()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_LOW_PRIORITY_MULTIPLIER).Value;
+            }
         }
 
         public static class Vanilla

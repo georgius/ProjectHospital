@@ -1949,7 +1949,27 @@ namespace ModAdvancedGameChanges.Lopital
                         }
                     }
 
-                    if (__instance.m_state.m_continuousWaitingTime > DayTime.Instance.IngameTimeHoursToRealTimeSeconds(Tweakable.Vanilla.PatientMaxWaitTimeHours()))
+                    float maxWaitingTime = Tweakable.Vanilla.PatientMaxWaitTimeHours();
+                    switch (__instance.m_state.m_priority)
+                    {
+                        case SymptomHazard.Unknown:
+                        case SymptomHazard.None:
+                        case SymptomHazard.Low:
+                            maxWaitingTime *= Tweakable.Mod.PatientMaxWaitTimeHoursLowPriorityMultiplier();
+                            break;
+                        case SymptomHazard.Medium:
+                            maxWaitingTime *= Tweakable.Mod.PatientMaxWaitTimeHoursMediumPriorityMultiplier();
+                            break;
+                        case SymptomHazard.High:
+                        case SymptomHazard.Positive:
+                            maxWaitingTime *= Tweakable.Mod.PatientMaxWaitTimeHoursHighPriorityMultiplier();
+                            break;
+                        default:
+                            maxWaitingTime *= Tweakable.Mod.PatientMaxWaitTimeHoursLowPriorityMultiplier();
+                            break;
+                    }
+
+                    if (__instance.m_state.m_continuousWaitingTime > DayTime.Instance.IngameTimeHoursToRealTimeSeconds(maxWaitingTime))
                     {
                         NotificationManager.GetInstance().AddMessage(__instance.m_entity, Notifications.Vanilla.NOTIF_PATIENT_LEFT_AFTER_LONG_WAIT, string.Empty, string.Empty, string.Empty, 0, 0, 0, 0, null, null);
 
@@ -2230,7 +2250,28 @@ namespace ModAdvancedGameChanges.Lopital
         {
             instance.m_state.m_waitingTime += deltaTime;
 
-            float maxWaitingTime = DayTime.Instance.IngameTimeHoursToRealTimeSeconds(Tweakable.Vanilla.PatientMaxWaitTimeHours() - 1f);
+            float maxWaitingTime = Tweakable.Vanilla.PatientMaxWaitTimeHours();
+            switch (instance.m_state.m_priority)
+            {
+                case SymptomHazard.Unknown:
+                case SymptomHazard.None:
+                case SymptomHazard.Low:
+                    maxWaitingTime *= Tweakable.Mod.PatientMaxWaitTimeHoursLowPriorityMultiplier();
+                    break;
+                case SymptomHazard.Medium:
+                    maxWaitingTime *= Tweakable.Mod.PatientMaxWaitTimeHoursMediumPriorityMultiplier();
+                    break;
+                case SymptomHazard.High:
+                case SymptomHazard.Positive:
+                    maxWaitingTime *= Tweakable.Mod.PatientMaxWaitTimeHoursHighPriorityMultiplier();
+                    break;
+                default:
+                    maxWaitingTime *= Tweakable.Mod.PatientMaxWaitTimeHoursLowPriorityMultiplier();
+                    break;
+            }
+
+            maxWaitingTime = DayTime.Instance.IngameTimeHoursToRealTimeSeconds(maxWaitingTime - 1f);
+
             if ((instance.m_state.m_continuousWaitingTime < maxWaitingTime) && ((instance.m_state.m_continuousWaitingTime + deltaTime) >= maxWaitingTime))
             {
                 NotificationManager.GetInstance().AddMessage(instance.m_entity, Notifications.Vanilla.NOTIF_PATIENT_LONG_WAIT, string.Empty, string.Empty, string.Empty, 0, 0, 0, 0, null, null);
