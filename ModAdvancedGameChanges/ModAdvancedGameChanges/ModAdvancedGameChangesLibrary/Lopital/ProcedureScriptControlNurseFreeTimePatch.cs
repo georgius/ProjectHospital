@@ -577,7 +577,7 @@ namespace ModAdvancedGameChanges.Lopital
                     }
                     mainCharacter.GetComponent<MoodComponent>().AddSatisfactionModifier(SatisfationModifiers.Vanilla.Entertained);
 
-                    int points = (int)((float)Tweakable.Vanilla.FreeTimeSkillPoints() * UnityEngine.Random.Range(0f, 1f));
+                    int points = (int)((float)Tweakable.Vanilla.RepeatActionFreeTimeSkillPoints() * UnityEngine.Random.Range(0f, 1f));
 
                     if (mainCharacter.GetComponent<BehaviorNurse>() != null)
                     {

@@ -163,7 +163,7 @@ namespace ModAdvancedGameChanges.Lopital
             WalkComponent walkComponent = __instance.GetComponent<WalkComponent>();
 
             __result = !procedureComponent.IsBusy();
-            __result |= !walkComponent.IsBusy();
+            __result &= !walkComponent.IsBusy();
 
             switch (__instance.m_state.m_doctorState)
             {
@@ -319,7 +319,34 @@ namespace ModAdvancedGameChanges.Lopital
                 return false;
             }
 
+            if (message.m_messageID == Messages.PATIENT_RELEASED)
+            {
+                return false;
+            }
+
+            if (message.m_messageID == Messages.DOCTOR_FINISHED_PROCEDURE)
+            {
+                __instance.SetReserved(false, string.Empty, null);
+                return false;
+            }
+
             return BehaviorPatch.ReceiveMessage(message, __instance, false);
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorDoctor), nameof(BehaviorDoctor.SetReserved))]
+        public static bool SetReservedPrefix(bool reserved, string procedureLocID, Entity patient, BehaviorDoctor __instance)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // Allow original method to run
+                return true;
+            }
+
+            __instance.SwitchState(reserved ? DoctorState.OverridenReservedForProcedure : DoctorState.Idle);
+            __instance.GetComponent<EmployeeComponent>().SetReserved(procedureLocID, patient);
+
+            return false;
         }
 
         [HarmonyPrefix]

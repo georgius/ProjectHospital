@@ -8,14 +8,33 @@ namespace ModAdvancedGameChanges
     {
         public static class Mod
         {
+            public static int AmbiguousLeaveMinutes()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_AMBIGUOUS_LEAVE_MINUTES).Value;
+            }
+
             public static int AllowedClinicDoctorsLevel()
             {
                 return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_ALLOWED_CLINIC_DOCTORS_LEVEL).Value;
             }
 
+            public static int ComplicatedDecisionMinutes()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_COMPLICATED_DECISION_MINUTES).Value;
+            }
+
             public static int DoctorLevelPoints(int index)
             {
                 return Tweakable.GetTweakable<GameDBTweakableInt>(String.Format(CultureInfo.InvariantCulture, Tweakables.Mod.AGC_TWEAKABLE_DOCTOR_LEVEL_POINTS_FORMAT, index)).Value;
+            }
+
+            public static int DoctorFillingReportMinutes()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_DOCTOR_FILLING_REPORT_MINUTES).Value;
+            }
+            public static int DoctorFillingReportSkillPoints()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_DOCTOR_FILLING_REPORT_SKILL_POINTS).Value;
             }
 
             public static float EfficiencyMinimum()
@@ -76,6 +95,26 @@ namespace ModAdvancedGameChanges
             public static float FulfillNeedsReductionMaximum()
             {
                 return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REDUCTION_MAXIMUM).Value;
+            }
+
+            public static int JanitorCleaningTimeBlood()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_JANITOR_CLEANING_TIME_BLOOD).Value;
+            }
+
+            public static int JanitorCleaningTimeDirt()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_JANITOR_CLEANING_TIME_DIRT).Value;
+            }
+
+            public static int JanitorLevelPoints(int index)
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(String.Format(CultureInfo.InvariantCulture, Tweakables.Mod.AGC_TWEAKABLE_JANITOR_LEVEL_POINTS_FORMAT, index)).Value;
+            }
+
+            public static int LabSpecialistLevelPoints(int index)
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(String.Format(CultureInfo.InvariantCulture, Tweakables.Mod.AGC_TWEAKABLE_LAB_SPECIALIST_LEVEL_POINTS_FORMAT, index)).Value;
             }
 
             public static float NeedBladder()
@@ -196,24 +235,19 @@ namespace ModAdvancedGameChanges
                 return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NURSE_RECEPTION_NEXT_QUESTION_SKILL_POINTS).Value;
             }
 
-            public static int LabSpecialistLevelPoints(int index)
+            public static float PatientMaxWaitTimeHoursHighPriorityMultiplier()
             {
-                return Tweakable.GetTweakable<GameDBTweakableInt>(String.Format(CultureInfo.InvariantCulture, Tweakables.Mod.AGC_TWEAKABLE_LAB_SPECIALIST_LEVEL_POINTS_FORMAT, index)).Value;
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_HIGH_PRIORITY_MULTIPLIER).Value;
             }
 
-            public static int JanitorCleaningTimeBlood()
+            public static float PatientMaxWaitTimeHoursMediumPriorityMultiplier()
             {
-                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_JANITOR_CLEANING_TIME_BLOOD).Value;
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_MEDIUM_PRIORITY_MULTIPLIER).Value;
             }
 
-            public static int JanitorCleaningTimeDirt()
+            public static float PatientMaxWaitTimeHoursLowPriorityMultiplier()
             {
-                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_JANITOR_CLEANING_TIME_DIRT).Value;
-            }
-
-            public static int JanitorLevelPoints(int index)
-            {
-                return Tweakable.GetTweakable<GameDBTweakableInt>(String.Format(CultureInfo.InvariantCulture, Tweakables.Mod.AGC_TWEAKABLE_JANITOR_LEVEL_POINTS_FORMAT, index)).Value;
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_LOW_PRIORITY_MULTIPLIER).Value;
             }
 
             public static int SkillLevels()
@@ -260,31 +294,6 @@ namespace ModAdvancedGameChanges
             {
                 return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_VENDING_PAYMENT_PATIENT_MAXIMUM).Value;
             }
-
-            public static float PatientMaxWaitTimeHoursHighPriorityMultiplier()
-            {
-                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_HIGH_PRIORITY_MULTIPLIER).Value;
-            }
-
-            public static float PatientMaxWaitTimeHoursMediumPriorityMultiplier()
-            {
-                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_MEDIUM_PRIORITY_MULTIPLIER).Value;
-            }
-
-            public static float PatientMaxWaitTimeHoursLowPriorityMultiplier()
-            {
-                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_LOW_PRIORITY_MULTIPLIER).Value;
-            }
-
-            public static float AmbiguousLeaveMinutes()
-            {
-                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_AMBIGUOUS_LEAVE_MINUTES).Value;
-            }
-
-            public static float ComplicatedDecisionMinutes()
-            {
-                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_COMPLICATED_DECISION_MINUTES).Value;
-            }
         }
 
         public static class Vanilla
@@ -321,11 +330,6 @@ namespace ModAdvancedGameChanges
                 return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_INCORRECT_DIAGNOSE_SKILL_POINTS).Value;
             }
 
-            public static int MainSkillPoints()
-            {
-                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_MAIN_SKILL_POINTS).Value;
-            }
-
             public static int JanitorDexteritySkillPoints()
             {
                 return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_JANITOR_DEXTERITY_SKILL_POINTS).Value;
@@ -334,6 +338,11 @@ namespace ModAdvancedGameChanges
             public static int JanitorManagerCleaningBonusPercent()
             {
                 return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_JANITOR_MANAGER_CLEANING_BONUS_PERCENT).Value;
+            }
+
+            public static int MainSkillPoints()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_MAIN_SKILL_POINTS).Value;
             }
 
             public static float PatientLeaveTimeHours()
@@ -351,7 +360,7 @@ namespace ModAdvancedGameChanges
                 return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Vanilla.TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS).Value;
             }
 
-            public static int FreeTimeSkillPoints()
+            public static int RepeatActionFreeTimeSkillPoints()
             {
                 return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_REPEAT_ACTION_FREE_TIME_SKILL_POINTS).Value;
             }

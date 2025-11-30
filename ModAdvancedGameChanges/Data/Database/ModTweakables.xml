@@ -265,12 +265,19 @@
 		<Value>4</Value>   
 	</GameDBTweakableFloat>
 	
-	<GameDBTweakableFloat ID="AGC_TWEAKABLE_AMBIGUOUS_LEAVE_MINUTES">
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_AMBIGUOUS_LEAVE_MINUTES">
 		<Value>10</Value>
-	</GameDBTweakableFloat>
-	<GameDBTweakableFloat ID="AGC_TWEAKABLE_COMPLICATED_DECISION_MINUTES">
+	</GameDBTweakableInt>
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_COMPLICATED_DECISION_MINUTES">
 		<Value>3</Value>
-	</GameDBTweakableFloat>
+	</GameDBTweakableInt>
+	
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_DOCTOR_FILLING_REPORT_MINUTES">
+		<Value>5</Value>
+	</GameDBTweakableInt>
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_DOCTOR_FILLING_REPORT_SKILL_POINTS">
+		<Value>3</Value>
+	</GameDBTweakableInt>
 	
 	<!-- vanilla -->
 	

@@ -748,6 +748,16 @@ namespace ModAdvancedGameChanges.Lopital
 
                     NotificationManager.GetInstance().AddMessage(__instance.m_entity, Notifications.Vanilla.NOTIF_AMBIGUOUS_DIAGNOSIS, string.Empty, string.Empty, string.Empty, 0, 0, 0, 0, null, null);
 
+                    // doctor have to fill report
+                    var doctorEmployeeComponent = doctor.GetComponent<EmployeeComponent>();
+                    var doctorProcedureComponent = doctor.GetComponent<ProcedureComponent>();
+                    var fillingReportProcedure = Database.Instance.GetEntry<GameDBProcedure>(Procedures.Vanilla.DoctorFillingReports);
+
+                    if (doctorProcedureComponent.GetProcedureAvailabilty(fillingReportProcedure, doctor, doctorEmployeeComponent.m_state.m_department.GetEntity(), AccessRights.STAFF, EquipmentListRules.ONLY_FREE_SAME_FLOOR_PREFER_DPT) == ProcedureSceneAvailability.AVAILABLE)
+                    {
+                        doctorProcedureComponent.StartProcedure(fillingReportProcedure, doctor, doctorEmployeeComponent.m_state.m_department.GetEntity(), AccessRights.STAFF, EquipmentListRules.ONLY_FREE_SAME_FLOOR_PREFER_DPT);
+                    }
+
                     __instance.GoToWaitingRoom();
                     __instance.UnreserveEmployees(true, false, false, true, false, false);
 
@@ -1130,6 +1140,17 @@ namespace ModAdvancedGameChanges.Lopital
                                 && ((procedureComponent.m_state.m_procedureQueue.m_plannedExaminationStates.Count == 0) 
                                     || (!__instance.m_state.m_medicalCondition.HasCriticalHiddenSymptom())))
                             {
+                                // doctor have to fill report
+                                var doctor = __instance.m_state.m_doctor.GetEntity();
+                                var doctorEmployeeComponent = doctor.GetComponent<EmployeeComponent>();
+                                var doctorProcedureComponent = doctor.GetComponent<ProcedureComponent>();
+                                var fillingReportProcedure = Database.Instance.GetEntry<GameDBProcedure>(Procedures.Vanilla.DoctorFillingReports);
+
+                                if (doctorProcedureComponent.GetProcedureAvailabilty(fillingReportProcedure, doctor, doctorEmployeeComponent.m_state.m_department.GetEntity(), AccessRights.STAFF, EquipmentListRules.ONLY_FREE_SAME_FLOOR_PREFER_DPT) == ProcedureSceneAvailability.AVAILABLE)
+                                {
+                                    doctorProcedureComponent.StartProcedure(fillingReportProcedure, doctor, doctorEmployeeComponent.m_state.m_department.GetEntity(), AccessRights.STAFF, EquipmentListRules.ONLY_FREE_SAME_FLOOR_PREFER_DPT);
+                                }
+
                                 __instance.SendHome();
 
                                 if (__instance.m_state.m_bookmarked)
@@ -1203,7 +1224,7 @@ namespace ModAdvancedGameChanges.Lopital
                         // we are in waiting room, but we are not waiting
                         __instance.SwitchState(PatientState.GoingToWaitingRoom);
                     }
-                    else if (__instance.m_state.m_timeInState > DayTime.Instance.IngameTimeHoursToRealTimeSeconds(Tweakable.Mod.AmbiguousLeaveMinutes() / 60f))
+                    else if (__instance.m_state.m_timeInState > DayTime.Instance.IngameTimeHoursToRealTimeSeconds((float)Tweakable.Mod.AmbiguousLeaveMinutes() / 60f))
                     {
                         __instance.SendHome();
                         __instance.Leave(false, false, false);
@@ -1241,7 +1262,7 @@ namespace ModAdvancedGameChanges.Lopital
                     }
                     else if (__instance.GetControlMode() == PatientControlMode.AI)
                     {
-                        if (__instance.m_state.m_timeInState > DayTime.Instance.IngameTimeHoursToRealTimeSeconds(Tweakable.Mod.ComplicatedDecisionMinutes() / 60f))
+                        if (__instance.m_state.m_timeInState > DayTime.Instance.IngameTimeHoursToRealTimeSeconds((float)Tweakable.Mod.ComplicatedDecisionMinutes() / 60f))
                         {
                             if (__instance.TryToScheduleExamination(false))
                             {

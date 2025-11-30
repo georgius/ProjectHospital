@@ -531,18 +531,35 @@ namespace ModAdvancedGameChanges
 
             new TweakableValidation(() =>
             {
-                var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_AMBIGUOUS_LEAVE_MINUTES);
-                if (value.Value < 0f)
+                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_AMBIGUOUS_LEAVE_MINUTES);
+                if (value.Value < 1)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_AMBIGUOUS_LEAVE_MINUTES}' must be greater than or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_AMBIGUOUS_LEAVE_MINUTES}' must be greater than zero.");
                 }
             }),
             new TweakableValidation(() =>
             {
-                var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_COMPLICATED_DECISION_MINUTES);
-                if (value.Value < 0f)
+                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_COMPLICATED_DECISION_MINUTES);
+                if (value.Value < 1)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_COMPLICATED_DECISION_MINUTES}' must be greater than or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_COMPLICATED_DECISION_MINUTES}' must be greater than zero.");
+                }
+            }),
+
+            new TweakableValidation(() =>
+            {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_DOCTOR_FILLING_REPORT_MINUTES);
+                if (value.Value < 1)
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_DOCTOR_FILLING_REPORT_MINUTES}' must be greater than zero.");
+                }
+            }),
+            new TweakableValidation(() =>
+            {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_DOCTOR_FILLING_REPORT_SKILL_POINTS);
+                if (value.Value < 1)
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_DOCTOR_FILLING_REPORT_SKILL_POINTS}' must be greater than zero.");
                 }
             }),
 
