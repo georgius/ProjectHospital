@@ -1092,32 +1092,47 @@ namespace ModAdvancedGameChanges.Lopital
                             }
                         }
                     }
-                    else if (!__instance.m_state.m_waitingForPlayer)
+                    else
                     {
-                        if (__instance.GetComponent<ProcedureComponent>().m_state.m_lastProcedureID != null)
+                        // patient is controlled by player
+
+                        if (procedureComponent.m_state.m_procedureQueue.m_plannedTreatmentStates.Count > 0)
                         {
-                            if (__instance.m_state.m_medicalCondition.m_diagnosedMedicalCondition == null)
+                            __instance.TryToStartScheduledTreatment(EquipmentListRules.ONLY_FREE, 0);
+                            __instance.m_state.m_waitingForPlayer = false;
+                        }
+                        else if (procedureComponent.m_state.m_procedureQueue.m_plannedExaminationStates.Count > 0)
+                        {
+                            __instance.TryToStartScheduledExamination();
+                            __instance.m_state.m_waitingForPlayer = false;
+                        }
+                        else if (__instance.m_state.m_waitingForPlayer)
+                        {
+                            __instance.CheckPlayerControlTimes(__instance.m_state.m_playerControlwaitingTime);
+                        }
+                        else
+                        {
+                            if (__instance.GetComponent<ProcedureComponent>().m_state.m_lastProcedureID != null)
                             {
-                                NotificationManager.GetInstance().AddMessage(
-                                    __instance.m_entity, Notifications.Vanilla.NOTIF_WAITING_FOR_PLAYER_DIAGNOSIS, 
-                                    StringTable.GetInstance().GetLocalizedText(__instance.GetComponent<ProcedureComponent>().m_state.m_lastProcedureID, new string[0]), 
-                                    string.Empty, string.Empty, 0, 0, 0, 0, null, null);
-                            }
-                            else
-                            {
-                                NotificationManager.GetInstance().AddMessage(
-                                    __instance.m_entity, Notifications.Vanilla.NOTIF_WAITING_FOR_PLAYER_TREATMENT, 
-                                    StringTable.GetInstance().GetLocalizedText(__instance.GetComponent<ProcedureComponent>().m_state.m_lastProcedureID, new string[0]), 
-                                    string.Empty, string.Empty, 0, 0, 0, 0, null, null);
+                                if (__instance.m_state.m_medicalCondition.m_diagnosedMedicalCondition == null)
+                                {
+                                    NotificationManager.GetInstance().AddMessage(
+                                        __instance.m_entity, Notifications.Vanilla.NOTIF_WAITING_FOR_PLAYER_DIAGNOSIS,
+                                        StringTable.GetInstance().GetLocalizedText(__instance.GetComponent<ProcedureComponent>().m_state.m_lastProcedureID, new string[0]),
+                                        string.Empty, string.Empty, 0, 0, 0, 0, null, null);
+                                }
+                                else
+                                {
+                                    NotificationManager.GetInstance().AddMessage(
+                                        __instance.m_entity, Notifications.Vanilla.NOTIF_WAITING_FOR_PLAYER_TREATMENT,
+                                        StringTable.GetInstance().GetLocalizedText(__instance.GetComponent<ProcedureComponent>().m_state.m_lastProcedureID, new string[0]),
+                                        string.Empty, string.Empty, 0, 0, 0, 0, null, null);
+                                }
+
+                                __instance.m_entity.GetComponent<SpeechComponent>().SetBubble(Speeches.Vanilla.Waiting, -1f);
+                                __instance.m_state.m_waitingForPlayer = true;
                             }
                         }
-
-                        __instance.m_entity.GetComponent<SpeechComponent>().SetBubble(Speeches.Vanilla.Waiting, -1f);
-                        __instance.m_state.m_waitingForPlayer = true;
-                    }
-                    else if (__instance.m_state.m_waitingForPlayer && __instance.GetControlMode() == PatientControlMode.PlayerControl)
-                    {
-                        __instance.CheckPlayerControlTimes(__instance.m_state.m_playerControlwaitingTime);
                     }
                 }
             }
