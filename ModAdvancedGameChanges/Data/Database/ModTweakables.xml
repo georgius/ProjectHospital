@@ -282,9 +282,14 @@
 	<!-- vanilla -->
 	
 	<GameDBTweakableInt ID="TWEAKABLE_MAIN_SKILL_POINTS">
-		<Value>5</Value>   
+		<Value>5</Value>
 	</GameDBTweakableInt>
 	<GameDBTweakableInt ID="TWEAKABLE_JANITOR_DEXTERITY_SKILL_POINTS">
 		<Value>1</Value>
 	</GameDBTweakableInt>
+	
+	<GameDBTweakableInt ID="TWEAKABLE_MAX_INSURANCE_COMPANIES">
+		<Value>99</Value>
+	</GameDBTweakableInt>
+	
 </Database>
