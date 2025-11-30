@@ -148,9 +148,9 @@ namespace ModAdvancedGameChanges.Lopital
                     var plannedTreatments = procedureComponent.m_state.m_procedureQueue?.m_plannedTreatmentStates?.Select(pts => pts.m_treatment.Entry?.DatabaseID.ToString() ?? string.Empty).ToArray() ?? new string[] { };
                     var plannedExaminations = procedureComponent.m_state.m_procedureQueue?.m_plannedExaminationStates?.Select(pes => pes.m_examination.Entry?.DatabaseID.ToString() ?? string.Empty).ToArray() ?? new string[] { };
 
-                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, "
-                        + $"planned treatments '{string.Join(", ", plannedTreatments)}', "
-                        + $"planned examinations '{string.Join(", ", plannedExaminations)}'");
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}"
+                        + $", planned treatments '{string.Join(", ", plannedTreatments)}'"
+                        + $", planned examinations '{string.Join(", ", plannedExaminations)}'");
                 }
 
                 __result = DiagnosisResult.DIAGNOSED;
