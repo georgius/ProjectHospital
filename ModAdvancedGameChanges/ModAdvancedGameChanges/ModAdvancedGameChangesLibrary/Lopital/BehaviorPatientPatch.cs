@@ -90,17 +90,17 @@ namespace ModAdvancedGameChanges.Lopital
             {
                 // diagnosed
 
-                if (!__instance.HasBeenIncorrectlyDiagnosed())
-                {
-                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, diagnosed with {__instance.m_state.m_medicalCondition.m_diagnosedMedicalCondition.Entry.DatabaseID} correctly");
-
-                    behaviorDoctor.m_state.m_todaysStatistics.m_correctlyDiagnosed++;
-                }
-                else
+                if (__instance.HasBeenIncorrectlyDiagnosed())
                 {
                     Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, diagnosed with {__instance.m_state.m_medicalCondition.m_diagnosedMedicalCondition.Entry.DatabaseID} incorrectly");
 
                     behaviorDoctor.m_state.m_todaysStatistics.m_misdiagnosed++;
+                }
+                else
+                {
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, diagnosed with {__instance.m_state.m_medicalCondition.m_diagnosedMedicalCondition.Entry.DatabaseID} correctly");
+
+                    behaviorDoctor.m_state.m_todaysStatistics.m_correctlyDiagnosed++;
                 }
 
                 int points;
