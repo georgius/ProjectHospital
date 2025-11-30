@@ -1044,13 +1044,30 @@ namespace ModAdvancedGameChanges.Lopital
                         {
                             __instance.TryToStartScheduledExamination();
                         }
-                        else if ((__instance.m_state.m_medicalCondition.m_diagnosedMedicalCondition == null)
-                            && __instance.Diagnose(__instance.m_state.m_department.GetEntity().m_departmentPersistentData.m_thresholdOfCertainty, true) == DiagnosisResult.COMPLICATED)
+                        else if (__instance.m_state.m_medicalCondition.m_diagnosedMedicalCondition == null)
                         {
-                            NotificationManager.GetInstance().AddMessage(__instance.m_entity, Notifications.Vanilla.NOTIF_COMPLICATED_DIAGNOSIS, string.Empty, string.Empty, string.Empty, 0, 0, 0, 0, null, null);
-                            __instance.SwitchState(PatientState.BlockedByComplicatedDiagnosis);
+                            var diagnosisResult = __instance.Diagnose(__instance.m_state.m_department.GetEntity().m_departmentPersistentData.m_thresholdOfCertainty, true);
 
-                            return false;
+                            switch (diagnosisResult)
+                            {
+                                case DiagnosisResult.DIAGNOSED:
+                                    return false;
+                                case DiagnosisResult.COMPLICATED:
+                                    {
+                                        NotificationManager.GetInstance().AddMessage(__instance.m_entity, Notifications.Vanilla.NOTIF_COMPLICATED_DIAGNOSIS, string.Empty, string.Empty, string.Empty, 0, 0, 0, 0, null, null);
+                                        __instance.SwitchState(PatientState.BlockedByComplicatedDiagnosis);
+
+                                        return false;
+                                    }
+                                default:
+                                    {
+                                        // no planned treatments, no planned examinations, no diagnose
+                                        // try to schedule some examination
+
+                                        __instance.TryToScheduleExamination();
+                                    }
+                                    break;
+                            }
                         }
                         else if (__instance.m_state.m_medicalCondition.m_diagnosedMedicalCondition != null)
                         {
@@ -1073,13 +1090,6 @@ namespace ModAdvancedGameChanges.Lopital
                             {
                                 __instance.TryToStartScheduledTreatment(EquipmentListRules.ONLY_FREE, 0);
                             }
-                        }
-                        else
-                        {
-                            // no planned treatments, no planned examinations, no diagnose
-                            // try to schedule some examination
-
-                            __instance.TryToScheduleExamination();
                         }
                     }
                     else if (!__instance.m_state.m_waitingForPlayer)
