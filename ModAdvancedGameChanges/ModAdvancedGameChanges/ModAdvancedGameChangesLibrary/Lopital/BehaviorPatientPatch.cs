@@ -1157,51 +1157,43 @@ namespace ModAdvancedGameChanges.Lopital
             {
                 if (procedureComponent.m_state.m_procedureQueue.m_plannedTreatmentStates.Count == 0)
                 {
-                    if (__instance.GetControlMode() == PatientControlMode.AI)
+                    if (!BehaviorPatientPatch.HandleDiedSentHome(__instance))
                     {
-                        if (!BehaviorPatientPatch.HandleDiedSentHome(__instance))
+                        if (__instance.HasBeenTreated()
+                            && ((procedureComponent.m_state.m_procedureQueue.m_plannedExaminationStates.Count == 0)
+                                || (!__instance.m_state.m_medicalCondition.HasCriticalHiddenSymptom())))
                         {
-                            if (__instance.HasBeenTreated() 
-                                && ((procedureComponent.m_state.m_procedureQueue.m_plannedExaminationStates.Count == 0) 
-                                    || (!__instance.m_state.m_medicalCondition.HasCriticalHiddenSymptom())))
+                            // doctor have to fill report
+                            var doctor = __instance.m_state.m_doctor.GetEntity();
+                            var doctorEmployeeComponent = doctor.GetComponent<EmployeeComponent>();
+                            var doctorProcedureComponent = doctor.GetComponent<ProcedureComponent>();
+                            var fillingReportProcedure = Database.Instance.GetEntry<GameDBProcedure>(Procedures.Vanilla.DoctorFillingReports);
+
+                            if (doctorProcedureComponent.GetProcedureAvailabilty(fillingReportProcedure, doctor, doctorEmployeeComponent.m_state.m_department.GetEntity(), AccessRights.STAFF, EquipmentListRules.ONLY_FREE_SAME_FLOOR_PREFER_DPT) == ProcedureSceneAvailability.AVAILABLE)
                             {
-                                // doctor have to fill report
-                                var doctor = __instance.m_state.m_doctor.GetEntity();
-                                var doctorEmployeeComponent = doctor.GetComponent<EmployeeComponent>();
-                                var doctorProcedureComponent = doctor.GetComponent<ProcedureComponent>();
-                                var fillingReportProcedure = Database.Instance.GetEntry<GameDBProcedure>(Procedures.Vanilla.DoctorFillingReports);
-
-                                if (doctorProcedureComponent.GetProcedureAvailabilty(fillingReportProcedure, doctor, doctorEmployeeComponent.m_state.m_department.GetEntity(), AccessRights.STAFF, EquipmentListRules.ONLY_FREE_SAME_FLOOR_PREFER_DPT) == ProcedureSceneAvailability.AVAILABLE)
-                                {
-                                    doctorProcedureComponent.StartProcedure(fillingReportProcedure, doctor, doctorEmployeeComponent.m_state.m_department.GetEntity(), AccessRights.STAFF, EquipmentListRules.ONLY_FREE_SAME_FLOOR_PREFER_DPT);
-                                }
-
-                                __instance.SendHome();
-
-                                if (__instance.m_state.m_bookmarked)
-                                {
-                                    NotificationManager.GetInstance().AddMessage(__instance.m_entity, Notifications.Vanilla.NOTIF_FAVORITE_PATIENT_TREATED, string.Empty, string.Empty, string.Empty, 0, 0, 0, 0, null, null);
-                                }
-
-                                InsuranceManager.Instance.UpdateInsuranceCompanyRequirementsAndObjectives(InsuranceCheckMode.IMMEDIATE);
-                                __instance.Leave(true, false, false);
+                                doctorProcedureComponent.StartProcedure(fillingReportProcedure, doctor, doctorEmployeeComponent.m_state.m_department.GetEntity(), AccessRights.STAFF, EquipmentListRules.ONLY_FREE_SAME_FLOOR_PREFER_DPT);
                             }
-                            else
+
+                            __instance.SendHome();
+
+                            if (__instance.m_state.m_bookmarked)
                             {
-                                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, something wrong with patient, cannot treat?");
-
-                                __instance.m_entity.GetComponent<SpeechComponent>().HideBubble();
-                                __instance.m_state.m_waitingForPlayer = false;
-
-                                __instance.SendHome();
-                                __instance.Leave(false, false, false);
+                                NotificationManager.GetInstance().AddMessage(__instance.m_entity, Notifications.Vanilla.NOTIF_FAVORITE_PATIENT_TREATED, string.Empty, string.Empty, string.Empty, 0, 0, 0, 0, null, null);
                             }
+
+                            InsuranceManager.Instance.UpdateInsuranceCompanyRequirementsAndObjectives(InsuranceCheckMode.IMMEDIATE);
+                            __instance.Leave(true, false, false);
                         }
-                    }
-                    else
-                    {
-                        // ???
-                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, player mode, not implemented");
+                        else
+                        {
+                            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, something wrong with patient, cannot treat?");
+
+                            __instance.m_entity.GetComponent<SpeechComponent>().HideBubble();
+                            __instance.m_state.m_waitingForPlayer = false;
+
+                            __instance.SendHome();
+                            __instance.Leave(false, false, false);
+                        }
                     }
                 }
                 else
