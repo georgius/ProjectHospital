@@ -49,25 +49,20 @@ namespace ModAdvancedGameChanges
                         ViewSettingsPatch.m_debug.Add(__instance, new GenericFlag<bool>("AGC_OPTION_DEBUG", false));
                         ViewSettingsPatch.m_enableModChanges.Add(__instance, new GenericFlag<bool>("AGC_OPTION_ENABLE_MOD_CHANGES", true));
                         ViewSettingsPatch.m_enableNonLinearSkillLeveling.Add(__instance, new GenericFlag<bool>("AGC_OPTION_ENABLE_NON_LINEAR_SKILL_LEVELING", true));
-                        ViewSettingsPatch.m_enablePedestrianGoToPharmacy.Add(__instance, new GenericFlag<bool>("AGC_OPTION_ENABLE_PEDESTRIAN_GO_TO_PHARMACY", true));
+                        ViewSettingsPatch.m_enablePedestrianGoToPharmacy.Add(__instance, new GenericFlag<bool>("AGC_OPTION_ENABLE_PEDESTRIAN_GO_TO_PHARMACY", Tweakable.Vanilla.DlcHospitalServicesEnabled()));
                         ViewSettingsPatch.m_forceEmployeeLowestHireLevel.Add(__instance, new GenericFlag<bool>("AGC_OPTION_FORCE_EMPLOYEE_LOWEST_HIRE_LEVEL", true));
                         ViewSettingsPatch.m_labEmployeeBiochemistry.Add(__instance, new GenericFlag<bool>("AGC_OPTION_LAB_EMPLOYEE_BIOCHEMISTRY", true));
                         ViewSettingsPatch.m_limitClinicDoctorsLevel.Add(__instance, new GenericFlag<bool>("AGC_OPTION_LIMIT_CLINIC_DOCTORS_LEVEL", true));
                         ViewSettingsPatch.m_patientsThroughEmergency.Add(__instance, new GenericFlag<bool>("AGC_OPTION_PATIENTS_ONLY_EMERGENCY", true));
                         ViewSettingsPatch.m_staffLunchNight.Add(__instance, new GenericFlag<bool>("AGC_OPTION_STAFF_LUNCH_NIGHT", true));
                         ViewSettingsPatch.m_staffShiftsEqual.Add(__instance, new GenericFlag<bool>("AGC_OPTION_STAFF_SHIFTS_EQUAL", true));
-
-                        if (Tweakable.Vanilla.DlcHospitalServicesEnabled())
-                        {
-                            ViewSettingsPatch.m_trainingDepartment.Add(__instance, new GenericFlag<bool>("AGC_OPTION_TRAINING_DEPARTMENT", true));
-                        }
+                        ViewSettingsPatch.m_trainingDepartment.Add(__instance, new GenericFlag<bool>("AGC_OPTION_TRAINING_DEPARTMENT", Tweakable.Vanilla.DlcHospitalServicesEnabled()));
 
                         var boolFlags = new List<GenericFlag<bool>>(__instance.m_allBoolFlags);
 
                         boolFlags.Add(ViewSettingsPatch.m_debug[__instance]);
                         boolFlags.Add(ViewSettingsPatch.m_enableModChanges[__instance]);
                         boolFlags.Add(ViewSettingsPatch.m_enableNonLinearSkillLeveling[__instance]);
-                        boolFlags.Add(ViewSettingsPatch.m_enablePedestrianGoToPharmacy[__instance]);
                         boolFlags.Add(ViewSettingsPatch.m_forceEmployeeLowestHireLevel[__instance]);
                         boolFlags.Add(ViewSettingsPatch.m_labEmployeeBiochemistry[__instance]);
                         boolFlags.Add(ViewSettingsPatch.m_limitClinicDoctorsLevel[__instance]);
@@ -77,6 +72,7 @@ namespace ModAdvancedGameChanges
 
                         if (Tweakable.Vanilla.DlcHospitalServicesEnabled())
                         {
+                            boolFlags.Add(ViewSettingsPatch.m_enablePedestrianGoToPharmacy[__instance]);
                             boolFlags.Add(ViewSettingsPatch.m_trainingDepartment[__instance]);
                         }
 
@@ -145,6 +141,8 @@ namespace ModAdvancedGameChanges
             {
                 ViewSettingsPatch.FixSchedules();
                 ViewSettingsPatch.FixVendingMachines();
+
+                ViewSettingsPatch.m_enablePedestrianGoToPharmacy[__instance].m_value &= Tweakable.Vanilla.DlcHospitalServicesEnabled();
 
                 if (ViewSettingsPatch.m_labEmployeeBiochemistry[__instance].m_value)
                 {
