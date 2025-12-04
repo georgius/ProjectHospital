@@ -609,14 +609,17 @@ namespace ModAdvancedGameChanges
 
             new TweakableValidation(() =>
             {
-                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_JANITOR_MANAGER_CLEANING_BONUS_PERCENT);
-                if (value.Value < 1)
+                if (Tweakable.Vanilla.DlcHospitalServicesEnabled())
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_JANITOR_MANAGER_CLEANING_BONUS_PERCENT}' must be greater than zero.");
-                }
-                if (value.Value > 100)
-                {
-                    throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_JANITOR_MANAGER_CLEANING_BONUS_PERCENT}' must be less than or equal to 100.");
+                    var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_JANITOR_MANAGER_CLEANING_BONUS_PERCENT);
+                    if (value.Value < 1)
+                    {
+                        throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_JANITOR_MANAGER_CLEANING_BONUS_PERCENT}' must be greater than zero.");
+                    }
+                    if (value.Value > 100)
+                    {
+                        throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_JANITOR_MANAGER_CLEANING_BONUS_PERCENT}' must be less than or equal to 100.");
+                    }
                 }
             }),
 
