@@ -191,7 +191,7 @@ namespace ModAdvancedGameChanges.Lopital
 
                 TileObject temp = MapScriptInterface.Instance.FindClosestCenterObjectWithTagShortestPath(
                     mainCharacter.GetComponent<WalkComponent>().GetCurrentTile(), mainCharacter.GetComponent<WalkComponent>().GetFloorIndex(),
-                    tag, AccessRights.STAFF, new string[] { RoomTypes.Vanilla.CommonRoom }, false, true, null, null);
+                    tag, AccessRights.STAFF, new string[] { Tags.Vanilla.CommonRoom }, false, true, null, null);
 
                 if (temp != null)
                 {
