@@ -165,7 +165,7 @@ namespace ModAdvancedGameChanges.Lopital
 
             // try to find appropriate place in department in common room
             {
-                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{mainCharacter?.Name ?? "NULL"}, searching in common room in department  for '{tag}'");
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{mainCharacter?.Name ?? "NULL"}, searching in common room in department '{department.m_departmentPersistentData.m_departmentType.Entry.DatabaseID}' for '{tag}'");
 
                 TileObject temp = MapScriptInterface.Instance.FindClosestFreeObjectWithTags(
                     mainCharacter.GetComponent<WalkComponent>().GetCurrentTile(), mainCharacter.GetComponent<WalkComponent>().GetFloorIndex(),
@@ -187,7 +187,7 @@ namespace ModAdvancedGameChanges.Lopital
             // try to find appropriate place in any common room
             if (result == null)
             {
-                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{mainCharacter?.Name ?? "NULL"}, searching in common room  for '{tag}'");
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{mainCharacter?.Name ?? "NULL"}, searching in common room for '{tag}'");
 
                 TileObject temp = MapScriptInterface.Instance.FindClosestCenterObjectWithTagShortestPath(
                     mainCharacter.GetComponent<WalkComponent>().GetCurrentTile(), mainCharacter.GetComponent<WalkComponent>().GetFloorIndex(),
