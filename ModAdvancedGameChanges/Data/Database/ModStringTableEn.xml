@@ -16,7 +16,7 @@
 				<LocID>AGC_OPTION_DEBUG</LocID>
 				<Text>[AGC] Debug output</Text>
 			</GameDBLocalizedString>
-			
+		
 			<GameDBLocalizedString>
 				<LocID>AGC_OPTION_ENABLE_MOD_CHANGES</LocID>
 				<Text>[AGC] Enable mod changes (requires restart)</Text>
@@ -25,6 +25,11 @@
 			<GameDBLocalizedString>
 				<LocID>AGC_OPTION_ENABLE_NON_LINEAR_SKILL_LEVELING</LocID>
 				<Text>[AGC] Non-linear skill leveling</Text>
+			</GameDBLocalizedString>
+			
+			<GameDBLocalizedString>
+				<LocID>AGC_OPTION_ENABLE_PEDESTRIAN_GO_TO_PHARMACY</LocID>
+				<Text>[AGC] Enable pedestrian go to pharmacy</Text>
 			</GameDBLocalizedString>
 			
 			<GameDBLocalizedString>

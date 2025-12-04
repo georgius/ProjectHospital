@@ -62,6 +62,7 @@
     <Compile Include="Lopital\BehaviorNursePatch.cs" />
     <Compile Include="Lopital\BehaviorPatch.cs" />
     <Compile Include="Lopital\BehaviorPatientPatch.cs" />
+    <Compile Include="Lopital\BehaviorPedestrianPatch.cs" />
     <Compile Include="Lopital\DepartmentPatch.cs" />
     <Compile Include="Lopital\EmployeeComponentPatch.cs" />
     <Compile Include="Lopital\FloorPatch.cs" />

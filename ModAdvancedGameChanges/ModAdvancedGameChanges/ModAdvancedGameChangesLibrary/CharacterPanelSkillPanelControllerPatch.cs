@@ -14,7 +14,7 @@ namespace ModAdvancedGameChanges
         {
             if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
             {
-                // Allow original method to run
+                // allow original method to run
                 return true;
             }
 
@@ -28,7 +28,7 @@ namespace ModAdvancedGameChanges
         {
             if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
             {
-                // Allow original method to run
+                // allow original method to run
                 return true;
             }
 
@@ -49,7 +49,7 @@ namespace ModAdvancedGameChanges
         {
             if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
             {
-                // Allow original method to run
+                // allow original method to run
                 return true;
             }
 

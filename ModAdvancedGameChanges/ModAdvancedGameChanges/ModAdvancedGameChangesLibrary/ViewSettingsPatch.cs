@@ -19,6 +19,7 @@ namespace ModAdvancedGameChanges
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_debug = new Dictionary<ViewSettings, GenericFlag<bool>>();
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_enableModChanges = new Dictionary<ViewSettings, GenericFlag<bool>>();
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_enableNonLinearSkillLeveling = new Dictionary<ViewSettings, GenericFlag<bool>>();
+        public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_enablePedestrianGoToPharmacy = new Dictionary<ViewSettings, GenericFlag<bool>>();
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_forceEmployeeLowestHireLevel = new Dictionary<ViewSettings, GenericFlag<bool>>();
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_labEmployeeBiochemistry = new Dictionary<ViewSettings, GenericFlag<bool>>();
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_limitClinicDoctorsLevel = new Dictionary<ViewSettings, GenericFlag<bool>>();
@@ -48,6 +49,7 @@ namespace ModAdvancedGameChanges
                         ViewSettingsPatch.m_debug.Add(__instance, new GenericFlag<bool>("AGC_OPTION_DEBUG", false));
                         ViewSettingsPatch.m_enableModChanges.Add(__instance, new GenericFlag<bool>("AGC_OPTION_ENABLE_MOD_CHANGES", true));
                         ViewSettingsPatch.m_enableNonLinearSkillLeveling.Add(__instance, new GenericFlag<bool>("AGC_OPTION_ENABLE_NON_LINEAR_SKILL_LEVELING", true));
+                        ViewSettingsPatch.m_enablePedestrianGoToPharmacy.Add(__instance, new GenericFlag<bool>("AGC_OPTION_ENABLE_PEDESTRIAN_GO_TO_PHARMACY", true));
                         ViewSettingsPatch.m_forceEmployeeLowestHireLevel.Add(__instance, new GenericFlag<bool>("AGC_OPTION_FORCE_EMPLOYEE_LOWEST_HIRE_LEVEL", true));
                         ViewSettingsPatch.m_labEmployeeBiochemistry.Add(__instance, new GenericFlag<bool>("AGC_OPTION_LAB_EMPLOYEE_BIOCHEMISTRY", true));
                         ViewSettingsPatch.m_limitClinicDoctorsLevel.Add(__instance, new GenericFlag<bool>("AGC_OPTION_LIMIT_CLINIC_DOCTORS_LEVEL", true));
@@ -65,6 +67,7 @@ namespace ModAdvancedGameChanges
                         boolFlags.Add(ViewSettingsPatch.m_debug[__instance]);
                         boolFlags.Add(ViewSettingsPatch.m_enableModChanges[__instance]);
                         boolFlags.Add(ViewSettingsPatch.m_enableNonLinearSkillLeveling[__instance]);
+                        boolFlags.Add(ViewSettingsPatch.m_enablePedestrianGoToPharmacy[__instance]);
                         boolFlags.Add(ViewSettingsPatch.m_forceEmployeeLowestHireLevel[__instance]);
                         boolFlags.Add(ViewSettingsPatch.m_labEmployeeBiochemistry[__instance]);
                         boolFlags.Add(ViewSettingsPatch.m_limitClinicDoctorsLevel[__instance]);
@@ -88,7 +91,7 @@ namespace ModAdvancedGameChanges
 
             Debug.Log(System.Reflection.MethodBase.GetCurrentMethod(), "End");
 
-            // Allow original method to run
+            // allow original method to run
             return true;
         }
 

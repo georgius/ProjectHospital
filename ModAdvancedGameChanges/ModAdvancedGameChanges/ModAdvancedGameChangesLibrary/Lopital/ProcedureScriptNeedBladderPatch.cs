@@ -17,7 +17,7 @@ namespace ModAdvancedGameChanges.Lopital
         {
             if (!ViewSettingsPatch.m_enabled)
             {
-                // Allow original method to run
+                // allow original method to run
                 return true;
             }
 
@@ -35,7 +35,7 @@ namespace ModAdvancedGameChanges.Lopital
         {
             if (!ViewSettingsPatch.m_enabled)
             {
-                // Allow original method to run
+                // allow original method to run
                 return true;
             }
 

@@ -31,7 +31,7 @@ namespace ModAdvancedGameChanges.Lopital
         {
             if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_forceEmployeeLowestHireLevel[SettingsManager.Instance.m_viewSettings].m_value))
             {
-                // Allow original method to run
+                // allow original method to run
                 return true;
             }
 
@@ -50,7 +50,7 @@ namespace ModAdvancedGameChanges.Lopital
         {
             if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_forceEmployeeLowestHireLevel[SettingsManager.Instance.m_viewSettings].m_value))
             {
-                // Allow original method to run
+                // allow original method to run
                 return true;
             }
 
@@ -69,7 +69,7 @@ namespace ModAdvancedGameChanges.Lopital
         {
             if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_forceEmployeeLowestHireLevel[SettingsManager.Instance.m_viewSettings].m_value))
             {
-                // Allow original method to run
+                // allow original method to run
                 return true;
             }
 
