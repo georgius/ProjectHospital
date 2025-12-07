@@ -249,17 +249,17 @@
 		<Value>5</Value>
 	</GameDBTweakableInt>
 	
-	<GameDBTweakableFloat ID="TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_HIGH_PRIORITY_MULTIPLIER">
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_HIGH_PRIORITY_MULTIPLIER">
 		<!-- vannila TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS is 4 -->
 		<!-- mutliplied by 1 is 4 -->
 		<Value>1</Value>   
 	</GameDBTweakableFloat>
-	<GameDBTweakableFloat ID="TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_MEDIUM_PRIORITY_MULTIPLIER">
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_MEDIUM_PRIORITY_MULTIPLIER">
 		<!-- vannila TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS is 4 -->
 		<!-- mutliplied by 2 is 8 -->
 		<Value>2</Value>   
 	</GameDBTweakableFloat>
-	<GameDBTweakableFloat ID="TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_LOW_PRIORITY_MULTIPLIER">
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_LOW_PRIORITY_MULTIPLIER">
 		<!-- vannila TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS is 4 -->
 		<!-- mutliplied by 4 is 16 -->
 		<Value>4</Value>   
@@ -277,6 +277,10 @@
 	</GameDBTweakableInt>
 	<GameDBTweakableInt ID="AGC_TWEAKABLE_DOCTOR_FILLING_REPORT_SKILL_POINTS">
 		<Value>3</Value>
+	</GameDBTweakableInt>
+	
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_DAILY_PEDESTRIANS">
+		<Value>15</Value>
 	</GameDBTweakableInt>
 	
 	<!-- vanilla -->

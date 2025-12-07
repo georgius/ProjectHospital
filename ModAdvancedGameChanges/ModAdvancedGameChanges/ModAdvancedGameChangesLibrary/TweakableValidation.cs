@@ -506,26 +506,26 @@ namespace ModAdvancedGameChanges
 
             new TweakableValidation(() =>
             {
-                var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_HIGH_PRIORITY_MULTIPLIER);
+                var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_HIGH_PRIORITY_MULTIPLIER);
                 if (value.Value <= 0f)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_HIGH_PRIORITY_MULTIPLIER}' must be greater than zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_HIGH_PRIORITY_MULTIPLIER}' must be greater than zero.");
                 }
             }),
             new TweakableValidation(() =>
             {
-                var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_MEDIUM_PRIORITY_MULTIPLIER);
+                var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_MEDIUM_PRIORITY_MULTIPLIER);
                 if (value.Value <= 0f)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_MEDIUM_PRIORITY_MULTIPLIER}' must be greater than zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_MEDIUM_PRIORITY_MULTIPLIER}' must be greater than zero.");
                 }
             }),
             new TweakableValidation(() =>
             {
-                var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_LOW_PRIORITY_MULTIPLIER);
+                var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_LOW_PRIORITY_MULTIPLIER);
                 if (value.Value <= 0f)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_LOW_PRIORITY_MULTIPLIER}' must be greater than zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_LOW_PRIORITY_MULTIPLIER}' must be greater than zero.");
                 }
             }),
 
