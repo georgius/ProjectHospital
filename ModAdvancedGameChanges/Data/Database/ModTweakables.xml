@@ -282,6 +282,9 @@
 	<GameDBTweakableInt ID="AGC_TWEAKABLE_PEDESTRIAN_MAX_COUNT">
 		<Value>15</Value>
 	</GameDBTweakableInt>
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_PROBABILITY">
+		<Value>1</Value>   
+	</GameDBTweakableFloat>
 	
 	<!-- vanilla -->
 	

@@ -255,6 +255,11 @@ namespace ModAdvancedGameChanges
                 return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_MAX_COUNT).Value;
             }
 
+            public static float PedestrianPharmacyProbability()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_PROBABILITY).Value;
+            }
+
             public static int SkillLevels()
             {
                 return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_SKILL_LEVELS).Value;
