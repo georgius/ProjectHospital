@@ -36,12 +36,46 @@ namespace ModAdvancedGameChanges
 
             if (__instance.m_floorIndex == 0)
             {
-                for (int i = pedestrians; i < Tweakable.Mod.DailyPedestrians(); i++)
+                for (int i = pedestrians; i < Tweakable.Mod.PedestrianMaxCount(); i++)
                 {
                     var entity = LopitalEntityFactory.CreateCharacterPedestrian(__instance, new Vector2i(0, 2));
                     entity.GetComponent<BehaviorPedestrian>().m_state.m_respawnTimeSeconds = UnityEngine.Random.Range(5f, 15f);
 
                     __instance.AddCharacter(entity);
+                }
+
+                // remove pedestrians over maximum allowed count (if possible)
+                if (pedestrians > Tweakable.Mod.PedestrianMaxCount())
+                {
+                    int j = 0;
+                    while (j < Hospital.Instance.m_characters.Count)
+                    {
+                        Entity entity = Hospital.Instance.m_characters[j];
+
+                        if (entity.GetComponent<BehaviorPedestrian>() != null)
+                        {
+                            switch (entity.GetComponent<BehaviorPedestrian>().m_state.m_state)
+                            {
+                                case BehaviorPedestrianState.Uninitialized:
+                                case BehaviorPedestrianState.Idle:
+                                    // safe to remove
+                                    Hospital.Instance.m_characters.RemoveAt(j);
+                                    break;
+                                case BehaviorPedestrianState.Walking:
+                                case BehaviorPedestrianState.IdleAtDestination:
+                                case BehaviorPedestrianState.WalkingBack:
+                                    // unsafe to remove, skip
+                                    j++;
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            j++;
+                        }
+                    }
                 }
             }
 

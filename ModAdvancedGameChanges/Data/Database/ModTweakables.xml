@@ -279,7 +279,7 @@
 		<Value>3</Value>
 	</GameDBTweakableInt>
 	
-	<GameDBTweakableInt ID="AGC_TWEAKABLE_DAILY_PEDESTRIANS">
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_PEDESTRIAN_MAX_COUNT">
 		<Value>15</Value>
 	</GameDBTweakableInt>
 	
