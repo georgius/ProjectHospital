@@ -11,6 +11,44 @@ namespace ModAdvancedGameChanges
     public static class FloorPatch
     {
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(Floor), nameof(Floor.OnDayStart))]
+        public static bool OnDayStartPrefix(Floor __instance)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // allow original method to run
+                return true;
+            }
+
+            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"floor {__instance.m_floorIndex}, on day start");
+
+            int pedestrians = 0;
+            foreach (Entity entity in Hospital.Instance.m_characters)
+            {
+                entity.GetComponent<EmployeeComponent>()?.OnDayStart();
+
+                if (entity.GetComponent<BehaviorPedestrian>() != null)
+                {
+                    entity.GetComponent<BehaviorPedestrian>().m_state.m_respawnTimeSeconds = UnityEngine.Random.Range(5f, 15f);
+                    pedestrians++;
+                }
+            }
+
+            if (__instance.m_floorIndex == 0)
+            {
+                for (int i = pedestrians; i < Tweakable.Mod.DailyPedestrians(); i++)
+                {
+                    var entity = LopitalEntityFactory.CreateCharacterPedestrian(__instance, new Vector2i(0, 2));
+                    entity.GetComponent<BehaviorPedestrian>().m_state.m_respawnTimeSeconds = UnityEngine.Random.Range(5f, 15f);
+
+                    __instance.AddCharacter(entity);
+                }
+            }
+
+            return false;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(Floor), nameof(Floor.UpdateStaticNavigationData))]
         public static bool UpdateStaticNavigationData(Floor __instance)
         {

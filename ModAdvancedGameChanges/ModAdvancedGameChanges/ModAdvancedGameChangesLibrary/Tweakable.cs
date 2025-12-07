@@ -23,6 +23,11 @@ namespace ModAdvancedGameChanges
                 return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_COMPLICATED_DECISION_MINUTES).Value;
             }
 
+            public static int DailyPedestrians()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_DAILY_PEDESTRIANS).Value;
+            }
+
             public static int DoctorLevelPoints(int index)
             {
                 return Tweakable.GetTweakable<GameDBTweakableInt>(String.Format(CultureInfo.InvariantCulture, Tweakables.Mod.AGC_TWEAKABLE_DOCTOR_LEVEL_POINTS_FORMAT, index)).Value;
