@@ -20,6 +20,8 @@
             public const string DonutSnack = "ui_donut_snack";
             public const string Distraction = "distraction";
             public const string Dressing = "dressing";
+            public const string DrugShelfPharmacist = "ui_drug_shelf";
+            public const string DrugShelfCustomer = "ui_drug_shelf_optional";
             public const string Dryer = "dryer";
             public const string Eating = "eating";
             public const string Elevator = "elevator";
