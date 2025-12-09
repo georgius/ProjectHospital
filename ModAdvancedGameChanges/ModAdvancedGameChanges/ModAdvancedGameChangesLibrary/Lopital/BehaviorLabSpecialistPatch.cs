@@ -217,6 +217,139 @@ namespace ModAdvancedGameChanges.Lopital
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorLabSpecialist), nameof(BehaviorLabSpecialist.Update))]
+        public static bool UpdatePrefix(float deltaTime, BehaviorLabSpecialist __instance)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // allow original method to run
+                return true;
+            }
+
+            __instance.m_state.m_timeInState += deltaTime;
+
+            if ((__instance.m_state.m_currentPatient != null) 
+                && (__instance.m_state.m_currentPatient.GetEntity() == null))
+            {
+                Debug.Log(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, cleaned up deleted patient {__instance.m_state.m_currentPatient.m_entityID}");
+                __instance.m_state.m_currentPatient = null;
+            }
+
+            if ((__instance.m_state.m_currentPatient != null) 
+                && (__instance.m_state.m_currentPatient.GetEntity() != null))
+            {
+                BehaviorPatient patient = __instance.m_state.m_currentPatient.GetEntity().GetComponent<BehaviorPatient>();
+
+                if ((patient != null)
+                    && patient.m_state.m_patientState == PatientState.Left)
+                {
+                    Debug.Log(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, cleaned up deleted patient {__instance.m_state.m_currentPatient.m_entityID}");
+                    __instance.m_state.m_currentPatient = null;
+                }
+            }
+
+            bool activeCharacter = true;
+
+            switch (__instance.m_state.m_labSpecialistState)
+            {
+                case LabSpecialistState.Idle:
+                    __instance.UpdateStateIdle(deltaTime);
+                    break;
+                case LabSpecialistState.GoingToWorkplace:
+                    __instance.UpdateStateGoingToWorkplace();
+                    break;
+                case LabSpecialistState.FulfillingNeeds:
+                    __instance.UpdateStateFulfillingNeeds();
+                    break;
+                case LabSpecialistState.FillingFreeTime:
+                    __instance.UpdateStateFillingFreeTime(deltaTime);
+                    break;
+                case LabSpecialistState.OverridenByProcedureScript:
+                    __instance.UpdeteSafetyReleaseCheck();
+                    break;
+                case LabSpecialistState.GoingHome:
+                    __instance.UpdateStateGoingHome();
+                    break;
+                case LabSpecialistState.AtHome:
+                    {
+                        __instance.UpdateStateAtHome();
+                        activeCharacter = false;
+                    }
+                    break;
+                case LabSpecialistState.Commuting:
+                    __instance.UpdateStateCommuting();
+                    break;
+                case LabSpecialistState.FiredAtHome:
+                    activeCharacter = false;
+                    break;
+                case LabSpecialistState.OverridenReservedForProcedure:
+                    {
+                        if ((__instance.GetComponent<EmployeeComponent>().m_state.m_reservedByPatient != null) 
+                            && (__instance.GetComponent<EmployeeComponent>().m_state.m_reservedByPatient.GetEntity() == null))
+                        {
+                            Debug.Log(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, reserved by a patient who left, cleared!");
+                            __instance.SwitchState(LabSpecialistState.Idle);
+                        }
+                    }
+                    break;
+                case LabSpecialistState.GoingForSample:
+                    __instance.UpdateStateGoingForSample();
+                    break;
+                case LabSpecialistState.GoingForSampleFromHospitalizedPatient:
+                    __instance.UpdateStateGoingForSampleFromHospitalizedPatient();
+                    break;
+                case LabSpecialistState.TakingSample:
+                    __instance.UpdateStateTakingSample();
+                    break;
+                case LabSpecialistState.ProcessingSampleFromPatient:
+                    __instance.UpdateStateProcessingSampleFromPatient();
+                    break;
+                case LabSpecialistState.GoingToStoreSampleFromPatient:
+                    __instance.UpdateStateGoingToStoreSampleFromPatient();
+                    break;
+                case LabSpecialistState.StoringSampleFromPatient:
+                    __instance.UpdateStateStoringSampleFromPatient();
+                    break;
+                case LabSpecialistState.SampleFromPatientStored:
+                    __instance.UpdateStateSampleFromPatientStored();
+                    break;
+                case LabSpecialistState.ReturningWithSample:
+                    __instance.UpdateStateReturningWithSample();
+                    break;
+                case LabSpecialistState.StartWritingNotes:
+                    __instance.UpdateStateWritingNotes();
+                    break;
+                case LabSpecialistState.StopWritingNotes:
+                    __instance.UpdateStopWritingNotes();
+                    break;
+                case LabSpecialistState.GoingToEquipment:
+                    __instance.UpdateStateGoingToEquipment();
+                    break;
+                case LabSpecialistState.UsingEquipment:
+                    __instance.UpdateStateUsingEquipment();
+                    break;
+                case LabSpecialistState.StoppedUsingEquipment:
+                    __instance.UpdateStateStoppedUsingEquipment();
+                    break;
+                case LabSpecialistState.FinishedProcedure:
+                    __instance.UpdateFinishedProcedure();
+                    break;
+                case LabSpecialistState.Training:
+                    __instance.UpdateTraining();
+                    break;
+                default:
+                    break;
+            }
+
+            if (activeCharacter)
+            {
+                Hospital.Instance.m_currentHospitalStatus.m_hadAnyActiveCharactersThisFrame = true;
+            }
+
+            return false;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(BehaviorLabSpecialist), "UpdateStateAtHome")]
         public static bool UpdateStateAtHomePrefix(BehaviorLabSpecialist __instance)
         {
@@ -842,6 +975,121 @@ namespace ModAdvancedGameChanges.Lopital
         public static TileObject GetWorkDesk(this BehaviorLabSpecialist instance)
         {
             return MethodAccessHelper.CallMethod<TileObject>(instance, "GetWorkDesk");
+        }
+
+        public static void UpdeteSafetyReleaseCheck(this BehaviorLabSpecialist instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdeteSafetyReleaseCheck");
+        }
+
+        public static void UpdateStateAtHome(this BehaviorLabSpecialist instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateAtHome");
+        }
+
+        public static void UpdateStateCommuting(this BehaviorLabSpecialist instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateCommuting");
+        }
+
+        public static void UpdateFinishedProcedure(this BehaviorLabSpecialist instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateFinishedProcedure");
+        }
+
+        public static void UpdateStateFillingFreeTime(this BehaviorLabSpecialist instance, float deltaTime)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateFillingFreeTime", deltaTime);
+        }
+
+        public static void UpdateStateFulfillingNeeds(this BehaviorLabSpecialist instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateFulfillingNeeds");
+        }
+
+        public static void UpdateStateGoingForSample(this BehaviorLabSpecialist instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateGoingForSample");
+        }
+
+        public static void UpdateStateGoingForSampleFromHospitalizedPatient(this BehaviorLabSpecialist instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateGoingForSampleFromHospitalizedPatient");
+        }
+
+        public static void UpdateStateGoingHome(this BehaviorLabSpecialist instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateGoingHome");
+        }
+
+        public static void UpdateStateGoingToEquipment(this BehaviorLabSpecialist instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateGoingToEquipment");
+        }
+
+        public static void UpdateStateGoingToStoreSampleFromPatient(this BehaviorLabSpecialist instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateGoingToStoreSampleFromPatient");
+        }
+
+        public static void UpdateStateGoingToWorkplace(this BehaviorLabSpecialist instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateGoingToWorkplace");
+        }
+
+        public static void UpdateStateIdle(this BehaviorLabSpecialist instance, float deltaTime)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateIdle", deltaTime);
+        }
+
+        public static void UpdateTraining(this BehaviorLabSpecialist instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateTraining");
+        }
+
+        public static void UpdateStateProcessingSampleFromPatient(this BehaviorLabSpecialist instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateProcessingSampleFromPatient");
+        }
+
+        public static void UpdateStateReturningWithSample(this BehaviorLabSpecialist instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateReturningWithSample");
+        }
+
+        public static void UpdateStateSampleFromPatientStored(this BehaviorLabSpecialist instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateSampleFromPatientStored");
+        }
+
+        public static void UpdateStateStoppedUsingEquipment(this BehaviorLabSpecialist instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateStoppedUsingEquipment");
+        }
+
+        public static void UpdateStopWritingNotes(this BehaviorLabSpecialist instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStopWritingNotes");
+        }
+
+        public static void UpdateStateStoringSampleFromPatient(this BehaviorLabSpecialist instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateStoringSampleFromPatient");
+        }
+
+        public static void UpdateStateTakingSample(this BehaviorLabSpecialist instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateTakingSample");
+        }
+
+        public static void UpdateStateUsingEquipment(this BehaviorLabSpecialist instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateUsingEquipment");
+        }
+
+        public static void UpdateStateWritingNotes(this BehaviorLabSpecialist instance)
+        {
+            MethodAccessHelper.CallMethod(instance, "UpdateStateWritingNotes");
         }
     }
 }
