@@ -10,8 +10,11 @@
             public const string FreeTime = "BUBBLE_FREETIME";
             public const string Food = "BUBBLE_FOOD";
             public const string Game = "BUBBLE_GAME";
+            public const string Happy = "BUBBLE_HAPPY";
             public const string Home = "BUBBLE_HOME";
             public const string NextPatient = "BUBBLE_NEXT";
+            public const string Pills = "BUBBLE_PILLS";
+            public const string Prescription = "BUBBLE_PRESCRIPTION";
             public const string Question = "BUBBLE_QUESTION";
             public const string Television = "BUBBLE_TV";
             public const string Unhappy = "BUBBLE_UNHAPPY";
