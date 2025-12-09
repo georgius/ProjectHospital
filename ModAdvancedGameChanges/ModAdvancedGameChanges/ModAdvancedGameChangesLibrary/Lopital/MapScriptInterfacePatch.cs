@@ -369,6 +369,48 @@ namespace ModAdvancedGameChanges.Lopital
             return MapScriptInterfacePatch.GetRandomFreePlaceInRoomTypePreferDepartment(instance.GetComponent<WalkComponent>(), roomType, department, accessRights);
         }
 
+        public static List<Entity> FindLabSpecialistsAssignedToRoom(Room room, bool hasToBeFree, Department department, GameDBEmployeeRole role, GameDBSkill skill)
+        {
+            List<Entity> result = new List<Entity>();
+
+            List<Department> departments = new List<Department>();
+            if (department != null)
+            {
+                departments.Add(department);
+            }
+            else
+            {
+                departments.AddRange(Hospital.Instance.m_departments);
+            }
+
+            foreach (Department queryDepartment in departments)
+            {
+                List<EntityIDPointer<Entity>> labSpecialists = queryDepartment.m_departmentPersistentData.m_labSpecialists;
+
+                foreach (EntityIDPointer<Entity> labSpecialistPointer in labSpecialists)
+                {
+                    Entity labSpecialist = labSpecialistPointer.GetEntity();
+                    BehaviorLabSpecialist behavior = labSpecialist.GetComponent<BehaviorLabSpecialist>();
+                    EmployeeComponent employee = labSpecialist.GetComponent<EmployeeComponent>();
+
+                    if ((employee != null)
+                        && (DayTime.Instance.GetShift() == employee.m_state.m_shift)
+                        && (employee.m_state.m_homeRoom != null)
+                        && (!employee.IsFired())
+                        && ((room == null) || (employee.m_state.m_homeRoom.GetEntity() == room))
+                        && ((department == null) || (employee.m_state.m_department.GetEntity() == department))
+                        && ((role == null) || employee.HasRole(role))
+                        && ((skill == null) || employee.m_state.m_skillSet.HasSkill(skill))
+                        && ((!hasToBeFree) || behavior.IsFree()))
+                    {
+                        result.Add(labSpecialist);
+                    }
+                }
+            }
+
+            return result;
+        }
+
         public static List<Entity> FindNursesAssignedToRoom(Room room, bool hasToBeFree, Department department, GameDBEmployeeRole role, GameDBSkill skill)
         {
             List<Entity> result = new List<Entity>();
@@ -410,7 +452,6 @@ namespace ModAdvancedGameChanges.Lopital
 
             return result;
         }
-
 
         public static bool IsInDestinationRoom(Entity entity)
         {
