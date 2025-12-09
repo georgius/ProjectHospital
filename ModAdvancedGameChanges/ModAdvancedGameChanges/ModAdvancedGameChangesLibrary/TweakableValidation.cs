@@ -585,6 +585,31 @@ namespace ModAdvancedGameChanges
                 }
             }),
 
+            new TweakableValidation(() =>
+            {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PHARMACIST_QUESTION_MINUTES);
+                if (value.Value < 1)
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PHARMACIST_QUESTION_MINUTES}' must be greater than zero.");
+                }
+            }),
+            new TweakableValidation(() =>
+            {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PHARMACIST_SEARCH_DRUG_MINUTES);
+                if (value.Value < 1)
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PHARMACIST_SEARCH_DRUG_MINUTES}' must be greater than zero.");
+                }
+            }),
+            new TweakableValidation(() =>
+            {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PHARMACIST_SEARCH_DRUG_SKILL_POINTS);
+                if (value.Value < 1)
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PHARMACIST_SEARCH_DRUG_SKILL_POINTS}' must be greater than zero.");
+                }
+            }),
+
             // vanilla checks
 
             new TweakableValidation(() =>

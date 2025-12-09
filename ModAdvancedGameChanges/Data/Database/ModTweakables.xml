@@ -286,6 +286,16 @@
 		<Value>1</Value>   
 	</GameDBTweakableFloat>
 	
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_PHARMACIST_QUESTION_MINUTES">
+		<Value>1</Value>
+	</GameDBTweakableInt>
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_PHARMACIST_SEARCH_DRUG_MINUTES">
+		<Value>5</Value>
+	</GameDBTweakableInt>
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_PHARMACIST_SEARCH_DRUG_SKILL_POINTS">
+		<Value>3</Value>
+	</GameDBTweakableInt>
+	
 	<!-- vanilla -->
 	
 	<GameDBTweakableInt ID="TWEAKABLE_MAIN_SKILL_POINTS">

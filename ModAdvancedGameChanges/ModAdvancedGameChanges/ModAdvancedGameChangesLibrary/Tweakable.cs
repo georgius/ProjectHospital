@@ -260,6 +260,21 @@ namespace ModAdvancedGameChanges
                 return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_PROBABILITY).Value;
             }
 
+            public static int PharmacistQuestionMinutes()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PHARMACIST_QUESTION_MINUTES).Value;
+            }
+
+            public static int PharmacistSearchDrugMinutes()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PHARMACIST_SEARCH_DRUG_MINUTES).Value;
+            }
+
+            public static int PharmacistSearchDrugSkillPoints()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PHARMACIST_SEARCH_DRUG_SKILL_POINTS).Value;
+            }
+
             public static int SkillLevels()
             {
                 return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_SKILL_LEVELS).Value;
