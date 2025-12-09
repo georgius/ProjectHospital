@@ -20,5 +20,19 @@ namespace ModAdvancedGameChanges.Helpers
 
             return (TResult)methodInfo.Invoke(instance, parameters);
         }
+
+        public static void CallStaticMethod(Type type, string methodName, params object[] parameters)
+        {
+            MethodInfo methodInfo = type.GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Static);
+
+            methodInfo.Invoke(null, parameters);
+        }
+
+        public static TResult CallStaticMethod<TResult>(Type type, string methodName, params object[] parameters)
+        {
+            MethodInfo methodInfo = type.GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Static);
+
+            return (TResult)methodInfo.Invoke(null, parameters);
+        }
     }
 }
