@@ -9,6 +9,8 @@
 
             public const string DoctorFillingReports = "CONTROL_PROCEDURE_DOCTOR_FILING_REPORTS";
 
+            public const string Pharmacy = "DLC_ADMIN_CONTROL_PROCEDURE_PHARMACY";
+
             public const string StaffTraining = "DLC_ADMIN_STAFF_TRAINING";
 
             public const string StaffFreeTime = "CONTROL_PROCEDURE_NURSE_FREE_TIME";
