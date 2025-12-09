@@ -76,6 +76,31 @@ namespace ModAdvancedGameChanges.Lopital
             return false;
         }
 
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(Hospital), "ValidateCharacters")]
+        public static bool ValidateCharactersPrefix(Hospital __instance)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // allow original method to run
+                return true;
+            }
+
+            foreach (Entity entity in __instance.m_characters)
+            {
+                BehaviorPedestrian pedestrian = entity.GetComponent<BehaviorPedestrian>();
+                if (pedestrian != null)
+                {
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{entity.Name ?? "NULL"}, setting voice and name");
+
+                    entity.GetComponent<CharacterPersonalInfoComponent>().ChooseVoice(true);
+                    entity.Name = "Pedestrian " + entity.GetComponent<CharacterPersonalInfoComponent>().m_personalInfo.GetFullName();
+                }
+            }
+
+            return true;
+        }
+
         private static void SetScheduleTimes(GameDBSchedule schedule, float startTime, float endTime)
         {
             Debug.Log(System.Reflection.MethodBase.GetCurrentMethod(), $"Setting schedule {schedule.DatabaseID}, start time {startTime.ToString(CultureInfo.InvariantCulture)}, end time {endTime.ToString(CultureInfo.InvariantCulture)}");
