@@ -579,7 +579,7 @@ namespace ModAdvancedGameChanges
                 {
                     throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_PROBABILITY}' must be greater than or equal to zero.");
                 }
-                if (value.Value < 1f)
+                if (value.Value > 1f)
                 {
                     throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_PROBABILITY}' must be lower than or equal to 1.");
                 }
