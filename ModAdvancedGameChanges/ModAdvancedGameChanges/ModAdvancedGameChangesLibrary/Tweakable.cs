@@ -275,6 +275,15 @@ namespace ModAdvancedGameChanges
                 return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PHARMACIST_SEARCH_DRUG_SKILL_POINTS).Value;
             }
 
+            public static int PharmacyNonRestrictedDrugsPaymentMinimum()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MINIMUM).Value;
+            }
+            public static int PharmacyNonRestrictedDrugsPaymentMaximum()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MAXIMUM).Value;
+            }
+
             public static int SkillLevels()
             {
                 return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_SKILL_LEVELS).Value;

@@ -266,7 +266,7 @@ namespace ModAdvancedGameChanges
                 {
                     throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_MEAL_MAXIMUM}' must be greater than or equal to {Tweakable.Mod.NeedHungerLunchPaymentMealMinimum().ToString(CultureInfo.InvariantCulture)}.");
                 }
-            }),            
+            }),
             new TweakableValidation(() =>
             {
                 var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_SNACK_MINIMUM);
@@ -607,6 +607,22 @@ namespace ModAdvancedGameChanges
                 if (value.Value < 1)
                 {
                     throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PHARMACIST_SEARCH_DRUG_SKILL_POINTS}' must be greater than zero.");
+                }
+            }),
+            new TweakableValidation(() =>
+            {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MINIMUM);
+                if (value.Value < 0)
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MINIMUM}' must be greater than or equal to zero.");
+                }
+            }),
+            new TweakableValidation(() =>
+            {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MAXIMUM);
+                if (value.Value < Tweakable.Mod.PharmacyNonRestrictedDrugsPaymentMinimum())
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MAXIMUM}' must be greater than or equal to {Tweakable.Mod.PharmacyNonRestrictedDrugsPaymentMinimum().ToString(CultureInfo.InvariantCulture)}.");
                 }
             }),
 

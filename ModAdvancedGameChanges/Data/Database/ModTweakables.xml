@@ -283,7 +283,7 @@
 		<Value>15</Value>
 	</GameDBTweakableInt>
 	<GameDBTweakableFloat ID="AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_PROBABILITY">
-		<Value>1</Value>   
+		<Value>0.5</Value>   
 	</GameDBTweakableFloat>
 	
 	<GameDBTweakableInt ID="AGC_TWEAKABLE_PHARMACIST_QUESTION_MINUTES">
@@ -294,6 +294,12 @@
 	</GameDBTweakableInt>
 	<GameDBTweakableInt ID="AGC_TWEAKABLE_PHARMACIST_SEARCH_DRUG_SKILL_POINTS">
 		<Value>3</Value>
+	</GameDBTweakableInt>
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MINIMUM">
+		<Value>10</Value>
+	</GameDBTweakableInt>
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MAXIMUM">
+		<Value>50</Value>
 	</GameDBTweakableInt>
 	
 	<!-- vanilla -->
