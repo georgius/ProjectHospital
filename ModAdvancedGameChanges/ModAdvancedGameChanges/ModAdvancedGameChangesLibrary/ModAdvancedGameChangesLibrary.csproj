@@ -64,11 +64,13 @@
     <Compile Include="Lopital\BehaviorPatientPatch.cs" />
     <Compile Include="Lopital\BehaviorPedestrianPatch.cs" />
     <Compile Include="Lopital\DepartmentPatch.cs" />
+    <Compile Include="Lopital\DLCProcedureScriptPharmacyPatch.cs" />
     <Compile Include="Lopital\EmployeeComponentPatch.cs" />
     <Compile Include="Lopital\FloorPatch.cs" />
     <Compile Include="Lopital\HiringManagerPatch.cs" />
     <Compile Include="Lopital\HospitalPatch.cs" />
     <Compile Include="Lopital\InsuranceCompanyPatch.cs" />
+    <Compile Include="Lopital\LopitalEntityFactoryPatch.cs" />
     <Compile Include="Lopital\MapScriptInterfacePatch.cs" />
     <Compile Include="Lopital\NeedPatch.cs" />
     <Compile Include="Lopital\ProcedureComponentPatch.cs" />
