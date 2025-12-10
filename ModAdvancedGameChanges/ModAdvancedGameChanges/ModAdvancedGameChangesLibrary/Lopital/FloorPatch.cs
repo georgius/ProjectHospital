@@ -29,7 +29,7 @@ namespace ModAdvancedGameChanges
 
                 if (entity.GetComponent<BehaviorPedestrian>() != null)
                 {
-                    entity.GetComponent<BehaviorPedestrian>().m_state.m_respawnTimeSeconds = UnityEngine.Random.Range(5f, 15f);
+                    entity.GetComponent<BehaviorPedestrian>().m_state.m_respawnTimeSeconds = DayTime.Instance.IngameTimeHoursToRealTimeSeconds(UnityEngine.Random.Range(0.5f, 2f));
                     pedestrians++;
                 }
             }
@@ -39,8 +39,7 @@ namespace ModAdvancedGameChanges
                 for (int i = pedestrians; i < Tweakable.Mod.PedestrianMaxCount(); i++)
                 {
                     var entity = LopitalEntityFactory.CreateCharacterPedestrian(__instance, new Vector2i(0, 2));
-                    entity.GetComponent<BehaviorPedestrian>().m_state.m_respawnTimeSeconds = UnityEngine.Random.Range(5f, 15f);
-
+                    entity.GetComponent<BehaviorPedestrian>().m_state.m_respawnTimeSeconds = DayTime.Instance.IngameTimeHoursToRealTimeSeconds(UnityEngine.Random.Range(0.5f, 2f));
                     __instance.AddCharacter(entity);
                 }
 
