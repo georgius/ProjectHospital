@@ -161,19 +161,34 @@ namespace ModAdvancedGameChanges.Lopital
             // nurse is possibly free when:
             // - is idle
 
+            ProcedureComponent procedureComponent = __instance.GetComponent<ProcedureComponent>();
+            WalkComponent walkComponent = __instance.GetComponent<WalkComponent>();
+
+            // not doing any procedure
+            __result = !procedureComponent.IsBusy();
+
+            // not walking
+            __result &= !walkComponent.IsBusy();
+
+            // check needs (no critical need)
+            foreach (var need in __instance.GetComponent<MoodComponent>().m_state.m_needs)
+            {
+                __result &= (need.m_currentValue < Tweakable.Mod.FulfillNeedsThresholdCritical());
+            }
+
             switch (__instance.m_state.m_nurseState)
             {
                 case NurseState.Idle:
                     {
                         __result = true;
 
-                        // check if nurse have patient
+                        // check if nurse have no patient
                         __result &= (__instance.CurrentPatient == null);
 
-                        // check if nurse is reserved by patient
+                        // check if nurse is not reserved by patient
                         __result &= (__instance.GetComponent<EmployeeComponent>().m_state.m_reservedByPatient == null);
 
-                        // check if nurse is reserved by procedure
+                        // check if nurse is not reserved by procedure
                         __result &= String.IsNullOrEmpty(__instance.GetComponent<EmployeeComponent>().m_state.m_reservedForProcedureLocID);
 
                         return false;

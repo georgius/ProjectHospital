@@ -162,8 +162,17 @@ namespace ModAdvancedGameChanges.Lopital
             ProcedureComponent procedureComponent = __instance.GetComponent<ProcedureComponent>();
             WalkComponent walkComponent = __instance.GetComponent<WalkComponent>();
 
+            // not doing any procedure
             __result = !procedureComponent.IsBusy();
+
+            // not walking
             __result &= !walkComponent.IsBusy();
+
+            // check needs (no critical need)
+            foreach (var need in __instance.GetComponent<MoodComponent>().m_state.m_needs)
+            {
+                __result &= (need.m_currentValue < Tweakable.Mod.FulfillNeedsThresholdCritical());
+            }
 
             switch (__instance.m_state.m_doctorState)
             {
@@ -173,13 +182,13 @@ namespace ModAdvancedGameChanges.Lopital
                         // check if doctor is sitting
                         __result &= walkComponent.IsSitting();
 
-                        // check if doctor have patient
+                        // check if doctor have no patient
                         __result &= (__instance.CurrentPatient == null);
 
-                        // check if doctor is reserved by patient
+                        // check if doctor is not reserved by patient
                         __result &= (__instance.GetComponent<EmployeeComponent>().m_state.m_reservedByPatient == null);
 
-                        // check if doctor is reserved by procedure
+                        // check if doctor is not reserved by procedure
                         __result &= String.IsNullOrEmpty(__instance.GetComponent<EmployeeComponent>().m_state.m_reservedForProcedureLocID);
 
                         return false;

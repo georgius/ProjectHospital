@@ -148,6 +148,94 @@ namespace ModAdvancedGameChanges.Lopital
             return false;
         }
 
+
+
+
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorLabSpecialist), nameof(BehaviorLabSpecialist.IsFree))]
+        [HarmonyPatch(new Type[] { })]
+        public static bool IsFreePrefix1(BehaviorLabSpecialist __instance, ref bool __result)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // allow original method to run
+                return true;
+            }
+
+            ProcedureComponent procedureComponent = __instance.GetComponent<ProcedureComponent>();
+            WalkComponent walkComponent = __instance.GetComponent<WalkComponent>();
+
+            // not doing any procedure
+            __result = !procedureComponent.IsBusy();
+
+            // not walking
+            __result &= !walkComponent.IsBusy();
+
+            // check needs (no critical need)
+            foreach (var need in __instance.GetComponent<MoodComponent>().m_state.m_needs)
+            {
+                __result &= (need.m_currentValue < Tweakable.Mod.FulfillNeedsThresholdCritical());
+            }
+
+            switch (__instance.m_state.m_labSpecialistState)
+            {
+                case LabSpecialistState.Idle:
+                    {
+                        // check if lab specialist is sitting
+                        __result &= walkComponent.IsSitting();
+
+                        // check if lab specialist have no patient
+                        __result &= (__instance.CurrentPatient == null);
+
+                        // check if lab specialist is not reserved by patient
+                        __result &= (__instance.GetComponent<EmployeeComponent>().m_state.m_reservedByPatient == null);
+
+                        // check if lab specialist is not reserved by procedure
+                        __result &= String.IsNullOrEmpty(__instance.GetComponent<EmployeeComponent>().m_state.m_reservedForProcedureLocID);
+
+                        return false;
+                    }
+                default:
+                    // default case
+                    __result = false;
+                    break;
+            }
+
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorLabSpecialist), nameof(BehaviorLabSpecialist.IsFree))]
+        [HarmonyPatch(new Type[] { typeof(Entity) })]
+        public static bool IsFreePrefix2(Entity patient, BehaviorLabSpecialist __instance, ref bool __result)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // allow original method to run
+                return true;
+            }
+
+            __result = false;
+
+            // check if lab specialist have patient as current patient
+            __result |= (__instance.CurrentPatient == patient);
+
+            // check if lab specialist is reserved by patient
+            __result |= (__instance.GetComponent<EmployeeComponent>().m_state.m_reservedByPatient == patient);
+
+            if (__result)
+            {
+                return false;
+            }
+
+            return BehaviorLabSpecialistPatch.IsFreePrefix1(__instance, ref __result);
+        }
+
+
+
+
+
         [HarmonyPrefix]
         [HarmonyPatch(typeof(BehaviorLabSpecialist), nameof(BehaviorLabSpecialist.IsHidden))]
         public static bool IsHiddenPrefix(BehaviorLabSpecialist __instance, ref bool __result)
