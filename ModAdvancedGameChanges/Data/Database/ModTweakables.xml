@@ -113,6 +113,16 @@
 		<Value>40</Value>
 	</GameDBTweakableFloat>
 	
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_EFFICIENCY_NEED_BLADDER_PENALTY">
+		<Value>30</Value>
+	</GameDBTweakableFloat>
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_EFFICIENCY_NEED_HUNGER_PENALTY">
+		<Value>20</Value>
+	</GameDBTweakableFloat>
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_EFFICIENCY_NEED_REST_PENALTY">
+		<Value>80</Value>
+	</GameDBTweakableFloat>
+	
 	<GameDBTweakableInt ID="AGC_TWEAKABLE_ENABLE_EXTRA_LEVELING_PERCENT">
 		<!--
 		Enables or disables applying extra leveling percent.

@@ -132,6 +132,31 @@ namespace ModAdvancedGameChanges
 
             new TweakableValidation(() =>
             {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_NEED_BLADDER_PENALTY);
+                if (value.Value < 0f)
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_NEED_BLADDER_PENALTY}' must be greater than or equal to zero.");
+                }
+            }),
+            new TweakableValidation(() =>
+            {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_NEED_HUNGER_PENALTY);
+                if (value.Value < 0f)
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_NEED_HUNGER_PENALTY}' must be greater than or equal to zero.");
+                }
+            }),
+            new TweakableValidation(() =>
+            {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_NEED_REST_PENALTY);
+                if (value.Value < 0f)
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_NEED_REST_PENALTY}' must be greater than or equal to zero.");
+                }
+            }),
+
+            new TweakableValidation(() =>
+            {
                 // the AGC_TWEAKABLE_ENABLE_EXTRA_LEVELING_PERCENT value is not relevant, we test it against 1
                 TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_ENABLE_EXTRA_LEVELING_PERCENT);
             }),

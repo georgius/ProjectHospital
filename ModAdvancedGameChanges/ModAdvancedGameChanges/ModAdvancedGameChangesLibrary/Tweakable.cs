@@ -72,6 +72,21 @@ namespace ModAdvancedGameChanges
                 return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_SHIFT_PREFERENCE_MAXIMUM).Value;
             }
 
+            public static float EfficiencyNeedBladderPenalty()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_NEED_BLADDER_PENALTY).Value;
+            }
+
+            public static float EfficiencyNeedHungerPenalty()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_NEED_HUNGER_PENALTY).Value;
+            }
+
+            public static float EfficiencyNeedRestPenalty()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_NEED_REST_PENALTY).Value;
+            }
+
             public static bool EnableExtraLevelingPercent()
             {
                 return (Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_ENABLE_EXTRA_LEVELING_PERCENT).Value == 1);

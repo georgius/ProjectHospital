@@ -667,6 +667,16 @@ namespace ModAdvancedGameChanges .Lopital
                 __result += multiplier * UnityEngine.Random.Range(Tweakable.Mod.EfficiencyShiftPreferenceMinimum(), Tweakable.Mod.EfficiencyShiftPreferenceMaximum());
             }
 
+            // penalties from needs
+            float needValue = Mathf.Max(Needs.NeedMinimum, Mathf.Min(Needs.NeedMaximum, __instance.m_entity.GetComponent<MoodComponent>().GetNeed(Needs.Vanilla.Bladder).m_currentValue));
+            __result -= needValue / Needs.NeedMaximum * Tweakable.Mod.EfficiencyNeedBladderPenalty();
+
+            needValue = Mathf.Max(Needs.NeedMinimum, Mathf.Min(Needs.NeedMaximum, __instance.m_entity.GetComponent<MoodComponent>().GetNeed(Needs.Vanilla.HungerStaff).m_currentValue));
+            __result -= needValue / Needs.NeedMaximum * Tweakable.Mod.EfficiencyNeedHungerPenalty();
+
+            needValue = Mathf.Max(Needs.NeedMinimum, Mathf.Min(Needs.NeedMaximum, __instance.m_entity.GetComponent<MoodComponent>().GetNeed(Needs.Vanilla.Rest).m_currentValue));
+            __result -= needValue / Needs.NeedMaximum * Tweakable.Mod.EfficiencyNeedRestPenalty();
+
             // sanitize output, do not go under minimum efficiency
             __result = Mathf.Max(Tweakable.Mod.EfficiencyMinimum(), __result);
 
