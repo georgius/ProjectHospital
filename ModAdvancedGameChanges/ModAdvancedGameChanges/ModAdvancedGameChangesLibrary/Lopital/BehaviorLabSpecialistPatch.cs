@@ -297,6 +297,24 @@ namespace ModAdvancedGameChanges.Lopital
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(BehaviorLabSpecialist), nameof(BehaviorLabSpecialist.SetReserved))]
+        public static bool SetReservedPrefix(bool reserved, string procedureLocID, Entity patient, BehaviorLabSpecialist __instance)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // allow original method to run
+                return true;
+            }
+
+            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, procedure {procedureLocID ?? "NULL"}, patient {patient?.Name ?? "NULL"}, reserved {reserved} ");
+
+            __instance.SwitchState(reserved ? LabSpecialistState.OverridenReservedForProcedure : LabSpecialistState.Idle);
+            __instance.GetComponent<EmployeeComponent>().SetReserved(procedureLocID, patient);
+
+            return false;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(BehaviorLabSpecialist), nameof(BehaviorLabSpecialist.Update))]
         public static bool UpdatePrefix(float deltaTime, BehaviorLabSpecialist __instance)
         {
