@@ -1109,6 +1109,24 @@ namespace ModAdvancedGameChanges .Lopital
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(EmployeeComponent), nameof(EmployeeComponent.SetReserved))]
+        public static bool SetReservedPrefix(string procedureLocID, Entity patient, EmployeeComponent __instance)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // allow original method to run
+                return true;
+            }
+
+            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, procedure {procedureLocID ?? "NULL"}, patient {patient?.Name ?? "NULL"}");
+
+            __instance.m_state.m_reservedByPatient = patient;
+            __instance.m_state.m_reservedForProcedureLocID = procedureLocID;
+
+            return false;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(EmployeeComponent), nameof(EmployeeComponent.ShouldStartCommuting))]
         public static bool ShouldStartCommutingPrefix(EmployeeComponent __instance, ref bool __result)
         {
