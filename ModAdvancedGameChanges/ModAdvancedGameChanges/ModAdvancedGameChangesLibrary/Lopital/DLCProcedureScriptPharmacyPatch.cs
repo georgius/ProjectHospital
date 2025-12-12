@@ -26,6 +26,9 @@ namespace ModAdvancedGameChanges.Lopital
             Entity mainCharacter = __instance.m_stateData.m_procedureScene.MainCharacter;
             Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{mainCharacter?.Name ?? "NULL"}, activating script {__instance.m_stateData.m_scriptName}");
 
+            // reset assigned lab specialist, not needed anymore
+            __instance.m_stateData.m_procedureScene.m_labSpecialist = null;
+
             __instance.SwitchState(DLCProcedureScriptPharmacyPatch.STATE_CUSTOMER_SEARCHING_ROOM);
 
             __instance.SetParam(DLCProcedureScriptPharmacyPatch.PARAM_PAY, 0f);
@@ -251,6 +254,7 @@ namespace ModAdvancedGameChanges.Lopital
 
                                 // reserve lab specialist by character
                                 pharmacist.GetComponent<BehaviorLabSpecialist>().CurrentPatient = mainCharacter;
+                                pharmacist.GetComponent<EmployeeComponent>().SetReserved(Procedures.Vanilla.Pharmacy, mainCharacter);
                                 pharmacist.GetComponent<Behavior>().ReceiveMessage(new Message(Messages.OVERRIDE_BY_PROCEDURE_SCRIPT));
 
                                 instance.SwitchState(DLCProcedureScriptPharmacyPatch.STATE_CUSTOMER_GOING_TO_PHARMACIST);
@@ -508,6 +512,7 @@ namespace ModAdvancedGameChanges.Lopital
             if (pharmacist != null)
             {
                 pharmacist.GetComponent<BehaviorLabSpecialist>().CurrentPatient = null;
+                pharmacist.GetComponent<EmployeeComponent>().SetReserved(string.Empty, null);
                 pharmacist.GetComponent<Behavior>().ReceiveMessage(new Message(Messages.CANCEL_OVERRIDE_BY_PROCEDURE_SCRIPT));
             }
 
