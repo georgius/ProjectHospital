@@ -485,7 +485,7 @@ namespace ModAdvancedGameChanges.Lopital
                 return true;
             }
 
-            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name} Message received: {message.m_messageID}");
+            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, message received: {message.m_messageID}");
 
             return BehaviorPatch.ReceiveMessage(message, __instance, true);
         }
