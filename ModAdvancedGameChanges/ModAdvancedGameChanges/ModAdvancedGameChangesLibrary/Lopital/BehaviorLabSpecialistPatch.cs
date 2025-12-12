@@ -228,10 +228,6 @@ namespace ModAdvancedGameChanges.Lopital
             return BehaviorLabSpecialistPatch.IsFreePrefix1(__instance, ref __result);
         }
 
-
-
-
-
         [HarmonyPrefix]
         [HarmonyPatch(typeof(BehaviorLabSpecialist), nameof(BehaviorLabSpecialist.IsHidden))]
         public static bool IsHiddenPrefix(BehaviorLabSpecialist __instance, ref bool __result)
