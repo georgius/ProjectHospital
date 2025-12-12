@@ -148,10 +148,6 @@ namespace ModAdvancedGameChanges.Lopital
             return false;
         }
 
-
-
-
-
         [HarmonyPrefix]
         [HarmonyPatch(typeof(BehaviorLabSpecialist), nameof(BehaviorLabSpecialist.IsFree))]
         [HarmonyPatch(new Type[] { })]
