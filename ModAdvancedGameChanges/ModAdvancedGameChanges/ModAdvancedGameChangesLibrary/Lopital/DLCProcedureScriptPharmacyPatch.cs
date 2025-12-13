@@ -4,7 +4,6 @@ using Lopital;
 using ModAdvancedGameChanges.Constants;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace ModAdvancedGameChanges.Lopital
 {
@@ -30,11 +29,33 @@ namespace ModAdvancedGameChanges.Lopital
             __instance.m_stateData.m_procedureScene.m_labSpecialist = null;
 
             __instance.SwitchState(DLCProcedureScriptPharmacyPatch.STATE_CUSTOMER_SEARCHING_ROOM);
-
-            __instance.SetParam(DLCProcedureScriptPharmacyPatch.PARAM_PAY, 0f);
-            __instance.SetParam(DLCProcedureScriptPharmacyPatch.PARAM_BUY_ITEMS, (float)UnityEngine.Random.Range(1, 5));
+            
             __instance.SetParam(DLCProcedureScriptPharmacyPatch.PARAM_MAX_WAIT_TIME, DayTime.Instance.IngameTimeHoursToRealTimeSeconds(2f));
-            __instance.SetParam(DLCProcedureScriptPharmacyPatch.PARAM_BUY_RESTRICTED_ITEMS, (float)UnityEngine.Random.Range(0, 3));
+
+            if (__instance.IsPatient())
+            {
+                __instance.SetParam(DLCProcedureScriptPharmacyPatch.PARAM_PAY,
+                    (float)mainCharacter.GetComponent<ProcedureComponent>().m_state.m_procedureQueue.m_activeTreatmentStates
+                        .Where(ats => ats.m_treatment.Entry.PharmacyPickup)
+                        .Sum(ats => ats.m_treatment.Entry.Cost));
+                
+                __instance.SetParam(DLCProcedureScriptPharmacyPatch.PARAM_BUY_RESTRICTED_ITEMS,
+                    (float)mainCharacter.GetComponent<ProcedureComponent>().m_state.m_procedureQueue.m_activeTreatmentStates.Count(ats => ats.m_treatment.Entry.PharmacyPickup));
+
+                var treatments = mainCharacter.GetComponent<BehaviorPatient>().m_state.m_medicalCondition.m_symptoms
+                    .Where(s => s.m_active)
+                    .SelectMany(s => s.m_symptom.Entry.Treatments)
+                    .Select(t => t.Entry)
+                    .Distinct()
+                    .Where(t => t.PharmacyPickup);
+
+                __instance.SetParam(DLCProcedureScriptPharmacyPatch.PARAM_BUY_ITEMS, (float)treatments.Count());            }
+            else
+            {
+                __instance.SetParam(DLCProcedureScriptPharmacyPatch.PARAM_PAY, 0f);
+                __instance.SetParam(DLCProcedureScriptPharmacyPatch.PARAM_BUY_ITEMS, (float)UnityEngine.Random.Range(1, 5));
+                __instance.SetParam(DLCProcedureScriptPharmacyPatch.PARAM_BUY_RESTRICTED_ITEMS, (float)UnityEngine.Random.Range(0, 3));
+            }
 
             return false;
         }
@@ -95,8 +116,8 @@ namespace ModAdvancedGameChanges.Lopital
                 case DLCProcedureScriptPharmacyPatch.STATE_PHARMACIST_GOING_TO_WORKPLACE:
                     DLCProcedureScriptPharmacyPatch.UpdateStatePharmacistGoingToWorkplace(__instance);
                     break;
-                case DLCProcedureScriptPharmacyPatch.STATE_PHARMACIST_PAY_FOR_DRUGS:
-                    DLCProcedureScriptPharmacyPatch.UpdateStatePharmacistPayForDrugs(__instance);
+                case DLCProcedureScriptPharmacyPatch.STATE_CUSTOMER_PAY_FOR_DRUGS:
+                    DLCProcedureScriptPharmacyPatch.UpdateStateCustomerPayForDrugs(__instance);
                     break;
                 default:
                     break;
@@ -189,12 +210,31 @@ namespace ModAdvancedGameChanges.Lopital
                 instance.GetEquipment(0).User = null;
                 mainCharacter.GetComponent<AnimModelComponent>().PlayAnimation(Animations.Vanilla.StandIdle, true);
 
-                instance.SetParam(
-                    DLCProcedureScriptPharmacyPatch.PARAM_PAY, 
-                    instance.GetParam(DLCProcedureScriptPharmacyPatch.PARAM_PAY) 
-                    + UnityEngine.Random.Range(
-                        (float)Tweakable.Mod.PharmacyNonRestrictedDrugsPaymentMinimum(), 
-                        (float)Tweakable.Mod.PharmacyNonRestrictedDrugsPaymentMaximum()));
+                if (instance.IsPatient())
+                {
+                    var treatment = mainCharacter.GetComponent<BehaviorPatient>().m_state.m_medicalCondition.m_symptoms
+                        .Where(s => s.m_active)
+                        .SelectMany(s => s.m_symptom.Entry.Treatments)
+                        .Select(t => t.Entry)
+                        .Distinct()
+                        .FirstOrDefault(t => t.PharmacyPickup);
+
+                    if (treatment != null)
+                    {
+                        instance.SetParam(DLCProcedureScriptPharmacyPatch.PARAM_PAY, instance.GetParam(DLCProcedureScriptPharmacyPatch.PARAM_PAY) + treatment.Cost);
+                        mainCharacter.GetComponent<ProcedureComponent>().SuppressSymptoms(treatment);
+                    }
+                }
+                else
+                {
+                    instance.SetParam(
+                        DLCProcedureScriptPharmacyPatch.PARAM_PAY,
+                        instance.GetParam(DLCProcedureScriptPharmacyPatch.PARAM_PAY)
+                        + UnityEngine.Random.Range(
+                            (float)Tweakable.Mod.PharmacyNonRestrictedDrugsPaymentMinimum(),
+                            (float)Tweakable.Mod.PharmacyNonRestrictedDrugsPaymentMaximum()));
+                }
+
                 instance.SwitchState(DLCProcedureScriptPharmacyPatch.STATE_CUSTOMER_SEARCHING_DRUG_SHELF);
             }
         }
@@ -257,6 +297,11 @@ namespace ModAdvancedGameChanges.Lopital
                                 pharmacist.GetComponent<EmployeeComponent>().SetReserved(Procedures.Vanilla.Pharmacy, mainCharacter);
                                 pharmacist.GetComponent<Behavior>().ReceiveMessage(new Message(Messages.OVERRIDE_BY_PROCEDURE_SCRIPT));
 
+                                if (instance.IsPatient())
+                                {
+                                    mainCharacter.GetComponent<BehaviorPatient>().SwitchState(PatientState.BuyingMedicine);
+                                }
+
                                 instance.SwitchState(DLCProcedureScriptPharmacyPatch.STATE_CUSTOMER_GOING_TO_PHARMACIST);
                             }
                         }
@@ -315,7 +360,10 @@ namespace ModAdvancedGameChanges.Lopital
                         pharmacist.GetComponent<PerkComponent>().RevealPerk(Perks.Vanilla.PeoplePerson, true);
                     }
 
-                    //mainCharacter.GetComponent<PerkComponent>().RevealAllPerks(mainCharacter.GetComponent<BehaviorPatient>().IsBookmarked());
+                    if (instance.IsPatient())
+                    {
+                        mainCharacter.GetComponent<PerkComponent>().RevealAllPerks(mainCharacter.GetComponent<BehaviorPatient>().IsBookmarked());
+                    }
                 }
 
                 mainCharacter.GetComponent<SpeechComponent>().PlayDialogue(Dialogues.Vanilla.PatientStatement);
@@ -323,13 +371,19 @@ namespace ModAdvancedGameChanges.Lopital
 
                 if (instance.GetParam(DLCProcedureScriptPharmacyPatch.PARAM_BUY_RESTRICTED_ITEMS) > 0f)
                 {
-                    mainCharacter.GetComponent<SpeechComponent>().SetBubble((UnityEngine.Random.Range(0, 100) > 50) ? Speeches.Vanilla.Pills : Speeches.Vanilla.Prescription, -1f);
+                    mainCharacter.GetComponent<SpeechComponent>().SetBubble(
+                        instance.IsPatient() 
+                            ? Speeches.Vanilla.Prescription 
+                            : (UnityEngine.Random.Range(0, 100) > 50) 
+                                ? Speeches.Vanilla.Pills 
+                                : Speeches.Vanilla.Prescription, 
+                        -1f);
                     instance.SwitchState(DLCProcedureScriptPharmacyPatch.STATE_CUSTOMER_WISH);
                 }
                 else
                 {
                     mainCharacter.GetComponent<SpeechComponent>().SetBubble(Speeches.Vanilla.Answer, -1f);
-                    instance.SwitchState(DLCProcedureScriptPharmacyPatch.STATE_PHARMACIST_PAY_FOR_DRUGS);
+                    instance.SwitchState(DLCProcedureScriptPharmacyPatch.STATE_CUSTOMER_PAY_FOR_DRUGS);
                 }
             }
         }
@@ -428,7 +482,7 @@ namespace ModAdvancedGameChanges.Lopital
             }
         }
 
-        public static void UpdateStatePharmacistPayForDrugs(DLCProcedureScriptPharmacy instance)
+        public static void UpdateStateCustomerPayForDrugs(DLCProcedureScriptPharmacy instance)
         {
             Entity mainCharacter = instance.m_stateData.m_procedureScene.MainCharacter;
             Entity pharmacist = mainCharacter.GetAssignedPharmacist();
@@ -490,6 +544,11 @@ namespace ModAdvancedGameChanges.Lopital
             }
         }
 
+        public static bool IsPatient(this DLCProcedureScriptPharmacy instance)
+        {
+            return instance.m_stateData.m_procedureScene.MainCharacter.GetComponent<BehaviorPatient>() != null;
+        }
+
         public static void Leave(this DLCProcedureScriptPharmacy instance, bool pay)
         {
             Entity mainCharacter = instance.m_stateData.m_procedureScene.MainCharacter;
@@ -504,7 +563,7 @@ namespace ModAdvancedGameChanges.Lopital
                 administrativeDepartment.Pay(amount, PaymentCategory.INSURANCE_CLINIC, mainCharacter);
                 if (SettingsManager.Instance.m_gameSettings.m_showPaymentsInGame.m_value)
                 {
-                    NotificationManager.GetInstance().AddFloatingIngameNotification(mainCharacter, "$" + amount, new Color(0.5f, 1f, 0.5f));
+                    NotificationManager.GetInstance().AddFloatingIngameNotification(mainCharacter, "$" + amount, new UnityEngine.Color(0.5f, 1f, 0.5f));
                 }
             }
 
@@ -520,10 +579,18 @@ namespace ModAdvancedGameChanges.Lopital
             instance.FreeReservedTile();
 
             instance.SwitchState(DLCProcedureScriptPharmacy.STATE_IDLE);
-
             mainCharacter.GetComponent<SpeechComponent>().HideBubble();
-            mainCharacter.GetComponent<WalkComponent>().SetDestination(MapScriptInterface.Instance.DEBUG_GetPedestiranSpawnPosition(), 0, MovementType.WALKING);
-            mainCharacter.GetComponent<BehaviorPedestrian>().SwitchState(BehaviorPedestrianState.WalkingBack);
+
+            if (instance.IsPatient())
+            {
+                mainCharacter.GetComponent<WalkComponent>().SetDestination(MapScriptInterface.Instance.GetRandomSpawnPosition(), 0, MovementType.WALKING);
+                mainCharacter.GetComponent<BehaviorPatient>().SwitchState(PatientState.Leaving);
+            }
+            else
+            {
+                mainCharacter.GetComponent<WalkComponent>().SetDestination(MapScriptInterface.Instance.DEBUG_GetPedestiranSpawnPosition(), 0, MovementType.WALKING);
+                mainCharacter.GetComponent<BehaviorPedestrian>().SwitchState(BehaviorPedestrianState.WalkingBack);
+            }
         }
 
         public static bool TryToSit(this DLCProcedureScriptPharmacy instance)
@@ -544,6 +611,11 @@ namespace ModAdvancedGameChanges.Lopital
                 {
                     instance.FreeReservedTile();
                     mainCharacter.GetComponent<WalkComponent>().GoSit(chairObject, MovementType.WALKING);
+
+                    if (instance.IsPatient())
+                    {
+                        mainCharacter.GetComponent<BehaviorPatient>().SwitchState(PatientState.WaitingSittingInPharmacy);
+                    }
 
                     return true;
                 }
@@ -572,6 +644,12 @@ namespace ModAdvancedGameChanges.Lopital
                     mainCharacter.GetComponent<WalkComponent>().SetDestination(position, currentRoom.GetFloorIndex(), MovementType.WALKING);
 
                     MapScriptInterface.Instance.ReserveTile(position, mainCharacter, currentRoom.GetFloorIndex());
+
+                    if (instance.IsPatient())
+                    {
+                        mainCharacter.GetComponent<BehaviorPatient>().SwitchState(PatientState.WaitingStandingInPharmacy);
+                    }
+
                     return true;
                 }
 
@@ -596,7 +674,7 @@ namespace ModAdvancedGameChanges.Lopital
         public const string STATE_PHARMACIST_SEARCHING_DRUG_SHELF = "STATE_PHARMACIST_SEARCHING_DRUG_SHELF";
         public const string STATE_PHARMACIST_USING_DRUG_SHELF = "STATE_PHARMACIST_USING_DRUG_SHELF";
         public const string STATE_PHARMACIST_GOING_TO_WORKPLACE = "STATE_PHARMACIST_GOING_TO_WORKPLACE";
-        public const string STATE_PHARMACIST_PAY_FOR_DRUGS = "STATE_PHARMACIST_PAY_FOR_DRUGS";
+        public const string STATE_CUSTOMER_PAY_FOR_DRUGS = "STATE_CUSTOMER_PAY_FOR_DRUGS";
 
         public const int PARAM_PAY = 0;
         public const int PARAM_BUY_ITEMS = 1;
