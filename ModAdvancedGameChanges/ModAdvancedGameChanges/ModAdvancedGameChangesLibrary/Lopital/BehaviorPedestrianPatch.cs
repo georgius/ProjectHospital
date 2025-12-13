@@ -126,7 +126,7 @@ namespace ModAdvancedGameChanges.Lopital
                         && ((availability == ProcedureSceneAvailability.AVAILABLE)
                             || (availability == ProcedureSceneAvailability.STAFF_BUSY)))
                     {
-                        __instance.GetComponent<ProcedureComponent>().StartProcedure(entry, __instance.m_entity, administrativeDepartment, AccessRights.STAFF, EquipmentListRules.ONLY_FREE);
+                        __instance.GetComponent<ProcedureComponent>().StartProcedure(entry, __instance.m_entity, administrativeDepartment, AccessRights.PATIENT, EquipmentListRules.ONLY_FREE);
                         __instance.SwitchState(BehaviorPedestrianState.Walking);
                     }
                     else if ((DayTime.Instance.GetDayTimeHours() > __instance.m_state.m_timeOfAppearance)
