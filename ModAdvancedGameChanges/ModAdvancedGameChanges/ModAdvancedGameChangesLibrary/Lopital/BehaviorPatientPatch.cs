@@ -453,7 +453,23 @@ namespace ModAdvancedGameChanges.Lopital
             BookmarkedCharacterManager.Instance.RemoveCharacter(__instance.m_entity);
 
             __instance.UnreserveEmployees(true, true, true, true, true, true);
-            __instance.SwitchState(PatientState.Leaving);
+
+            GameDBProcedure entry = Database.Instance.GetEntry<GameDBProcedure>(Procedures.Vanilla.Pharmacy);
+
+            Department administrativeDepartment = MapScriptInterface.Instance.GetDepartmentOfType(Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.AdministrativeDepartment));
+            ProcedureSceneAvailability availability = __instance.GetComponent<ProcedureComponent>().GetProcedureAvailabilty(entry, __instance.m_entity, administrativeDepartment, AccessRights.PATIENT, EquipmentListRules.ONLY_FREE);
+
+            if (__instance.HasBeenTreated() 
+                && pay
+                && ((availability == ProcedureSceneAvailability.AVAILABLE) || (availability == ProcedureSceneAvailability.STAFF_BUSY)))
+            {
+                __instance.GetComponent<ProcedureComponent>().StartProcedure(entry, __instance.m_entity, administrativeDepartment, AccessRights.PATIENT, EquipmentListRules.ONLY_FREE);
+                __instance.SwitchState(PatientState.GoingToPharmacy);
+            }
+            else
+            {
+                __instance.SwitchState(PatientState.Leaving);
+            }
 
             return false;
         }
