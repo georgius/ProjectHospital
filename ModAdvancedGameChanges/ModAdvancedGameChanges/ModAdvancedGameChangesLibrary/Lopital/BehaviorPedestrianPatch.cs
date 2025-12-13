@@ -12,7 +12,7 @@ namespace ModAdvancedGameChanges.Lopital
         [HarmonyPatch(typeof(BehaviorPedestrian), nameof(BehaviorPedestrian.GetAccessRights))]
         public static bool GetAccessRightsPrefix(BehaviorPedestrian __instance, ref AccessRights __result)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enablePedestrianGoToPharmacy[SettingsManager.Instance.m_viewSettings].m_value))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // allow original method to run
                 return true;
@@ -26,7 +26,7 @@ namespace ModAdvancedGameChanges.Lopital
         [HarmonyPatch(typeof(BehaviorPedestrian), nameof(BehaviorPedestrian.SwitchState))]
         public static bool SwitchStatePrefix(BehaviorPedestrianState state, BehaviorPedestrian __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enablePedestrianGoToPharmacy[SettingsManager.Instance.m_viewSettings].m_value))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // allow original method to run
                 return true;
@@ -47,7 +47,7 @@ namespace ModAdvancedGameChanges.Lopital
         [HarmonyPatch(typeof(BehaviorPedestrian), "Reset")]
         public static bool ResetPrefix(BehaviorPedestrian __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enablePedestrianGoToPharmacy[SettingsManager.Instance.m_viewSettings].m_value))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // allow original method to run
                 return true;
@@ -66,7 +66,7 @@ namespace ModAdvancedGameChanges.Lopital
         [HarmonyPatch(typeof(BehaviorPedestrian), nameof(BehaviorPedestrian.Update))]
         public static bool UpdatePrefix(float deltaTime, BehaviorPedestrian __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enablePedestrianGoToPharmacy[SettingsManager.Instance.m_viewSettings].m_value))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // allow original method to run
                 return true;
@@ -107,7 +107,7 @@ namespace ModAdvancedGameChanges.Lopital
         [HarmonyPatch(typeof(BehaviorPedestrian), "UpdateStateIdle")]
         public static bool UpdateStateIdlePrefix(BehaviorPedestrian __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enablePedestrianGoToPharmacy[SettingsManager.Instance.m_viewSettings].m_value))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // allow original method to run
                 return true;
@@ -120,7 +120,10 @@ namespace ModAdvancedGameChanges.Lopital
                     GameDBProcedure entry = Database.Instance.GetEntry<GameDBProcedure>(Procedures.Vanilla.Pharmacy);
 
                     Department administrativeDepartment = MapScriptInterface.Instance.GetDepartmentOfType(Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.AdministrativeDepartment));
-                    ProcedureSceneAvailability availability = __instance.GetComponent<ProcedureComponent>().GetProcedureAvailabilty(entry, __instance.m_entity, administrativeDepartment, AccessRights.PATIENT, EquipmentListRules.ONLY_FREE);
+                    ProcedureSceneAvailability availability =
+                        ViewSettingsPatch.m_enablePedestrianGoToPharmacy[SettingsManager.Instance.m_viewSettings].m_value
+                         ? __instance.GetComponent<ProcedureComponent>().GetProcedureAvailabilty(entry, __instance.m_entity, administrativeDepartment, AccessRights.PATIENT, EquipmentListRules.ONLY_FREE)
+                         : ProcedureSceneAvailability.STAFF_UNAVAILABLE;
 
                     if ((UnityEngine.Random.Range(0f, 1f) <= Tweakable.Mod.PedestrianPharmacyProbability())
                         && ((availability == ProcedureSceneAvailability.AVAILABLE)
@@ -149,7 +152,7 @@ namespace ModAdvancedGameChanges.Lopital
         [HarmonyPatch(typeof(BehaviorPedestrian), "UpdateStateIdleAtDestination")]
         public static bool UpdateStateIdleAtDestinationPrefix(BehaviorPedestrian __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enablePedestrianGoToPharmacy[SettingsManager.Instance.m_viewSettings].m_value))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // allow original method to run
                 return true;
@@ -168,7 +171,7 @@ namespace ModAdvancedGameChanges.Lopital
         [HarmonyPatch(typeof(BehaviorPedestrian), "UpdateStateWalking")]
         public static bool UpdateStateWalkingPrefix(BehaviorPedestrian __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enablePedestrianGoToPharmacy[SettingsManager.Instance.m_viewSettings].m_value))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // allow original method to run
                 return true;
@@ -187,7 +190,7 @@ namespace ModAdvancedGameChanges.Lopital
         [HarmonyPatch(typeof(BehaviorPedestrian), "UpdateStateWalkingBack")]
         public static bool UpdateStateWalkingBackPrefix(BehaviorPedestrian __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enablePedestrianGoToPharmacy[SettingsManager.Instance.m_viewSettings].m_value))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // allow original method to run
                 return true;
