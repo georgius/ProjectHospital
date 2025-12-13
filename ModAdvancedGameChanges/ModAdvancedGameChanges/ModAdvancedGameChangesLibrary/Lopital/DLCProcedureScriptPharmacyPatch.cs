@@ -29,7 +29,7 @@ namespace ModAdvancedGameChanges.Lopital
             __instance.m_stateData.m_procedureScene.m_labSpecialist = null;
 
             __instance.SwitchState(DLCProcedureScriptPharmacyPatch.STATE_CUSTOMER_SEARCHING_ROOM);
-            
+
             __instance.SetParam(DLCProcedureScriptPharmacyPatch.PARAM_MAX_WAIT_TIME, DayTime.Instance.IngameTimeHoursToRealTimeSeconds(2f));
 
             if (__instance.IsPatient())
@@ -38,18 +38,20 @@ namespace ModAdvancedGameChanges.Lopital
                     (float)mainCharacter.GetComponent<ProcedureComponent>().m_state.m_procedureQueue.m_activeTreatmentStates
                         .Where(ats => ats.m_treatment.Entry.PharmacyPickup)
                         .Sum(ats => ats.m_treatment.Entry.Cost));
-                
+
                 __instance.SetParam(DLCProcedureScriptPharmacyPatch.PARAM_BUY_RESTRICTED_ITEMS,
                     (float)mainCharacter.GetComponent<ProcedureComponent>().m_state.m_procedureQueue.m_activeTreatmentStates.Count(ats => ats.m_treatment.Entry.PharmacyPickup));
 
                 var treatments = mainCharacter.GetComponent<BehaviorPatient>().m_state.m_medicalCondition.m_symptoms
                     .Where(s => s.m_active)
-                    .SelectMany(s => s.m_symptom.Entry.Treatments)
-                    .Select(t => t.Entry)
+                    .SelectMany(s => s.m_symptom.Entry?.Treatments ?? new DatabaseEntryRef<GameDBTreatment>[0])
+                    .Select(rt => rt.Entry)
+                    .Where(t => t != null)
                     .Distinct()
                     .Where(t => t.PharmacyPickup);
 
-                __instance.SetParam(DLCProcedureScriptPharmacyPatch.PARAM_BUY_ITEMS, (float)treatments.Count());            }
+                __instance.SetParam(DLCProcedureScriptPharmacyPatch.PARAM_BUY_ITEMS, (float)treatments.Count());
+            }
             else
             {
                 __instance.SetParam(DLCProcedureScriptPharmacyPatch.PARAM_PAY, 0f);
@@ -214,8 +216,9 @@ namespace ModAdvancedGameChanges.Lopital
                 {
                     var treatment = mainCharacter.GetComponent<BehaviorPatient>().m_state.m_medicalCondition.m_symptoms
                         .Where(s => s.m_active)
-                        .SelectMany(s => s.m_symptom.Entry.Treatments)
-                        .Select(t => t.Entry)
+                        .SelectMany(s => s.m_symptom.Entry?.Treatments ?? new DatabaseEntryRef<GameDBTreatment>[0])
+                        .Select(rt => rt.Entry)
+                        .Where(t => t != null)
                         .Distinct()
                         .FirstOrDefault(t => t.PharmacyPickup);
 
