@@ -535,7 +535,7 @@ namespace ModAdvancedGameChanges .Lopital
         [HarmonyPatch(typeof(EmployeeComponent), nameof(EmployeeComponent.GetRoleCount))]
         public static bool GetRoleCountPrefix(EmployeeComponent __instance, ref int __result)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // allow original method to run
                 return true;
@@ -569,7 +569,7 @@ namespace ModAdvancedGameChanges .Lopital
         [HarmonyPatch(typeof(EmployeeComponent), nameof(EmployeeComponent.CheckAnyRoleAssigned))]
         public static bool CheckAnyRoleAssignedPrefix(EmployeeComponent __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // allow original method to run
                 return true;
@@ -602,7 +602,7 @@ namespace ModAdvancedGameChanges .Lopital
         [HarmonyPatch(typeof(EmployeeComponent), nameof(EmployeeComponent.CheckChiefNodiagnoseDepartment))]
         public static bool CheckChiefNodiagnoseDepartmentPrefix(bool janitorCheck, EmployeeComponent __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // allow original method to run
                 return true;
@@ -622,7 +622,7 @@ namespace ModAdvancedGameChanges .Lopital
                     (__instance.m_state.m_department.GetEntity().GetDepartmentType() == Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.Radiology))
                     || (__instance.m_state.m_department.GetEntity().GetDepartmentType() == Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.MedicalLaboratories))
                     || (Tweakable.Vanilla.DlcHospitalServicesEnabled() && (__instance.m_state.m_department.GetEntity().GetDepartmentType() == Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.AdministrativeDepartment)))
-                    || (ViewSettingsPatch.m_enabledTrainingDepartment && (__instance.m_state.m_department.GetEntity().GetDepartmentType() == Database.Instance.GetEntry<GameDBDepartment>(Departments.Mod.TrainingDepartment)))
+                    || (__instance.m_state.m_department.GetEntity().GetDepartmentType() == Database.Instance.GetEntry<GameDBDepartment>(Departments.Mod.TrainingDepartment))
                     )
                 {
                     __instance.m_state.m_supervisor = emergencyDepartment.m_departmentPersistentData.m_chiefDoctor;
@@ -792,7 +792,7 @@ namespace ModAdvancedGameChanges .Lopital
         [HarmonyPatch(typeof(EmployeeComponent), nameof(EmployeeComponent.GoToTraining))]
         public static bool GoToTrainingPrefix(ProcedureComponent procedureComponent, EmployeeComponent __instance, ref bool __result)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // allow original method to run
                 return true;
@@ -1192,26 +1192,24 @@ namespace ModAdvancedGameChanges .Lopital
 
             Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, switching department from {__instance.m_state.m_department.GetEntity().GetDepartmentType().DatabaseID} to {department.GetDepartmentType().DatabaseID}");
 
-            if (ViewSettingsPatch.m_enabledTrainingDepartment)
+            GameDBRoomType homeRoomType = __instance.GetHomeRoomType();
+
+            if ((homeRoomType != null)
+                && (
+                    homeRoomType.HasTag(Tags.Mod.DoctorTrainingWorkspace)
+                    || homeRoomType.HasTag(Tags.Mod.NurseTrainingWorkspace)
+                    || homeRoomType.HasTag(Tags.Mod.LabSpecialistTrainingWorkspace)
+                    || homeRoomType.HasTag(Tags.Mod.JanitorTrainingWorkspace)
+                    ))
             {
-                GameDBRoomType homeRoomType = __instance.GetHomeRoomType();
+                // employee in training department, employee is in training workspace
 
-                if ((homeRoomType != null)
-                    && (
-                        homeRoomType.HasTag(Tags.Mod.DoctorTrainingWorkspace)
-                        || homeRoomType.HasTag(Tags.Mod.NurseTrainingWorkspace)
-                        || homeRoomType.HasTag(Tags.Mod.LabSpecialistTrainingWorkspace)
-                        || homeRoomType.HasTag(Tags.Mod.JanitorTrainingWorkspace)
-                        ))
-                {
-                    // employee in training department, employee is in training workspace
+                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, reset training");
 
-                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, reset training");
-
-                    __instance.m_state.m_trainingData.m_trainingRemainingHours = 0;
-                    __instance.m_state.m_trainingData.m_trainingSkillsToTrain.Clear();
-                }
+                __instance.m_state.m_trainingData.m_trainingRemainingHours = 0;
+                __instance.m_state.m_trainingData.m_trainingSkillsToTrain.Clear();
             }
+
 
             __instance.ResetWorkspace(true);
             __instance.m_state.m_department.GetEntity().RemoveCharacter(__instance.m_entity);
@@ -1222,7 +1220,7 @@ namespace ModAdvancedGameChanges .Lopital
             __instance.SwitchDressCodeColors(department, true);
 
             // go to common room
-            if (__instance.m_entity.GetComponent<BehaviorDoctor>() != null)            
+            if (__instance.m_entity.GetComponent<BehaviorDoctor>() != null)
             {
                 BehaviorDoctor doctor = __instance.m_entity.GetComponent<BehaviorDoctor>();
                 Vector3i position = MapScriptInterfacePatch.GetRandomFreePlaceInRoomTypePreferDepartment(doctor, RoomTypes.Vanilla.CommonRoom, doctor.GetComponent<EmployeeComponent>().m_state.m_department.GetEntity(), AccessRights.STAFF);
@@ -1234,6 +1232,7 @@ namespace ModAdvancedGameChanges .Lopital
                     Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, going to common room");
                 }
             }
+
             if (__instance.m_entity.GetComponent<BehaviorNurse>() != null)
             {
                 BehaviorNurse nurse = __instance.m_entity.GetComponent<BehaviorNurse>();
@@ -1246,6 +1245,7 @@ namespace ModAdvancedGameChanges .Lopital
                     Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, going to common room");
                 }
             }
+
             if (__instance.m_entity.GetComponent<BehaviorLabSpecialist>() != null)
             {
                 BehaviorLabSpecialist labSpecialist = __instance.m_entity.GetComponent<BehaviorLabSpecialist>();
@@ -1258,6 +1258,7 @@ namespace ModAdvancedGameChanges .Lopital
                     Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, going to common room");
                 }
             }
+
             if (__instance.m_entity.GetComponent<BehaviorJanitor>() != null)
             {
                 BehaviorJanitor janitor = __instance.m_entity.GetComponent<BehaviorJanitor>();
@@ -1278,7 +1279,7 @@ namespace ModAdvancedGameChanges .Lopital
         [HarmonyPatch(typeof(EmployeeComponent), nameof(EmployeeComponent.ToggleTraining))]
         public static bool ToggleTrainingPrefix(Skill skill, EmployeeComponent __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // allow original method to run
                 return true;
@@ -1330,7 +1331,7 @@ namespace ModAdvancedGameChanges .Lopital
         [HarmonyPatch(typeof(EmployeeComponent), nameof(EmployeeComponent.UpdateTraining))]
         public static bool UpdateTrainingPrefix(ProcedureComponent procedureComponent, EmployeeComponent __instance, ref bool __result)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // allow original method to run
                 return true;

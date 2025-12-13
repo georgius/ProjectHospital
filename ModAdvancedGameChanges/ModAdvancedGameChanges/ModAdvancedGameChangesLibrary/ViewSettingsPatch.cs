@@ -14,7 +14,6 @@ namespace ModAdvancedGameChanges
     public static class ViewSettingsPatch
     {
         public static bool m_enabled = false;
-        public static bool m_enabledTrainingDepartment = true;
 
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_debug = new Dictionary<ViewSettings, GenericFlag<bool>>();
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_enableModChanges = new Dictionary<ViewSettings, GenericFlag<bool>>();
@@ -26,7 +25,6 @@ namespace ModAdvancedGameChanges
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_patientsThroughEmergency = new Dictionary<ViewSettings, GenericFlag<bool>>();
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_staffLunchNight = new Dictionary<ViewSettings, GenericFlag<bool>>();
         public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_staffShiftsEqual = new Dictionary<ViewSettings, GenericFlag<bool>>();
-        public static readonly Dictionary<ViewSettings, GenericFlag<bool>> m_trainingDepartment = new Dictionary<ViewSettings, GenericFlag<bool>>();
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(ViewSettings), nameof(ViewSettings.Load))]
@@ -36,9 +34,11 @@ namespace ModAdvancedGameChanges
 
             try
             {
+                ViewSettingsPatch.m_enabled = false;
                 Tweakable.CheckConfiguration();
 
-                ViewSettingsPatch.m_enabled = AdvancedGameChanges.m_enabled;
+                // mod will be enabled if everything is correct and DLC Hospital Services is present
+                ViewSettingsPatch.m_enabled = AdvancedGameChanges.m_enabled && Tweakable.Vanilla.DlcHospitalServicesEnabled();
 
                 if (ViewSettingsPatch.m_enabled)
                 {
@@ -56,7 +56,6 @@ namespace ModAdvancedGameChanges
                         ViewSettingsPatch.m_patientsThroughEmergency.Add(__instance, new GenericFlag<bool>("AGC_OPTION_PATIENTS_ONLY_EMERGENCY", true));
                         ViewSettingsPatch.m_staffLunchNight.Add(__instance, new GenericFlag<bool>("AGC_OPTION_STAFF_LUNCH_NIGHT", true));
                         ViewSettingsPatch.m_staffShiftsEqual.Add(__instance, new GenericFlag<bool>("AGC_OPTION_STAFF_SHIFTS_EQUAL", true));
-                        ViewSettingsPatch.m_trainingDepartment.Add(__instance, new GenericFlag<bool>("AGC_OPTION_TRAINING_DEPARTMENT", Tweakable.Vanilla.DlcHospitalServicesEnabled()));
 
                         var boolFlags = new List<GenericFlag<bool>>(__instance.m_allBoolFlags);
 
@@ -73,7 +72,6 @@ namespace ModAdvancedGameChanges
                         if (Tweakable.Vanilla.DlcHospitalServicesEnabled())
                         {
                             boolFlags.Add(ViewSettingsPatch.m_enablePedestrianGoToPharmacy[__instance]);
-                            boolFlags.Add(ViewSettingsPatch.m_trainingDepartment[__instance]);
                         }
 
                         __instance.m_allBoolFlags = boolFlags.ToArray();
@@ -101,14 +99,8 @@ namespace ModAdvancedGameChanges
             ViewSettingsPatch.m_enabled &= ViewSettingsPatch.m_enableModChanges.ContainsKey(__instance);
             ViewSettingsPatch.m_enabled &= (ViewSettingsPatch.m_enabled && ViewSettingsPatch.m_enableModChanges[__instance].m_value);
 
-            bool enableTrainingDepartment = ViewSettingsPatch.m_enabled && Tweakable.Vanilla.DlcHospitalServicesEnabled();
-            enableTrainingDepartment &= ViewSettingsPatch.m_trainingDepartment.ContainsKey(__instance);
-            enableTrainingDepartment &= (enableTrainingDepartment && ViewSettingsPatch.m_trainingDepartment[__instance].m_value);
-
-            if (!enableTrainingDepartment)
+            if (!ViewSettingsPatch.m_enabled)
             {
-                ViewSettingsPatch.m_enabledTrainingDepartment = false;
-
                 Debug.Log(System.Reflection.MethodBase.GetCurrentMethod(), $"Disabling training department");
 
                 var tablesHelper = new PrivateFieldAccessHelper<Database, IDictionary>("tables", Database.Instance);

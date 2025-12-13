@@ -63,11 +63,6 @@
 			</GameDBLocalizedString>
 			
 			<GameDBLocalizedString>
-				<LocID>AGC_OPTION_TRAINING_DEPARTMENT</LocID>
-				<Text>[AGC] Training department (requires restart)</Text>
-			</GameDBLocalizedString>
-			
-			<GameDBLocalizedString>
 				<LocID>AGC_DPT_TRAINING</LocID>
 				<Text>Training department</Text>
 			</GameDBLocalizedString>

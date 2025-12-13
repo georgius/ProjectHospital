@@ -12,13 +12,13 @@ namespace ModAdvancedGameChanges
         [HarmonyPatch(typeof(CharacterPanelSkillPanelController), "IsTrainingEnabled")]
         public static bool IsTrainingEnabledPrefix(CharacterPanelSkillPanelController __instance, ref bool __result)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // allow original method to run
                 return true;
             }
 
-            __result = ViewSettingsPatch.m_enabledTrainingDepartment || Tweakable.Vanilla.DlcHospitalServicesEnabled();
+            __result = true;
             return false;
         }
 
@@ -26,7 +26,7 @@ namespace ModAdvancedGameChanges
         [HarmonyPatch(typeof(CharacterPanelSkillPanelController), "IsTrainingRoomAvailable")]
         public static bool IsTrainingRoomAvailablePrefix(CharacterPanelSkillPanelController __instance, ref bool __result)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // allow original method to run
                 return true;
@@ -47,7 +47,7 @@ namespace ModAdvancedGameChanges
         [HarmonyPatch(typeof(CharacterPanelSkillPanelController), "IsTrainingRoomFree")]
         public static bool IsTrainingRoomFreePrefix(Entity employee, CharacterPanelSkillPanelController __instance, ref bool __result)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // allow original method to run
                 return true;

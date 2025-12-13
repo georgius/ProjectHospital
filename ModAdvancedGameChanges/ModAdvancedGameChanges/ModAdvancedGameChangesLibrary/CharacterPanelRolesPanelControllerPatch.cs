@@ -13,7 +13,7 @@ namespace ModAdvancedGameChanges
         [HarmonyPatch(typeof(CharacterPanelRolesPanelController), nameof(CharacterPanelRolesPanelController.UpdateData))]
         public static bool UpdateDataPrefix(Entity employee, CharacterPanelRolesPanelController __instance)
         {
-            if ((!ViewSettingsPatch.m_enabled) || (!ViewSettingsPatch.m_enabledTrainingDepartment))
+            if (!ViewSettingsPatch.m_enabled)
             {
                 // allow original method to run
                 return true;
