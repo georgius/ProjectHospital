@@ -891,13 +891,22 @@ namespace ModAdvancedGameChanges.Lopital
                 Database.Instance.GetEntry<GameDBSchedule>(Schedules.Vanilla.SCHEDULE_OPENING_HOURS_STAFF_NIGHT);
 
             Need hunger = instance.GetComponent<MoodComponent>().GetNeed(Needs.Vanilla.HungerStaff);
+            Need rest = instance.GetComponent<MoodComponent>().GetNeed(Needs.Vanilla.Rest);
+
             List<Need> needsSortedFromMostCritical = instance.GetComponent<MoodComponent>().GetNeedsSortedFromMostCritical();
 
             foreach (Need need in needsSortedFromMostCritical)
             {
                 if ((need.m_currentValue > UnityEngine.Random.Range(Tweakable.Mod.FulfillNeedsThreshold(), Needs.NeedMaximum)) || (need.m_currentValue > Tweakable.Mod.FulfillNeedsThresholdCritical()))
                 {
-                    if (need == hunger)
+                    if ((need == rest)
+                        && (need.m_currentValue <= Tweakable.Mod.FulfillNeedsThresholdCritical())
+                        && instance.GetComponent<PerkComponent>().m_perkSet.HasPerk(Perks.Vanilla.HardWorker))
+                    {
+                        // skip rest, hard worker does not take free time breaks
+                        continue;
+                    }
+                    else if (need == hunger)
                     {
                         // check if lab specialist should go to lunch
                         if ((!instance.m_state.m_hadLunch)

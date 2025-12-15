@@ -12,6 +12,7 @@
             public const string Gamer = "PERK_GAMER";
             public const string Germaphobe = "PERK_GERMAPHOBE";
             public const string GoodBoss = "PERK_GOOD_BOSS";
+            public const string HardWorker = "PERK_HARD_WORKER";
             public const string Hedonist = "PERK_HEDONIST";
             public const string LongCommute = "PERK_LONG_COMMUTE";
             public const string NightOwl = "PERK_NIGHT_OWL";

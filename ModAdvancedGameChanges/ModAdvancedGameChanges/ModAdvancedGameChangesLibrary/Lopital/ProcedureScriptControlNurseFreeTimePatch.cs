@@ -300,6 +300,10 @@ namespace ModAdvancedGameChanges.Lopital
                 {
                     mainCharacter.GetComponent<PerkComponent>().m_perkSet.RevealPerk(Perks.Vanilla.Spartan);
                 }
+                if (mainCharacter.GetComponent<PerkComponent>().m_perkSet.HasHiddenPerk(Perks.Vanilla.HardWorker))
+                {
+                    mainCharacter.GetComponent<PerkComponent>().m_perkSet.RevealPerk(Perks.Vanilla.HardWorker);
+                }
 
                 mainCharacter.GetComponent<PropComponent>().m_state.m_prop = null;
                 mainCharacter.GetComponent<SpeechComponent>().HideBubble();
@@ -414,6 +418,10 @@ namespace ModAdvancedGameChanges.Lopital
                 if (mainCharacter.GetComponent<PerkComponent>().m_perkSet.HasHiddenPerk(Perks.Vanilla.Spartan))
                 {
                     mainCharacter.GetComponent<PerkComponent>().m_perkSet.RevealPerk(Perks.Vanilla.Spartan);
+                }
+                if (mainCharacter.GetComponent<PerkComponent>().m_perkSet.HasHiddenPerk(Perks.Vanilla.HardWorker))
+                {
+                    mainCharacter.GetComponent<PerkComponent>().m_perkSet.RevealPerk(Perks.Vanilla.HardWorker);
                 }
 
                 // we are done
@@ -600,6 +608,10 @@ namespace ModAdvancedGameChanges.Lopital
                 if (mainCharacter.GetComponent<PerkComponent>().m_perkSet.HasHiddenPerk(Perks.Vanilla.Spartan))
                 {
                     mainCharacter.GetComponent<PerkComponent>().m_perkSet.RevealPerk(Perks.Vanilla.Spartan);
+                }
+                if (mainCharacter.GetComponent<PerkComponent>().m_perkSet.HasHiddenPerk(Perks.Vanilla.HardWorker))
+                {
+                    mainCharacter.GetComponent<PerkComponent>().m_perkSet.RevealPerk(Perks.Vanilla.HardWorker);
                 }
 
                 // we are done
