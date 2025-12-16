@@ -479,7 +479,7 @@ namespace ModAdvancedGameChanges.Lopital
                     {
                         if ((homeRoomType == null)
                             || ((homeRoomType != null) && homeRoomType.HasTag(Tags.Mod.NurseTrainingWorkspace) && (!BehaviorNursePatch.HandleGoHomeFulfillNeedsGoToWorkplace(__instance)))
-                            || ((homeRoomType != null) && (!homeRoomType.HasTag(Tags.Mod.NurseTrainingWorkspace)) && (!BehaviorNursePatch.HandleGoHomeFulfillNeedsTraining(__instance))))
+                            || ((homeRoomType != null) && (!homeRoomType.HasTag(Tags.Mod.NurseTrainingWorkspace)) && (!BehaviorNursePatch.HandleGoHomeFulfillNeedsTraining(__instance)) && (!BehaviorNursePatch.HandleGoHomeFulfillNeedsGoToWorkplace(__instance))))
                         {
                             // by default, go to common room
                             Vector3i position = MapScriptInterfacePatch.GetRandomFreePlaceInRoomTypePreferDepartment(__instance, RoomTypes.Vanilla.CommonRoom, employeeComponent.m_state.m_department.GetEntity(), AccessRights.STAFF);
