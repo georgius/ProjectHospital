@@ -38,7 +38,7 @@ namespace ModAdvancedGameChanges
                 {
                     allowedSwitchDepartment |= (doctor.m_state.m_doctorState == DoctorState.AtHome);
 
-                    allowedSwitchDepartment &= !(Tweakable.Vanilla.DlcHospitalServicesEnabled() && (department.m_departmentPersistentData.m_departmentType == Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.AdministrativeDepartment)));
+                    allowedSwitchDepartment &= (department.m_departmentPersistentData.m_departmentType != Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.AdministrativeDepartment));
                     allowedSwitchDepartment &= (department.m_departmentPersistentData.m_departmentType != Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.Radiology));
                     allowedSwitchDepartment &= (department.m_departmentPersistentData.m_departmentType != Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.MedicalLaboratories));
                 }
@@ -46,7 +46,7 @@ namespace ModAdvancedGameChanges
                 {
                     allowedSwitchDepartment |= (nurse.m_state.m_nurseState == NurseState.AtHome);
 
-                    allowedSwitchDepartment &= !(Tweakable.Vanilla.DlcHospitalServicesEnabled() && (department.m_departmentPersistentData.m_departmentType == Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.AdministrativeDepartment)));
+                    allowedSwitchDepartment &= (department.m_departmentPersistentData.m_departmentType != Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.AdministrativeDepartment));
                     allowedSwitchDepartment &= (department.m_departmentPersistentData.m_departmentType != Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.Radiology));
                     allowedSwitchDepartment &= (department.m_departmentPersistentData.m_departmentType != Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.MedicalLaboratories));
                 }
@@ -54,7 +54,7 @@ namespace ModAdvancedGameChanges
                 {
                     allowedSwitchDepartment |= (labSpecialist.m_state.m_labSpecialistState == LabSpecialistState.AtHome);
 
-                    allowedSwitchDepartment &= !(Tweakable.Vanilla.DlcHospitalServicesEnabled() && (department.m_departmentPersistentData.m_departmentType == Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.Pathology)));
+                    allowedSwitchDepartment &= (department.m_departmentPersistentData.m_departmentType != Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.Pathology));
                     allowedSwitchDepartment &= (department.m_departmentPersistentData.m_departmentType != Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.IntensiveCareUnit));
                 }
                 else if (janitor != null)

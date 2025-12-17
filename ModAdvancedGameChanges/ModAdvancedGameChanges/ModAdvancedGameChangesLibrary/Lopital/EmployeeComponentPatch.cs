@@ -315,7 +315,7 @@ namespace ModAdvancedGameChanges .Lopital
 
                         if (__instance.m_state.m_points >= Tweakable.Mod.JanitorLevelPoints(1))
                         {
-                            if (Tweakable.Vanilla.DlcHospitalServicesEnabled() && (__instance.m_state.m_skillSet.m_specialization1 == null))
+                            if (__instance.m_state.m_skillSet.m_specialization1 == null)
                             {
                                 GameDBSkill[] skills = new GameDBSkill[]
                                 {
@@ -499,7 +499,7 @@ namespace ModAdvancedGameChanges .Lopital
                     {
                         string titleLocID = Notifications.Vanilla.NOTIF_CHARACTER_LEVELED_UP;
 
-                        if (Tweakable.Vanilla.DlcHospitalServicesEnabled() && (__instance.m_state.m_level > Levels.Janitors.Janitor) && (__instance.m_state.m_skillSet.m_specialization1 == null))
+                        if ((__instance.m_state.m_level > Levels.Janitors.Janitor) && (__instance.m_state.m_skillSet.m_specialization1 == null))
                         {
                             GameDBSkill[] array = new GameDBSkill[]
                             {
@@ -608,7 +608,7 @@ namespace ModAdvancedGameChanges .Lopital
                 return true;
             }
 
-            if (janitorCheck && Tweakable.Vanilla.DlcHospitalServicesEnabled())
+            if (janitorCheck)
             {
                 Hospital.Instance.UpdateJanitorBosses();
                 return false;
@@ -621,7 +621,7 @@ namespace ModAdvancedGameChanges .Lopital
                 if (
                     (__instance.m_state.m_department.GetEntity().GetDepartmentType() == Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.Radiology))
                     || (__instance.m_state.m_department.GetEntity().GetDepartmentType() == Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.MedicalLaboratories))
-                    || (Tweakable.Vanilla.DlcHospitalServicesEnabled() && (__instance.m_state.m_department.GetEntity().GetDepartmentType() == Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.AdministrativeDepartment)))
+                    || (__instance.m_state.m_department.GetEntity().GetDepartmentType() == Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.AdministrativeDepartment))
                     || (__instance.m_state.m_department.GetEntity().GetDepartmentType() == Database.Instance.GetEntry<GameDBDepartment>(Departments.Mod.TrainingDepartment))
                     )
                 {

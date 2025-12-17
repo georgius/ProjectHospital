@@ -25,7 +25,7 @@ namespace ModAdvancedGameChanges.Lopital
 
             foreach (EntityIDPointer<Entity> entityIDPointer in __instance.m_departmentPersistentData.m_patients)
             {
-                if (((!Tweakable.Vanilla.DlcHospitalServicesEnabled()) || __instance.m_departmentPersistentData.m_departmentType != Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.Pathology))
+                if (__instance.m_departmentPersistentData.m_departmentType != Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.Pathology)
                     && !entityIDPointer.GetEntity().GetComponent<BehaviorPatient>().IsHidden())
                 {
                     totalSatisfaction += entityIDPointer.GetEntity().GetComponent<MoodComponent>().GetTotalSatisfaction();
