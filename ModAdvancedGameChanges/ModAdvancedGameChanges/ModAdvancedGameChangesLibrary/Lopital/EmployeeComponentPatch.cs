@@ -614,23 +614,26 @@ namespace ModAdvancedGameChanges .Lopital
                 return false;
             }
 
-            Department emergencyDepartment = MapScriptInterface.Instance.GetDepartmentOfType(Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.Emergency));
-
-            if ((emergencyDepartment.m_departmentPersistentData.m_chiefDoctor != null))
+            if (
+                (__instance.m_state.m_department.GetEntity().GetDepartmentType() == Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.Radiology))
+                || (__instance.m_state.m_department.GetEntity().GetDepartmentType() == Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.MedicalLaboratories))
+                || (__instance.m_state.m_department.GetEntity().GetDepartmentType() == Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.AdministrativeDepartment))
+                || (__instance.m_state.m_department.GetEntity().GetDepartmentType() == Database.Instance.GetEntry<GameDBDepartment>(Departments.Mod.TrainingDepartment))
+                )
             {
-                if (
-                    (__instance.m_state.m_department.GetEntity().GetDepartmentType() == Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.Radiology))
-                    || (__instance.m_state.m_department.GetEntity().GetDepartmentType() == Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.MedicalLaboratories))
-                    || (__instance.m_state.m_department.GetEntity().GetDepartmentType() == Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.AdministrativeDepartment))
-                    || (__instance.m_state.m_department.GetEntity().GetDepartmentType() == Database.Instance.GetEntry<GameDBDepartment>(Departments.Mod.TrainingDepartment))
-                    )
+                Department emergencyDepartment = MapScriptInterface.Instance.GetDepartmentOfType(Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.Emergency));
+
+                if (emergencyDepartment.m_departmentPersistentData.m_chiefDoctor != null)
                 {
                     __instance.m_state.m_supervisor = emergencyDepartment.m_departmentPersistentData.m_chiefDoctor;
                     __instance.CheckBossModifiers();
                 }
             }
-
-            __instance.m_state.m_supervisor = __instance.m_state.m_department.GetEntity().m_departmentPersistentData.m_chiefDoctor;
+            else
+            {
+                __instance.m_state.m_supervisor = __instance.m_state.m_department.GetEntity().m_departmentPersistentData.m_chiefDoctor;
+                __instance.CheckBossModifiers();
+            }
 
             return false;
         }

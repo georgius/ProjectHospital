@@ -521,8 +521,11 @@ namespace ModAdvancedGameChanges.Lopital
 
                 Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, arrived to workplace");
 
+                employeeComponent.CheckChiefNodiagnoseDepartment(false);
                 employeeComponent.CheckRoomSatisfactionBonuses();
                 employeeComponent.CheckMoodModifiers(__instance.IsBookmarked());
+                employeeComponent.CheckBossModifiers();
+                employeeComponent.UpdateHomeRoom();
                 __instance.CancelBrowsing();
 
                 if (!__instance.GetComponent<WalkComponent>().IsOnBiohazard())

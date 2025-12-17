@@ -661,8 +661,11 @@ namespace ModAdvancedGameChanges .Lopital
 
                 Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, arrived to workplace");
 
+                employeeComponent.CheckChiefNodiagnoseDepartment(true);
                 employeeComponent.CheckRoomSatisfactionBonuses();
                 employeeComponent.CheckMoodModifiers(__instance.IsBookmarked());
+                employeeComponent.CheckBossModifiers();
+                employeeComponent.UpdateHomeRoom();
 
                 if (!BehaviorJanitorPatch.HandleGoHomeFulfillNeedsTraining(__instance))
                 {
