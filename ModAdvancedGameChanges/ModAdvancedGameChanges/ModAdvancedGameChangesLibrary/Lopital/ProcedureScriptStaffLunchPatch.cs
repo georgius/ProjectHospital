@@ -935,8 +935,6 @@ namespace ModAdvancedGameChanges.Lopital
             instance.SwitchState(ProcedureScriptStaffLunch.STATE_IDLE);
         }
 
-
-
         public const string STATE_SEARCHING_ROOM = "STATE_SEARCHING_ROOM";
 
         // common room lunch
