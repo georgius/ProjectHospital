@@ -146,11 +146,11 @@
 		<Value>10</Value>
 	</GameDBTweakableInt>
 	
-	<GameDBTweakableInt ID="AGC_TWEAKABLE_JANITOR_CLEANING_TIME_DIRT">
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_JANITOR_CLEANING_TIME_DIRT_MINUTES">
 		<!-- the cleaning time per dirt unit -->
 		<Value>1</Value>
 	</GameDBTweakableInt>
-	<GameDBTweakableInt ID="AGC_TWEAKABLE_JANITOR_CLEANING_TIME_BLOOD">
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_JANITOR_CLEANING_TIME_BLOOD_MINUTES">
 		<!-- the cleaning time per blood unit -->
 		<Value>5</Value>
 	</GameDBTweakableInt>

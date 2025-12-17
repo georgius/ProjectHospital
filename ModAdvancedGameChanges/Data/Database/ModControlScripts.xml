@@ -1,0 +1,8 @@
+<Database>
+
+    <GameDBProcedure ID="AGC_JANITOR_CLEANING">
+        <ProcedureScript>ProcedureScriptJanitorCleaning</ProcedureScript>
+    </GameDBProcedure>
+	
+</Database>
+

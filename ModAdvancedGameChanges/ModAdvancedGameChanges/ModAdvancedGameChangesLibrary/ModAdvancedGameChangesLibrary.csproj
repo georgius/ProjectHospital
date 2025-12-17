@@ -79,6 +79,7 @@
     <Compile Include="Lopital\ProcedureScriptControlNurseFreeTimePatch.cs" />
     <Compile Include="Lopital\ProcedureScriptDoctorFilingReportsPatch.cs" />
     <Compile Include="Lopital\ProcedureScriptExaminationReceptionFastPatch.cs" />
+    <Compile Include="Lopital\ProcedureScriptJanitorCleaning.cs" />
     <Compile Include="Lopital\ProcedureScriptNeedBladderPatch.cs" />
     <Compile Include="Lopital\ProcedureScriptNeedBoredomPatch.cs" />
     <Compile Include="Lopital\ProcedureScriptNeedHungerPatch.cs" />

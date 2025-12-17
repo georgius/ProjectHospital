@@ -186,76 +186,6 @@ namespace ModAdvancedGameChanges .Lopital
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(BehaviorJanitor), "SelectNextAction")]
-        public static bool SelectNextActionPrefix(BehaviorJanitor __instance)
-        {
-            if (!ViewSettingsPatch.m_enabled)
-            {
-                // allow original method to run
-                return true;
-            }
-
-            EmployeeComponent employeeComponent = __instance.GetComponent<EmployeeComponent>();
-            GameDBRoomType homeRoomType = employeeComponent?.GetHomeRoomType();
-
-            if ((homeRoomType != null) && homeRoomType.HasAnyTag(new string[] { Tags.Vanilla.JanitorAdminWorkplace, Tags.Mod.JanitorTrainingWorkspace }))
-            {
-                __instance.FreeObject();
-                __instance.FreeTile();
-                __instance.FreeRoom();
-                __instance.GoReturnCart();
-            }
-            else
-            {
-                if (__instance.m_state.m_cleaningTime <= -1f)
-                {
-                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, starting cleaning tile");
-
-                    __instance.GetComponent<AnimModelComponent>().PlayAnimation(Animations.Vanilla.Mop, true);
-
-                    __instance.UpdateCleaningTime();
-
-                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, cleaning time {__instance.m_state.m_cleaningTime.ToString(CultureInfo.InvariantCulture)}");
-
-                    PlayerStatistics.Instance.IncrementStatistic(Statistics.Vanilla.TilesClean, 1);
-                    MapScriptInterface.Instance.CleanTile(__instance.GetComponent<WalkComponent>().GetCurrentTile(), __instance.GetComponent<WalkComponent>().GetFloorIndex());
-                }
-                else if (__instance.m_state.m_cleaningTime <= 0f)
-                {
-                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, cleaning tile over");
-
-                    __instance.GetComponent<AnimModelComponent>().PlayAnimation(Animations.Vanilla.StandIdle, true);
-
-                    employeeComponent.AddSkillPoints(Skills.Vanilla.SKILL_JANITOR_QUALIF_DEXTERITY, Tweakable.Vanilla.JanitorDexteritySkillPoints(), true);
-
-                    __instance.m_state.m_cleaningTime = -1f;
-
-                    if (!__instance.TryToSelectTileInCurrentRoom())
-                    {
-                        Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, dirty tile in current room not found");
-
-                        if (!__instance.TryToSelectTileInARoom())
-                        {
-                            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, dirty tile in room not found");
-
-                            if (!__instance.TryToSelectIndoorTile(BehaviorJanitorPatch.DirtinessThreshold))
-                            {
-                                Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, dirty tile not found");
-
-                                __instance.FreeObject();
-                                __instance.FreeTile();
-                                __instance.FreeRoom();
-                                __instance.GoReturnCart();
-                            }
-                        }
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        [HarmonyPrefix]
         [HarmonyPatch(typeof(BehaviorJanitor), nameof(BehaviorJanitor.SwitchState))]
         public static bool SwitchStatePrefix(BehaviorJanitorState state, BehaviorJanitor __instance)
         {
@@ -444,68 +374,6 @@ namespace ModAdvancedGameChanges .Lopital
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(BehaviorJanitor), "UpdateCleaningTime")]
-        public static bool UpdateCleaningTimePrefix(BehaviorJanitor __instance)
-        {
-            if (!ViewSettingsPatch.m_enabled)
-            {
-                // allow original method to run
-                return true;
-            }
-
-            EmployeeComponent employeeComponent = __instance.GetComponent<EmployeeComponent>();
-            WalkComponent walkComponent = __instance.GetComponent<WalkComponent>();
-            PerkComponent perkComponent = __instance.GetComponent<PerkComponent>();
-
-            Floor floor = Hospital.Instance.m_floors[walkComponent.GetFloorIndex()];
-            DirtType dirtType = floor.m_mapPersistentData.m_tiles[walkComponent.GetCurrentTile().m_x, walkComponent.GetCurrentTile().m_y].m_dirtType;
-            float dirtLevel = floor.m_mapPersistentData.m_tiles[walkComponent.GetCurrentTile().m_x, walkComponent.GetCurrentTile().m_y].m_dirtLevel;
-
-            float cleaningTime = (dirtType == DirtType.DIRT) ? Tweakable.Mod.JanitorCleaningTimeDirt() : Tweakable.Mod.JanitorCleaningTimeBlood();
-            float skillLevel = employeeComponent.GetSkillLevel(Skills.Vanilla.SKILL_JANITOR_QUALIF_DEXTERITY);
-
-            float ratio = (skillLevel - Skills.SkillLevelMinimum) / (Skills.SkillLevelMaximum - Skills.SkillLevelMinimum);
-            float reduction = UnityEngine.Random.Range(Tweakable.Mod.SkillTimeReductionMinimum() * ratio, Tweakable.Mod.SkillTimeReductionMaximum() * ratio) / 100f;
-
-            cleaningTime = cleaningTime * dirtLevel * employeeComponent.GetEfficiencyTimeMultiplier() * (1 - reduction);
-
-            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, dirt {dirtType}, dirt level {dirtLevel.ToString(CultureInfo.InvariantCulture)}, cleaning time {cleaningTime.ToString(CultureInfo.InvariantCulture)}, skill level {skillLevel.ToString(CultureInfo.InvariantCulture)}");
-
-            if (perkComponent.m_perkSet.HasPerk(Perks.Vanilla.Chemist))
-            {
-                if (perkComponent.m_perkSet.HasHiddenPerk(Perks.Vanilla.Chemist))
-                {
-                    perkComponent.RevealPerk(Perks.Vanilla.Chemist, __instance.m_state.m_bookmarked);
-                }
-
-                cleaningTime *= UnityEngine.Random.Range(0.5f, 1f);
-            }
-
-            float penalty = 1f;
-            float bonus = 0f;
-
-            if (employeeComponent.m_state.m_supervisor != null)
-            {
-                BehaviorJanitor janitorManager = employeeComponent.m_state.m_supervisor.GetEntity()?.GetComponent<BehaviorJanitor>();
-
-                if (janitorManager != null)
-                {
-                    penalty = UnityEngine.Random.Range(Skills.SkillLevelMinimum, Skills.SkillLevelMaximum + Skills.SkillLevelMinimum - janitorManager.GetComponent<EmployeeComponent>().m_state.m_skillSet.GetSkillLevel(Skills.Vanilla.DLC_SKILL_JANITOR_SPEC_MANAGER));
-                    bonus = (float)Tweakable.Vanilla.JanitorManagerCleaningBonusPercent() / (100f * penalty);
-                }
-            }
-
-            bonus += __instance.m_state.m_cartAvailable ? UnityEngine.Random.Range(0f, 0.2f) : 0f;
-
-            cleaningTime *= Mathf.Max(0f, Mathf.Min(1f, (1 - bonus)));
-
-            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{__instance.m_entity.Name}, chemist {perkComponent.m_perkSet.HasPerk(Perks.Vanilla.Chemist)}, penalty {penalty.ToString(CultureInfo.InvariantCulture)}, bonus {bonus.ToString(CultureInfo.InvariantCulture)}, cart {__instance.m_state.m_cartAvailable}");
-
-            __instance.m_state.m_cleaningTime = cleaningTime;
-            return false;
-        }
-
-        [HarmonyPrefix]
         [HarmonyPatch(typeof(BehaviorJanitor), "UpdateStateAdminIdle")]
         public static bool UpdateStateAdminIdlePrefix(float deltaTime, BehaviorJanitor __instance)
         {
@@ -616,7 +484,8 @@ namespace ModAdvancedGameChanges .Lopital
                 return true;
             }
 
-            if (!__instance.GetComponent<WalkComponent>().IsBusy())
+            if ((!__instance.GetComponent<WalkComponent>().IsBusy())
+                && (!__instance.GetComponent<ProcedureComponent>().IsBusy()))
             {
                 EmployeeComponent employeeComponent = __instance.GetComponent<EmployeeComponent>();
 
@@ -631,14 +500,12 @@ namespace ModAdvancedGameChanges .Lopital
                 }
                 else
                 {
-                    __instance.SelectNextAction();
+                    GameDBProcedure cleaning = Database.Instance.GetEntry<GameDBProcedure>(Procedures.Mod.JanitorCleaning);
+
+                    __instance.GetComponent<ProcedureComponent>().StartProcedure(cleaning, __instance.m_entity, __instance.GetDepartment(), AccessRights.STAFF_ONLY, EquipmentListRules.IGNORE);
                 }
 
                 __instance.m_state.m_workingTime += deltaTime;
-                if (__instance.m_state.m_cleaningTime >= 0f)
-                {
-                    __instance.m_state.m_cleaningTime -= deltaTime;
-                }
             }
 
             return false;

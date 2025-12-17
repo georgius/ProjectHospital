@@ -2,6 +2,11 @@
 {
     public static class Procedures
     {
+        public static class Mod
+        {
+            public const string JanitorCleaning = "AGC_JANITOR_CLEANING";
+        }
+
         public static class Vanilla
         {
             public const string CallPatientWithQueueMonitor = "CONTROL_PROCEDURE_CALL_PATIENT";
