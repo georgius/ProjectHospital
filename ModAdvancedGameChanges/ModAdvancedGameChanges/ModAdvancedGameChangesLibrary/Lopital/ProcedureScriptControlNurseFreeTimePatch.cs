@@ -245,7 +245,7 @@ namespace ModAdvancedGameChanges.Lopital
 
             if (instance.m_stateData.m_timeInState < DayTime.Instance.IngameTimeHoursToRealTimeSeconds(Tweakable.Mod.NeedRestMinutes() / 60f))
             {
-                ProcedureScriptControlNurseFreeTimePatch.RestChooseRoomAndEquipment(instance);
+                ProcedureScriptControlNurseFreeTimePatch.GamerChooseRoomAndEquipment(instance);
             }
             else
             {
