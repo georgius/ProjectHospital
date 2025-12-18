@@ -124,7 +124,7 @@ namespace ModAdvancedGameChanges.Lopital
             //        mainCharacter, mainCharacter,
             //        mainCharacter.GetComponent<WalkComponent>().GetCurrentTile(),
             //        currentRoom,
-            //        new string[] { tag }, AccessRights.STAFF, false, null, false);
+            //        new string[] { tag }, AccessRights.STAFF_ONLY, false, null, false);
 
             //    if (temp != null)
             //    {
@@ -148,7 +148,7 @@ namespace ModAdvancedGameChanges.Lopital
             //        mainCharacter, mainCharacter,
             //        mainCharacter.GetComponent<WalkComponent>().GetCurrentTile(),
             //        mainCharacter.GetComponent<EmployeeComponent>().m_state.m_homeRoom.GetEntity(),
-            //        new string[] { tag }, AccessRights.STAFF, false, null, false);
+            //        new string[] { tag }, AccessRights.STAFF_ONLY, false, null, false);
 
             //    if (temp != null)
             //    {
@@ -169,7 +169,7 @@ namespace ModAdvancedGameChanges.Lopital
 
                 TileObject temp = MapScriptInterface.Instance.FindClosestFreeObjectWithTags(
                     mainCharacter.GetComponent<WalkComponent>().GetCurrentTile(), mainCharacter.GetComponent<WalkComponent>().GetFloorIndex(),
-                    department, new string[] { tag }, AccessRights.STAFF, Database.Instance.GetEntry<GameDBRoomType>(RoomTypes.Vanilla.CommonRoom));
+                    department, new string[] { tag }, AccessRights.STAFF_ONLY, Database.Instance.GetEntry<GameDBRoomType>(RoomTypes.Vanilla.CommonRoom));
 
                 if (temp != null)
                 {
@@ -189,19 +189,24 @@ namespace ModAdvancedGameChanges.Lopital
             {
                 Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{mainCharacter?.Name ?? "NULL"}, searching in any common room for '{tag}'");
 
-                TileObject temp = MapScriptInterface.Instance.FindClosestCenterObjectWithTagShortestPath(
-                    mainCharacter.GetComponent<WalkComponent>().GetCurrentTile(), mainCharacter.GetComponent<WalkComponent>().GetFloorIndex(),
-                    tag, AccessRights.STAFF, new string[] { Tags.Vanilla.CommonRoom }, false, true, null, null);
-
-                if (temp != null)
+                foreach (var dpt in Hospital.Instance.m_departments)
                 {
-                    Vector3i tempPosition = new Vector3i(temp.GetDefaultUseTile().m_x, temp.GetDefaultUseTile().m_y, temp.GetFloorIndex());
-                    Vector3i resultPosition = (result == null) ? tempPosition : new Vector3i(result.GetDefaultUseTile().m_x, result.GetDefaultUseTile().m_y, result.GetFloorIndex());
-                    Vector3i currentPosition = new Vector3i(mainCharacter.GetComponent<WalkComponent>().GetCurrentTile().m_x, mainCharacter.GetComponent<WalkComponent>().GetCurrentTile().m_y, mainCharacter.GetComponent<WalkComponent>().GetFloorIndex());
+                    Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{mainCharacter?.Name ?? "NULL"}, searching in common room in department '{dpt.m_departmentPersistentData.m_departmentType.Entry.DatabaseID}' for '{tag}'");
 
-                    if ((currentPosition - tempPosition).LengthSquaredWithPenalty() <= (currentPosition - resultPosition).LengthSquaredWithPenalty())
+                    TileObject temp = MapScriptInterface.Instance.FindClosestFreeObjectWithTags(
+                        mainCharacter.GetComponent<WalkComponent>().GetCurrentTile(), mainCharacter.GetComponent<WalkComponent>().GetFloorIndex(),
+                        dpt, new string[] { tag }, AccessRights.STAFF_ONLY, Database.Instance.GetEntry<GameDBRoomType>(RoomTypes.Vanilla.CommonRoom));
+
+                    if (temp != null)
                     {
-                        result = temp;
+                        Vector3i tempPosition = new Vector3i(temp.GetDefaultUseTile().m_x, temp.GetDefaultUseTile().m_y, temp.GetFloorIndex());
+                        Vector3i resultPosition = (result == null) ? tempPosition : new Vector3i(result.GetDefaultUseTile().m_x, result.GetDefaultUseTile().m_y, result.GetFloorIndex());
+                        Vector3i currentPosition = new Vector3i(mainCharacter.GetComponent<WalkComponent>().GetCurrentTile().m_x, mainCharacter.GetComponent<WalkComponent>().GetCurrentTile().m_y, mainCharacter.GetComponent<WalkComponent>().GetFloorIndex());
+
+                        if ((currentPosition - tempPosition).LengthSquaredWithPenalty() <= (currentPosition - resultPosition).LengthSquaredWithPenalty())
+                        {
+                            result = temp;
+                        }
                     }
                 }
             }
