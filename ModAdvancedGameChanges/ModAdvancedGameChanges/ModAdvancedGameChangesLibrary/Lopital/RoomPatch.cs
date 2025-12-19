@@ -1,6 +1,7 @@
 ﻿using GLib;
 using HarmonyLib;
 using Lopital;
+using ModAdvancedGameChanges.Constants;
 using System.Collections.Generic;
 
 namespace ModAdvancedGameChanges.Lopital
@@ -117,6 +118,24 @@ namespace ModAdvancedGameChanges.Lopital
             });
 
             return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(Room), "UpdateProcedureStatistics")]
+        public static bool UpdateProcedureStatistics(float deltaTime, Room __instance)
+        {
+            if (!ViewSettingsPatch.m_enabled)
+            {
+                // allow original method to run
+                return true;
+            }
+
+            if (__instance.m_roomPersistentData.m_roomType.Entry == Database.Instance.GetEntry<GameDBRoomType>(RoomTypes.Vanilla.Pharmacy))
+            {
+                Hospital.Instance.m_currentHospitalStatus.m_patientsWaitingForPharmacy = __instance.m_roomPersistentData.m_characterQueue.Count;
+            }
+
+            return true;
         }
     }
 }
