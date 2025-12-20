@@ -135,7 +135,7 @@ If there are also another possible drugs not prescribed by doctor, patients buy 
 The pedestrians buy between 1 and 5 (randomly) of non-restricted drugs by price randomly between `AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MINIMUM` and `AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MAXIMUM`
 and between 0 and 3 (randomly) of prescribed drugs by price randomly between `AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MINIMUM` and `AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MAXIMUM`.
 
-### Pedestrian pharmacy tweakable
+### Pedestrian pharmacy tweakables
 The pedestrian pharmacy behavior is affected by these tweakables
 
 | Tweakable | Default | Type | Minimum | Maximum | Description |
