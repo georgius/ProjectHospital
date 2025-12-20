@@ -8,19 +8,10 @@ This repository contains mod files for [Advanced game changes]() mod from [Proje
 The mod requires **Hospital services DLC** to work. Without **Hospital services DLC** will be all effects of mod disabled.
 
 # Changes in mod
-- completely changed flows of doctors, nurses, lab specialists, janitors, patients and visitors
-- implemented non-linear skill leveling or employee level
-- implemented *Training department* (option *[AGC] Training department (requires restart)*), where employees can get higher skill or employee level without training costs (wages are still paid)
-- introduced option *[AGC] Force employee lowest hire level* which forces that employee level on hire is always lowest (level 1, skills are on 0%)
-- introduced option *[AGC] Biochemistry lab employee (requires restart)* which forces lab specialists in *Medical laboratories* department to have *Advanced biochemistry* skill
-- introduced option *[AGC] Limit clinic doctors level* which forces doctors on clinic to have lower maximum level
-- introduced option *[AGC] Patients go through emergency* which forces all patients to go through *Emergency* department
-- introduced option *[AGC] Night shift staff lunch* which enables food requirement for night shift employees
-- introduced option *[AGC] Same length for staff shifts (requires restart)* which forces to recalculate shifts lengths to be equal (12 hours each shift)
-- introduced option 
-
-# Development
-The **Advanced game changes** mod is developed in Visual Studio 2026 Community, the project needs *.NET Framework 3.5* to be installed. The .NET Framework 3.5 can be added in *Control Pannel* / *Programs and Features* / *Turn Windows features on or off*. When installing Visual Studio 2026 Community, add *NET Framework 3.5 development tools* component.
+- completely changed flows of doctors, nurses, lab specialists, janitors, patients, visitors and pedestrians
+- implemented non-linear skill leveling or employee leveling
+- implemented *Training department*, where employees can get higher skill or employee level without training costs (wages are still paid)
+- allowed pedestrians to go to pharmacy to buy medicine
 
 # Options
 The several aspects of mod can be controlled directly from game options.
@@ -29,7 +20,7 @@ Some options require restart of game after changing.
 | Option | Default | Description |
 | -- | -- | -- |
 | [AGC] Debug output | off | Enables or disabled verbose output of mod to game log file. |
-| [AGC] Enable mod changes (requires restart) | on | Enables or disables **ALL changes** introduced by mod. It is useful when player wants to play game without mod modifications. In such case is not needed to uninstall mod. |
+| [AGC] Enable mod changes (requires restart) | on | Enables or disables **ALL changes** introduced by mod. It is useful when player wants to play game without mod modifications. In such case it is not needed to uninstall mod. |
 | [AGC] Non-linear skill leveling | on | Enables or disables non-linear skill leveling and employee leveling |
 | [AGC] Enable pedestrian go to pharmacy | on | Enables or disables pedestrians to go to pharmacy to buy medicine. |
 | [AGC] Force employee lowest hire level | on | Forces hiring of all employes with lowest level. |
@@ -117,3 +108,6 @@ similar as doctor gains new skill at `Resident` level - after `AGC_TWEAKABLE_DOC
 ## Non-linear skill leveling
 The non-linear skill leveling is similar to non-linear employee level.
 It is controlled by main tweakable `AGC_TWEAKABLE_SKILL_LEVELS` and several other tweakables.
+
+# Development
+The **Advanced game changes** mod is developed in Visual Studio 2026 Community, the project needs *.NET Framework 3.5* to be installed. The .NET Framework 3.5 can be added in *Control Pannel* / *Programs and Features* / *Turn Windows features on or off*. When installing Visual Studio 2026 Community, add *NET Framework 3.5 development tools* component.
