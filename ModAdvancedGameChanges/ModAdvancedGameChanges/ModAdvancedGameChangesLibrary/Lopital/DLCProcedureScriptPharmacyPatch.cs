@@ -54,7 +54,7 @@ namespace ModAdvancedGameChanges.Lopital
             }
             else
             {
-                float restrictedItems = UnityEngine.Random.Range(0, 3);
+                float restrictedItems = UnityEngine.Random.Range(0f, 3f);
 
                 __instance.SetParam(DLCProcedureScriptPharmacyPatch.PARAM_PAY, 0f);
                 __instance.SetParam(DLCProcedureScriptPharmacyPatch.PARAM_BUY_ITEMS, (float)UnityEngine.Random.Range(1, 5));
