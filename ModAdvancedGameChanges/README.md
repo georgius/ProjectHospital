@@ -49,7 +49,6 @@ lab specialists and janitors gain new skill - same as doctors on `Resident` and 
 | Specialist | Nurse specialist | Master scientist | Master janitor |
 
 #### Nurses
-
 The nurse needs `AGC_TWEAKABLE_NURSE_LEVEL_POINTS_1 + AGC_TWEAKABLE_NURSE_LEVEL_POINTS_2` points to
 increase employee level from `Nursing intern` to `Registered nurse`.
 The value is same as for doctors increasing from `Intern` to `Attending`.
@@ -65,7 +64,6 @@ similar as doctor gains new skill at `Resident` level - after `AGC_TWEAKABLE_DOC
 | Nurse specialist | maximum level | |
 
 #### Lab specialists
-
 The lab specialist needs `AGC_TWEAKABLE_LAB_SPECIALIST_LEVEL_POINTS_1 + AGC_TWEAKABLE_LAB_SPECIALIST_LEVEL_POINTS_2` points to
 increase employee level from `Junior scientist` to `Senior scientist`.
 The value is same as for doctors increasing from `Intern` to `Attending`.
@@ -81,7 +79,6 @@ similar as doctor gains new skill at `Resident` level - after `AGC_TWEAKABLE_DOC
 | Master scientist | maximum level | |
 
 #### Janitors
-
 The janitor needs `AGC_TWEAKABLE_JANITOR_LEVEL_POINTS_1 + AGC_TWEAKABLE_JANITOR_LEVEL_POINTS_2` points to
 increase employee level from `Janitor` to `Senior janitor`.
 The value is same as for doctors increasing from `Intern` to `Attending`.
@@ -97,4 +94,5 @@ similar as doctor gains new skill at `Resident` level - after `AGC_TWEAKABLE_DOC
 | Master janitor | maximum level | |
 
 ## Non-linear skill leveling
-
+The non-linear skill leveling is similar to non-linear employee level.
+It is controlled by main tweakable `AGC_TWEAKABLE_SKILL_LEVELS` and several other tweakables.
