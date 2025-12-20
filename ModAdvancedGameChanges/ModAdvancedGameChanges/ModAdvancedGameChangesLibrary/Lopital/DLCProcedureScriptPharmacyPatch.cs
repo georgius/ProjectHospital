@@ -30,7 +30,7 @@ namespace ModAdvancedGameChanges.Lopital
 
             __instance.SwitchState(DLCProcedureScriptPharmacyPatch.STATE_CUSTOMER_SEARCHING_ROOM);
 
-            __instance.SetParam(DLCProcedureScriptPharmacyPatch.PARAM_MAX_WAIT_TIME, DayTime.Instance.IngameTimeHoursToRealTimeSeconds(2f));
+            __instance.SetParam(DLCProcedureScriptPharmacyPatch.PARAM_MAX_WAIT_TIME, DayTime.Instance.IngameTimeHoursToRealTimeSeconds(Tweakable.Mod.PharmacyCustomerMaximumWaitingTimeMinutes() / 60f));
 
             if (__instance.IsPatient())
             {
@@ -351,7 +351,7 @@ namespace ModAdvancedGameChanges.Lopital
 
             float actionTime = instance.GetActionTime(
                 pharmacist,
-                (int)DayTime.Instance.IngameTimeHoursToRealTimeSeconds(((float)Tweakable.Mod.PharmacistQuestionMinutes()) / 60f),
+                (int)DayTime.Instance.IngameTimeHoursToRealTimeSeconds(((float)Tweakable.Mod.PharmacyPharmacistQuestionMinutes()) / 60f),
                 pharmacist.GetComponent<EmployeeComponent>().GetSkillLevel(Skills.Vanilla.DLC_SKILL_LAB_SPECIALIST_SPEC_PHARMACOLOGY));
 
             if (instance.m_stateData.m_timeInState > actionTime)
@@ -436,7 +436,7 @@ namespace ModAdvancedGameChanges.Lopital
 
             float actionTime = instance.GetActionTime(
                 pharmacist,
-                (int)DayTime.Instance.IngameTimeHoursToRealTimeSeconds(((float)Tweakable.Mod.PharmacistSearchDrugMinutes()) / 60f),
+                (int)DayTime.Instance.IngameTimeHoursToRealTimeSeconds(((float)Tweakable.Mod.PharmacyPharmacistSearchDrugMinutes()) / 60f),
                 pharmacist.GetComponent<EmployeeComponent>().GetSkillLevel(Skills.Vanilla.DLC_SKILL_LAB_SPECIALIST_SPEC_PHARMACOLOGY));
 
             if (instance.m_stateData.m_timeInState > actionTime)
@@ -457,7 +457,7 @@ namespace ModAdvancedGameChanges.Lopital
                 // free reserved object
                 instance.GetEquipment(0).User = null;
 
-                pharmacist.GetComponent<EmployeeComponent>().AddSkillPoints(Skills.Vanilla.DLC_SKILL_LAB_SPECIALIST_SPEC_PHARMACOLOGY, Tweakable.Mod.PharmacistSearchDrugSkillPoints(), true);
+                pharmacist.GetComponent<EmployeeComponent>().AddSkillPoints(Skills.Vanilla.DLC_SKILL_LAB_SPECIALIST_SPEC_PHARMACOLOGY, Tweakable.Mod.PharmacyPharmacistSearchDrugSkillPoints(), true);
 
                 TileObject workChair = pharmacist.GetComponent<EmployeeComponent>().GetWorkChair();
                 pharmacist.GetComponent<WalkComponent>().GoSit(workChair, MovementType.WALKING);
@@ -492,7 +492,7 @@ namespace ModAdvancedGameChanges.Lopital
 
             float actionTime = instance.GetActionTime(
                 pharmacist,
-                (int)DayTime.Instance.IngameTimeHoursToRealTimeSeconds(((float)Tweakable.Mod.PharmacistQuestionMinutes()) / 60f),
+                (int)DayTime.Instance.IngameTimeHoursToRealTimeSeconds(((float)Tweakable.Mod.PharmacyPharmacistQuestionMinutes()) / 60f),
                 pharmacist.GetComponent<EmployeeComponent>().GetSkillLevel(Skills.Vanilla.DLC_SKILL_LAB_SPECIALIST_SPEC_PHARMACOLOGY));
 
             if (instance.m_stateData.m_timeInState > actionTime)

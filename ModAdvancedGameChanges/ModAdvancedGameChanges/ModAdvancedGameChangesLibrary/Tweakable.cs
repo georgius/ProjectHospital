@@ -275,19 +275,24 @@ namespace ModAdvancedGameChanges
                 return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_PROBABILITY).Value;
             }
 
-            public static int PharmacistQuestionMinutes()
+            public static int PharmacyCustomerMaximumWaitingTimeMinutes()
             {
-                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PHARMACIST_QUESTION_MINUTES).Value;
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_CUSTOMER_MAXIMUM_WAITING_TIME_MINUTES).Value;
             }
 
-            public static int PharmacistSearchDrugMinutes()
+            public static int PharmacyPharmacistQuestionMinutes()
             {
-                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PHARMACIST_SEARCH_DRUG_MINUTES).Value;
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_PHARMACIST_QUESTION_MINUTES).Value;
             }
 
-            public static int PharmacistSearchDrugSkillPoints()
+            public static int PharmacyPharmacistSearchDrugMinutes()
             {
-                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PHARMACIST_SEARCH_DRUG_SKILL_POINTS).Value;
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_PHARMACIST_SEARCH_DRUG_MINUTES).Value;
+            }
+
+            public static int PharmacyPharmacistSearchDrugSkillPoints()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_PHARMACIST_SEARCH_DRUG_SKILL_POINTS).Value;
             }
 
             public static int PharmacyNonRestrictedDrugsPaymentMinimum()

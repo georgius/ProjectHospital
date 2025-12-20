@@ -89,13 +89,24 @@
 	</GameDBTweakableFloat>
 	
 	<GameDBTweakableFloat ID="AGC_TWEAKABLE_EFFICIENCY_MINIMUM">
+		<!-- the minimum efficiency value, the efficiency will not go under this value -->
+		<!-- the base action time is divided by efficiency -->
+		<!-- percent -->
+		<!-- value in <1.0, 100.0> -->
 		<Value>20</Value>
 	</GameDBTweakableFloat>
 	
+	<!-- satisfaction of employee is in <0.0, 100.0> interval -->
 	<GameDBTweakableFloat ID="AGC_TWEAKABLE_EFFICIENCY_SATISFACTION_MINIMUM">
+		<!-- the minimum satisfaction part -->
+		<!-- percent -->
+		<!-- value in <0.0, 100.0> -->
 		<Value>45</Value>
 	</GameDBTweakableFloat>
 	<GameDBTweakableFloat ID="AGC_TWEAKABLE_EFFICIENCY_SATISFACTION_MAXIMUM">
+		<!-- the maximum satisfaction part -->
+		<!-- percent -->
+		<!-- value in <0.0, 100.0> -->
 		<Value>55</Value>
 	</GameDBTweakableFloat>
 	
@@ -296,13 +307,16 @@
 		<Value>0.5</Value>   
 	</GameDBTweakableFloat>
 	
-	<GameDBTweakableInt ID="AGC_TWEAKABLE_PHARMACIST_QUESTION_MINUTES">
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_PHARMACY_CUSTOMER_MAXIMUM_WAITING_TIME_MINUTES">
+		<Value>120</Value>
+	</GameDBTweakableInt>
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_PHARMACY_PHARMACIST_QUESTION_MINUTES">
 		<Value>1</Value>
 	</GameDBTweakableInt>
-	<GameDBTweakableInt ID="AGC_TWEAKABLE_PHARMACIST_SEARCH_DRUG_MINUTES">
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_PHARMACY_PHARMACIST_SEARCH_DRUG_MINUTES">
 		<Value>5</Value>
 	</GameDBTweakableInt>
-	<GameDBTweakableInt ID="AGC_TWEAKABLE_PHARMACIST_SEARCH_DRUG_SKILL_POINTS">
+	<GameDBTweakableInt ID="AGC_TWEAKABLE_PHARMACY_PHARMACIST_SEARCH_DRUG_SKILL_POINTS">
 		<Value>3</Value>
 	</GameDBTweakableInt>
 	<GameDBTweakableInt ID="AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MINIMUM">

@@ -612,26 +612,34 @@ namespace ModAdvancedGameChanges
 
             new TweakableValidation(() =>
             {
-                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PHARMACIST_QUESTION_MINUTES);
+                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_CUSTOMER_MAXIMUM_WAITING_TIME_MINUTES);
                 if (value.Value < 1)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PHARMACIST_QUESTION_MINUTES}' must be greater than zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_CUSTOMER_MAXIMUM_WAITING_TIME_MINUTES}' must be greater than zero.");
                 }
             }),
             new TweakableValidation(() =>
             {
-                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PHARMACIST_SEARCH_DRUG_MINUTES);
+                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_PHARMACIST_QUESTION_MINUTES);
                 if (value.Value < 1)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PHARMACIST_SEARCH_DRUG_MINUTES}' must be greater than zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_PHARMACIST_QUESTION_MINUTES}' must be greater than zero.");
                 }
             }),
             new TweakableValidation(() =>
             {
-                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PHARMACIST_SEARCH_DRUG_SKILL_POINTS);
+                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_PHARMACIST_SEARCH_DRUG_MINUTES);
                 if (value.Value < 1)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PHARMACIST_SEARCH_DRUG_SKILL_POINTS}' must be greater than zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_PHARMACIST_SEARCH_DRUG_MINUTES}' must be greater than zero.");
+                }
+            }),
+            new TweakableValidation(() =>
+            {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_PHARMACIST_SEARCH_DRUG_SKILL_POINTS);
+                if (value.Value < 1)
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_PHARMACIST_SEARCH_DRUG_SKILL_POINTS}' must be greater than zero.");
                 }
             }),
             new TweakableValidation(() =>
