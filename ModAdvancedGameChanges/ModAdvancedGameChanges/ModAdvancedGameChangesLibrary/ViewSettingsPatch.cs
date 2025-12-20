@@ -49,7 +49,7 @@ namespace ModAdvancedGameChanges
                         ViewSettingsPatch.m_debug.Add(__instance, new GenericFlag<bool>("AGC_OPTION_DEBUG", false));
                         ViewSettingsPatch.m_enableModChanges.Add(__instance, new GenericFlag<bool>("AGC_OPTION_ENABLE_MOD_CHANGES", true));
                         ViewSettingsPatch.m_enableNonLinearSkillLeveling.Add(__instance, new GenericFlag<bool>("AGC_OPTION_ENABLE_NON_LINEAR_SKILL_LEVELING", true));
-                        ViewSettingsPatch.m_enablePedestrianGoToPharmacy.Add(__instance, new GenericFlag<bool>("AGC_OPTION_ENABLE_PEDESTRIAN_GO_TO_PHARMACY", Tweakable.Vanilla.DlcHospitalServicesEnabled()));
+                        ViewSettingsPatch.m_enablePedestrianGoToPharmacy.Add(__instance, new GenericFlag<bool>("AGC_OPTION_ENABLE_PEDESTRIAN_GO_TO_PHARMACY", true));
                         ViewSettingsPatch.m_forceEmployeeLowestHireLevel.Add(__instance, new GenericFlag<bool>("AGC_OPTION_FORCE_EMPLOYEE_LOWEST_HIRE_LEVEL", true));
                         ViewSettingsPatch.m_labEmployeeBiochemistry.Add(__instance, new GenericFlag<bool>("AGC_OPTION_LAB_EMPLOYEE_BIOCHEMISTRY", true));
                         ViewSettingsPatch.m_limitClinicDoctorsLevel.Add(__instance, new GenericFlag<bool>("AGC_OPTION_LIMIT_CLINIC_DOCTORS_LEVEL", true));
