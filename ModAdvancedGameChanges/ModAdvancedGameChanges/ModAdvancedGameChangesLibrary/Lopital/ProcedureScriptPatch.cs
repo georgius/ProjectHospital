@@ -19,7 +19,7 @@ namespace ModAdvancedGameChanges.Lopital
             }
 
             float ratio = (characterSkill - Skills.SkillLevelMinimum) / (Skills.SkillLevelMaximum - Skills.SkillLevelMinimum);
-            float reduction = UnityEngine.Random.Range(Tweakable.Mod.SkillTimeReductionMinimum() * ratio, Tweakable.Mod.SkillTimeReductionMaximum() * ratio) / 100f;
+            float reduction = UnityEngine.Random.Range(Tweakable.Mod.SkillTimeReductionMinimum(), Tweakable.Mod.SkillTimeReductionMaximum()) * ratio / 100f;
 
             __result = ((float)characterTimeConstant) * character.GetComponent<EmployeeComponent>().GetEfficiencyTimeMultiplier() * (1 - reduction);
             return false;
