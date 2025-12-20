@@ -270,9 +270,14 @@ namespace ModAdvancedGameChanges
                 return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_MAX_COUNT).Value;
             }
 
-            public static float PedestrianPharmacyProbability()
+            public static float PedestrianPharmacyProbabilityDayPercent()
             {
-                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_PROBABILITY).Value;
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_PROBABILITY_DAY_PERCENT).Value;
+            }
+
+            public static float PedestrianPharmacyProbabilityDayNightPercent()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_PROBABILITY_NIGHT_PERCENT).Value;
             }
 
             public static int PharmacyCustomerMaximumWaitingTimeMinutes()

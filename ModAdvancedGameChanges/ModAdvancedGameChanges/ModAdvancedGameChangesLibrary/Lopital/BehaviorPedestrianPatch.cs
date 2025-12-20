@@ -124,8 +124,11 @@ namespace ModAdvancedGameChanges.Lopital
                         ViewSettingsPatch.m_enablePedestrianGoToPharmacy[SettingsManager.Instance.m_viewSettings].m_value
                          ? __instance.GetComponent<ProcedureComponent>().GetProcedureAvailabilty(entry, __instance.m_entity, administrativeDepartment, AccessRights.PATIENT, EquipmentListRules.ONLY_FREE)
                          : ProcedureSceneAvailability.STAFF_UNAVAILABLE;
+                    float probabilityPercent = (DayTime.Instance.GetShift() == Shift.DAY)
+                        ? Tweakable.Mod.PedestrianPharmacyProbabilityDayPercent()
+                        : Tweakable.Mod.PedestrianPharmacyProbabilityDayNightPercent();
 
-                    if ((UnityEngine.Random.Range(0f, 1f) <= Tweakable.Mod.PedestrianPharmacyProbability())
+                    if ((UnityEngine.Random.Range(0f, 100f) <= probabilityPercent)
                         && ((availability == ProcedureSceneAvailability.AVAILABLE)
                             || (availability == ProcedureSceneAvailability.STAFF_BUSY)))
                     {
@@ -133,7 +136,7 @@ namespace ModAdvancedGameChanges.Lopital
                         __instance.SwitchState(BehaviorPedestrianState.Walking);
                     }
                     else if ((DayTime.Instance.GetDayTimeHours() > __instance.m_state.m_timeOfAppearance)
-                            && (DayTime.Instance.GetDayTimeHours() < 22f))
+                            && (DayTime.Instance.GetShift() == Shift.DAY))
                     {
                         __instance.GetComponent<WalkComponent>().SetDestination(MapScriptInterface.Instance.DEBUG_GetPedestiranDestinationPosition(), 0, MovementType.WALKING);
                         __instance.SwitchState(BehaviorPedestrianState.Walking);
