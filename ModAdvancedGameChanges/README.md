@@ -4,6 +4,9 @@ This repository contains mod files for [Advanced game changes]() mod from [Proje
 - Data - contains mod static data (assets, database files)
 - ModAdvancedGameChanges - contains Visual Studio 2026 solution with sources and dependencies
 
+# Requirements
+The mod requires **Hospital services DLC** to work. Without **Hospital services DLC** will be all effects of mod disabled.
+
 # Changes in mod
 - completely changed flows of doctors, nurses, lab specialists, janitors, patients and visitors
 - implemented non-linear skill leveling or employee level
@@ -14,9 +17,27 @@ This repository contains mod files for [Advanced game changes]() mod from [Proje
 - introduced option *[AGC] Patients go through emergency* which forces all patients to go through *Emergency* department
 - introduced option *[AGC] Night shift staff lunch* which enables food requirement for night shift employees
 - introduced option *[AGC] Same length for staff shifts (requires restart)* which forces to recalculate shifts lengths to be equal (12 hours each shift)
+- introduced option 
 
 # Development
 The **Advanced game changes** mod is developed in Visual Studio 2026 Community, the project needs *.NET Framework 3.5* to be installed. The .NET Framework 3.5 can be added in *Control Pannel* / *Programs and Features* / *Turn Windows features on or off*. When installing Visual Studio 2026 Community, add *NET Framework 3.5 development tools* component.
+
+# Options
+The several aspects of mod can be controlled directly from game options.
+Some options require restart of game after changing.
+
+| Option | Default | Description |
+| -- | -- | -- |
+| [AGC] Debug output | off | Enables or disabled verbose output of mod to game log file. |
+| [AGC] Enable mod changes (requires restart) | on | Enables or disables **ALL changes** introduced by mod. It is useful when player wants to play game without mod modifications. In such case is not needed to uninstall mod. |
+| [AGC] Non-linear skill leveling | on | Enables or disables non-linear skill leveling and employee leveling |
+| [AGC] Enable pedestrian go to pharmacy | on | Enables or disables pedestrians to go to pharmacy to buy medicine. |
+| [AGC] Force employee lowest hire level | on | Forces hiring of all employes with lowest level. |
+| [AGC] Biochemistry lab employee (requires restart) | on | Forces lab specialists in *Medical laboratories* department to have *Advanced biochemistry* skill. |
+| [AGC] Limit clinic doctors level | on | Enables or disables clinic doctors from gaining more level than specified by tweakables. |
+| [AGC] Patients go through emergency | on | Enables or disables that all patients must go through ememrgency department. If turned off, some patients can go directly to specialized clinic offices. |
+| [AGC] Night shift staff lunch | on | Enables or disables lunch for night staff shift. |
+| [AGC] Same length for staff shifts (requires restart) | on | Enables or disables same length for day and night shift. |
 
 # Tweakables
 The **Advanced game changes** mod has many tweakable values.
