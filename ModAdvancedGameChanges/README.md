@@ -12,6 +12,7 @@ The mod requires **Hospital services DLC** to work. Without **Hospital services 
 - implemented non-linear skill leveling or employee leveling
 - implemented *Training department*, where employees can get higher skill or employee level without training costs (wages are still paid)
 - allowed pedestrians to go to pharmacy to buy medicine
+- modified action time calculation
 
 # Options
 The several aspects of mod can be controlled directly from game options.
@@ -110,20 +111,41 @@ The non-linear skill leveling is similar to non-linear employee level.
 It is controlled by main tweakable `AGC_TWEAKABLE_SKILL_LEVELS` and several other tweakables.
 
 ## Pedestrian go to pharmacy
-There are several tweakables affecting pharmacy for all and several affecting pharmacy behavior for pedestrians.
+There are several tweakables affecting pharmacy for all characters and several affecting pharmacy behavior for pedestrians.
 
 ### General pharmacy tweakables
-General pharmacy behavior for all is affected by these tweakables
+The general pharmacy behavior for all characters is affected by these tweakables
 
 | Tweakable | Default | Type | Minimum | Maximum | Description |
 | -- | -- | -- | -- | -- | -- |
-| AGC_TWEAKABLE_PHARMACY_CUSTOMER_MAXIMUM_WAITING_TIME_MINUTES | 120 | int | 1 | | The maximum waiting time (in minutes) in pharmacy for character. If character is waiting more, character leaves pharmacy without payment. |
-| AGC_TWEAKABLE_PHARMACY_PHARMACIST_QUESTION_MINUTES | 1 | int | 1 | | ??? |
-| AGC_TWEAKABLE_PHARMACY_PHARMACIST_SEARCH_DRUG_MINUTES | 1 | int | 1 | | ??? |
-| AGC_TWEAKABLE_PHARMACY_PHARMACIST_SEARCH_DRUG_SKILL_POINTS | 3 | int | 1 | | ??? |
-| AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MINIMUM | 10 | int | 0 | | ??? |
-| AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MAXIMUM | 50 | int | AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MINIMUM + 1 | | ??? |
+| AGC_TWEAKABLE_PHARMACY_CUSTOMER_MAXIMUM_WAITING_TIME_MINUTES | 120 | int | 1 | | The maximum waiting time (in minutes) in pharmacy for all character. If character is waiting more, character leaves pharmacy without payment. |
+| AGC_TWEAKABLE_PHARMACY_PHARMACIST_QUESTION_MINUTES | 1 | int | 1 | | The base time (in minutes) for pharmacist question. See more [Action time calculation](#action-time-calculation). |
+| AGC_TWEAKABLE_PHARMACY_PHARMACIST_SEARCH_DRUG_MINUTES | 1 | int | 1 | | The base time (in minutes) for pharmacist to search drugs in shelfs. See more [Action time calculation](#action-time-calculation). |
+| AGC_TWEAKABLE_PHARMACY_PHARMACIST_SEARCH_DRUG_SKILL_POINTS | 3 | int | 1 | | TO DO |
+| AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MINIMUM | 10 | int | 0 | | The minimum payment for non-restricted drugs (drugs without prescription). |
+| AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MAXIMUM | 50 | int | AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MINIMUM + 1 | | The maximum payment for non-restricted drugs (drugs without prescription). |
 
+The patient or pedestrian going to pharmacy can buy several non-restricted drugs and several drugs with prescription.
+
+#### Patients
+The patients buy prescribed drugs by doctor (the prices are specified in game files).
+If there are also another possible drugs not prescribed by doctor, patients buy them by price randomly between `AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MINIMUM` and `AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MAXIMUM`.
+
+#### Pedestrians
+The pedestrians buy between 1 and 5 (randomly) of non-restricted drugs by price randomly between `AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MINIMUM` and `AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MAXIMUM`
+and between 0 and 3 (randomly) of prescribed drugs by price randomly between `AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MINIMUM` and `AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MAXIMUM`.
+
+### Pedestrian pharmacy tweakable
+The pedestrian pharmacy behavior is affected by these tweakables
+
+| Tweakable | Default | Type | Minimum | Maximum | Description |
+| -- | -- | -- | -- | -- | -- |
+| AGC_TWEAKABLE_PEDESTRIAN_MAX_COUNT | 15 | int | 0 | | The maximum pedestrian count. |
+| AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_PROBABILITY_DAY_PERCENT| 50 | float | 0 | 100 | The probability (in percent) that pedestrian will go to pharmacy. In other case, pedestrian will just walk around hospital. |
+| AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_PROBABILITY_NIGHT_PERCENT | 10 | float | 0 | 100 | The probability (in percent) that pedestrian will go to pharmacy. In other case, pedestrian will not appear. |
+
+## Action time calculation
+TO DO
 
 # Development
 The **Advanced game changes** mod is developed in Visual Studio 2026 Community, the project needs *.NET Framework 3.5* to be installed. The .NET Framework 3.5 can be added in *Control Pannel* / *Programs and Features* / *Turn Windows features on or off*. When installing Visual Studio 2026 Community, add *NET Framework 3.5 development tools* component.
