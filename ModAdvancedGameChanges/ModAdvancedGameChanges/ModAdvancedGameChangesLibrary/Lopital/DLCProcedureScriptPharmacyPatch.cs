@@ -54,9 +54,21 @@ namespace ModAdvancedGameChanges.Lopital
             }
             else
             {
+                float restrictedItems = UnityEngine.Random.Range(0, 3);
+
                 __instance.SetParam(DLCProcedureScriptPharmacyPatch.PARAM_PAY, 0f);
                 __instance.SetParam(DLCProcedureScriptPharmacyPatch.PARAM_BUY_ITEMS, (float)UnityEngine.Random.Range(1, 5));
-                __instance.SetParam(DLCProcedureScriptPharmacyPatch.PARAM_BUY_RESTRICTED_ITEMS, (float)UnityEngine.Random.Range(0, 3));
+                __instance.SetParam(DLCProcedureScriptPharmacyPatch.PARAM_BUY_RESTRICTED_ITEMS, restrictedItems);
+
+                for (float i = restrictedItems; i > 0f; i--)
+                {
+                    __instance.SetParam(
+                        DLCProcedureScriptPharmacyPatch.PARAM_PAY,
+                        __instance.GetParam(DLCProcedureScriptPharmacyPatch.PARAM_PAY)
+                        + UnityEngine.Random.Range(
+                            (float)Tweakable.Mod.PharmacyNonRestrictedDrugsPaymentMinimum(),
+                            (float)Tweakable.Mod.PharmacyNonRestrictedDrugsPaymentMaximum()));
+                }
             }
 
             return false;
