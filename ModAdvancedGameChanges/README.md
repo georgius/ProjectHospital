@@ -21,8 +21,8 @@ Some options require restart of game after changing.
 | -- | -- | -- |
 | [AGC] Debug output | off | Enables or disabled verbose output of mod to game log file. |
 | [AGC] Enable mod changes (requires restart) | on | Enables or disables **ALL changes** introduced by mod. It is useful when player wants to play game without mod modifications. In such case it is not needed to uninstall mod. |
-| [AGC] Non-linear skill leveling | on | Enables or disables non-linear skill leveling and employee leveling |
-| [AGC] Enable pedestrian go to pharmacy | on | Enables or disables pedestrians to go to pharmacy to buy medicine. |
+| [AGC] Non-linear skill leveling | on | Enables or disables non-linear skill leveling and employee leveling. See more at [Non-linear employee leveling](#non-linear-employee-leveling). |
+| [AGC] Enable pedestrian go to pharmacy | on | Enables or disables pedestrians to go to pharmacy to buy medicine. See more at [Pedestrian go to pharmacy](#pedestrian-go-to-pharmacy). |
 | [AGC] Force employee lowest hire level | on | Forces hiring of all employes with lowest level. |
 | [AGC] Biochemistry lab employee (requires restart) | on | Forces lab specialists in *Medical laboratories* department to have *Advanced biochemistry* skill. |
 | [AGC] Limit clinic doctors level | on | Enables or disables clinic doctors from gaining more level than specified by tweakables. |
@@ -108,6 +108,22 @@ similar as doctor gains new skill at `Resident` level - after `AGC_TWEAKABLE_DOC
 ## Non-linear skill leveling
 The non-linear skill leveling is similar to non-linear employee level.
 It is controlled by main tweakable `AGC_TWEAKABLE_SKILL_LEVELS` and several other tweakables.
+
+## Pedestrian go to pharmacy
+There are several tweakables affecting pharmacy for all and several affecting pharmacy behavior for pedestrians.
+
+### General pharmacy tweakables
+General pharmacy behavior for all is affected by these tweakables
+
+| Tweakable | Default | Type | Minimum | Maximum | Description |
+| -- | -- | -- | -- | -- | -- |
+| AGC_TWEAKABLE_PHARMACY_CUSTOMER_MAXIMUM_WAITING_TIME_MINUTES | 120 | int | 1 | | The maximum waiting time (in minutes) in pharmacy for character. If character is waiting more, character leaves pharmacy without payment. |
+| AGC_TWEAKABLE_PHARMACY_PHARMACIST_QUESTION_MINUTES | 1 | int | 1 | | ??? |
+| AGC_TWEAKABLE_PHARMACY_PHARMACIST_SEARCH_DRUG_MINUTES | 1 | int | 1 | | ??? |
+| AGC_TWEAKABLE_PHARMACY_PHARMACIST_SEARCH_DRUG_SKILL_POINTS | 3 | int | 1 | | ??? |
+| AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MINIMUM | 10 | int | 0 | | ??? |
+| AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MAXIMUM | 50 | int | AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MINIMUM + 1 | | ??? |
+
 
 # Development
 The **Advanced game changes** mod is developed in Visual Studio 2026 Community, the project needs *.NET Framework 3.5* to be installed. The .NET Framework 3.5 can be added in *Control Pannel* / *Programs and Features* / *Turn Windows features on or off*. When installing Visual Studio 2026 Community, add *NET Framework 3.5 development tools* component.
