@@ -26,7 +26,7 @@ Some options require restart of game after changing.
 | [AGC] Force employee lowest hire level | on | Forces hiring of all employes with lowest level. |
 | [AGC] Biochemistry lab employee (requires restart) | on | Forces lab specialists in *Medical laboratories* department to have *Advanced biochemistry* skill. |
 | [AGC] Limit clinic doctors level | on | Enables or disables clinic doctors from gaining more level than specified by tweakables. |
-| [AGC] Patients go through emergency | on | Enables or disables that all patients must go through ememrgency department. If turned off, some patients can go directly to specialized clinic offices. |
+| [AGC] Patients go through emergency | on | Enables or disables that all patients must go through emergency department. If turned off, some patients can go directly to specialized clinic offices. |
 | [AGC] Night shift staff lunch | on | Enables or disables lunch for night staff shift. |
 | [AGC] Same length for staff shifts (requires restart) | on | Enables or disables same length for day and night shift. |
 
