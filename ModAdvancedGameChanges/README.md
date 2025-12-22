@@ -172,7 +172,7 @@ The general pharmacy behavior for all characters is affected by these tweakables
 
 #### Patients
 The patients buy prescribed drugs by doctor (the prices are specified in game files).
-If there are also another possible drugs not prescribed by doctor, patients buy them by price randomly between `AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MINIMUM` and `AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MAXIMUM`.
+If there are another possible treatments for symptoms of diseases not presribed by doctor, patients buy them by prices specified in game files.
 
 #### Pedestrians
 The pedestrians buy between 1 and 5 (randomly) of non-restricted drugs by price randomly between `AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MINIMUM` and `AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MAXIMUM`
