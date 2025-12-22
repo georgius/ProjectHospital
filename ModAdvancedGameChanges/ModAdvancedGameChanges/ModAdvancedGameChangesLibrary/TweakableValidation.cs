@@ -590,10 +590,10 @@ namespace ModAdvancedGameChanges
 
             new TweakableValidation(() =>
             {
-                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_MAX_COUNT);
+                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_COUNT);
                 if (value.Value < 0)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_MAX_COUNT}' must be greater than or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_COUNT}' must be greater than or equal to zero.");
                 }
             }),
 

@@ -265,9 +265,9 @@ namespace ModAdvancedGameChanges
                 return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_LOW_PRIORITY_MULTIPLIER).Value;
             }
 
-            public static int PedestrianMaxCount()
+            public static int PedestrianCount()
             {
-                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_MAX_COUNT).Value;
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_COUNT).Value;
             }
 
             public static float PedestrianPharmacyProbabilityDayPercent()

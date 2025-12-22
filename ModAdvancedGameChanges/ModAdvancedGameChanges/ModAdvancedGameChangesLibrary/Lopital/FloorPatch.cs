@@ -36,15 +36,15 @@ namespace ModAdvancedGameChanges
 
             if (__instance.m_floorIndex == 0)
             {
-                for (int i = pedestrians; i < Tweakable.Mod.PedestrianMaxCount(); i++)
+                for (int i = pedestrians; i < Tweakable.Mod.PedestrianCount(); i++)
                 {
                     var entity = LopitalEntityFactory.CreateCharacterPedestrian(__instance, new Vector2i(0, 2));
                     entity.GetComponent<BehaviorPedestrian>().m_state.m_respawnTimeSeconds = DayTime.Instance.IngameTimeHoursToRealTimeSeconds(UnityEngine.Random.Range(0.5f, 2f));
                     __instance.AddCharacter(entity);
                 }
 
-                // remove pedestrians over maximum allowed count (if possible)
-                if (pedestrians > Tweakable.Mod.PedestrianMaxCount())
+                // remove pedestrians over allowed count (if possible)
+                if (pedestrians > Tweakable.Mod.PedestrianCount())
                 {
                     int j = 0;
                     while (j < Hospital.Instance.m_characters.Count)
