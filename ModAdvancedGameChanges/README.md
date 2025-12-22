@@ -39,7 +39,7 @@ The **Advanced game changes** mod has many tweakable values.
 The non-linear employee leveling for doctors is straightforward.
 
 | Doctor's level | Points needed for next level | Default |
-| -- | -- | -- |
+| -- | -- | --: |
 | Intern		 | AGC_TWEAKABLE_DOCTOR_LEVEL_POINTS_1 | 20 000 |
 | Resident		 | AGC_TWEAKABLE_DOCTOR_LEVEL_POINTS_2 | 40 000 |
 | Attending	     | AGC_TWEAKABLE_DOCTOR_LEVEL_POINTS_3 | 80 000 |
@@ -69,7 +69,7 @@ Nurse gains new skill after `AGC_TWEAKABLE_NURSE_LEVEL_POINTS_1` points,
 similar as doctor gains new skill at `Resident` level - after `AGC_TWEAKABLE_DOCTOR_LEVEL_POINTS_1`.
 
 | Nurse's level | Points needed for next level | Default |
-| -- | -- | -- |
+| -- | -- | --: |
 | Nursing intern | AGC_TWEAKABLE_NURSE_LEVEL_POINTS_1 | 20 000 |
 | Nursing intern | AGC_TWEAKABLE_NURSE_LEVEL_POINTS_2 | 40 000 |
 | Registered nurse | AGC_TWEAKABLE_NURSE_LEVEL_POINTS_3 | 80 000 |
@@ -84,7 +84,7 @@ Lab specialist gains new skill after `AGC_TWEAKABLE_LAB_SPECIALIST_LEVEL_POINTS_
 similar as doctor gains new skill at `Resident` level - after `AGC_TWEAKABLE_DOCTOR_LEVEL_POINTS_1`.
 
 | Lab specialist's level | Points needed for next level | Default |
-| -- | -- | -- |
+| -- | -- | --: |
 | Junior scientist | AGC_TWEAKABLE_LAB_SPECIALIST_LEVEL_POINTS_1 | 20 000 |
 | Junior scientist | AGC_TWEAKABLE_LAB_SPECIALIST_LEVEL_POINTS_2 | 40 000 |
 | Senior scientist | AGC_TWEAKABLE_LAB_SPECIALIST_LEVEL_POINTS_3 | 80 000 |
@@ -99,7 +99,7 @@ Janitor gains new skill after `AGC_TWEAKABLE_JANITOR_LEVEL_POINTS_1` points,
 similar as doctor gains new skill at `Resident` level - after `AGC_TWEAKABLE_DOCTOR_LEVEL_POINTS_1`.
 
 | Janitor's level | Points needed for next level | Default |
-| -- | -- | -- |
+| -- | -- | --: |
 | Janitor | AGC_TWEAKABLE_JANITOR_LEVEL_POINTS_1 | 20 000 |
 | Janitor | AGC_TWEAKABLE_JANITOR_LEVEL_POINTS_2 | 40 000 |
 | Senior janitor | AGC_TWEAKABLE_JANITOR_LEVEL_POINTS_3 | 80 000 |
@@ -114,7 +114,7 @@ It is controlled by main tweakable `AGC_TWEAKABLE_SKILL_LEVELS` and several othe
 There are several tweakables affecting pharmacy for all characters and several affecting pharmacy behavior for pedestrians.
 
 ### General pharmacy tweakables
-The general pharmacy behavior for all characters is affected by these tweakables
+The general pharmacy behavior for all characters is affected by these tweakables:
 
 | Tweakable | Default | Type | Minimum | Maximum | Description |
 | -- | -- | -- | -- | -- | -- |
