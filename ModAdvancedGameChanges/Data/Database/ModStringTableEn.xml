@@ -29,8 +29,8 @@
 			</GameDBLocalizedString>
 			
 			<GameDBLocalizedString>
-				<LocID>AGC_OPTION_ENABLE_PEDESTRIAN_GO_TO_PHARMACY</LocID>
-				<Text>[AGC] Enable pedestrian go to pharmacy</Text>
+				<LocID>AGC_OPTION_ENABLE_PEDESTRIANS_GO_TO_PHARMACY</LocID>
+				<Text>[AGC] Enable pedestrians go to pharmacy</Text>
 			</GameDBLocalizedString>
 			
 			<GameDBLocalizedString>

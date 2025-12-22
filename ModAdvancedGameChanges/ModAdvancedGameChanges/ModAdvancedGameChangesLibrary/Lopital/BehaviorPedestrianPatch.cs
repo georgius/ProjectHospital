@@ -121,7 +121,7 @@ namespace ModAdvancedGameChanges.Lopital
 
                     Department administrativeDepartment = MapScriptInterface.Instance.GetDepartmentOfType(Database.Instance.GetEntry<GameDBDepartment>(Departments.Vanilla.AdministrativeDepartment));
                     ProcedureSceneAvailability availability =
-                        ViewSettingsPatch.m_enablePedestrianGoToPharmacy[SettingsManager.Instance.m_viewSettings].m_value
+                        ViewSettingsPatch.m_enablePedestriansGoToPharmacy[SettingsManager.Instance.m_viewSettings].m_value
                          ? __instance.GetComponent<ProcedureComponent>().GetProcedureAvailabilty(entry, __instance.m_entity, administrativeDepartment, AccessRights.PATIENT, EquipmentListRules.ONLY_FREE)
                          : ProcedureSceneAvailability.STAFF_UNAVAILABLE;
                     float probabilityPercent = (DayTime.Instance.GetShift() == Shift.DAY)
