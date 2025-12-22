@@ -171,7 +171,7 @@ The general pharmacy behavior for all characters is affected by these tweakables
 | Description | The maximum payment for non-restricted drugs (drugs without prescription). |
 
 #### Patients
-The patients buy prescribed drugs by doctor (the prices are specified in game files).
+The patients buy prescribed drugs by doctor, the prices are specified in game files.
 If there are another possible treatments for symptoms of diseases not presribed by doctor, patients buy them by prices specified in game files.
 
 #### Pedestrians
