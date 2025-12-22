@@ -23,7 +23,7 @@ Some options require restart of game after changing.
 | [AGC] Debug output | off | Enables or disabled verbose output of mod to game log file. |
 | [AGC] Enable mod changes (requires restart) | on | Enables or disables **ALL changes** introduced by mod. It is useful when player wants to play game without mod modifications. In such case it is not needed to uninstall mod. |
 | [AGC] Non-linear skill leveling | on | Enables or disables non-linear skill leveling and employee leveling. See more at [Non-linear employee leveling](#non-linear-employee-leveling). |
-| [AGC] Enable pedestrian go to pharmacy | on | Enables or disables pedestrians to go to pharmacy to buy medicine. See more at [Pedestrian go to pharmacy](#pedestrian-go-to-pharmacy). |
+| [AGC] Enable pedestrians go to pharmacy | on | Enables or disables pedestrians to go to pharmacy to buy medicine. See more at [Pedestrians going to pharmacy](#pedestrians-going-to-pharmacy). |
 | [AGC] Force employee lowest hire level | on | Forces hiring of all employes with lowest level. |
 | [AGC] Biochemistry lab employee (requires restart) | on | Forces lab specialists in *Medical laboratories* department to have *Advanced biochemistry* skill. |
 | [AGC] Limit clinic doctors level | on | Enables or disables clinic doctors from gaining more level than specified by tweakables. |
@@ -110,7 +110,7 @@ similar as doctor gains new skill at `Resident` level - after `AGC_TWEAKABLE_DOC
 The non-linear skill leveling is similar to non-linear employee level.
 It is controlled by main tweakable `AGC_TWEAKABLE_SKILL_LEVELS` and several other tweakables.
 
-## Pedestrian go to pharmacy
+## Pedestrians going to pharmacy
 There are several tweakables affecting pharmacy for all characters and several affecting pharmacy behavior for pedestrians.
 
 ### General pharmacy tweakables
