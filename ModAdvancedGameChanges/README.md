@@ -116,16 +116,59 @@ There are several tweakables affecting pharmacy for all characters and several a
 ### General pharmacy tweakables
 The general pharmacy behavior for all characters is affected by these tweakables:
 
-| Tweakable | Default | Type | Minimum | Maximum | Description |
-| -- | -- | -- | -- | -- | -- |
-| AGC_TWEAKABLE_PHARMACY_CUSTOMER_MAXIMUM_WAITING_TIME_MINUTES | 120 | int | 1 | | The maximum waiting time (in minutes) in pharmacy for all character. If character is waiting more, character leaves pharmacy without payment. |
-| AGC_TWEAKABLE_PHARMACY_PHARMACIST_QUESTION_MINUTES | 1 | int | 1 | | The base time (in minutes) for pharmacist question. See more [Action time calculation](#action-time-calculation). |
-| AGC_TWEAKABLE_PHARMACY_PHARMACIST_SEARCH_DRUG_MINUTES | 1 | int | 1 | | The base time (in minutes) for pharmacist to search drugs in shelfs. See more [Action time calculation](#action-time-calculation). |
-| AGC_TWEAKABLE_PHARMACY_PHARMACIST_SEARCH_DRUG_SKILL_POINTS | 3 | int | 1 | | TO DO |
-| AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MINIMUM | 10 | int | 0 | | The minimum payment for non-restricted drugs (drugs without prescription). |
-| AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MAXIMUM | 50 | int | AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MINIMUM + 1 | | The maximum payment for non-restricted drugs (drugs without prescription). |
+| Name | Value |
+| :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_PHARMACY_CUSTOMER_MAXIMUM_WAITING_TIME_MINUTES |
+| Type | int |
+| Default | 120 |
+| Minimum | 1 |
+| Maximum | |
+| Description | The maximum waiting time in pharmacy in minutes for all characters. If character is waiting longer, the character leaves pharmacy without payment. |
 
-The patient or pedestrian going to pharmacy can buy several non-restricted drugs and several drugs with prescription.
+| Name | Value |
+| :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_PHARMACY_PHARMACIST_QUESTION_MINUTES |
+| Type | int |
+| Default | 1 |
+| Minimum | 1 |
+| Maximum | |
+| Description | The base time in minutes for pharmacist question. See more [Action time calculation](#action-time-calculation). |
+
+| Name | Value |
+| :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_PHARMACY_PHARMACIST_SEARCH_DRUG_MINUTES |
+| Type | int |
+| Default | 1 |
+| Minimum | 1 |
+| Maximum | |
+| Description | The base time in minutes for pharmacist to search drugs in shelfs. See more [Action time calculation](#action-time-calculation). |
+
+| Name | Value |
+| :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_PHARMACY_PHARMACIST_SEARCH_DRUG_SKILL_POINTS |
+| Type | int |
+| Default | 3 |
+| Minimum | 1 |
+| Maximum | |
+| Description | TO DO |
+
+| Name | Value |
+| :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MINIMUM |
+| Type | int |
+| Default | 10 |
+| Minimum | 0 |
+| Maximum | |
+| Description | The minimum payment for non-restricted drugs (drugs without prescription). |
+
+| Name | Value |
+| :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MAXIMUM |
+| Type | int |
+| Default | 50 |
+| Minimum | AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MINIMUM + 1 |
+| Maximum | |
+| Description | The maximum payment for non-restricted drugs (drugs without prescription). |
 
 #### Patients
 The patients buy prescribed drugs by doctor (the prices are specified in game files).
@@ -136,13 +179,34 @@ The pedestrians buy between 1 and 5 (randomly) of non-restricted drugs by price 
 and between 0 and 3 (randomly) of prescribed drugs by price randomly between `AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MINIMUM` and `AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MAXIMUM`.
 
 ### Pedestrian pharmacy tweakables
-The pedestrian pharmacy behavior is affected by these tweakables
+The pedestrian pharmacy behavior is affected by these tweakables:
 
-| Tweakable | Default | Type | Minimum | Maximum | Description |
-| -- | -- | -- | -- | -- | -- |
-| AGC_TWEAKABLE_PEDESTRIAN_MAX_COUNT | 15 | int | 0 | | The maximum pedestrian count. |
-| AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_PROBABILITY_DAY_PERCENT| 50 | float | 0 | 100 | The probability (in percent) that pedestrian will go to pharmacy. In other case, pedestrian will just walk around hospital. |
-| AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_PROBABILITY_NIGHT_PERCENT | 10 | float | 0 | 100 | The probability (in percent) that pedestrian will go to pharmacy. In other case, pedestrian will not appear. |
+| Name | Value |
+| :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_PEDESTRIAN_COUNT |
+| Type | int |
+| Default | 15 |
+| Minimum | 0 |
+| Maximum | |
+| Description | The pedestrian count simulated by game. |
+
+| Name | Value |
+| :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_PROBABILITY_DAY_PERCENT |
+| Type | float |
+| Default | 50 |
+| Minimum | 0 |
+| Maximum | 100 |
+| Description | The probability in percent that pedestrian will go to pharmacy in day shift. In other case, pedestrian will just walk around hospital. |
+
+| Name | Value |
+| :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_PROBABILITY_NIGHT_PERCENT |
+| Type | float |
+| Default | 10 |
+| Minimum | 0 |
+| Maximum | 100 |
+| Description | The probability in percent that pedestrian will go to pharmacy in night shift. In other case, pedestrian will not appear. |
 
 ## Action time calculation
 TO DO
