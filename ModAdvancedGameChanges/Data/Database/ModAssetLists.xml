@@ -1,6 +1,6 @@
 <Database>
 
-<!-- ================================================== Department ================================================== -->
+	<!-- ================================================== Department ================================================== -->
 
 	<GameDBAsset ID="AGC_DPT_ICON_0">
 		<Type>TEXTURE_CUSTOM_SPRITE</Type>
@@ -30,6 +30,5 @@
 		<Type>TEXTURE_CUSTOM_SPRITE</Type>
 		<File>MOD_ROOT/Assets/mod_dept_icon_6.png</File>
 	</GameDBAsset>
-	
 
 </Database>

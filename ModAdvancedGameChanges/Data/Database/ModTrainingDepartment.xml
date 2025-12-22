@@ -1,4 +1,5 @@
 <Database>
+
 	<GameDBDepartment ID="AGC_DPT_TRAINING">
 		<LockedByDefault>false</LockedByDefault>
         <HospitalizationLockedByDefault>true</HospitalizationLockedByDefault>

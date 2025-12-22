@@ -1,4 +1,5 @@
 ﻿<Database>
+
 	<GameDBTweakableInt ID="AGC_TWEAKABLE_DOCTOR_LEVEL_POINTS_1">
 		<Value>20000</Value>
 	</GameDBTweakableInt>
