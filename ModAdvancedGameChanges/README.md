@@ -152,23 +152,7 @@ The general pharmacy behavior for all characters is affected by these tweakables
 | Maximum | |
 | Description | TO DO |
 
-| Name | Value |
-| :-- | :-- |
-| Tweakable | AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MINIMUM |
-| Type | int |
-| Default | 10 |
-| Minimum | 0 |
-| Maximum | |
-| Description | The minimum payment for non-restricted drugs (drugs without prescription). |
 
-| Name | Value |
-| :-- | :-- |
-| Tweakable | AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MAXIMUM |
-| Type | int |
-| Default | 50 |
-| Minimum | AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MINIMUM + 1 |
-| Maximum | |
-| Description | The maximum payment for non-restricted drugs (drugs without prescription). |
 
 #### Patients
 The patients buy prescribed drugs by doctor, the prices are specified in game files.
@@ -207,6 +191,69 @@ The pedestrian pharmacy behavior is affected by these tweakables:
 | Minimum | 0 |
 | Maximum | 100 |
 | Description | The probability in percent that pedestrian will go to pharmacy in night shift. In other case, pedestrian will not appear. |
+
+| Name | Value |
+| :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_BUY_UNRESTRICTED_ITEMS_MAXIMUM |
+| Type | int |
+| Default | 5 |
+| Minimum | 1 |
+| Maximum | |
+| Description | The minimum count of non-restricted drugs (drugs without prescription) to be buyed by pedestrian. |
+
+| Name | Value |
+| :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_BUY_RESTRICTED_ITEMS_MINIMUM |
+| Type | int |
+| Default | 0 |
+| Minimum | 0 |
+| Maximum | |
+| Description | The minimum count of restricted drugs (drugs with prescription) to be buyed by pedestrian. |
+
+| Name | Value |
+| :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_BUY_RESTRICTED_ITEMS_MAXIMUM |
+| Type | int |
+| Default | 3 |
+| Minimum | AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_BUY_RESTRICTED_ITEMS_MINIMUM |
+| Maximum | |
+| Description | The maximum count of restricted drugs (drugs with prescription) to be buyed by pedestrian. |
+
+| Name | Value |
+| :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_UNRESTRICTED_ITEMS_PAYMENT_MINIMUM |
+| Type | int |
+| Default | 10 |
+| Minimum | 0 |
+| Maximum | |
+| Description | The minimum payment for non-restricted drugs (drugs without prescription). |
+
+| Name | Value |
+| :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_UNRESTRICTED_ITEMS_PAYMENT_MAXIMUM |
+| Type | int |
+| Default | 50 |
+| Minimum | AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_UNRESTRICTED_ITEMS_PAYMENT_MINIMUM |
+| Maximum | |
+| Description | The maximum payment for non-restricted drugs (drugs without prescription). |
+
+| Name | Value |
+| :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_RESTRICTED_ITEMS_PAYMENT_MINIMUM |
+| Type | int |
+| Default | 60 |
+| Minimum | 0 |
+| Maximum | |
+| Description | The minimum payment for restricted drugs (drugs with prescription). |
+
+| Name | Value |
+| :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_RESTRICTED_ITEMS_PAYMENT_MAXIMUM |
+| Type | int |
+| Default | 130 |
+| Minimum | AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_RESTRICTED_ITEMS_PAYMENT_MINIMUM |
+| Maximum | |
+| Description | The maximum payment for restricted drugs (drugs with prescription). |
 
 ## Action time calculation
 TO DO
