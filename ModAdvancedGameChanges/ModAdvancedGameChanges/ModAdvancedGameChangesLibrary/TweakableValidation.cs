@@ -31,11 +31,11 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_ALLOWED_CLINIC_DOCTORS_LEVEL);
                 if (value.Value < 1)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_ALLOWED_CLINIC_DOCTORS_LEVEL}' must be greater than zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_ALLOWED_CLINIC_DOCTORS_LEVEL}' must be greater than 0.");
                 }
                 if (value.Value > 5)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_ALLOWED_CLINIC_DOCTORS_LEVEL}' must be lower than six.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_ALLOWED_CLINIC_DOCTORS_LEVEL}' must be lower than 6.");
                 }
             }),
 
@@ -62,7 +62,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_GOOD_BOSS_MINIMUM);
                 if (value.Value < 0f)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_GOOD_BOSS_MINIMUM}' must be greater than or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_GOOD_BOSS_MINIMUM}' must be greater than or equal to 0.");
                 }
                 if (value.Value > 100f)
                 {
@@ -86,7 +86,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_SATISFACTION_MINIMUM);
                 if (value.Value < 0f)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_SATISFACTION_MINIMUM}' must be greater than or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_SATISFACTION_MINIMUM}' must be greater than or equal to 0.");
                 }
                 if (value.Value > 100f)
                 {
@@ -110,7 +110,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_SHIFT_PREFERENCE_MINIMUM);
                 if (value.Value < 0f)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_SHIFT_PREFERENCE_MINIMUM}' must be greater than or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_SHIFT_PREFERENCE_MINIMUM}' must be greater than or equal to 0.");
                 }
                 if (value.Value > 100f)
                 {
@@ -135,7 +135,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_NEED_BLADDER_PENALTY);
                 if (value.Value < 0f)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_NEED_BLADDER_PENALTY}' must be greater than or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_NEED_BLADDER_PENALTY}' must be greater than or equal to 0.");
                 }
             }),
             new TweakableValidation(() =>
@@ -143,7 +143,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_NEED_HUNGER_PENALTY);
                 if (value.Value < 0f)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_NEED_HUNGER_PENALTY}' must be greater than or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_NEED_HUNGER_PENALTY}' must be greater than or equal to 0.");
                 }
             }),
             new TweakableValidation(() =>
@@ -151,7 +151,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_NEED_REST_PENALTY);
                 if (value.Value < 0f)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_NEED_REST_PENALTY}' must be greater than or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_NEED_REST_PENALTY}' must be greater than or equal to 0.");
                 }
             }),
 
@@ -166,7 +166,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_THRESHOLD);
                 if (value.Value < 0f)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_THRESHOLD}' must be greater than or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_THRESHOLD}' must be greater than or equal to 0.");
                 }
                 if (value.Value > 100f)
                 {
@@ -190,7 +190,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REDUCTION_MINIMUM);
                 if (value.Value < 0f)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REDUCTION_MINIMUM}' must be greater than or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_FULFILL_NEEDS_REDUCTION_MINIMUM}' must be greater than or equal to 0.");
                 }
                 if (value.Value > 100f)
                 {
@@ -215,7 +215,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_NEED_BLADDER);
                 if (value.Value < 0f)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_BLADDER}' must be greater than or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_BLADDER}' must be greater than or equal to 0.");
                 }
             }),
 
@@ -224,7 +224,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_NEED_BOREDOM_USING_OBJECT);
                 if (value.Value < 0f)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_BOREDOM_USING_OBJECT}' must be greater than or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_BOREDOM_USING_OBJECT}' must be greater than or equal to 0.");
                 }
             }),
             new TweakableValidation(() =>
@@ -232,7 +232,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_NEED_BOREDOM_USING_PHONE);
                 if (value.Value < 0f)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_BOREDOM_USING_PHONE}' must be greater than or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_BOREDOM_USING_PHONE}' must be greater than or equal to 0.");
                 }
             }),
             new TweakableValidation(() =>
@@ -240,7 +240,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_NEED_BOREDOM_YAWNING);
                 if (value.Value < 0f)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_BOREDOM_YAWNING}' must be greater than or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_BOREDOM_YAWNING}' must be greater than or equal to 0.");
                 }
             }),
 
@@ -249,7 +249,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER);
                 if (value.Value < 0f)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER}' must be greater than or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER}' must be greater than or equal to 0.");
                 }
             }),
             new TweakableValidation(() =>
@@ -257,7 +257,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH);
                 if (value.Value < 0f)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH}' must be greater than or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH}' must be greater than or equal to 0.");
                 }
             }),
             new TweakableValidation(() =>
@@ -265,7 +265,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_EATING_TIME_MINUTES);
                 if (value.Value < 0f)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_EATING_TIME_MINUTES}' must be greater than or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_EATING_TIME_MINUTES}' must be greater than or equal to 0.");
                 }
             }),
             new TweakableValidation(() =>
@@ -273,7 +273,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_COFFEE_TIME_MINUTES);
                 if (value.Value < 0f)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_COFFEE_TIME_MINUTES}' must be greater than or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_COFFEE_TIME_MINUTES}' must be greater than or equal to 0.");
                 }
             }),
             new TweakableValidation(() =>
@@ -281,7 +281,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_MEAL_MINIMUM);
                 if (value.Value < 0)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_MEAL_MINIMUM}' must be greater than or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_MEAL_MINIMUM}' must be greater than or equal to 0.");
                 }
             }),
             new TweakableValidation(() =>
@@ -297,7 +297,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_SNACK_MINIMUM);
                 if (value.Value < 0)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_SNACK_MINIMUM}' must be greater than or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_SNACK_MINIMUM}' must be greater than or equal to 0.");
                 }
             }),
             new TweakableValidation(() =>
@@ -313,7 +313,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_JUICE_MINIMUM);
                 if (value.Value < 0)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_JUICE_MINIMUM}' must be greater than or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_JUICE_MINIMUM}' must be greater than or equal to 0.");
                 }
             }),
             new TweakableValidation(() =>
@@ -329,7 +329,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_COFFEE_MINIMUM);
                 if (value.Value < 0)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_COFFEE_MINIMUM}' must be greater than or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_HUNGER_LUNCH_PAYMENT_COFFEE_MINIMUM}' must be greater than or equal to 0.");
                 }
             }),
             new TweakableValidation(() =>
@@ -346,7 +346,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_NEED_REST_MINUTES);
                 if (value.Value < 0f)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_REST_MINUTES}' must be greater than zero or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_REST_MINUTES}' must be greater than or equal to 0.");
                 }
             }),
             new TweakableValidation(() =>
@@ -354,7 +354,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_NEED_REST_PLAY_GAME);
                 if (value.Value < 0f)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_REST_PLAY_GAME}' must be greater than or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_REST_PLAY_GAME}' must be greater than or equal to 0.");
                 }
             }),
             new TweakableValidation(() =>
@@ -362,7 +362,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_NEED_REST_SIT);
                 if (value.Value < 0f)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_REST_SIT}' must be greater than or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_REST_SIT}' must be greater than or equal to 0.");
                 }
             }),
             new TweakableValidation(() =>
@@ -370,7 +370,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_NEED_REST_STUDY);
                 if (value.Value < 0f)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_REST_STUDY}' must be greater than or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NEED_REST_STUDY}' must be greater than or equal to 0.");
                 }
             }),
 
@@ -385,7 +385,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NURSE_RECEPTION_QUESTION_MINUTES);
                 if (value.Value < 1)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NURSE_RECEPTION_QUESTION_MINUTES}' must be greater than zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NURSE_RECEPTION_QUESTION_MINUTES}' must be greater than 0.");
                 }
             }),
             new TweakableValidation(() =>
@@ -393,7 +393,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NURSE_RECEPTION_DECISION_MINUTES);
                 if (value.Value < 1)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NURSE_RECEPTION_DECISION_MINUTES}' must be greater than zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NURSE_RECEPTION_DECISION_MINUTES}' must be greater than 0.");
                 }
             }),
             new TweakableValidation(() =>
@@ -401,7 +401,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NURSE_RECEPTION_QUESTION_SKILL_POINTS);
                 if (value.Value < 1)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NURSE_RECEPTION_QUESTION_SKILL_POINTS}' must be greater than zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NURSE_RECEPTION_QUESTION_SKILL_POINTS}' must be greater than 0.");
                 }
             }),
             new TweakableValidation(() =>
@@ -409,7 +409,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_NURSE_RECEPTION_NEXT_QUESTION_SKILL_POINTS);
                 if (value.Value < 1)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NURSE_RECEPTION_NEXT_QUESTION_SKILL_POINTS}' must be greater than zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_NURSE_RECEPTION_NEXT_QUESTION_SKILL_POINTS}' must be greater than 0.");
                 }
             }),
 
@@ -424,7 +424,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_JANITOR_CLEANING_TIME_BLOOD_MINUTES);
                 if (value.Value < 1)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_JANITOR_CLEANING_TIME_BLOOD_MINUTES}' must be greater than zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_JANITOR_CLEANING_TIME_BLOOD_MINUTES}' must be greater than 0.");
                 }
             }),
             new TweakableValidation(() =>
@@ -432,7 +432,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_JANITOR_CLEANING_TIME_DIRT_MINUTES);
                 if (value.Value < 1)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_JANITOR_CLEANING_TIME_DIRT_MINUTES}' must be greater than zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_JANITOR_CLEANING_TIME_DIRT_MINUTES}' must be greater than 0.");
                 }
             }),
 
@@ -447,7 +447,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_SKILL_LEVELS);
                 if (value.Value < 1)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_SKILL_LEVELS}' must be greater than zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_SKILL_LEVELS}' must be greater than 0.");
                 }
 
                 for (int i = 0; i < value.Value; i++)
@@ -457,7 +457,7 @@ namespace ModAdvancedGameChanges
 
                     if (skillPoints.Value < 1)
                     {
-                        throw new Exception($"The tweakable '{name}' must be greater than zero.");
+                        throw new Exception($"The tweakable '{name}' must be greater than 0.");
                     }
                 }
             }),
@@ -467,7 +467,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_SKILL_TIME_REDUCTION_MINIMUM);
                 if (value.Value < 0f)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_SKILL_TIME_REDUCTION_MINIMUM}' must be greater than or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_SKILL_TIME_REDUCTION_MINIMUM}' must be greater than or equal to 0.");
                 }
                 if (value.Value > 100f)
                 {
@@ -479,7 +479,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_SKILL_TIME_REDUCTION_MAXIMUM);
                 if (value.Value < 0f)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_SKILL_TIME_REDUCTION_MAXIMUM}' must be greater than or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_SKILL_TIME_REDUCTION_MAXIMUM}' must be greater than or equal to 0.");
                 }
                 if (value.Value > 100f)
                 {
@@ -492,7 +492,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_TRAINING_HOUR_SKILL_POINTS);
                 if (value.Value < 1)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_TRAINING_HOUR_SKILL_POINTS}' must be greater than zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_TRAINING_HOUR_SKILL_POINTS}' must be greater than 0.");
                 }
             }),
 
@@ -501,7 +501,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_VENDING_PAYMENT_EMPLOYEE_MINIMUM);
                 if (value.Value < 0)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_VENDING_PAYMENT_EMPLOYEE_MINIMUM}' must be greater than or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_VENDING_PAYMENT_EMPLOYEE_MINIMUM}' must be greater than or equal to 0.");
                 }
             }),
             new TweakableValidation(() =>
@@ -517,7 +517,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_VENDING_PAYMENT_PATIENT_MINIMUM);
                 if (value.Value < 0)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_VENDING_PAYMENT_PATIENT_MINIMUM}' must be greater than or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_VENDING_PAYMENT_PATIENT_MINIMUM}' must be greater than or equal to 0.");
                 }
             }),
             new TweakableValidation(() =>
@@ -534,7 +534,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_HIGH_PRIORITY_MULTIPLIER);
                 if (value.Value <= 0f)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_HIGH_PRIORITY_MULTIPLIER}' must be greater than zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_HIGH_PRIORITY_MULTIPLIER}' must be greater than 0.");
                 }
             }),
             new TweakableValidation(() =>
@@ -542,7 +542,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_MEDIUM_PRIORITY_MULTIPLIER);
                 if (value.Value <= 0f)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_MEDIUM_PRIORITY_MULTIPLIER}' must be greater than zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_MEDIUM_PRIORITY_MULTIPLIER}' must be greater than 0.");
                 }
             }),
             new TweakableValidation(() =>
@@ -550,7 +550,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_LOW_PRIORITY_MULTIPLIER);
                 if (value.Value <= 0f)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_LOW_PRIORITY_MULTIPLIER}' must be greater than zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS_LOW_PRIORITY_MULTIPLIER}' must be greater than 0.");
                 }
             }),
 
@@ -559,7 +559,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_AMBIGUOUS_LEAVE_MINUTES);
                 if (value.Value < 1)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_AMBIGUOUS_LEAVE_MINUTES}' must be greater than zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_AMBIGUOUS_LEAVE_MINUTES}' must be greater than 0.");
                 }
             }),
             new TweakableValidation(() =>
@@ -567,7 +567,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_COMPLICATED_DECISION_MINUTES);
                 if (value.Value < 1)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_COMPLICATED_DECISION_MINUTES}' must be greater than zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_COMPLICATED_DECISION_MINUTES}' must be greater than 0.");
                 }
             }),
 
@@ -576,7 +576,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_DOCTOR_FILLING_REPORT_MINUTES);
                 if (value.Value < 1)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_DOCTOR_FILLING_REPORT_MINUTES}' must be greater than zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_DOCTOR_FILLING_REPORT_MINUTES}' must be greater than 0.");
                 }
             }),
             new TweakableValidation(() =>
@@ -584,7 +584,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_DOCTOR_FILLING_REPORT_SKILL_POINTS);
                 if (value.Value < 1)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_DOCTOR_FILLING_REPORT_SKILL_POINTS}' must be greater than zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_DOCTOR_FILLING_REPORT_SKILL_POINTS}' must be greater than 0.");
                 }
             }),
 
@@ -593,7 +593,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_COUNT);
                 if (value.Value < 0)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_COUNT}' must be greater than or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_COUNT}' must be greater than or equal to 0.");
                 }
             }),
 
@@ -602,7 +602,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_PROBABILITY_DAY_PERCENT);
                 if (value.Value < 0f)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_PROBABILITY_DAY_PERCENT}' must be greater than or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_PROBABILITY_DAY_PERCENT}' must be greater than or equal to 0.");
                 }
                 if (value.Value > 100f)
                 {
@@ -614,11 +614,67 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_PROBABILITY_NIGHT_PERCENT);
                 if (value.Value < 0f)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_PROBABILITY_NIGHT_PERCENT}' must be greater than or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_PROBABILITY_NIGHT_PERCENT}' must be greater than or equal to 0.");
                 }
                 if (value.Value > 100f)
                 {
                     throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_PROBABILITY_NIGHT_PERCENT}' must be lower than or equal to 100.");
+                }
+            }),
+            new TweakableValidation(() =>
+            {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_BUY_UNRESTRICTED_ITEMS_MAXIMUM);
+                if (value.Value < 1)
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_BUY_UNRESTRICTED_ITEMS_MAXIMUM}' must be greater than or equal to 1.");
+                }
+            }),
+            new TweakableValidation(() =>
+            {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_BUY_RESTRICTED_ITEMS_MINIMUM);
+                if (value.Value < 0)
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_BUY_RESTRICTED_ITEMS_MINIMUM}' must be greater than or equal to 0.");
+                }
+            }),
+            new TweakableValidation(() =>
+            {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_BUY_RESTRICTED_ITEMS_MAXIMUM);
+                if (value.Value < Tweakable.Mod.PedestrianPharmacyBuyRestrictedItemsMinimum())
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_BUY_RESTRICTED_ITEMS_MAXIMUM}' must be greater than or equal to {Tweakable.Mod.PedestrianPharmacyBuyRestrictedItemsMinimum().ToString(CultureInfo.InvariantCulture)}.");
+                }
+            }),
+            new TweakableValidation(() =>
+            {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_UNRESTRICTED_ITEMS_PAYMENT_MINIMUM);
+                if (value.Value < 0)
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_UNRESTRICTED_ITEMS_PAYMENT_MINIMUM}' must be greater than or equal to 0.");
+                }
+            }),
+            new TweakableValidation(() =>
+            {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_UNRESTRICTED_ITEMS_PAYMENT_MAXIMUM);
+                if (value.Value < Tweakable.Mod.PedestrianPharmacyUnrestrictedItemsPaymentMinimum())
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_UNRESTRICTED_ITEMS_PAYMENT_MAXIMUM}' must be greater than or equal to {Tweakable.Mod.PedestrianPharmacyUnrestrictedItemsPaymentMinimum().ToString(CultureInfo.InvariantCulture)}.");
+                }
+            }),
+            new TweakableValidation(() =>
+            {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_RESTRICTED_ITEMS_PAYMENT_MINIMUM);
+                if (value.Value < 0)
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_RESTRICTED_ITEMS_PAYMENT_MINIMUM}' must be greater than or equal to 0.");
+                }
+            }),
+            new TweakableValidation(() =>
+            {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_RESTRICTED_ITEMS_PAYMENT_MAXIMUM);
+                if (value.Value < Tweakable.Mod.PedestrianPharmacyRestrictedItemsPaymentMinimum())
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_RESTRICTED_ITEMS_PAYMENT_MAXIMUM}' must be greater than or equal to {Tweakable.Mod.PedestrianPharmacyRestrictedItemsPaymentMinimum().ToString(CultureInfo.InvariantCulture)}.");
                 }
             }),
 
@@ -627,7 +683,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_CUSTOMER_MAXIMUM_WAITING_TIME_MINUTES);
                 if (value.Value < 1)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_CUSTOMER_MAXIMUM_WAITING_TIME_MINUTES}' must be greater than zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_CUSTOMER_MAXIMUM_WAITING_TIME_MINUTES}' must be greater than 0.");
                 }
             }),
             new TweakableValidation(() =>
@@ -635,7 +691,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_PHARMACIST_QUESTION_MINUTES);
                 if (value.Value < 1)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_PHARMACIST_QUESTION_MINUTES}' must be greater than zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_PHARMACIST_QUESTION_MINUTES}' must be greater than 0.");
                 }
             }),
             new TweakableValidation(() =>
@@ -643,7 +699,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_PHARMACIST_SEARCH_DRUG_MINUTES);
                 if (value.Value < 1)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_PHARMACIST_SEARCH_DRUG_MINUTES}' must be greater than zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_PHARMACIST_SEARCH_DRUG_MINUTES}' must be greater than 0.");
                 }
             }),
             new TweakableValidation(() =>
@@ -651,23 +707,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_PHARMACIST_SEARCH_DRUG_SKILL_POINTS);
                 if (value.Value < 1)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_PHARMACIST_SEARCH_DRUG_SKILL_POINTS}' must be greater than zero.");
-                }
-            }),
-            new TweakableValidation(() =>
-            {
-                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MINIMUM);
-                if (value.Value < 0)
-                {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MINIMUM}' must be greater than or equal to zero.");
-                }
-            }),
-            new TweakableValidation(() =>
-            {
-                var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MAXIMUM);
-                if (value.Value < Tweakable.Mod.PharmacyNonRestrictedDrugsPaymentMinimum())
-                {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MAXIMUM}' must be greater than or equal to {Tweakable.Mod.PharmacyNonRestrictedDrugsPaymentMinimum().ToString(CultureInfo.InvariantCulture)}.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_PHARMACIST_SEARCH_DRUG_SKILL_POINTS}' must be greater than 0.");
                 }
             }),
 
@@ -678,7 +718,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_MAIN_SKILL_POINTS);
                 if (value.Value < 1)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_MAIN_SKILL_POINTS}' must be greater than zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_MAIN_SKILL_POINTS}' must be greater than 0.");
                 }
             }),
 
@@ -687,7 +727,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_CORRECT_DIAGNOSE_PERK_SKILL_POINTS);
                 if (value.Value < 0)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_CORRECT_DIAGNOSE_PERK_SKILL_POINTS}' must be greater than or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_CORRECT_DIAGNOSE_PERK_SKILL_POINTS}' must be greater than or equal to 0.");
                 }
             }),
             new TweakableValidation(() =>
@@ -695,7 +735,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_CORRECT_DIAGNOSE_SKILL_POINTS);
                 if (value.Value < 0)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_CORRECT_DIAGNOSE_SKILL_POINTS}' must be greater than or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_CORRECT_DIAGNOSE_SKILL_POINTS}' must be greater than or equal to 0.");
                 }
             }),
             new TweakableValidation(() =>
@@ -703,7 +743,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_INCORRECT_DIAGNOSE_PERK_SKILL_POINTS);
                 if (value.Value < 0)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_INCORRECT_DIAGNOSE_PERK_SKILL_POINTS}' must be greater than or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_INCORRECT_DIAGNOSE_PERK_SKILL_POINTS}' must be greater than or equal to 0.");
                 }
             }),
             new TweakableValidation(() =>
@@ -711,7 +751,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_INCORRECT_DIAGNOSE_SKILL_POINTS);
                 if (value.Value < 0)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_INCORRECT_DIAGNOSE_SKILL_POINTS}' must be greater than or equal to zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_INCORRECT_DIAGNOSE_SKILL_POINTS}' must be greater than or equal to 0.");
                 }
             }),
 
@@ -722,7 +762,7 @@ namespace ModAdvancedGameChanges
                     var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_JANITOR_MANAGER_CLEANING_BONUS_PERCENT);
                     if (value.Value < 1)
                     {
-                        throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_JANITOR_MANAGER_CLEANING_BONUS_PERCENT}' must be greater than zero.");
+                        throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_JANITOR_MANAGER_CLEANING_BONUS_PERCENT}' must be greater than 0.");
                     }
                     if (value.Value > 100)
                     {
@@ -736,7 +776,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_JANITOR_DEXTERITY_SKILL_POINTS);
                 if (value.Value < 1)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_JANITOR_DEXTERITY_SKILL_POINTS}' must be greater than zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_JANITOR_DEXTERITY_SKILL_POINTS}' must be greater than 0.");
                 }
             }),
 
@@ -745,7 +785,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Vanilla.TWEAKABLE_PATIENT_LEAVE_TIME_HOURS);
                 if (value.Value <= 0f)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_PATIENT_LEAVE_TIME_HOURS}' must be greater than zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_PATIENT_LEAVE_TIME_HOURS}' must be greater than 0.");
                 }
             }),
             new TweakableValidation(() =>
@@ -753,7 +793,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Vanilla.TWEAKABLE_PATIENT_LEAVE_WARNING_HOURS);
                 if (value.Value <= 0f)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_PATIENT_LEAVE_WARNING_HOURS}' must be greater than zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_PATIENT_LEAVE_WARNING_HOURS}' must be greater than 0.");
                 }
             }),
             new TweakableValidation(() =>
@@ -761,7 +801,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Vanilla.TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS);
                 if (value.Value <= 0f)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS}' must be greater than zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_PATIENT_MAX_WAIT_TIME_HOURS}' must be greater than 0.");
                 }
             }),
 
@@ -770,7 +810,7 @@ namespace ModAdvancedGameChanges
                 var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Vanilla.TWEAKABLE_REPEAT_ACTION_FREE_TIME_SKILL_POINTS);
                 if (value.Value < 1)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_REPEAT_ACTION_FREE_TIME_SKILL_POINTS}' must be greater than zero.");
+                    throw new Exception($"The tweakable '{Tweakables.Vanilla.TWEAKABLE_REPEAT_ACTION_FREE_TIME_SKILL_POINTS}' must be greater than 0.");
                 }
             })
         };
@@ -783,7 +823,7 @@ namespace ModAdvancedGameChanges
                 var levelPoints = TweakableValidation.EnsureExists<GameDBTweakableInt>(name);
                 if (levelPoints.Value < 1)
                 {
-                    throw new Exception($"The tweakable '{name}' must be greater than zero.");
+                    throw new Exception($"The tweakable '{name}' must be greater than 0.");
                 }
             }
         }

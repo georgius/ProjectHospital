@@ -280,6 +280,41 @@ namespace ModAdvancedGameChanges
                 return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_PROBABILITY_NIGHT_PERCENT).Value;
             }
 
+            public static int PedestrianPharmacyBuyUnrestrictedItemsMaximum()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_BUY_UNRESTRICTED_ITEMS_MAXIMUM).Value;
+            }
+
+            public static int PedestrianPharmacyBuyRestrictedItemsMinimum()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_BUY_RESTRICTED_ITEMS_MINIMUM).Value;
+            }
+
+            public static int PedestrianPharmacyBuyRestrictedItemsMaximum()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_BUY_RESTRICTED_ITEMS_MAXIMUM).Value;
+            }
+
+            public static int PedestrianPharmacyUnrestrictedItemsPaymentMinimum()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_UNRESTRICTED_ITEMS_PAYMENT_MINIMUM).Value;
+            }
+
+            public static int PedestrianPharmacyUnrestrictedItemsPaymentMaximum()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_UNRESTRICTED_ITEMS_PAYMENT_MAXIMUM).Value;
+            }
+
+            public static int PedestrianPharmacyRestrictedItemsPaymentMinimum()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_RESTRICTED_ITEMS_PAYMENT_MINIMUM).Value;
+            }
+
+            public static int PedestrianPharmacyRestrictedItemsPaymentMaximum()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_RESTRICTED_ITEMS_PAYMENT_MAXIMUM).Value;
+            }
+
             public static int PharmacyCustomerMaximumWaitingTimeMinutes()
             {
                 return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_CUSTOMER_MAXIMUM_WAITING_TIME_MINUTES).Value;
@@ -298,15 +333,6 @@ namespace ModAdvancedGameChanges
             public static int PharmacyPharmacistSearchDrugSkillPoints()
             {
                 return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_PHARMACIST_SEARCH_DRUG_SKILL_POINTS).Value;
-            }
-
-            public static int PharmacyNonRestrictedDrugsPaymentMinimum()
-            {
-                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MINIMUM).Value;
-            }
-            public static int PharmacyNonRestrictedDrugsPaymentMaximum()
-            {
-                return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MAXIMUM).Value;
             }
 
             public static int SkillLevels()
