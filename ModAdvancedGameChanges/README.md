@@ -150,9 +150,7 @@ The general pharmacy behavior for all characters is affected by these tweakables
 | Default | 3 |
 | Minimum | 1 |
 | Maximum | |
-| Description | TO DO |
-
-
+| Description | The skill points to be added to `DLC_SKILL_LAB_SPECIALIST_SPEC_PHARMACOLOGY` and to employee level. |
 
 #### Patients
 The patients buy prescribed drugs by doctor, the prices are specified in game files.
