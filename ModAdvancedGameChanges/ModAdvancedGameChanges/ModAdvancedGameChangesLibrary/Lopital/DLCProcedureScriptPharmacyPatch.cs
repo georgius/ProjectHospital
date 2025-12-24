@@ -312,6 +312,9 @@ namespace ModAdvancedGameChanges.Lopital
                                 pharmacist.GetComponent<EmployeeComponent>().SetReserved(Procedures.Vanilla.Pharmacy, mainCharacter);
                                 pharmacist.GetComponent<Behavior>().ReceiveMessage(new Message(Messages.OVERRIDE_BY_PROCEDURE_SCRIPT));
 
+                                // assign lab specialist to procedure
+                                instance.m_stateData.m_procedureScene.m_labSpecialist = pharmacist;
+
                                 if (instance.IsPatient())
                                 {
                                     mainCharacter.GetComponent<BehaviorPatient>().SwitchState(PatientState.BuyingMedicine);
@@ -588,6 +591,9 @@ namespace ModAdvancedGameChanges.Lopital
                 pharmacist.GetComponent<BehaviorLabSpecialist>().CurrentPatient = null;
                 pharmacist.GetComponent<EmployeeComponent>().SetReserved(string.Empty, null);
                 pharmacist.GetComponent<Behavior>().ReceiveMessage(new Message(Messages.CANCEL_OVERRIDE_BY_PROCEDURE_SCRIPT));
+
+                // reset assigned lab specialist, not needed anymore
+                instance.m_stateData.m_procedureScene.m_labSpecialist = null;
             }
 
             currentRoom?.DequeueCharacter(mainCharacter);
