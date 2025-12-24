@@ -356,6 +356,13 @@ namespace ModAdvancedGameChanges.Lopital
 
                 mainCharacter.GetComponent<SpeechComponent>().HideBubble();
                 instance.SwitchState(DLCProcedureScriptPharmacyPatch.STATE_PHARMACIST_QUESTION);
+
+                float actionTime = instance.GetActionTime(
+                    pharmacist,
+                    (int)DayTime.Instance.IngameTimeHoursToRealTimeSeconds(((float)Tweakable.Mod.PharmacyPharmacistQuestionMinutes()) / 60f),
+                    pharmacist.GetComponent<EmployeeComponent>().GetSkillLevel(Skills.Vanilla.DLC_SKILL_LAB_SPECIALIST_SPEC_PHARMACOLOGY));
+
+                instance.SetParam(DLCProcedureScriptPharmacyPatch.PARAM_ACTION_TIME, actionTime);
             }
         }
 
@@ -364,12 +371,7 @@ namespace ModAdvancedGameChanges.Lopital
             Entity mainCharacter = instance.m_stateData.m_procedureScene.MainCharacter;
             Entity pharmacist = mainCharacter.GetAssignedPharmacist();
 
-            float actionTime = instance.GetActionTime(
-                pharmacist,
-                (int)DayTime.Instance.IngameTimeHoursToRealTimeSeconds(((float)Tweakable.Mod.PharmacyPharmacistQuestionMinutes()) / 60f),
-                pharmacist.GetComponent<EmployeeComponent>().GetSkillLevel(Skills.Vanilla.DLC_SKILL_LAB_SPECIALIST_SPEC_PHARMACOLOGY));
-
-            if (instance.m_stateData.m_timeInState > actionTime)
+            if (instance.m_stateData.m_timeInState > instance.GetParam(DLCProcedureScriptPharmacyPatch.PARAM_ACTION_TIME))
             {
                 if (pharmacist.GetComponent<PerkComponent>().m_perkSet.HasPerk(Perks.Vanilla.PeoplePerson))
                 {
@@ -402,6 +404,13 @@ namespace ModAdvancedGameChanges.Lopital
                 {
                     mainCharacter.GetComponent<SpeechComponent>().SetBubble(Speeches.Vanilla.Answer, -1f);
                     instance.SwitchState(DLCProcedureScriptPharmacyPatch.STATE_CUSTOMER_PAY_FOR_DRUGS);
+
+                    float actionTime = instance.GetActionTime(
+                        pharmacist,
+                        (int)DayTime.Instance.IngameTimeHoursToRealTimeSeconds(((float)Tweakable.Mod.PharmacyPharmacistQuestionMinutes()) / 60f),
+                        pharmacist.GetComponent<EmployeeComponent>().GetSkillLevel(Skills.Vanilla.DLC_SKILL_LAB_SPECIALIST_SPEC_PHARMACOLOGY));
+
+                    instance.SetParam(DLCProcedureScriptPharmacyPatch.PARAM_ACTION_TIME, actionTime);
                 }
             }
         }
@@ -441,6 +450,13 @@ namespace ModAdvancedGameChanges.Lopital
             {
                 pharmacist.GetComponent<SpeechComponent>().SetBubble(Speeches.Vanilla.Question, -1f);
                 instance.SwitchState(DLCProcedureScriptPharmacyPatch.STATE_PHARMACIST_SEARCHING_DRUG_SHELF);
+
+                float actionTime = instance.GetActionTime(
+                    pharmacist,
+                    (int)DayTime.Instance.IngameTimeHoursToRealTimeSeconds(((float)Tweakable.Mod.PharmacyPharmacistSearchDrugMinutes()) / 60f),
+                    pharmacist.GetComponent<EmployeeComponent>().GetSkillLevel(Skills.Vanilla.DLC_SKILL_LAB_SPECIALIST_SPEC_PHARMACOLOGY));
+
+                instance.SetParam(DLCProcedureScriptPharmacyPatch.PARAM_ACTION_TIME, actionTime);
             }
         }
 
@@ -449,12 +465,7 @@ namespace ModAdvancedGameChanges.Lopital
             Entity mainCharacter = instance.m_stateData.m_procedureScene.MainCharacter;
             Entity pharmacist = mainCharacter.GetAssignedPharmacist();
 
-            float actionTime = instance.GetActionTime(
-                pharmacist,
-                (int)DayTime.Instance.IngameTimeHoursToRealTimeSeconds(((float)Tweakable.Mod.PharmacyPharmacistSearchDrugMinutes()) / 60f),
-                pharmacist.GetComponent<EmployeeComponent>().GetSkillLevel(Skills.Vanilla.DLC_SKILL_LAB_SPECIALIST_SPEC_PHARMACOLOGY));
-
-            if (instance.m_stateData.m_timeInState > actionTime)
+            if (instance.m_stateData.m_timeInState > instance.GetParam(DLCProcedureScriptPharmacyPatch.PARAM_ACTION_TIME))
             {
                 pharmacist.GetComponent<SpeechComponent>().HideBubble();
                 pharmacist.GetComponent<UseComponent>().Activate(UseComponentMode.SINGLE_USE);
@@ -505,12 +516,7 @@ namespace ModAdvancedGameChanges.Lopital
             Entity mainCharacter = instance.m_stateData.m_procedureScene.MainCharacter;
             Entity pharmacist = mainCharacter.GetAssignedPharmacist();
 
-            float actionTime = instance.GetActionTime(
-                pharmacist,
-                (int)DayTime.Instance.IngameTimeHoursToRealTimeSeconds(((float)Tweakable.Mod.PharmacyPharmacistQuestionMinutes()) / 60f),
-                pharmacist.GetComponent<EmployeeComponent>().GetSkillLevel(Skills.Vanilla.DLC_SKILL_LAB_SPECIALIST_SPEC_PHARMACOLOGY));
-
-            if (instance.m_stateData.m_timeInState > actionTime)
+            if (instance.m_stateData.m_timeInState > instance.GetParam(DLCProcedureScriptPharmacyPatch.PARAM_ACTION_TIME))
             {
                 instance.Leave(true);
             }
@@ -701,5 +707,6 @@ namespace ModAdvancedGameChanges.Lopital
         public const int PARAM_BUY_ITEMS = 1;
         public const int PARAM_MAX_WAIT_TIME = 2;
         public const int PARAM_BUY_RESTRICTED_ITEMS = 3;
+        public const int PARAM_ACTION_TIME = 4;
     }
 }
