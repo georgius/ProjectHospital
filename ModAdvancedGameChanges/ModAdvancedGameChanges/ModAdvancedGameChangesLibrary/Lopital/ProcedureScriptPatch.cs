@@ -2,6 +2,7 @@
 using HarmonyLib;
 using Lopital;
 using ModAdvancedGameChanges.Constants;
+using System.Globalization;
 
 namespace ModAdvancedGameChanges.Lopital
 {
@@ -18,10 +19,13 @@ namespace ModAdvancedGameChanges.Lopital
                 return true;
             }
 
-            float ratio = (characterSkill - Skills.SkillLevelMinimum) / (Skills.SkillLevelMaximum - Skills.SkillLevelMinimum);
-            float reduction = UnityEngine.Random.Range(Tweakable.Mod.SkillTimeReductionMinimum(), Tweakable.Mod.SkillTimeReductionMaximum()) * ratio / 100f;
+            float skillRatio = UnityEngine.Mathf.Max(Tweakable.Mod.EfficiencyMinimum() / 100f, (characterSkill - Skills.SkillLevelMinimum) / (Skills.SkillLevelMaximum - Skills.SkillLevelMinimum));
+            float efficiency = character.GetComponent<EmployeeComponent>().GetEfficiencyTimeMultiplier();
 
-            __result = ((float)characterTimeConstant) * character.GetComponent<EmployeeComponent>().GetEfficiencyTimeMultiplier() * (1 - reduction);
+            __result = ((float)characterTimeConstant) * efficiency / skillRatio;
+
+            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{character?.Name ?? "NULL"}, script {__instance.m_stateData.m_scriptName}, base {characterTimeConstant.ToString(CultureInfo.InvariantCulture)}, efficiency {efficiency.ToString(CultureInfo.InvariantCulture)}, skill ratio {skillRatio.ToString(CultureInfo.InvariantCulture)}, result {__result.ToString(CultureInfo.InvariantCulture)}");
+
             return false;
         }
 
