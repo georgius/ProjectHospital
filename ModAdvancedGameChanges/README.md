@@ -136,7 +136,7 @@ The general pharmacy behavior for all characters is affected by these tweakables
 | :-- | :-- |
 | Tweakable | AGC_TWEAKABLE_PHARMACY_PHARMACIST_SEARCH_DRUG_MINUTES |
 | Type | int |
-| Default | 1 |
+| Default | 5 |
 | Minimum | 1 |
 | Maximum | |
 | Description | The base time in minutes for pharmacist to search drugs in shelfs. See more [Action time calculation](#action-time-calculation). |
