@@ -345,16 +345,6 @@ namespace ModAdvancedGameChanges
                 return Tweakable.GetTweakable<GameDBTweakableInt>(String.Format(CultureInfo.InvariantCulture, Tweakables.Mod.AGC_TWEAKABLE_SKILL_POINTS_FORMAT, index)).Value;
             }
 
-            public static float SkillTimeReductionMinimum()
-            {
-                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_SKILL_TIME_REDUCTION_MINIMUM).Value;
-            }
-
-            public static float SkillTimeReductionMaximum()
-            {
-                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_SKILL_TIME_REDUCTION_MAXIMUM).Value;
-            }
-
             public static int TrainingHourSkillPoints()
             {
                 return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_TRAINING_HOUR_SKILL_POINTS).Value;

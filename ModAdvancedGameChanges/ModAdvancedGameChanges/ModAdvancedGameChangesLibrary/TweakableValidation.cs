@@ -464,31 +464,6 @@ namespace ModAdvancedGameChanges
 
             new TweakableValidation(() =>
             {
-                var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_SKILL_TIME_REDUCTION_MINIMUM);
-                if (value.Value < 0f)
-                {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_SKILL_TIME_REDUCTION_MINIMUM}' must be greater than or equal to 0.");
-                }
-                if (value.Value > 100f)
-                {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_SKILL_TIME_REDUCTION_MINIMUM}' must be less than or equal to 100.");
-                }
-            }),
-            new TweakableValidation(() =>
-            {
-                var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_SKILL_TIME_REDUCTION_MAXIMUM);
-                if (value.Value < 0f)
-                {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_SKILL_TIME_REDUCTION_MAXIMUM}' must be greater than or equal to 0.");
-                }
-                if (value.Value > 100f)
-                {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_SKILL_TIME_REDUCTION_MAXIMUM}' must be less than or equal to 100.");
-                }
-            }),
-
-            new TweakableValidation(() =>
-            {
                 var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_TRAINING_HOUR_SKILL_POINTS);
                 if (value.Value < 1)
                 {
