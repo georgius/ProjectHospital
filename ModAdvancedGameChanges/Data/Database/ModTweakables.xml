@@ -90,6 +90,13 @@
 		<Value>20</Value>
 	</GameDBTweakableFloat>
 	
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_EFFICIENCY_SKILL_ADD">
+		<!-- the static skill add value, this value is added to skill value and is affecting efficiency -->
+		<!-- skill unit -->
+		<!-- value in <0.0, 5.0> -->
+		<Value>0.8</Value>
+	</GameDBTweakableFloat>
+	
 	<!-- satisfaction of employee is in <0.0, 100.0> interval -->
 	<GameDBTweakableFloat ID="AGC_TWEAKABLE_EFFICIENCY_SATISFACTION_MINIMUM">
 		<!-- the minimum satisfaction part -->

@@ -59,6 +59,19 @@ namespace ModAdvancedGameChanges
             }),
             new TweakableValidation(() =>
             {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_SKILL_ADD);
+                if (value.Value < 0f)
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_SKILL_ADD}' must be greater than or equal to 0.");
+                }
+                if (value.Value > 5f)
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_SKILL_ADD}' must be less than or equal to 5.");
+                }
+            }),
+
+            new TweakableValidation(() =>
+            {
                 var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_GOOD_BOSS_MINIMUM);
                 if (value.Value < 0f)
                 {
