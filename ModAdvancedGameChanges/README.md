@@ -254,7 +254,16 @@ The pedestrian pharmacy behavior is affected by these tweakables:
 | Description | The maximum payment for restricted drugs (drugs with prescription). |
 
 ## Action time calculation
-TO DO
+Each action in game (e.g. doctors' examinations, doctors' treatments, nurses' actions, 
+lab specialists' actions, janitors' actions) has base time of execution.
+The action time is calculated with following formulas
+
+$action\_time = \frac{base\_action\_time \cdot efficiency}{skill\_ratio}$
+
+where
+
+$skill\_ratio=\max(\frac{\mathrm{AGC\_TWEAKABLE\_EFFICIENCY\_MINIMUM}}{100},\frac{skill + \mathrm{AGC\_TWEAKABLE\_EFFICIENCY\_SKILL\_ADD}}{4})$
+
 
 # Development
 The **Advanced game changes** mod is developed in Visual Studio 2026 Community, the project needs *.NET Framework 3.5* to be installed. The .NET Framework 3.5 can be added in *Control Pannel* / *Programs and Features* / *Turn Windows features on or off*. When installing Visual Studio 2026 Community, add *NET Framework 3.5 development tools* component.
