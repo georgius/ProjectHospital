@@ -170,7 +170,7 @@ The pedestrian pharmacy behavior is affected by these tweakables:
 | Default | 15 |
 | Minimum | 0 |
 | Maximum | |
-| Description | The pedestrian count simulated by game. |
+| Description | The pedestrians' count simulated by game. |
 
 | Name | Value |
 | :-- | :-- |
