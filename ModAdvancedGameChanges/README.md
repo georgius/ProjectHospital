@@ -255,7 +255,11 @@ The pedestrian pharmacy behavior is affected by these tweakables:
 
 ## Action time calculation
 Each action in game (e.g. doctors' examinations, doctors' treatments, nurses' actions, 
-lab specialists' actions, janitors' actions) has base time of execution.
+lab specialists' actions, janitors' actions) has base time of execution - $base\\_action\\_time$.
+Also each action time is related to some *skill*, so $skill\\_level$ is part of calculation formulas.
+Let the $skill\\_level \in \langle 1.0, 5.0 \rangle$.
+
+
 The action time is calculated with following formulas
 
 $action\\_time = \frac{base\\_action\\_time \cdot efficiency}{skill\\_ratio}$
