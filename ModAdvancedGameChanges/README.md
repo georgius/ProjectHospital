@@ -261,6 +261,9 @@ Let the $skill\\_level \in \langle 0.0, 4.0 \rangle$ and define $skill\\_ratio$ 
 
 $skill\\_ratio=\max(\frac{\mathrm{AGC\\_TWEAKABLE\\_EFFICIENCY\\_MINIMUM}}{100},\frac{skill\\_level + \mathrm{AGC\\_TWEAKABLE\\_EFFICIENCY\\_SKILL\\_ADD}}{4})$
 
+or with default settings
+
+$skill\\_ratio \in \langle 0.2, 1.2 \rangle$
 
 The action time is calculated with following formula
 
