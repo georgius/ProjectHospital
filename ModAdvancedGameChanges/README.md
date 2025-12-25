@@ -268,6 +268,14 @@ $action\\_time = \frac{base\\_action\\_time \cdot efficiency}{skill\\_ratio}$
 
 ## Action time tweakables
 
+| Name | Value |
+| :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_EFFICIENCY_MINIMUM |
+| Type | float |
+| Default | 20 |
+| Minimum | 1.0 |
+| Maximum | 100.0 |
+| Description | The minimum $skill\\_ratio$ value and TO DO. |
 
 # Tweakables
 The **Advanced game changes** mod has many tweakable values.
