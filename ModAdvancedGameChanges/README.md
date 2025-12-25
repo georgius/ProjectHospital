@@ -5,7 +5,8 @@ This repository contains mod files for [Advanced game changes]() mod from [Proje
 - ModAdvancedGameChanges - contains Visual Studio 2026 solution with sources and dependencies
 
 # Requirements
-The mod requires **Hospital services DLC** to work. Without **Hospital services DLC** will be all effects of mod disabled.
+The mod requires [**Hospital Services DLC**](https://store.steampowered.com/app/1282550/Project_Hospital__Hospital_Services/) to work.
+Without [**Hospital Services DLC**](https://store.steampowered.com/app/1282550/Project_Hospital__Hospital_Services/) will be all effects of mod disabled.
 
 # Changes in mod
 - completely changed flows of doctors, nurses, lab specialists, janitors, patients, visitors and pedestrians
