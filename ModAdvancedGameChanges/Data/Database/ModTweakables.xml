@@ -101,14 +101,14 @@
 	<GameDBTweakableFloat ID="AGC_TWEAKABLE_EFFICIENCY_SATISFACTION_MINIMUM">
 		<!-- the minimum satisfaction part -->
 		<!-- percent -->
-		<!-- value in <0.0, 100.0> -->
-		<Value>45</Value>
+		<!-- value in <0.0, 200.0> -->
+		<Value>90</Value>
 	</GameDBTweakableFloat>
 	<GameDBTweakableFloat ID="AGC_TWEAKABLE_EFFICIENCY_SATISFACTION_MAXIMUM">
 		<!-- the maximum satisfaction part -->
 		<!-- percent -->
-		<!-- value in <0.0, 100.0> -->
-		<Value>55</Value>
+		<!-- value in <0.0, 200.0> -->
+		<Value>110</Value>
 	</GameDBTweakableFloat>
 	
 	<GameDBTweakableFloat ID="AGC_TWEAKABLE_EFFICIENCY_GOOD_BOSS_MINIMUM">

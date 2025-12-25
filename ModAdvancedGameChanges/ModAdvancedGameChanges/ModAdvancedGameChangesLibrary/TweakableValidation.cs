@@ -101,9 +101,9 @@ namespace ModAdvancedGameChanges
                 {
                     throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_SATISFACTION_MINIMUM}' must be greater than or equal to 0.");
                 }
-                if (value.Value > 100f)
+                if (value.Value > 200f)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_SATISFACTION_MINIMUM}' must be less than or equal to 100.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_SATISFACTION_MINIMUM}' must be less than or equal to 200.");
                 }
             }),
             new TweakableValidation(() =>
@@ -113,9 +113,9 @@ namespace ModAdvancedGameChanges
                 {
                     throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_SATISFACTION_MAXIMUM}' must be greater than or equal to {Tweakable.Mod.EfficiencySatisfactionMinimum().ToString(CultureInfo.InvariantCulture)}.");
                 }
-                if (value.Value > 100f)
+                if (value.Value > 200f)
                 {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_SATISFACTION_MAXIMUM}' must be less than or equal to 100.");
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_EFFICIENCY_SATISFACTION_MAXIMUM}' must be less than or equal to 200.");
                 }
             }),
             new TweakableValidation(() =>
