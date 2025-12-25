@@ -32,11 +32,8 @@ Some options require restart of game after changing.
 | [AGC] Night shift staff lunch | on | Enables or disables lunch for night staff shift. |
 | [AGC] Same length for staff shifts (requires restart) | on | Enables or disables same length for day and night shift. |
 
-# Tweakables
-The **Advanced game changes** mod has many tweakable values.
-
-## Non-linear employee leveling
-### Doctors
+# Non-linear employee leveling
+## Doctors
 The non-linear employee leveling for doctors is straightforward.
 
 | Doctor's level | Points needed for next level | Default |
@@ -47,7 +44,7 @@ The non-linear employee leveling for doctors is straightforward.
 | Fellow		 | AGC_TWEAKABLE_DOCTOR_LEVEL_POINTS_4 | 160 000 |
 | Specialist	 | maximum level | |
 
-### Nurses, lab specialists and janitors
+## Nurses, lab specialists and janitors
 The nurses, lab specialists and janitors have only 3 employee levels instead of 5 as doctors.
 To simulate same behavior as for doctors, there are added 2 virtual employee levels, see following table.
 The level must be virtual, because it is not possible to modify user interface with mod.
@@ -62,7 +59,7 @@ lab specialists and janitors gain new skill - same as doctors on `Resident` and 
 | Fellow | Registered nurse | Senior scientist | Senior janitor |
 | Specialist | Nurse specialist | Master scientist | Master janitor |
 
-#### Nurses
+### Nurses
 The nurse needs `AGC_TWEAKABLE_NURSE_LEVEL_POINTS_1 + AGC_TWEAKABLE_NURSE_LEVEL_POINTS_2` points to
 increase employee level from `Nursing intern` to `Registered nurse`.
 The value is same as for doctors increasing from `Intern` to `Attending`.
@@ -77,7 +74,7 @@ similar as doctor gains new skill at `Resident` level - after `AGC_TWEAKABLE_DOC
 | Registered nurse | AGC_TWEAKABLE_NURSE_LEVEL_POINTS_4 | 160 000 |
 | Nurse specialist | maximum level | |
 
-#### Lab specialists
+### Lab specialists
 The lab specialist needs `AGC_TWEAKABLE_LAB_SPECIALIST_LEVEL_POINTS_1 + AGC_TWEAKABLE_LAB_SPECIALIST_LEVEL_POINTS_2` points to
 increase employee level from `Junior scientist` to `Senior scientist`.
 The value is same as for doctors increasing from `Intern` to `Attending`.
@@ -92,7 +89,7 @@ similar as doctor gains new skill at `Resident` level - after `AGC_TWEAKABLE_DOC
 | Senior scientist | AGC_TWEAKABLE_LAB_SPECIALIST_LEVEL_POINTS_4 | 160 000 |
 | Master scientist | maximum level | |
 
-#### Janitors
+### Janitors
 The janitor needs `AGC_TWEAKABLE_JANITOR_LEVEL_POINTS_1 + AGC_TWEAKABLE_JANITOR_LEVEL_POINTS_2` points to
 increase employee level from `Janitor` to `Senior janitor`.
 The value is same as for doctors increasing from `Intern` to `Attending`.
@@ -107,14 +104,14 @@ similar as doctor gains new skill at `Resident` level - after `AGC_TWEAKABLE_DOC
 | Senior janitor | AGC_TWEAKABLE_JANITOR_LEVEL_POINTS_4 | 160 000 |
 | Master janitor | maximum level | |
 
-## Non-linear skill leveling
+# Non-linear skill leveling
 The non-linear skill leveling is similar to non-linear employee level.
 It is controlled by main tweakable `AGC_TWEAKABLE_SKILL_LEVELS` and several other tweakables.
 
-## Pedestrians going to pharmacy
+# Pedestrians going to pharmacy
 There are several tweakables affecting pharmacy for all characters and several affecting pharmacy behavior for pedestrians.
 
-### General pharmacy tweakables
+## General pharmacy tweakables
 The general pharmacy behavior for all characters is affected by these tweakables:
 
 | Name | Value |
@@ -153,13 +150,14 @@ The general pharmacy behavior for all characters is affected by these tweakables
 | Maximum | |
 | Description | The skill points to be added to `DLC_SKILL_LAB_SPECIALIST_SPEC_PHARMACOLOGY` and to employee level. |
 
-#### Patients
+## Patients
 The patients buy prescribed drugs by doctor, the prices are specified in game files.
 If there are another possible treatments for symptoms of diseases not presribed by doctor, patients buy them by prices specified in game files.
 
-#### Pedestrians
-The pedestrians buy between 1 and 5 (randomly) of non-restricted drugs by price randomly between `AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MINIMUM` and `AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MAXIMUM`
-and between 0 and 3 (randomly) of prescribed drugs by price randomly between `AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MINIMUM` and `AGC_TWEAKABLE_PHARMACY_NON_RESTRICTED_DRUGS_PAYMENT_MAXIMUM`.
+## Pedestrians
+The pedestrians buy between `1` and `AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_BUY_UNRESTRICTED_ITEMS_MAXIMUM` (randomly) of non-restricted drugs by price randomly between `AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_UNRESTRICTED_ITEMS_PAYMENT_MINIMUM` and `AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_UNRESTRICTED_ITEMS_PAYMENT_MAXIMUM`
+and between `AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_BUY_RESTRICTED_ITEMS_MINIMUM` and `AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_BUY_RESTRICTED_ITEMS_MAXIMUM` (randomly)
+of prescribed drugs by price randomly between `AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_RESTRICTED_ITEMS_PAYMENT_MINIMUM` and `AGC_TWEAKABLE_PEDESTRIAN_PHARMACY_RESTRICTED_ITEMS_PAYMENT_MAXIMUM`.
 
 ### Pedestrian pharmacy tweakables
 The pedestrian pharmacy behavior is affected by these tweakables:
@@ -254,7 +252,7 @@ The pedestrian pharmacy behavior is affected by these tweakables:
 | Maximum | |
 | Description | The maximum payment for restricted drugs (drugs with prescription). |
 
-## Action time calculation
+# Action time calculation
 Each action in game (e.g. doctors' examinations, doctors' treatments, nurses' actions, 
 lab specialists' actions, janitors' actions) has base time of execution - $base\\_action\\_time$.
 Also each action time is related to some *skill*, so $skill\\_level$ is part of calculation formulas.
@@ -267,8 +265,11 @@ The action time is calculated with following formulas
 
 $action\\_time = \frac{base\\_action\\_time \cdot efficiency}{skill\\_ratio}$
 
+## Action time tweakables
 
 
+# Tweakables
+The **Advanced game changes** mod has many tweakable values.
 
 # Development
 The **Advanced game changes** mod is developed in Visual Studio 2026 Community, the project needs *.NET Framework 3.5* to be installed. The .NET Framework 3.5 can be added in *Control Pannel* / *Programs and Features* / *Turn Windows features on or off*. When installing Visual Studio 2026 Community, add *NET Framework 3.5 development tools* component.
