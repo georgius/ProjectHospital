@@ -258,7 +258,7 @@ Each action in game (e.g. doctors' examinations, doctors' treatments, nurses' ac
 lab specialists' actions, janitors' actions) has base time of execution.
 The action time is calculated with following formulas
 
-$action\_time = \frac{base\_action\_time \cdot efficiency}{skill\_ratio}$
+$action\\_time = \frac{base\_action\_time \cdot efficiency}{skill\_ratio}$
 
 where
 
