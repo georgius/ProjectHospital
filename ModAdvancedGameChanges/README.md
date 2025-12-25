@@ -272,5 +272,7 @@ $action\\_time = \frac{base\\_action\\_time \cdot efficiency}{skill\\_ratio}$
 # Tweakables
 The **Advanced game changes** mod has many tweakable values.
 
+TO DO
+
 # Development
 The **Advanced game changes** mod is developed in Visual Studio 2026 Community, the project needs *.NET Framework 3.5* to be installed. The .NET Framework 3.5 can be added in *Control Pannel* / *Programs and Features* / *Turn Windows features on or off*. When installing Visual Studio 2026 Community, add *NET Framework 3.5 development tools* component.
