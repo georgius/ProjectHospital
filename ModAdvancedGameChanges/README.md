@@ -257,7 +257,7 @@ The pedestrian pharmacy behavior is affected by these tweakables:
 Each action in game (e.g. doctors' examinations, doctors' treatments, nurses' actions, 
 lab specialists' actions, janitors' actions) has base time of execution - $base\\_action\\_time$.
 Also each action time is related to some *skill*, so $skill\\_level$ is part of calculation formulas.
-Let the $skill\\_level \in \langle 1.0, 5.0 \rangle$ and define $skill\\_ratio$ as
+Let the $skill\\_level \in \langle 0.0, 4.0 \rangle$ and define $skill\\_ratio$ as
 
 $skill\\_ratio=\max(\frac{\mathrm{AGC\\_TWEAKABLE\\_EFFICIENCY\\_MINIMUM}}{100},\frac{skill\\_level + \mathrm{AGC\\_TWEAKABLE\\_EFFICIENCY\\_SKILL\\_ADD}}{4})$
 
@@ -284,7 +284,7 @@ $action\\_time = \frac{base\\_action\\_time \cdot efficiency}{skill\\_ratio}$
 | Default | 0.8 |
 | Minimum | 0.0 |
 | Maximum | 5.0 |
-| Description | The static skill add value in $skill\\_ratio$ formula. In default settings, with minimum possible skill level (0%) the $skill\\_ratio=0.2$, with maximum possible skill level (100%) the $skill\\_ratio=1.2$. |
+| Description | The static skill add value in $skill\\_ratio$ formula. In default settings, with minimum possible skill level ($skill\\_level=0.0$) the $skill\\_ratio=0.2$, with maximum possible skill level ($skill\\_level=4.0$) the $skill\\_ratio=1.2$. |
 
 # Tweakables
 The **Advanced game changes** mod has many tweakable values.
