@@ -258,6 +258,7 @@ Each action in game (e.g. doctors' examinations, doctors' treatments, nurses' ac
 lab specialists' actions, janitors' actions) has base time of execution - $base\\_action\\_time$.
 Also each action time is related to some *skill*, so $skill\\_level$ is part of calculation formulas.
 Let the $skill\\_level \in \langle 1.0, 5.0 \rangle$ and define $skill\\_ratio$ as
+
 $skill\\_ratio=\max(\frac{\mathrm{AGC\\_TWEAKABLE\\_EFFICIENCY\\_MINIMUM}}{100},\frac{skill\\_level + \mathrm{AGC\\_TWEAKABLE\\_EFFICIENCY\\_SKILL\\_ADD}}{4})$
 
 
