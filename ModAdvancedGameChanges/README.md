@@ -12,7 +12,7 @@ Without [**Hospital Services DLC**](https://store.steampowered.com/app/1282550/P
 - completely changed flows of doctors, nurses, lab specialists, janitors, patients, visitors and pedestrians
 - implemented non-linear skill leveling or employee leveling
 - implemented *Training department*, where employees can get higher skill or employee level without training costs (wages are still paid)
-- allowed pedestrians to go to pharmacy to buy medicine
+- allowed pedestrians to go to pharmacy to buy drugs
 - modified action time calculation
 
 # Options
@@ -108,7 +108,8 @@ similar as doctor gains new skill at `Resident` level - after `AGC_TWEAKABLE_DOC
 The non-linear skill leveling is similar to non-linear employee level.
 It is controlled by main tweakable `AGC_TWEAKABLE_SKILL_LEVELS` and several other tweakables.
 
-# Pedestrians going to pharmacy
+# Pharmacy behavior
+The pharmacy behavior is completely changed. The main change is possibility of pedestrians to go to pharmacy.
 There are several tweakables affecting pharmacy for all characters and several affecting pharmacy behavior for pedestrians.
 
 ## General pharmacy tweakables
@@ -196,7 +197,7 @@ The pedestrian pharmacy behavior is affected by these tweakables:
 | Default | 5 |
 | Minimum | 1 |
 | Maximum | |
-| Description | The minimum count of non-restricted drugs (drugs without prescription) to be buyed by pedestrian. |
+| Description | The maximum count of non-restricted drugs (drugs without prescription) to be buyed by pedestrian. The minimum is hard coded to 1. |
 
 | Name | Value |
 | :-- | :-- |
