@@ -275,7 +275,16 @@ $action\\_time = \frac{base\\_action\\_time \cdot efficiency}{skill\\_ratio}$
 | Default | 20 |
 | Minimum | 1.0 |
 | Maximum | 100.0 |
-| Description | The minimum $skill\\_ratio$ value and TO DO. |
+| Description | The minimum TO DO. |
+
+| Name | Value |
+| :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_EFFICIENCY_SKILL_ADD |
+| Type | float |
+| Default | 0.8 |
+| Minimum | 0.0 |
+| Maximum | 5.0 |
+| Description | The static skill add value in $skill\\_ratio$ formula. In default settings, with minimum possible skill level (0%) the $skill\\_ratio=0.2$, with maximum possible skill level (100%) the $skill\\_ratio=1.2$. |
 
 # Tweakables
 The **Advanced game changes** mod has many tweakable values.
