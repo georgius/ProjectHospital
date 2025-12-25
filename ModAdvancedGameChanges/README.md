@@ -262,7 +262,7 @@ $action\\_time = \frac{base\\_action\\_time \cdot efficiency}{skill\\_ratio}$
 
 where
 
-$skill\\_ratio=\max(\frac{\mathrm{AGC\\_TWEAKABLE\\_EFFICIENCY\\_MINIMUM}}{100},\frac{skill + \mathrm{AGC\\_TWEAKABLE\\_EFFICIENCY\\_SKILL\\_ADD}}{4})$
+$skill\\_ratio=\max(\frac{\mathrm{AGC\\_TWEAKABLE\\_EFFICIENCY\\_MINIMUM}}{100},\frac{skill\\_level + \mathrm{AGC\\_TWEAKABLE\\_EFFICIENCY\\_SKILL\\_ADD}}{4})$
 
 
 # Development
