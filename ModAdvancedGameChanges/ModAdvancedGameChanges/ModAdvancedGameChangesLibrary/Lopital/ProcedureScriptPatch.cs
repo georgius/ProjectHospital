@@ -20,11 +20,11 @@ namespace ModAdvancedGameChanges.Lopital
             }
 
             float skillRatio = UnityEngine.Mathf.Max(Tweakable.Mod.EfficiencyMinimum() / 100f, (characterSkill - Skills.SkillLevelMinimum + Tweakable.Mod.EfficiencySkillAdd()) / (Skills.SkillLevelMaximum - Skills.SkillLevelMinimum));
-            float efficiency = character.GetComponent<EmployeeComponent>().GetEfficiencyTimeMultiplier();
+            float actionTimeMultiplier = character.GetComponent<EmployeeComponent>().GetEfficiencyTimeMultiplier();
 
-            __result = ((float)characterTimeConstant) * efficiency / skillRatio;
+            __result = ((float)characterTimeConstant) * actionTimeMultiplier / skillRatio;
 
-            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{character?.Name ?? "NULL"}, script {__instance.m_stateData.m_scriptName}, base {characterTimeConstant.ToString(CultureInfo.InvariantCulture)}, efficiency {efficiency.ToString(CultureInfo.InvariantCulture)}, skill ratio {skillRatio.ToString(CultureInfo.InvariantCulture)}, result {__result.ToString(CultureInfo.InvariantCulture)}");
+            Debug.LogDebug(System.Reflection.MethodBase.GetCurrentMethod(), $"{character?.Name ?? "NULL"}, script {__instance.m_stateData.m_scriptName}, base {characterTimeConstant.ToString(CultureInfo.InvariantCulture)}, action time multiplier {actionTimeMultiplier.ToString(CultureInfo.InvariantCulture)}, skill ratio {skillRatio.ToString(CultureInfo.InvariantCulture)}, result {__result.ToString(CultureInfo.InvariantCulture)}");
 
             return false;
         }
