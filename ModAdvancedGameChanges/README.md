@@ -259,7 +259,7 @@ lab specialists' actions, janitors' actions) has base time of execution - $\text
 Also each action time is related to some *skill*, so $\textit{skill\\_level}$ is part of calculation formulas.
 Let the $\textit{skill\\_level} \in \langle 1.0, 5.0 \rangle$ and define $\textit{skill\\_ratio}$ as
 
-$\textit{skill\\_ratio}=\max(\frac{\textsf{AGC\\_TWEAKABLE\\_EFFICIENCY\\_MINIMUM}}{100.0},\frac{\textit{skill\\_level} - 1.0 + \textsf{AGC\\_TWEAKABLE\\_EFFICIENCY\\_SKILL\\_ADD}}{4.0})$
+$\textit{skill\\_ratio}=\max(\textsf{AGC\\_TWEAKABLE\\_ACTION\\_TIME\\_SKILL\\_RATIO\\_MINIMUM},\frac{\textit{skill\\_level} - 1.0 + \textsf{AGC\\_TWEAKABLE\\_ACTION\\_TIME\\_SKILL\\_ADD}}{4.0})$
 
 or with default settings
 
@@ -284,6 +284,15 @@ $\textit{efficiency\\_percent} \in \langle 50.0, 105.0 \rangle \Rightarrow \text
 or in words, action time is prolonged when employee is not satisfied.
 
 ## Action time tweakables
+
+| Name | Value |
+| :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_ACTION_TIME_SKILL_RATIO_MINIMUM |
+| Type | float |
+| Default | 0.2 |
+| Minimum | 0.001 |
+| Maximum | |
+| Description | The minimum $\textit{skill\\_ratio}$ value. |
 
 | Name | Value |
 | :-- | :-- |
