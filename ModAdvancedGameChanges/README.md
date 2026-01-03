@@ -267,7 +267,7 @@ $\textit{skill\\_ratio} \in \langle 0.2, 1.2 \rangle$
 
 The action time is calculated with following formula
 
-$\textit{action\\_time} = \frac{\textit{base\\_action\\_time} \\> \cdot \\> \textit{action\\_time\\_multiplier}}{\textit{skill\\_ratio}}$
+$\textit{action\\_time} = \frac{\textit{base\\_action\\_time} \cdot \textit{action\\_time\\_multiplier}}{\textit{skill\\_ratio}}$
 
 The $\textit{action\\_time\\_multiplier}$ is defined as
 
