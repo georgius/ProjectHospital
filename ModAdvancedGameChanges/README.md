@@ -301,7 +301,7 @@ or in words, action time is prolonged when employee is not satisfied.
 | Default | 0.8 |
 | Minimum | 0.0 |
 | Maximum | 5.0 |
-| Description | The static skill add value in $skill\\_ratio$ formula. In default settings, with minimum possible skill level ($skill\\_level=0.0$) the $skill\\_ratio=0.2$, with maximum possible skill level ($skill\\_level=4.0$) the $skill\\_ratio=1.2$. When $skill\\_ratio$ is lower than 1, the action time is longer as base action time, when $skill\\_ratio$ is greater than 1, the action time is shorter than base action time.  |
+| Description | The static skill add value in $\textit{skill\\_ratio}$ formula. In default settings, with minimum possible skill level ($\textit{skill\\_level}=1.0$) the $\textit{skill\\_ratio}=0.2$, with maximum possible skill level ($\textit{skill\\_level}=5.0$) the $\textit{skill\\_ratio}=1.2$. When $\textit{skill\\_ratio}$ is lower than 1, the action time is longer as base action time, when $\textit{skill\\_ratio}$ is greater than 1, the action time is shorter than base action time.  |
 
 # Tweakables
 The **Advanced game changes** mod has many tweakable values.
