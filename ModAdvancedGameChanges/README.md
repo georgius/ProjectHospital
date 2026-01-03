@@ -267,11 +267,7 @@ $\textit{skill\\_ratio} \in \langle 0.2, 1.2 \rangle$
 
 The action time is calculated with following formula
 
-$\textit{action\\_time} = \frac{\textit{base\\_action\\_time} \cdot \textit{action\\_time\\_multiplier}}{\textit{skill\\_ratio}}$
-
-The $\textit{action\\_time\\_multiplier}$ is defined as
-
-$\textit{action\\_time\\_multiplier}=\frac{100.0}{\textit{efficiency\\_percent}}$
+$\textit{action\\_time} = \frac{\textit{base\\_action\\_time}}{\textit{skill\\_ratio}} \cdot \frac{100.0}{\textit{efficiency\\_percent}}$
 
 Let the $\textit{satisfaction} \in \langle 0.0, 100.0 \rangle$ and define $\textit{efficiency\\_percent}$ as
 
@@ -296,21 +292,23 @@ or in words, action time is prolonged when employee is not satisfied.
 
 | Name | Value |
 | :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_ACTION_TIME_SKILL_ADD |
+| Type | float |
+| Default | 0.8 |
+| Minimum | 0.0 |
+| Maximum | 5.0 |
+| Description | The static skill add value in $\textit{skill\\_ratio}$ formula. In default settings, with minimum possible skill level ($\textit{skill\\_level}=1.0$) the $\textit{skill\\_ratio}=0.2$, with maximum possible skill level ($\textit{skill\\_level}=5.0$) the $\textit{skill\\_ratio}=1.2$. When $\textit{skill\\_ratio}$ is lower than 1, the action time is longer as base action time, when $\textit{skill\\_ratio}$ is greater than 1, the action time is shorter than base action time.  |
+
+
+
+| Name | Value |
+| :-- | :-- |
 | Tweakable | AGC_TWEAKABLE_EFFICIENCY_MINIMUM |
 | Type | float |
 | Default | 20 |
 | Minimum | 1.0 |
 | Maximum | 100.0 |
 | Description | The minimum TO DO. |
-
-| Name | Value |
-| :-- | :-- |
-| Tweakable | AGC_TWEAKABLE_EFFICIENCY_SKILL_ADD |
-| Type | float |
-| Default | 0.8 |
-| Minimum | 0.0 |
-| Maximum | 5.0 |
-| Description | The static skill add value in $\textit{skill\\_ratio}$ formula. In default settings, with minimum possible skill level ($\textit{skill\\_level}=1.0$) the $\textit{skill\\_ratio}=0.2$, with maximum possible skill level ($\textit{skill\\_level}=5.0$) the $\textit{skill\\_ratio}=1.2$. When $\textit{skill\\_ratio}$ is lower than 1, the action time is longer as base action time, when $\textit{skill\\_ratio}$ is greater than 1, the action time is shorter than base action time.  |
 
 # Tweakables
 The **Advanced game changes** mod has many tweakable values.
