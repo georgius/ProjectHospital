@@ -259,7 +259,7 @@ lab specialists' actions, janitors' actions) has base time of execution - $\text
 Also each action time is related to some *skill*, so $\textit{skill\\_level}$ is part of calculation formulas.
 Let the $\textit{skill\\_level} \in \langle 1.0, 5.0 \rangle$ and define $\textit{skill\\_ratio}$ as
 
-$\textit{skill\\_ratio}=\max(\textsf{AGC\\_TWEAKABLE\\_ACTION\\_TIME\\_SKILL\\_RATIO\\_MINIMUM},\frac{\textit{skill\\_level} - 1.0 + \textsf{AGC\\_TWEAKABLE\\_ACTION\\_TIME\\_SKILL\\_ADD}}{4.0})$
+$\textit{skill\\_ratio}=\frac{\textit{skill\\_level} - 1.0 + \textsf{AGC\\_TWEAKABLE\\_ACTION\\_TIME\\_SKILL\\_ADD}}{4.0}$
 
 or with default settings
 
@@ -283,19 +283,10 @@ or in words, action time is prolonged when employee is not satisfied.
 
 | Name | Value |
 | :-- | :-- |
-| Tweakable | AGC_TWEAKABLE_ACTION_TIME_SKILL_RATIO_MINIMUM |
-| Type | float |
-| Default | 0.2 |
-| Minimum | 0.001 |
-| Maximum | |
-| Description | The minimum $\textit{skill\\_ratio}$ value. |
-
-| Name | Value |
-| :-- | :-- |
 | Tweakable | AGC_TWEAKABLE_ACTION_TIME_SKILL_ADD |
 | Type | float |
 | Default | 0.8 |
-| Minimum | 0.0 |
+| Minimum | 0.004 |
 | Maximum | 5.0 |
 | Description | The static skill add value in $\textit{skill\\_ratio}$ formula. In default settings, with minimum possible skill level ($\textit{skill\\_level}=1.0$) the $\textit{skill\\_ratio}=0.2$, with maximum possible skill level ($\textit{skill\\_level}=5.0$) the $\textit{skill\\_ratio}=1.2$. When $\textit{skill\\_ratio}$ is lower than 1, the action time is longer as base action time, when $\textit{skill\\_ratio}$ is greater than 1, the action time is shorter than base action time.  |
 

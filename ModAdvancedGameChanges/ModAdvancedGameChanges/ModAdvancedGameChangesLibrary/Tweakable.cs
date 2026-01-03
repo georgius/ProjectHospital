@@ -13,11 +13,6 @@ namespace ModAdvancedGameChanges
                 return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_ACTION_TIME_SKILL_ADD).Value;
             }
 
-            public static float ActionTimeSkillRatioMinimum()
-            {
-                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_ACTION_TIME_SKILL_RATIO_MINIMUM).Value;
-            }
-
             public static int AmbiguousLeaveMinutes()
             {
                 return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_AMBIGUOUS_LEAVE_MINUTES).Value;
