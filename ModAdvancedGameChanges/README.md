@@ -259,7 +259,7 @@ lab specialists' actions, janitors' actions) has base time of execution - $\text
 Also each action time is related to some *skill*, so $\textit{skill\\_level}$ is part of calculation formulas.
 Let the $\textit{skill\\_level} \in \langle 1.0, 5.0 \rangle$ and define $\textit{skill\\_ratio}$ as
 
-$\textit{skill\\_ratio}=\max(\frac{\textsf{AGC\\_TWEAKABLE\\_EFFICIENCY\\_MINIMUM}}{100.0},\frac{\textit{skill\\_level} \\> - \\> 1.0 \\> + \\> \textsf{AGC\\_TWEAKABLE\\_EFFICIENCY\\_SKILL\\_ADD}}{4.0})$
+$\textit{skill\\_ratio}=\max(\frac{\textsf{AGC\\_TWEAKABLE\\_EFFICIENCY\\_MINIMUM}}{100.0},\frac{\textit{skill\\_level} - 1.0 + \textsf{AGC\\_TWEAKABLE\\_EFFICIENCY\\_SKILL\\_ADD}}{4.0})$
 
 or with default settings
 
