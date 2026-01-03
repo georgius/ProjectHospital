@@ -260,7 +260,7 @@ Also each action time is related to some *skill*, so $skill\\_level$ is part of 
 Let the $skill\\_level \in \langle 1.0, 5.0 \rangle$ and define $skill\\_ratio$ as
 
 ```math
-skill\_ratio=\frac{skill\_level - 1.0 + \textsf{AGC\_TWEAKABLE\_ACTION\_TIME\_SKILL\\_ADD}}{4.0}$
+skill\_ratio=\frac{skill\_level - 1.0 + \textsf{AGC\_TWEAKABLE\_ACTION\_TIME\_SKILL\_ADD}}{4.0}
 ```
 
 or with default settings
