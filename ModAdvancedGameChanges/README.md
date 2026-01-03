@@ -255,19 +255,19 @@ The pedestrian pharmacy behavior is affected by these tweakables:
 
 # Action time calculation
 Each action in game (e.g. doctors' examinations, doctors' treatments, nurses' actions, 
-lab specialists' actions, janitors' actions) has base time of execution - $\textit{base\\_action\\_time}$.
-Also each action time is related to some *skill*, so $\textit{skill\\_level}$ is part of calculation formulas.
-Let the $\textit{skill\\_level} \in \langle 1.0, 5.0 \rangle$ and define $\textit{skill\\_ratio}$ as
+lab specialists' actions, janitors' actions) has base time of execution - $base\\_action\\_time$.
+Also each action time is related to some *skill*, so $skill\\_level$ is part of calculation formulas.
+Let the $skill\\_level \in \langle 1.0, 5.0 \rangle$ and define $skill\\_ratio$ as
 
 $skill\\_ratio=\frac{skill\\_level - 1.0 + \textsf{AGC\\_TWEAKABLE\\_ACTION\\_TIME\\_SKILL\\_ADD}}{4.0}$
 
 or with default settings
 
-$\textit{skill\\_ratio} \in \langle 0.2, 1.2 \rangle$
+$skill\\_ratio \in \langle 0.2, 1.2 \rangle$
 
 The action time is calculated with following formula
 
-$\textit{action\\_time} = \frac{\textit{base\\_action\\_time}}{\textit{skill\\_ratio}} \cdot \frac{100.0}{\textit{efficiency\\_percent}}$
+$action\\_time = \frac{base\\_action\\_time}{skill\\_ratio} \cdot \frac{100.0}{efficiency\\_percent}$
 
 Let the $\textit{satisfaction} \in \langle 0.0, 100.0 \rangle$ and define $\textit{efficiency\\_percent}$ as
 
