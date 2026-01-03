@@ -255,19 +255,33 @@ The pedestrian pharmacy behavior is affected by these tweakables:
 
 # Action time calculation
 Each action in game (e.g. doctors' examinations, doctors' treatments, nurses' actions, 
-lab specialists' actions, janitors' actions) has base time of execution - $base\\_action\\_time$.
-Also each action time is related to some *skill*, so $skill\\_level$ is part of calculation formulas.
-Let the $skill\\_level \in \langle 0.0, 4.0 \rangle$ and define $skill\\_ratio$ as
+lab specialists' actions, janitors' actions) has base time of execution - $\textit{base\\_action\\_time}$.
+Also each action time is related to some *skill*, so $\textit{skill\\_level}$ is part of calculation formulas.
+Let the $\textit{skill\\_level} \in \langle 1.0, 5.0 \rangle$ and define $\textit{skill\\_ratio}$ as
 
-$skill\\_ratio=\max(\frac{\mathrm{AGC\\_TWEAKABLE\\_EFFICIENCY\\_MINIMUM}}{100},\frac{skill\\_level + \mathrm{AGC\\_TWEAKABLE\\_EFFICIENCY\\_SKILL\\_ADD}}{4})$
+$\textit{skill\\_ratio}=\max(\frac{\textsf{AGC\\_TWEAKABLE\\_EFFICIENCY\\_MINIMUM}}{100.0},\frac{\textit{skill\\_level} \> - \> 1.0 \> + \> \textsf{AGC\\_TWEAKABLE\\_EFFICIENCY\\_SKILL\\_ADD}}{4.0})$
 
 or with default settings
 
-$skill\\_ratio \in \langle 0.2, 1.2 \rangle$
+$\textit{skill\\_ratio} \in \langle 0.2, 1.2 \rangle$
 
 The action time is calculated with following formula
 
-$action\\_time = \frac{base\\_action\\_time \cdot efficiency}{skill\\_ratio}$
+$\textit{action\\_time} = \frac{\textit{base\\_action\\_time} \> \cdot \> \textit{action\\_time\\_multiplier}}{\textit{skill\\_ratio}}$
+
+The $\textit{action\\_time\\_multiplier}$ is defined as
+
+$\textit{action\\_time\\_multiplier}=\frac{100.0}{\textit{efficiency\\_percent}}$
+
+Let the $\textit{satisfaction} \in \langle 0.0, 100.0 \rangle$ and define $\textit{efficiency\\_percent}$ as
+
+$\textit{efficiency\\_percent} = 50.0 + \frac{\textit{satisfaction}}{200.0} \cdot \mathrm{random}(\textsf{AGC\\_TWEAKABLE\\_EFFICIENCY\\_SATISFACTION\\_MINIMUM},\textsf{AGC\\_TWEAKABLE\\_EFFICIENCY\\_SATISFACTION\\_MAXIMUM})$
+
+Then with default settings
+
+$\textit{efficiency\\_percent} \in \langle 50.0, 105.0 \rangle \Rightarrow \textit{action\\_time\\_multiplier} \in \langle 2.0, \frac{100.0}{105.0} \approx 0.95 \rangle $
+
+or in words, action time is prolonged when employee is not satisfied.
 
 ## Action time tweakables
 
