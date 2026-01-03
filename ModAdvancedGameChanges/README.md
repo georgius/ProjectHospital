@@ -263,9 +263,7 @@ Let the $skill\\_level \in \langle 1.0, 5.0 \rangle$ and define $skill\\_ratio$ 
 skill\_ratio=\frac{skill\_level - 1.0 + \textsf{AGC\_TWEAKABLE\_ACTION\_TIME\_SKILL\_ADD}}{4.0}
 ```
 
-or with default settings
-
-$skill\\_ratio \in \langle 0.2, 1.2 \rangle$
+or with default settings $skill\\_ratio \in \langle 0.2, 1.2 \rangle$
 
 The action time is calculated with following formula
 
