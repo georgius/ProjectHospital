@@ -268,7 +268,7 @@ or with default settings $skill\\_ratio \in \langle 0.2, 1.2 \rangle$
 The action time is calculated with following formula
 
 ```math
-action\_time = \frac{base\_action\_time}{skill\_ratio} \cdot \frac{100.0}{\textit{efficiency\_percent}}
+action\_time = \frac{base\_action\_time}{skill\_ratio} \cdot \frac{100.0}{*efficiency*}
 ```
 
 Let the $\textit{satisfaction} \in \langle 0.0, 100.0 \rangle$ and define $\textit{efficiency\\_percent}$ as

@@ -649,8 +649,10 @@ namespace ModAdvancedGameChanges .Lopital
             }
 
             // normalize satisfaction
-            __result = Mathf.Max(0f, Mathf.Min(100f, (float)__instance.m_entity.GetComponent<MoodComponent>().GetTotalSatisfaction())) / 200.0f;
-            __result = UnityEngine.Random.Range(Tweakable.Mod.EfficiencySatisfactionMinimum(), Tweakable.Mod.EfficiencySatisfactionMaximum()) * __result + 50f;
+            __result = Mathf.Max(0f, Mathf.Min(100f, (float)__instance.m_entity.GetComponent<MoodComponent>().GetTotalSatisfaction()));
+            __result *= (100f - Tweakable.Mod.EfficiencyMinimum()) / 100f;
+            __result *= UnityEngine.Random.Range(Tweakable.Mod.EfficiencySatisfactionMinimum(), Tweakable.Mod.EfficiencySatisfactionMaximum()) / 100f;
+            __result += Tweakable.Mod.EfficiencyMinimum();
 
             PerkComponent perkComponent = __instance.m_entity.GetComponent<PerkComponent>();
             Entity chief = (__instance.m_state.m_supervisor == null) ? null : __instance.m_state.m_supervisor.GetEntity();
