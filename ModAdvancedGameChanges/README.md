@@ -263,17 +263,18 @@ Let the $\mathit{skill\\_level} \in \langle 1.0, 5.0 \rangle$ and define *skill\
 \mathit{skill\_ratio}=\frac{\mathit{skill\_level} - 1.0 + \mathsf{AGC\_TWEAKABLE\_ACTION\_TIME\_SKILL\_ADD}}{4.0}
 ```
 
-or with default settings $skill\\_ratio \in \langle 0.2, 1.2 \rangle$
+or with default settings $\mathit{skill\\_ratio} \in \langle 0.2, 1.2 \rangle$
 
 The action time is calculated with following formula
 
 ```math
-action\_time = \frac{base\_action\_time}{skill\_ratio} \cdot \frac{100.0}{\mathit{efficiency}}
+\mathit{action\_time} = \frac{\mathit{base\_action\_time}}{\mathit{skill\_ratio}} \cdot \frac{100.0}{\mathit{efficiency}}
 ```
+Let the $\mathit{satisfaction} \in \langle 0.0, 100.0 \rangle$ and define $\mathit{efficiency}$ as
 
-Let the $\textit{satisfaction} \in \langle 0.0, 100.0 \rangle$ and define $\textit{efficiency\\_percent}$ as
-
-$\textit{efficiency\\_percent} = 50.0 + \frac{\textit{satisfaction}}{200.0} \cdot \mathrm{random}(\textsf{AGC\\_TWEAKABLE\\_EFFICIENCY\\_SATISFACTION\\_MINIMUM},\textsf{AGC\\_TWEAKABLE\\_EFFICIENCY\\_SATISFACTION\\_MAXIMUM})$
+```math
+\mathit{efficiency} = \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_MINIMUM} + \frac{100.0 - \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_MINIMUM}}{100.0} \cdot \mathit{satisfaction} \cdot \frac{\mathrm{random}(\mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_SATISFACTION\_MINIMUM}, \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_SATISFACTION\_MAXIMUM})}{100.0}
+```
 
 Then with default settings
 
