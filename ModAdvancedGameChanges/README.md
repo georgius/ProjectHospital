@@ -271,6 +271,8 @@ The action time is calculated with following formula
 action\_time = \frac{base\_action\_time}{skill\_ratio} \cdot \frac{100.0}{*efficiency*}
 ```
 
+For text, use `\textit{...}`: $E = \textit{energy}$, $m = \textit{mass}$.
+
 Let the $\textit{satisfaction} \in \langle 0.0, 100.0 \rangle$ and define $\textit{efficiency\\_percent}$ as
 
 $\textit{efficiency\\_percent} = 50.0 + \frac{\textit{satisfaction}}{200.0} \cdot \mathrm{random}(\textsf{AGC\\_TWEAKABLE\\_EFFICIENCY\\_SATISFACTION\\_MINIMUM},\textsf{AGC\\_TWEAKABLE\\_EFFICIENCY\\_SATISFACTION\\_MAXIMUM})$
