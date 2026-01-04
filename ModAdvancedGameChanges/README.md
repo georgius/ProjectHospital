@@ -278,7 +278,7 @@ Let the $\mathit{satisfaction} \in \langle 0.0, 100.0 \rangle$ and define $\math
 ```
 
 ```math
-a_t = \frac{a_b}{\it fff} \cdot \frac{100.0}{e}
+a_t = \frac{a_b}{\it efficiency} \cdot \frac{100.0}{e}
 ```
 
 Then with default settings
