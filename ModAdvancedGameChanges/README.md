@@ -255,12 +255,12 @@ The pedestrian pharmacy behavior is affected by these tweakables:
 
 # Action time calculation
 Each action in game (e.g. doctors' examinations, doctors' treatments, nurses' actions, 
-lab specialists' actions, janitors' actions) has base time of execution - $base\\_action\\_time$.
-Also each action time is related to some *skill*, so $skill\\_level$ is part of calculation formulas.
-Let the $skill\\_level \in \langle 1.0, 5.0 \rangle$ and define $skill\\_ratio$ as
+lab specialists' actions, janitors' actions) has base time of execution - *base\_action\_time*.
+Also each action time is related to some *skill*, so *skill\_level* is part of calculation formulas.
+Let the $\mathit{skill\\_level} \in \langle 1.0, 5.0 \rangle$ and define *skill\_ratio* as
 
 ```math
-skill\_ratio=\frac{skill\_level - 1.0 + \textsf{AGC\_TWEAKABLE\_ACTION\_TIME\_SKILL\_ADD}}{4.0}
+\mathit{skill\_ratio}=\frac{\mathit{skill\_level} - 1.0 + \mathsf{AGC\_TWEAKABLE\_ACTION\_TIME\_SKILL\_ADD}}{4.0}
 ```
 
 or with default settings $skill\\_ratio \in \langle 0.2, 1.2 \rangle$
