@@ -271,7 +271,7 @@ The action time is calculated with following formula
 action\_time = \frac{base\_action\_time}{skill\_ratio} \cdot \frac{100.0}{*efficiency*}
 ```
 
-For text, use `\textit{...}`: $E = \textit{energy}$, $m = \textit{mass}$.
+For text, use `\mathit{...}`: $E = \textit{energy}$, $m = \mathit{mass}$.
 
 Let the $\textit{satisfaction} \in \langle 0.0, 100.0 \rangle$ and define $\textit{efficiency\\_percent}$ as
 
