@@ -283,6 +283,22 @@ and define $\mathit{efficiency}$ as
 \mathit{efficiency} = \mathrm{max}(\mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_MINIMUM}, \mathit{mood} + \mathit{chief} + \mathit{shift} - \mathit{needs})
 ```
 
+mood ???
+
+Define $\mathit{chief}$ as
+
+```math
+\mathit{chief} = \mathrm{random}(\mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_GOOD\_BOSS\_MINIMUM}, \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_GOOD\_BOSS\_MAXIMUM})
+```
+
+```math
+\mathit{chief} = \begin{cases}
+\mathrm{random}(\mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_GOOD\_BOSS\_MINIMUM}, \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_GOOD\_BOSS\_MAXIMUM}), & \text{if employee's chief has perk \textbf{Good Boss}} \\
+    0, & \text{otherwise}
+  \end{cases}
+```
+
+
 ```math
 \mathit{efficiency} = \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_MINIMUM} + \frac{100.0 - \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_MINIMUM}}{100.0} \cdot \mathit{satisfaction} \cdot \mathit{satisfaction\_factor}
 ```
@@ -302,8 +318,26 @@ and define $\mathit{efficiency}$ as
 | :-- | :-- |
 | Tweakable | AGC_TWEAKABLE_EFFICIENCY_MINIMUM |
 | Type | float |
-| Default | 20 |
+| Default | 20.0 |
 | Minimum | 1.0 |
+| Maximum | 100.0 |
+| Description | The minimum TO DO. |
+
+| Name | Value |
+| :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_EFFICIENCY_GOOD_BOSS_MINIMUM |
+| Type | float |
+| Default | 5.0 |
+| Minimum | 0.0 |
+| Maximum | 100.0 |
+| Description | The minimum TO DO. |
+
+| Name | Value |
+| :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_EFFICIENCY_GOOD_BOSS_MAXIMUM |
+| Type | float |
+| Default | 10.0 |
+| Minimum | AGC_TWEAKABLE_EFFICIENCY_GOOD_BOSS_MINIMUM |
 | Maximum | 100.0 |
 | Description | The minimum TO DO. |
 
