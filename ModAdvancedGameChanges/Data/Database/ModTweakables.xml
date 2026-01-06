@@ -81,20 +81,13 @@
 	<GameDBTweakableInt ID="AGC_TWEAKABLE_SKILL_POINTS_4">
 		<Value>4800</Value>
 	</GameDBTweakableInt>
+	
+	<GameDBTweakableFloat ID="AGC_TWEAKABLE_SKILL_RATIO_MINIMUM">
+		<Value>0.2</Value>
+	</GameDBTweakableFloat>
 
 	<GameDBTweakableFloat ID="AGC_TWEAKABLE_EFFICIENCY_MINIMUM">
-		<!-- the minimum efficiency value, the efficiency will not go under this value -->
-		<!-- the base action time is divided by efficiency -->
-		<!-- percent -->
-		<!-- value in <1.0, 100.0> -->
 		<Value>20</Value>
-	</GameDBTweakableFloat>
-	
-	<GameDBTweakableFloat ID="AGC_TWEAKABLE_EFFICIENCY_SKILL_ADD">
-		<!-- the static skill add value, this value is added to skill value and is affecting efficiency -->
-		<!-- skill unit -->
-		<!-- value in <0.0, 5.0> -->
-		<Value>0.8</Value>
 	</GameDBTweakableFloat>
 	
 	<!-- satisfaction of employee is in <0.0, 100.0> interval -->

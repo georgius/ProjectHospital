@@ -28,19 +28,6 @@ namespace ModAdvancedGameChanges
         {
             new TweakableValidation(() =>
             {
-                var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_ACTION_TIME_SKILL_ADD);
-                if (value.Value < 0.004f)
-                {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_ACTION_TIME_SKILL_ADD}' must be greater than or equal to 0.004.");
-                }
-                if (value.Value > 5f)
-                {
-                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_ACTION_TIME_SKILL_ADD}' must be less than or equal to 5.");
-                }
-            }),
-
-            new TweakableValidation(() =>
-            {
                 var value = TweakableValidation.EnsureExists<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_ALLOWED_CLINIC_DOCTORS_LEVEL);
                 if (value.Value < 1)
                 {
@@ -697,6 +684,19 @@ namespace ModAdvancedGameChanges
                 if (value.Value < 1)
                 {
                     throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_PHARMACY_PHARMACIST_SEARCH_DRUG_SKILL_POINTS}' must be greater than 0.");
+                }
+            }),
+
+            new TweakableValidation(() =>
+            {
+                var value = TweakableValidation.EnsureExists<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_SKILL_RATIO_MINIMUM);
+                if (value.Value < 0.001f)
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_SKILL_RATIO_MINIMUM}' must be greater than or equal to 0.001.");
+                }
+                if (value.Value > 5f)
+                {
+                    throw new Exception($"The tweakable '{Tweakables.Mod.AGC_TWEAKABLE_SKILL_RATIO_MINIMUM}' must be less than or equal to 5.");
                 }
             }),
 

@@ -19,7 +19,7 @@ namespace ModAdvancedGameChanges.Lopital
                 return true;
             }
 
-            float skillRatio = (characterSkill - Skills.SkillLevelMinimum + Tweakable.Mod.ActionTimeSkillAdd()) / (Skills.SkillLevelMaximum - Skills.SkillLevelMinimum);
+            float skillRatio = (characterSkill - Skills.SkillLevelMinimum) / (Skills.SkillLevelMaximum - Skills.SkillLevelMinimum) + Tweakable.Mod.SkillRatioMinimum();
             float actionTimeMultiplier = character.GetComponent<EmployeeComponent>().GetEfficiencyTimeMultiplier();
 
             __result = ((float)characterTimeConstant) * actionTimeMultiplier / skillRatio;

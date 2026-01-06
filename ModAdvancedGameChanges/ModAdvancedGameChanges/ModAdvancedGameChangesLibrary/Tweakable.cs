@@ -8,11 +8,6 @@ namespace ModAdvancedGameChanges
     {
         public static class Mod
         {
-            public static float ActionTimeSkillAdd()
-            {
-                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_ACTION_TIME_SKILL_ADD).Value;
-            }
-
             public static int AmbiguousLeaveMinutes()
             {
                 return Tweakable.GetTweakable<GameDBTweakableInt>(Tweakables.Mod.AGC_TWEAKABLE_AMBIGUOUS_LEAVE_MINUTES).Value;
@@ -348,6 +343,11 @@ namespace ModAdvancedGameChanges
             public static int SkillPoints(int index)
             {
                 return Tweakable.GetTweakable<GameDBTweakableInt>(String.Format(CultureInfo.InvariantCulture, Tweakables.Mod.AGC_TWEAKABLE_SKILL_POINTS_FORMAT, index)).Value;
+            }
+
+            public static float SkillRatioMinimum()
+            {
+                return Tweakable.GetTweakable<GameDBTweakableFloat>(Tweakables.Mod.AGC_TWEAKABLE_SKILL_RATIO_MINIMUM).Value;
             }
 
             public static int TrainingHourSkillPoints()

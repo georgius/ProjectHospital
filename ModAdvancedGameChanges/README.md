@@ -260,7 +260,7 @@ Also each action time is related to some *skill*, so *skill\_level* is part of c
 Let the $\mathit{skill\\_level} \in \langle 1.0, 5.0 \rangle$ and define *skill\_ratio* as
 
 ```math
-\mathit{skill\_ratio}=\frac{\mathit{skill\_level} - 1.0 + \mathsf{AGC\_TWEAKABLE\_ACTION\_TIME\_SKILL\_ADD}}{4.0}
+\mathit{skill\_ratio}=\frac{\mathit{skill\_level} - 1.0}{4.0} + \mathsf{AGC\_TWEAKABLE\_SKILL\_RATIO\_MINIMUM}
 ```
 
 or with default settings $\mathit{skill\\_ratio} \in \langle 0.2, 1.2 \rangle$
@@ -287,14 +287,12 @@ or in words, action time is prolonged when employee is not satisfied.
 
 | Name | Value |
 | :-- | :-- |
-| Tweakable | AGC_TWEAKABLE_ACTION_TIME_SKILL_ADD |
+| Tweakable | AGC_TWEAKABLE_SKILL_RATIO_MINIMUM |
 | Type | float |
-| Default | 0.8 |
-| Minimum | 0.004 |
+| Default | 0.2 |
+| Minimum | 0.001 |
 | Maximum | 5.0 |
-| Description | The static skill add value in $\textit{skill\\_ratio}$ formula. In default settings, with minimum possible skill level ($\textit{skill\\_level}=1.0$) the $\textit{skill\\_ratio}=0.2$, with maximum possible skill level ($\textit{skill\\_level}=5.0$) the $\textit{skill\\_ratio}=1.2$. When $\textit{skill\\_ratio}$ is lower than 1, the action time is longer as base action time, when $\textit{skill\\_ratio}$ is greater than 1, the action time is shorter than base action time.  |
-
-
+| Description | The minimum value of $\mathit{skill\\_ratio}$. In default settings, with minimum possible skill level ($\mathit{skill\\_level}=1.0$) the $\mathit{skill\\_ratio}=0.2$, with maximum possible skill level ($\mathit{skill\\_level}=5.0$) the $\mathit{skill\\_ratio}=1.2$. When $\mathit{skill\\_ratio}$ is lower than 1, the action time is longer as base action time, when $\mathit{skill\\_ratio}$ is greater than 1, the action time is shorter than base action time.  |
 
 | Name | Value |
 | :-- | :-- |
