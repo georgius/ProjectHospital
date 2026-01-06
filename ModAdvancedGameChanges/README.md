@@ -277,12 +277,6 @@ Let the $\mathit{satisfaction} \in \langle 0.0, 100.0 \rangle$ and define $\math
 \mathit{efficiency} = \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_MINIMUM} + \frac{100.0 - \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_MINIMUM}}{100.0} \cdot \mathit{satisfaction} \cdot \frac{\mathrm{random}(\mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_SATISFACTION\_MINIMUM}, \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_SATISFACTION\_MAXIMUM})}{100.0}
 ```
 
-Then with default settings
-
-$\textit{efficiency\\_percent} \in \langle 50.0, 105.0 \rangle \Rightarrow \textit{action\\_time\\_multiplier} \in \langle 2.0, \frac{100.0}{105.0} \approx 0.95 \rangle $
-
-or in words, action time is prolonged when employee is not satisfied.
-
 ## Action time tweakables
 
 | Name | Value |
