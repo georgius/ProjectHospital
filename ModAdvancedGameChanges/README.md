@@ -280,7 +280,7 @@ Let the $\mathit{satisfaction} \in \langle 0.0, 100.0 \rangle$, define
 and define $\mathit{efficiency}$ as
 
 ```math
-\mathit{efficiency} = \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_MINIMUM} + \frac{100.0 - \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_MINIMUM}}{100.0} \cdot \mathit{satisfaction} \cdot \frac{\mathrm{random}(\mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_SATISFACTION\_MINIMUM}, \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_SATISFACTION\_MAXIMUM})}{100.0}
+\mathit{efficiency} = \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_MINIMUM} + \frac{100.0 - \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_MINIMUM}}{100.0} \cdot \mathit{satisfaction} \cdot \mathit{satisfaction\_multiplier}
 ```
 
 ## Action time tweakables
