@@ -280,6 +280,10 @@ Let the $\mathit{satisfaction} \in \langle 0.0, 100.0 \rangle$, define $\mathit{
 and define $\mathit{efficiency}$ as
 
 ```math
+\mathit{efficiency} = \mathrm{max}(\mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_MINIMUM}, \mathit{mood} + \mathit{chief} + \mathit{shift} - \mathit{needs})
+```
+
+```math
 \mathit{efficiency} = \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_MINIMUM} + \frac{100.0 - \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_MINIMUM}}{100.0} \cdot \mathit{satisfaction} \cdot \mathit{satisfaction\_factor}
 ```
 
