@@ -271,16 +271,16 @@ The action time is calculated with following formula
 \mathit{action\_time} = \frac{\mathit{base\_action\_time}}{\mathit{skill\_ratio}} \cdot \frac{100.0}{\mathit{efficiency}}
 ```
 
-Let the $\mathit{satisfaction} \in \langle 0.0, 100.0 \rangle$, define
+Let the $\mathit{satisfaction} \in \langle 0.0, 100.0 \rangle$, define $\mathit{satisfaction\\_factor}$
 
 ```math
-\mathit{satisfaction\_multiplier} = \frac{\mathrm{random}(\mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_SATISFACTION\_MINIMUM}, \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_SATISFACTION\_MAXIMUM})}{100.0}
+\mathit{satisfaction\_factor} = \frac{\mathrm{random}(\mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_SATISFACTION\_MINIMUM}, \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_SATISFACTION\_MAXIMUM})}{100.0}
 ```
 
 and define $\mathit{efficiency}$ as
 
 ```math
-\mathit{efficiency} = \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_MINIMUM} + \frac{100.0 - \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_MINIMUM}}{100.0} \cdot \mathit{satisfaction} \cdot \mathit{satisfaction\_multiplier}
+\mathit{efficiency} = \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_MINIMUM} + \frac{100.0 - \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_MINIMUM}}{100.0} \cdot \mathit{satisfaction} \cdot \mathit{satisfaction\_factor}
 ```
 
 ## Action time tweakables
