@@ -302,7 +302,7 @@ Define $\mathit{shift}$ as
 \mathit{shift} = \mathit{shift\_preference} \cdot \mathrm{random} \begin{pmatrix} \mathrm{AGC\_TWEAKABLE\_EFFICIENCY\_SHIFT\_PREFERENCE\_MAXIMUM} \\ \mathrm{AGC\_TWEAKABLE\_EFFICIENCY\_SHIFT\_PREFERENCE\_MINIMUM} \end{pmatrix}
 ```
 
-where
+where $\mathit{shift\\_preference}$
 
 ```math
 \mathit{shift\_preference} = \begin{cases} 
