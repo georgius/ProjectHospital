@@ -308,13 +308,13 @@ where $\mathit{shift\\_preference}$
 
 ```math
 \mathit{shift\_preference} = \begin{cases} 
-\text{if employee has perk \textbf{Early Bird}} & \Rightarrow \begin{cases} \text{is day shift} & \Rightarrow 1 \\ \text{is night shift} & \Rightarrow -1 \end{cases} \\
-\text{if employee has perk \textbf{Night Owl}} & \Rightarrow \begin{cases} \text{is day shift} & \Rightarrow -1 \\ \text{is night shift} & \Rightarrow 1 \end{cases} \\
+\text{if employee has perk \textbf{Early Bird}} & \Rightarrow \begin{cases} \text{assigned to day shift} & \Rightarrow 1 \\ \text{assigned to night shift} & \Rightarrow -1 \end{cases} \\
+\text{if employee has perk \textbf{Night Owl}} & \Rightarrow \begin{cases} \text{assigned to day shift} & \Rightarrow -1 \\ \text{assigned night shift} & \Rightarrow 1 \end{cases} \\
 \text{otherwise} & \Rightarrow 0
 \end{cases}
 ```
 
-In other words, if employee has perk **Early Bird** and employee is working in day shift, efficiency is increased, otherwise efficiency is decreased.
+In other words, if employee has perk **Early Bird** and employee is assigned to day shift, efficiency is increased, otherwise efficiency is decreased.
 The same is for employee with perk **Night Owl**. When employee does not have these perks, efficiency is not affected.
 
 
