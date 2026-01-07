@@ -263,7 +263,14 @@ Let the $\mathit{skill\\_level} \in \langle 1.0, 5.0 \rangle$ and define *skill\
 \mathit{skill\_ratio}=\frac{\mathit{skill\_level} - 1.0}{4.0} + \mathsf{AGC\_TWEAKABLE\_SKILL\_RATIO\_MINIMUM}
 ```
 
-or with default settings $\mathit{skill\\_ratio} \in \langle 0.2, 1.2 \rangle$
+or with default settings $\mathit{skill\\_ratio} \in \langle 0.2, 1.2 \rangle$.
+Because in many formulas are present random numbers, define
+
+```math
+\mathrm{random} \begin{pmatrix} 0.0 \\ 10.0 \end{pmatrix}
+```
+
+as random number in interval $\langle 0.0, 10.0 \rangle$.
 
 The action time is calculated with following formula
 
