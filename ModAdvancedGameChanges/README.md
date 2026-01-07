@@ -278,13 +278,7 @@ The action time is calculated with following formula
 \mathit{action\_time} = \frac{\mathit{base\_action\_time}}{\mathit{skill\_ratio}} \cdot \frac{100.0}{\mathit{efficiency}}
 ```
 
-Let the $\mathit{satisfaction} \in \langle 0.0, 100.0 \rangle$, define $\mathit{satisfaction\\_factor}$
-
-```math
-\mathit{satisfaction\_factor} = \frac{\mathrm{random}(\mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_SATISFACTION\_MINIMUM}, \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_SATISFACTION\_MAXIMUM})}{100.0}
-```
-
-and define $\mathit{efficiency}$ as
+Define $\mathit{efficiency}$ as
 
 ```math
 \mathit{efficiency} = \mathrm{max}(\mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_MINIMUM}, \mathit{mood} + \mathit{chief} + \mathit{shift} - \mathit{needs})
@@ -295,26 +289,11 @@ mood ???
 Define $\mathit{chief}$ as
 
 ```math
-\mathit{chief} = \mathrm{random}(\mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_GOOD\_BOSS\_MINIMUM}, \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_GOOD\_BOSS\_MAXIMUM})
-```
-
-```math
-\mathit{chief} = \begin{cases}
-\mathrm{random}(\mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_GOOD\_BOSS\_MINIMUM}, \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_GOOD\_BOSS\_MAXIMUM}), & \text{if employee's chief has perk \textbf{Good Boss}} \\
-    0, & \text{otherwise}
-  \end{cases}
-```
-
-```math
 \mathit{chief} = \begin{cases} 
-\text{if employee's chief has perk \textbf{Good Boss}} & \Rightarrow \mathrm{random} \begin{pmatrix} \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_GOOD\_BOSS\_MAXIMUM} \\ \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_GOOD\_BOSS\_MINIMUM} \end{pmatrix} \\
+\text{if employee's chief has perk \textbf{Good Boss}} & \Rightarrow \mathrm{random} \begin{pmatrix} \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_GOOD\_BOSS\_MAXIMUM} \\ \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_GOOD\_BOSS\_MINIMUM} \end{pmatrix}
+ \\
 \text{otherwise} & \Rightarrow 0
 \end{cases}
-```
-
-
-```math
-\mathit{efficiency} = \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_MINIMUM} + \frac{100.0 - \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_MINIMUM}}{100.0} \cdot \mathit{satisfaction} \cdot \mathit{satisfaction\_factor}
 ```
 
 ## Action time tweakables
