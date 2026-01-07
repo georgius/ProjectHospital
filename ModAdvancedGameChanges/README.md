@@ -267,7 +267,7 @@ or with default settings $\mathit{skill\\_ratio} \in \langle 0.2, 1.2 \rangle$.
 Because in many formulas are present random numbers, define
 
 ```math
-\mathrm{random} \begin{pmatrix} 0.0 \\ 10.0 \end{pmatrix}
+\mathrm{random} \begin{pmatrix} 10.0 \\ 0.0 \end{pmatrix}
 ```
 
 as random number in interval $\langle 0.0, 10.0 \rangle$.
