@@ -300,7 +300,7 @@ Define $\mathit{chief}$ as
 
 ```math
 \mathit{chief} = \begin{cases} 
-\text{if employee's chief has perk \textbf{Good Boss}} & \Rightarrow \mathrm{random}(\mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_GOOD\_BOSS\_MINIMUM}, \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_GOOD\_BOSS\_MAXIMUM}) \\
+\text{if employee's chief has perk \textbf{Good Boss}} & \Rightarrow R_{nx} \\
 \text{otherwise} & \Rightarrow 0
 \end{cases}
 ```
