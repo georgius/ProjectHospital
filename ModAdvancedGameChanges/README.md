@@ -296,6 +296,14 @@ Define $\mathit{chief}$ as
 \end{cases}
 ```
 
+```math
+\mathit{chief} = \begin{cases} 
+\mathrm{random} \begin{pmatrix} \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_GOOD\_BOSS\_MAXIMUM} \\ \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_GOOD\_BOSS\_MINIMUM} \end{pmatrix}, & \text{if employee's chief has perk \textbf{Good Boss}}
+ \\
+0, & \text{otherwise}
+\end{cases}
+```
+
 ## Action time tweakables
 
 | Name | Value |
