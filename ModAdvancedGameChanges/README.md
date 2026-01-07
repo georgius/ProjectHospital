@@ -296,6 +296,8 @@ Define $\mathit{chief}$ as
 \end{cases}
 ```
 
+In other words, if employee's chief has perk **Good Boss**, efficiency is increased, otherwise efficiency is not affected.
+
 Define $\mathit{shift}$ as
 
 ```math
@@ -311,6 +313,9 @@ where $\mathit{shift\\_preference}$
 \text{otherwise} & \Rightarrow 0
 \end{cases}
 ```
+
+In other words, if employee has perk **Early Bird** and employee is working in day shift, efficiency is increased, otherwise efficiency is decreased.
+The same is for employee with perk **Night Owl**. When employee does not have these perks, efficiency is not affected.
 
 
 ## Action time tweakables
