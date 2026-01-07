@@ -298,6 +298,13 @@ Define $\mathit{chief}$ as
   \end{cases}
 ```
 
+```math
+\mathit{chief} = \begin{cases} 
+\text{if employee's chief has perk \textbf{Good Boss}} & \Rightarrow \mathrm{random}(\mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_GOOD\_BOSS\_MINIMUM}, \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_GOOD\_BOSS\_MAXIMUM}) \\
+\text{otherwise} & \Rightarrow 0
+\end{cases}
+```
+
 
 ```math
 \mathit{efficiency} = \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_MINIMUM} + \frac{100.0 - \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_MINIMUM}}{100.0} \cdot \mathit{satisfaction} \cdot \mathit{satisfaction\_factor}
