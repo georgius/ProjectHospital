@@ -296,13 +296,22 @@ Define $\mathit{chief}$ as
 \end{cases}
 ```
 
+Define $\mathit{shift}$ as
+
 ```math
-\mathit{chief} = \begin{cases} 
-\mathrm{random} \begin{pmatrix} \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_GOOD\_BOSS\_MAXIMUM} \\ \mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_GOOD\_BOSS\_MINIMUM} \end{pmatrix}, & \text{if employee's chief has perk \textbf{Good Boss}}
- \\
-0, & \text{otherwise}
+\mathit{shift} = \mathit{shift\_preference} \cdot \mathrm{random} \begin{pmatrix} \mathrm{AGC\_TWEAKABLE\_EFFICIENCY\_SHIFT\_PREFERENCE\_MAXIMUM} \\ \mathrm{AGC\_TWEAKABLE\_EFFICIENCY\_SHIFT\_PREFERENCE\_MINIMUM} \end{pmatrix}
+```
+
+where
+
+```math
+\mathit{shift\_preference} = \begin{cases} 
+\text{if employee has perk \textbf{Early Bird}} & \Rightarrow \begin{cases} \text{is day shift} & \Rightarrow 1 \\ \text{is night shift} & \Rightarrow -1 \end{cases} \\
+\text{if employee has perk \textbf{Night Owl}} & \Rightarrow \begin{cases} \text{is day shift} & \Rightarrow -1 \\ \text{is night shift} & \Rightarrow 1 \end{cases} \\
+\text{otherwise} & \Rightarrow 0
 \end{cases}
 ```
+
 
 ## Action time tweakables
 
