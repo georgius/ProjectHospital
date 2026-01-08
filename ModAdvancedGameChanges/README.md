@@ -392,6 +392,33 @@ Define $\mathit{needs}$ as
 | Maximum | 100.0 |
 | Description | The maximum value to be added to efficiency if employee has shift perk (**Early Bird** or **Night Owl**) and is assigned to correct shift. |
 
+| Name | Value |
+| :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_EFFICIENCY_NEED_BLADDER_PENALTY |
+| Type | float |
+| Default | 30.0 |
+| Minimum | 0.0 |
+| Maximum | |
+| Description | The maximum penalty for efficiency if employee has full bladder. |
+
+| Name | Value |
+| :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_EFFICIENCY_NEED_HUNGER_PENALTY |
+| Type | float |
+| Default | 20.0 |
+| Minimum | 0.0 |
+| Maximum | |
+| Description | The maximum penalty for efficiency if employee is hungry. |
+
+| Name | Value |
+| :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_EFFICIENCY_NEED_REST_PENALTY |
+| Type | float |
+| Default | 80.0 |
+| Minimum | 0.0 |
+| Maximum | |
+| Description | The maximum penalty for efficiency if employee is exhausted. |
+
 # Tweakables
 The **Advanced game changes** mod has many tweakable values.
 
