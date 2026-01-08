@@ -286,6 +286,14 @@ Define $\mathit{efficiency}$ as
 
 ##### <ins>Mood</ins>
 
+Define $\mathit{mood}$ as
+
+```math
+\mathit{mood} = \mathit{satisfaction} \cdot \mathrm{random} \begin{pmatrix} \mathrm{AGC\_TWEAKABLE\_EFFICIENCY\_SATISFACTION\_MAXIMUM} \\ \mathrm{AGC\_TWEAKABLE\_EFFICIENCY\_SATISFACTION\_MINIMUM} \end{pmatrix}
+```
+
+where $\mathit{satisfaction} \in \langle 0.0, 100.0 \rangle$.
+
 ##### <ins>Chief</ins>
 
 Define $\mathit{chief}$ as
