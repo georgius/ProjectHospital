@@ -341,7 +341,7 @@ The same is for employee with perk **Night Owl**. When employee does not have th
 | Default | 20.0 |
 | Minimum | 1.0 |
 | Maximum | 100.0 |
-| Description | The minimum TO DO. |
+| Description | The minimum efficiency. The efficiency value does not go under this value in any circumstances. |
 
 | Name | Value |
 | :-- | :-- |
@@ -350,7 +350,7 @@ The same is for employee with perk **Night Owl**. When employee does not have th
 | Default | 5.0 |
 | Minimum | 0.0 |
 | Maximum | 100.0 |
-| Description | The minimum TO DO. |
+| Description | The minimum value to be added to efficiency if employee's chief has perk **Good Boss**. |
 
 | Name | Value |
 | :-- | :-- |
@@ -359,7 +359,25 @@ The same is for employee with perk **Night Owl**. When employee does not have th
 | Default | 10.0 |
 | Minimum | AGC_TWEAKABLE_EFFICIENCY_GOOD_BOSS_MINIMUM |
 | Maximum | 100.0 |
-| Description | The minimum TO DO. |
+| Description | The maximum value to be added to efficiency if employee's chief has perk **Good Boss**. |
+
+| Name | Value |
+| :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_EFFICIENCY_SHIFT_PREFERENCE_MINIMUM |
+| Type | float |
+| Default | 20.0 |
+| Minimum | 0.0 |
+| Maximum | 100.0 |
+| Description | The minimum value to be added to efficiency if employee has shift perk (**Early Bird** or **Night Owl**) and is assigned to correct shift. |
+
+| Name | Value |
+| :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_EFFICIENCY_SHIFT_PREFERENCE_MAXIMUM |
+| Type | float |
+| Default | 40.0 |
+| Minimum | AGC_TWEAKABLE_EFFICIENCY_SHIFT_PREFERENCE_MINIMUM |
+| Maximum | 100.0 |
+| Description | The maximum value to be added to efficiency if employee has shift perk (**Early Bird** or **Night Owl**) and is assigned to correct shift. |
 
 # Tweakables
 The **Advanced game changes** mod has many tweakable values.
