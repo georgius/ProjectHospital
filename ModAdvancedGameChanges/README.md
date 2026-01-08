@@ -289,10 +289,11 @@ Define $\mathit{efficiency}$ as
 Define $\mathit{mood}$ as
 
 ```math
-\mathit{mood} = \mathit{satisfaction} \cdot \mathrm{random} \begin{pmatrix} \mathrm{AGC\_TWEAKABLE\_EFFICIENCY\_SATISFACTION\_MAXIMUM} \\ \mathrm{AGC\_TWEAKABLE\_EFFICIENCY\_SATISFACTION\_MINIMUM} \end{pmatrix}
+\mathit{mood} = \frac{\mathit{satisfaction}}{100.0} \cdot \mathrm{random} \begin{pmatrix} \mathrm{AGC\_TWEAKABLE\_EFFICIENCY\_SATISFACTION\_MAXIMUM} \\ \mathrm{AGC\_TWEAKABLE\_EFFICIENCY\_SATISFACTION\_MINIMUM} \end{pmatrix}
 ```
 
 where $\mathit{satisfaction} \in \langle 0.0, 100.0 \rangle$.
+In other words, higher satisfaction means higher efficiency is increased.
 
 ##### <ins>Chief</ins>
 
@@ -363,6 +364,24 @@ Define $\mathit{needs}$ as
 | Minimum | 1.0 |
 | Maximum | 100.0 |
 | Description | The minimum efficiency. The efficiency value does not go under this value in any circumstances. |
+
+| Name | Value |
+| :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_EFFICIENCY_SATISFACTION_MINIMUM |
+| Type | float |
+| Default | 90.0 |
+| Minimum | 0.0 |
+| Maximum | 200.0 |
+| Description | The minimum value for random satisfaction interval. |
+
+| Name | Value |
+| :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_EFFICIENCY_SATISFACTION_MAXIMUM |
+| Type | float |
+| Default | 110.0 |
+| Minimum | AGC_TWEAKABLE_EFFICIENCY_SATISFACTION_MINIMUM |
+| Maximum | 200.0 |
+| Description | The maximum value for random satisfaction interval. |
 
 | Name | Value |
 | :-- | :-- |
