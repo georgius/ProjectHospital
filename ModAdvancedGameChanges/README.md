@@ -284,7 +284,9 @@ Define $\mathit{efficiency}$ as
 \mathit{efficiency} = \mathrm{max}(\mathsf{AGC\_TWEAKABLE\_EFFICIENCY\_MINIMUM}, \mathit{mood} + \mathit{chief} + \mathit{shift} - \mathit{needs})
 ```
 
-mood ???
+##### <ins>Mood</ins>
+
+##### <ins>Chief</ins>
 
 Define $\mathit{chief}$ as
 
@@ -297,6 +299,8 @@ Define $\mathit{chief}$ as
 ```
 
 In other words, if employee's chief has perk **Good Boss**, efficiency is increased, otherwise efficiency is not affected.
+
+##### <ins>Shift</ins>
 
 Define $\mathit{shift}$ as
 
@@ -317,6 +321,7 @@ where $\mathit{shift\\_preference}$
 In other words, if employee has perk **Early Bird** and employee is assigned to day shift, efficiency is increased, otherwise efficiency is decreased.
 The same is for employee with perk **Night Owl**. When employee does not have these perks, efficiency is not affected.
 
+##### <ins>Needs</ins>
 
 ## Action time tweakables
 
