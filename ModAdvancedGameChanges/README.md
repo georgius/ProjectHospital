@@ -322,6 +322,19 @@ In other words, if employee has perk **Early Bird** and employee is assigned to 
 The same is for employee with perk **Night Owl**. When employee does not have these perks, efficiency is not affected.
 
 ##### <ins>Needs</ins>
+Each employee has several needs - *Hunger*, *Bladder* and *Rest*. 
+Let each need value is in interval $\langle 0.0, 100.0 \rangle$ and when need is fully satisfied it has value $0.0$,
+when need is empty it has value $100.0$.
+
+Define $\mathit{needs}$ as
+
+```math
+\begin{align*}
+\mathit{needs} &= \frac{\mathit{bladder}}{100.0} \cdot \mathrm{AGC\_TWEAKABLE\_EFFICIENCY\_NEED\_BLADDER\_PENALTY} \\
+&+ \frac{\mathit{hunger}}{100.0} \cdot \mathrm{AGC\_TWEAKABLE\_EFFICIENCY\_NEED\_HUNGER\_PENALTY} \\
+&+ \frac{\mathit{rest}}{100.0} \cdot \mathrm{AGC\_TWEAKABLE\_EFFICIENCY\_NEED\_REST\_PENALTY}
+\end{align*}
+```
 
 ## Action time tweakables
 
