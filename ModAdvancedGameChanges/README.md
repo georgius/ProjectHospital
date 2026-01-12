@@ -449,6 +449,97 @@ Define $\mathit{needs}$ as
 # Tweakables
 The **Advanced game changes** mod has many tweakable values.
 
+## Doctors' tweakables
+
+## Nurses' tweakables
+
+| Name | Value |
+| :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_NURSE_RECEPTION_QUESTION_MINUTES |
+| Type | int |
+| Default | 1 |
+| Minimum | 1 |
+| Maximum | |
+| Description | The base time in game minutes for receptionist to ask patient about symptom. |
+
+| Name | Value |
+| :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_NURSE_RECEPTION_DECISION_MINUTES |
+| Type | int |
+| Default | 3 |
+| Minimum | 1 |
+| Maximum | |
+| Description | The base time in game minutes for receptionist to decide what to do next. |
+
+| Name | Value |
+| :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_NURSE_RECEPTION_QUESTION_SKILL_POINTS |
+| Type | int |
+| Default | 1 |
+| Minimum | 1 |
+| Maximum | |
+| Description | The skill points to be added to SKILL_NURSE_SPEC_RECEPTIONIST skill after each question. |
+
+| Name | Value |
+| :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_NURSE_RECEPTION_NEXT_QUESTION_SKILL_POINTS |
+| Type | int |
+| Default | 5 |
+| Minimum | 1 |
+| Maximum | |
+| Description | The skill points to be added to SKILL_NURSE_QUALIF_PATIENT_CARE skill when receptionist is continuing asking questions. |
+
+## Lab specialists' tweakables
+
+## Janitors' tweakables
+
+| Name | Value |
+| :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_JANITOR_CLEANING_TIME_DIRT_MINUTES |
+| Type | int |
+| Default | 1 |
+| Minimum | 1 |
+| Maximum | |
+| Description | The base time in game minutes for janitor to clean dirty tile. |
+
+| Name | Value |
+| :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_JANITOR_CLEANING_TIME_BLOOD_MINUTES |
+| Type | int |
+| Default | 5 |
+| Minimum | 1 |
+| Maximum | |
+| Description | The base time in game minutes for janitor clean tile with blood. |
+
+## Miscellaneous tweakables
+
+| Name | Value |
+| :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_ENABLE_EXTRA_LEVELING_PERCENT |
+| Type | int |
+| Default | 0 |
+| Minimum | 0 |
+| Maximum | 1 |
+| Description | Enables or disables the extra leveling percent specified in game files for skill. |
+
+| Name | Value |
+| :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_ALLOWED_CLINIC_DOCTORS_LEVEL |
+| Type | int |
+| Default | 3 |
+| Minimum | 1 |
+| Maximum | 5 |
+| Description | The maximum allowed doctors' level on clinic in any department. It is applied if option **[AGC] Limit clinic doctors level** is turned on. If doctor has higher level than this limit, the doctor's level is decreased to tweakable value. |
+
+| Name | Value |
+| :-- | :-- |
+| Tweakable | AGC_TWEAKABLE_TRAINING_HOUR_SKILL_POINTS |
+| Type | int |
+| Default | 10 |
+| Minimum | 1 |
+| Maximum | |
+| Description | The base value of skill points to be added after hour in training for trainees in training department. |
+
 TO DO
 
 # Development
