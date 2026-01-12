@@ -10,10 +10,11 @@ Without [**Hospital Services DLC**](https://store.steampowered.com/app/1282550/P
 
 # Changes in mod
 - completely changed flows of doctors, nurses, lab specialists, janitors, patients, visitors and pedestrians
-- implemented non-linear skill leveling or employee leveling
+- implemented [non-linear skill leveling](#non-linear-skill-leveling) or [employee leveling](#non-linear-employee-leveling)
 - implemented *Training department*, where employees can get higher skill or employee level without training costs (wages are still paid)
-- allowed pedestrians to go to pharmacy to buy drugs
-- modified action time calculation
+- allowed pedestrians to go to pharmacy to buy drugs, see [pharmacy behavior](#pharmacy-behavior)
+- changed [action time calculation](#action-time-calculation)
+- changed [needs fulfilling](#needs-fulfilling)
 
 # Options
 The several aspects of mod can be controlled directly from game options.
@@ -510,6 +511,10 @@ The **Advanced game changes** mod has many tweakable values.
 | Minimum | 1 |
 | Maximum | |
 | Description | The base time in game minutes for janitor clean tile with blood. |
+
+## Needs tweakables
+
+
 
 ## Miscellaneous tweakables
 
