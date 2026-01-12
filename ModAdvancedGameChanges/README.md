@@ -131,7 +131,7 @@ The general pharmacy behavior for all characters is affected by these tweakables
 | Default | 1 |
 | Minimum | 1 |
 | Maximum | |
-| Description | The base time in minutes for pharmacist question. See more [Action time calculation](#action-time-calculation). |
+| Description | The base time in game minutes for pharmacist question. See more [Action time calculation](#action-time-calculation). |
 
 | Name | Value |
 | :-- | :-- |
@@ -140,7 +140,7 @@ The general pharmacy behavior for all characters is affected by these tweakables
 | Default | 5 |
 | Minimum | 1 |
 | Maximum | |
-| Description | The base time in minutes for pharmacist to search drugs in shelfs. See more [Action time calculation](#action-time-calculation). |
+| Description | The base time in game minutes for pharmacist to search drugs in shelfs. See more [Action time calculation](#action-time-calculation). |
 
 | Name | Value |
 | :-- | :-- |
